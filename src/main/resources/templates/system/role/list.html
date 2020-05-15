@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="page-content-wrap">
+            <div class="layui-form-item">
+                <form class="layui-form">
+                    <div class="layui-inline tool-btn">
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                            <i class="fa fa-plus"></i>
+                            添加
+                        </a>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off" >
+                    </div>
+                    <div class="layui-inline">
+                        <select name="state">
+                            <option value="">请选择一个状态</option>
+                            <option value="0" th:each="state:${stateMap.values()}" th:value="${state.code}" th:text="${state.label}"></option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search">
+                            <i class="fa fa-search"></i>
+                            搜索
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script th:inline="javascript">
+            const stateMap = [[${stateMap}]]
+        </script>
+        <script th:inline="none">
+            const prefix =  `${gate}system/role`
+
+            layui.use(['table', 'jquery'], () => {
+                const {table} = layui,
+                    cols = [[
+                        {field: 'name', title: '名称', align: 'center'},
+                        {field: 'key', title: '角色标识', align: 'center'},
+                        {
+                            field: 'state',
+                            title: '状态',
+                            align: 'center',
+                            templet: ({state}) => {
+                                let {label,css} = stateMap[state]
+                                return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
+                            }
+                        },
+                        {field: 'remark', title: '备注', align: 'center'},
+                        {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#rud'}
+                    ]]
+
+                table.render(fillDefault(cols))
+                table.on('tool(table)', handleAction)
+            })
+        </script>
+    </body>
+
+</html>

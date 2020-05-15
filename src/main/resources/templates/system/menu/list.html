@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head th:include="include :: header"></head>
+    <style>
+        .depth0{
+            padding-left:21px ;
+        }
+        .depth1 {
+            padding-left: 42px;
+        }
+        .depth2{
+            padding-left:63px ;
+        }
+        td{
+            user-select: none;
+        }
+        .child-btn{
+            cursor: pointer;
+        }
+        .child-btn>span{
+            margin-left: 10px;
+        }
+    </style>
+    <body>
+        <div class="page-content-wrap">
+            <div class="layui-form-item">
+                <div class="layui-inline tool-btn">
+                    <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                        <i class="fa fa-plus"></i>
+                        添加
+                    </a>
+                </div>
+            </div>
+            <div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script th:inline="javascript">
+            const typeMap = [[${typeMap}]],
+                stateMap = [[${stateMap}]]
+        </script>
+        <script th:inline="none">
+            const prefix = `${gate}system/menu`
+
+            layui.use(['table', 'jquery'], () => {
+                const {table, jquery: $} = layui
+
+                table.render({
+                    id: 'table',
+                    elem: '#table',
+                    page : false,
+                    method: 'post',
+                    url: `${prefix}/rest/tree`,
+                    parseData: ({code, info:msg, data:src})=>{
+                        let dest = [...src]
+                        sort(dest, src, 0)
+                        return {
+                            code,msg,
+                            "data": dest
+                        }
+                    },
+                    cols: [[
+                        {
+                            field: 'name',
+                            title: '名称',
+                            align: 'left',
+                            templet: ({id, depth, parentId, childList, name}) => {
+
+                                let div = $('<i></i>')
+                                div.addClass(`fa parent${parentId} depth${depth}`).attr('data-id',id)
+                                if(childList){
+                                    div.addClass('child-btn fa-chevron-right')
+                                }
+                                if( 0!==parentId ){
+                                    div.addClass('child')
+                                }
+                                let span = $('<span></span>')
+                                span.html(name)
+                                div.append(span)
+                                return div.prop('outerHTML')
+                            }
+                        },
+                        {field: 'path', title: '跳转地址', align: 'center'},
+                        {field: 'key', title: '权限标识', align: 'center'},
+                        {
+                            field: 'type',
+                            title: '类型',
+                            align: 'center',
+                            templet: ({type}) => {
+                                let {label,css} = typeMap[type]
+                                return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
+                            }
+                        },
+                        {
+                            field: 'state',
+                            title: '状态',
+                            align: 'center',
+                            templet: ({state}) => {
+                                let {label,css} = stateMap[state]
+                                return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
+                            }
+                        },
+                        {field: 'sort', title: '排序', align: 'center'},
+                        {title: '操作',  width:'190', fixed: 'right', align: 'center', toolbar: '#ud'}
+                    ]],
+                    done: () => {
+                        $('.child').parents('tr').hide()
+                    }
+                })
+
+                // 交给通用操作
+                table.on('tool(table)', handleAction)
+
+
+                // 子级列表 显示/隐藏
+                $('body').on('click', '.child-btn', function () {
+                    childHandle(this)
+                })
+
+                function childHandle(btn,flag) {
+                    let $btn = $(btn),
+                        id = $btn.data('id'),
+                        childs = $('.parent' + id),
+                        show = 'fa-chevron-down',
+                        hide = 'fa-chevron-right'
+
+                    if ($btn.hasClass(hide)) {
+
+                        // 展开
+                        $btn.removeClass(hide).addClass(show)
+                        childs.parents('tr').show()
+                    } else {
+
+                        // 收起
+                        $btn.removeClass(show).addClass(hide)
+                        childs.each((index, child) => {
+                            // 子级为目录，孙级也隐藏
+                            if($(child).is(`.child-btn.${show}`)){
+                                childHandle(child)
+                            }
+                            $(child).parents('tr').hide()
+                        })
+                    }
+                }
+            })
+
+
+            // 结构排序成列表
+            function sort(dest, src, depth) {
+                for (let item of src) {
+                    item.depth = depth
+                    let {id, childList} = item
+                    if (childList) {
+                        // 将子元素插入父级元素后
+                        dest.splice(1 + getIndex(dest, id), 0, ...childList)
+                        // 子孙级递归插入
+                        sort(dest, childList,1+depth)
+                        --item.depth
+                    }
+                }
+            }
+
+            // 获取id元素的索引位置
+            function getIndex(list, id) {
+                for (let i in list) {
+                    if (id === list[i].id) {
+                        return parseInt(i)
+                    }
+                }
+            }
+        </script>
+    </body>
+
+</html>

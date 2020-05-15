@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="page-content-wrap">
+            <form class="layui-form" id="form" th:attr="action=${action}">
+
+                <div class="layui-tab" style="margin: 0;">
+                    <ul class="layui-tab-title">
+                        <li><a th:href="@{/blog/list}" id="superior">博客管理</a></li>
+                        <li class="layui-this"  th:text="'/rest/save'==${action}?'添加博客':'修改博客'"></li>
+                    </ul>
+                    <input type="hidden" name="id" th:value="${o.id}">
+                    <div class="layui-tab-content">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">标题：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" lay-verify="required" th:value="${ o.title }" class="layui-input" placeholder="请输入标题" autocomplete="off"  >
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类型：</label>
+                            <div class="layui-input-block">
+                                <select name="type"  lay-search="">
+                                    <option th:each="type:${typeList}" th:value="${type.code}" th:field="${o.type}" th:text="${type.label}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">内容：</label>
+                            <div class="layui-input-block">
+                                <textarea name="content" rows="30" th:text="${o.content}" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:include="include :: au-footer"></div>
+        <script th:inline="none">
+            const prefix =  `${gate}blog`
+
+            layui.use(['form'],  ()=> {
+                const {form} = layui
+
+                //监听提交
+                form.on('submit(submit)',  PAGE_SUBMIT)
+            })
+
+        </script>
+    </body>
+
+</html>

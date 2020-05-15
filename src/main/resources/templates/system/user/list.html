@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head th:include="include :: header"></head>
+    <style>
+        .role-btn{
+            cursor: pointer;
+        }
+    </style>
+    <body>
+        <div class="page-content-wrap">
+            <div class="layui-form-item">
+                <form class="layui-form">
+                    <div class="layui-inline tool-btn">
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                            <i class="fa fa-plus"></i>
+                            添加
+                        </a>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入姓名" autocomplete="off" >
+                    </div>
+                    <div class="layui-inline">
+                        <select name="state">
+                            <option value="">请选择一个状态</option>
+                            <option th:each="state:${stateMap.values()}" th:value="${state.code}" th:text="${state.label}"></option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <select name="role.id"  lay-search="">
+                            <option value="">请选择一个角色</option>
+                            <option th:each="role:${roleList}" th:value="${role.id}" th:text="${role.name}"></option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search">
+                            <i class="fa fa-search"></i>
+                            搜索
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script type="text/html" id="user-rud">
+            <a class="layui-btn layui-btn-sm" lay-event="detail"  shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
+            {{#  if(d.state != 12){ }}
+            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"  shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"  shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
+            {{#  } }}
+        </script>
+        <script th:inline="javascript">
+            const stateMap = [[${stateMap}]]
+        </script>
+        <script th:inline="none">
+            const prefix = `${gate}system/user`
+
+            layui.use(['table', 'jquery'], () => {
+                const {table,jquery:$} = layui,
+                    cols = [[
+                        {field: 'username', title: '用户名', align: 'center'},
+                        {field: 'name', title: '姓名', align: 'center'},
+                        {field: 'phone', title: '手机号', align: 'center'},
+                        {
+                            field: 'role',
+                            title: '角色',
+                            align: 'center',
+                            templet: ({role})=>{
+                                return `<a class="role-btn" data-id="${role.id}">${role.name}</a>`
+                            }
+                        },
+                        {
+                            field: 'state',
+                            title: '状态',
+                            align: 'center',
+                            templet: ({state}) => {
+                                let {label,css} = stateMap[state]
+                                return `<a  class="layui-btn layui-btn-xs ${css}">${label}</a>`
+                            }
+                        },
+                        {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#user-rud'}
+                    ]]
+
+                table.render(fillDefault(cols))
+                table.on('tool(table)', handleAction)
+
+                $('body').on('click','.role-btn',({target})=>{
+                    let id = $(target).data('id')
+                    newFrame(`角色详情`, `${gate}/system/role/detail/${id}`)
+                })
+            })
+        </script>
+    </body>
+
+</html>

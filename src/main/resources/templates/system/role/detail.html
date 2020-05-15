@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="wrap-container">
+            <form class="layui-form-pane iframe-from">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${o.name}" class="layui-input" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色标识：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${o.key}" class="layui-input" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单权限：</label>
+                    <div class="layui-input-block">
+                        <div id="menuTree"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="text"  class="layui-input" th:value="${o.stateStr}" disabled>
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注：</label>
+                    <div class="layui-input-block">
+                        <textarea  th:text="${o.remark}" class="layui-textarea" disabled></textarea>
+                    </div>
+
+                </div>
+
+
+            </form>
+        </div>
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+
+            layui.use('tree',  ()=> {
+                const {tree} = layui,
+                    menuTree = [{
+                        id: 0,
+                        name: '根目录',
+                        childList: [[${o.menuList}]]
+                    }]
+
+                // 菜单树
+                tree.render({
+                    id:'menuTree',
+                    elem: '#menuTree',
+                    data: formatTree(menuTree),
+                    text: { none: '无菜单权限'}
+                })
+
+            })
+
+            /**
+             * 整理列表为layuitree数据格式
+             */
+            function formatTree(tree) {
+                for (let item of tree) {
+                    item.title = item.name
+                    if (item.childList) {
+                        item.spread = true
+                        item.children = item.childList
+                        formatTree(item.children)
+                    }
+                    delete item.name
+                    delete item.childList
+                }
+                return tree
+            }
+
+
+        </script>
+    </body>
+
+</html>

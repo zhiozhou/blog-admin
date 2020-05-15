@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.system.extend.domain.dao.TableDAO">
+
+    <select id="list" parameterType="TableDTO" resultType="TablePO">
+        SELECT
+        table_name NAME,
+        table_comment COMMENT
+        FROM
+        information_schema.TABLES
+        WHERE
+        table_schema = (
+        SELECT DATABASE
+        ())
+        <if test="nameLike != null and nameLike != ''">and table_name LIKE CONCAT('%',#{nameLike},'%')</if>
+        <if test="nameIn != null">
+            AND table_name in
+            <foreach collection="nameIn" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+</mapper>

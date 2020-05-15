@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="page-content-wrap">
+            <div class="layui-form-item">
+                <form class="layui-form">
+                    <div class="layui-inline tool-btn">
+                        <a class="layui-btn layui-btn-sm layui-btn-normal coffee-btn" shiro:hasPermission=${m.permissionPrefix+':extend'}>
+                            <i class="fa fa-coffee"></i>
+                            生成
+                        </a>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off" >
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search">
+                            <i class="fa fa-search"></i>
+                            搜索
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script th:inline="none">
+            const prefix = `${gate}system/extend`
+
+            layui.use(['table', 'jquery'], () => {
+                const {table,jquery:$} = layui,
+                    cols = [[
+                        {type:'checkbox'},
+                        {field: 'name', title: '名称', align: 'center'},
+                        {field: 'comment', title: '描述', align: 'center'}
+                    ]],
+                    options = fillDefault(cols)
+
+                options.url = `${prefix}/rest/table/list`
+                table.render(options)
+
+
+                $('.coffee-btn').click(()=>{
+                    let {data:list} = table.checkStatus('table')
+
+                    if(0 == list.length){
+                        return warn('请选中要生成的表')
+                    }
+
+                    let url = `${prefix}/rest/extend?tableNames=`
+                    for(i in list ){
+                        url+=list[i].name+','
+                    }
+                    window.open(url)
+                })
+
+            })
+
+        </script>
+    </body>
+
+</html>

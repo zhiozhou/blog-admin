@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="wrap-container">
+            <form class="layui-form-pane iframe-from">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${ o.username }" class="layui-input" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${ o.name }" class="layui-input" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="text"  class="layui-input" th:value="${o.stateStr}" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${ o.gmtModified }" class="layui-input date-field" disabled>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div th:include="include :: footer"></div>
+    </body>
+
+</html>

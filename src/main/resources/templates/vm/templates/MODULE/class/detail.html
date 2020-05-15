@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="wrap-container">
+            <form class="layui-form-pane iframe-from">
+#set($left="${")
+#foreach ($column in $table.columnList)
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">${column.comment}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="$left o.${column.attrName} }" class="layui-input" disabled>
+                    </div>
+                </div>
+#end
+
+            </form>
+        </div>
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+
+        </script>
+    </body>
+
+</html>

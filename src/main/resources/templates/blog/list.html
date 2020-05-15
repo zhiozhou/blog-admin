@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="page-content-wrap">
+            <div class="layui-form-item">
+                <form class="layui-form">
+                    <div class="layui-inline tool-btn">
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-go-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                            <i class="fa fa-plus"></i>
+                            添加
+                        </a>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="titleLike" class="layui-input" placeholder="请输入标题" autocomplete="off" >
+                    </div>
+                    <div class="layui-inline">
+                        <select name="type">
+                            <option value="">请选择一个类型</option>
+                            <option th:each="type:${typeMap.values()}" th:value="${type.code}" th:text="${type.label}"></option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search">
+                            <i class="fa fa-search"></i>
+                            搜索
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script th:inline="javascript">
+            const typeMap = [[${typeMap}]]
+        </script>
+        <script th:inline="none">
+            const prefix = `${gate}blog`
+            layui.use(['table', 'jquery'], () => {
+                const {table} = layui,
+                    cols = [[
+                        {field: 'title', title: '标题', align: 'center'},
+                        {field: 'type', title: '类型', align: 'center',templet:({type})=>{return typeMap[type].label}},
+                        {field: 'gmtCreate', title: '创建时间', align: 'center'},
+                        {field: 'pv', title: '页面访问量', align: 'center'},
+                        {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#rud'}
+                    ]]
+
+                table.render(fillDefault(cols))
+                table.on('tool(table)', handleAction2)
+            })
+        </script>
+    </body>
+
+</html>

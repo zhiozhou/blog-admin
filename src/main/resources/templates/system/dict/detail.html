@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <style>
+        .layui-table, .layui-table-view{
+            margin: 0;
+        }
+    </style>
+    <body>
+        <div class="page-content-wrap">
+            <form class="layui-form-pane">
+
+                <div class="layui-tab" style="margin: 0;">
+
+                    <ul class="layui-tab-title">
+                        <li><a th:href="@{/system/dict/list}">字典列表</a></li>
+                        <li class="layui-this">字典详情</li>
+                    </ul>
+
+                    <div class="layui-tab-content">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">名称：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${ o.name }" class="layui-input" disabled>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">字典标识：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${ o.key }" class="layui-input" disabled>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${0 ==o.state?'正常':'冻结'}" class="layui-input" disabled>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea  th:text="${o.remark}" class="layui-textarea" disabled></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">数据项：</label>
+                            <div class="layui-input-block">
+                                <table id="data-table" lay-filter="data-table"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+            const dictData = [[${o.dataList}]]
+        </script>
+        <script th:inline="none">
+            const typeMap = {
+                    0:{css:'layui-bg-blue', info:'正常'},
+                    1:{css:'layui-btn-primary', info:'预留'},
+                    11:{css:'', info:'系统'},
+                }
+
+            layui.use(['table', 'form','jquery'], () => {
+                const {table} = layui
+                table.render({
+                    id: 'data-table',
+                    elem: '#data-table',
+                    data: dictData,
+                    cols: [[
+                        {field: 'code', title: '编码值', align: 'center', edit: true},
+                        {field: 'label', title: '标签', align: 'center', edit: true},
+                        {field: 'css', title: 'class标签', align: 'center', edit: true},
+                        {
+                            field: 'type',
+                            title: '类型',
+                            align: 'center',
+                            templet : ({type})=>{
+                                let {css,info} = typeMap[type]
+                                return `<a class="state-btn layui-btn layui-btn-xs ${css}">${info}</a>`
+                            }
+                        },
+                        {
+                            field: 'top' ,
+                            title: '默认使用',
+                            align: 'center',
+                            templet:({top})=>{
+                                let css = 'layui-bg-blue', info='正常'
+                                if(1 === top){
+                                    css ='t'
+                                    info = '默认'
+                                }
+                                return `<a class="top-btn layui-btn layui-btn-xs ${css}">${info}</a>`
+                            }
+                        }
+
+                    ]]
+                })
+            })
+
+        </script>
+    </body>
+
+</html>

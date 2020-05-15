@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.system.menu.domain.dao.MenuDAO">
+
+    <insert id="save" parameterType="MenuPO">
+        INSERT INTO system_menu(
+        parent_id,
+        name,
+        icon,
+        path,
+        type,
+        state,
+        sort,
+        <if test="key != null and key != ''">`key`,</if>
+        create_id,
+        modified_id,
+        gmt_create,
+        gmt_modified)
+        VALUES(
+        #{parentId},
+        #{name},
+        #{icon},
+        #{path},
+        #{type},
+        #{state},
+        #{sort},
+        <if test="key != null and key != ''">#{key},</if>
+        #{createId},
+        #{createId},
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <delete id="remove" parameterType="MenuDTO">
+        delete from system_menu
+        <where>
+            id = #{id}
+            <if test="null != childList and childList.size() > 0">or id IN
+                <foreach collection="childList" index="index" item="item" open="(" separator="," close=")">
+                    #{item.id}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <update id="update" parameterType="MenuPO">
+        update system_menu
+        <set>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="icon != null and icon != ''">icon = #{icon},</if>
+            <if test="path != null and path != ''">path = #{path},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="state != null ">state = #{state},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="key != null and key != ''">`key` = #{key},</if>
+            modified_id = #{modifiedId},
+            gmt_modified = NOW()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="get" parameterType="MenuDTO" resultType="MenuPO">
+        SELECT
+            system_menu.id,
+            system_menu.parent_id,
+            CASE
+            system_menu.parent_id
+            WHEN 0 THEN
+            '根目录' ELSE parent_menu.name
+            END parentName,
+            system_menu.name,
+            system_menu.icon,
+            system_menu.path,
+            system_menu.type,
+            system_menu.state,
+            system_menu.sort,
+            system_menu.`key`
+        FROM
+            system_menu
+        LEFT JOIN system_menu AS parent_menu ON system_menu.parent_id = parent_menu.id
+        <where>
+            <if test="id != null">AND system_menu.id = #{id}</if>
+        </where>
+    </select>
+
+
+    <select id="childList" parameterType="MenuDTO" resultType="MenuPO">
+        SELECT
+            id
+        FROM
+            system_menu
+        WHERE
+            parent_id = #{id} UNION
+        SELECT
+            child.id
+        FROM
+            system_menu child
+            LEFT JOIN ( SELECT id, parent_id, `name` FROM system_menu ) parent ON child.parent_id = parent.id
+        WHERE
+            parent.parent_id = #{id}
+    </select>
+
+    <select id="list" parameterType="MenuDTO" resultType="MenuPO">
+        SELECT
+        id,
+        parent_id,
+        system_menu.name,
+        icon,
+        path,
+        type,
+        state,
+        sort,
+        `key`
+        FROM
+        system_menu
+        <if test="userId != null">
+            LEFT JOIN system_role_menu ON system_menu.id = system_role_menu.menu_id
+            LEFT JOIN system_user_role ON system_role_menu.role_id = system_user_role.role_id
+        </if>
+        <where>
+            <if test="userId != null">AND system_user_role.user_id = #{userId}</if>
+            <if test="state != null">AND state = #{state}</if>
+            <if test="types != null">AND type IN
+                <foreach collection="types" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY
+        parent_id,
+        sort
+    </select>
+
+
+    <select id="count" parameterType="MenuDTO" resultType="integer">
+        SELECT
+        COUNT( 0 )
+        FROM
+        system_menu
+        <where>
+            <if test="noid != null ">and id != #{noid}</if>
+            <if test="name != null and name != ''">and name = #{name}</if>
+            <if test="key != null and key != ''">and `key` = #{key}</if>
+        </where>
+    </select>
+
+
+    <select id="keySet" parameterType="integer" resultType="string">
+        SELECT
+            `key`
+        FROM
+            system_menu
+            LEFT JOIN system_role_menu ON system_menu.id = system_role_menu.menu_id
+            LEFT JOIN system_user_role ON system_role_menu.role_id = system_user_role.role_id
+        WHERE
+            state = 0
+            AND `key` is not null
+            AND system_user_role.user_id = #{value}
+    </select>
+
+
+</mapper>
