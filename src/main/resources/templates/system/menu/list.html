@@ -20,6 +20,9 @@
         .child-btn>span{
             margin-left: 10px;
         }
+        .refresh-btn{
+            float: right;
+        }
     </style>
     <body>
         <div class="page-content-wrap">
@@ -28,6 +31,11 @@
                     <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
                         <i class="fa fa-plus"></i>
                         添加
+                    </a>
+
+                    <a class="layui-btn layui-btn-sm refresh-btn" shiro:hasPermission=${m.permissionPrefix+':refresh'}>
+                        <i class="fa fa-refresh"></i>
+                        刷新权限
                     </a>
                 </div>
             </div>
@@ -113,6 +121,14 @@
                 table.on('tool(table)', handleAction)
 
 
+                // 权限刷新
+                $('.refresh-btn').click(()=>{
+                    post(`${prefix}/rest/refresh`, null, () => {
+                        done(()=>{})
+                    })
+                })
+
+
                 // 子级列表 显示/隐藏
                 $('body').on('click', '.child-btn', function () {
                     childHandle(this)
@@ -144,6 +160,9 @@
                     }
                 }
             })
+
+
+
 
 
             // 结构排序成列表

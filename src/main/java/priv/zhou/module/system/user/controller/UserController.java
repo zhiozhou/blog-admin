@@ -50,7 +50,7 @@ public class UserController extends BaseController {
         fillAdd(model, new UserDTO().setState(0));
 
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_USER_STATE)).getData());
-        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(false)).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(0)).getData().getList());
         return "system/user/au";
     }
 
@@ -64,7 +64,7 @@ public class UserController extends BaseController {
         fillUpdate(model, dtoVO.getData());
 
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_USER_STATE)).getData());
-        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(false)).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(0)).getData().getList());
         return "system/user/au";
     }
 
@@ -86,7 +86,7 @@ public class UserController extends BaseController {
     public String list(Model model) {
         fillList(model, module);
 
-        model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(false)).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(0)).getData().getList());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_USER_STATE), false).getData());
         return "system/user/list";
     }

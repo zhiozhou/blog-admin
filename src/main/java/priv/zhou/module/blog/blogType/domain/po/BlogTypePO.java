@@ -1,10 +1,10 @@
-package priv.zhou.module.blog.domain.po;
+package priv.zhou.module.blog.blogType.domain.po;
 
-import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,12 +12,12 @@ import java.util.Date;
  *  数据持久化模型
  *
  * @author zhou
- * @since 2020.05.15
+ * @since 2020.05.21
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-public class BlogPO implements Serializable{
+public class BlogTypePO implements Serializable{
 
 
 	/**
@@ -26,29 +26,39 @@ public class BlogPO implements Serializable{
 	private Integer id;
 
 	/**
+	 * 标识
+	 */
+	private String key;
+
+	/**
+	 * 名称
+	 */
+	private String name;
+
+	/**
 	 * 标题
 	 */
 	private String title;
 
 	/**
-	 * 文章类型
+	 * 类型
 	 */
-	private Integer type;
+	private String desc;
 
 	/**
-	 * 内容
+	 * 背景
 	 */
-	private String content;
+	private String bg;
 
 	/**
-	 * 博客状态
+	 * 备注
+	 */
+	private String remark;
+
+	/**
+	 * 状态
 	 */
 	private Integer state;
-
-	/**
-	 * 页面访问量
-	 */
-	private Long pv;
 
 	/**
 	 * 创建时间

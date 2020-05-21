@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
+import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 
@@ -57,6 +58,13 @@ public class MenuRestController {
     public OutVO<List<MenuDTO>> trimList(MenuDTO menuDTO) {
         OutVO<List<MenuDTO>> outVO = menuService.list(menuDTO);
         return outVO.setData(IMenuService.toTree(outVO.getData()));
+    }
+
+    @RequiresPermissions("system:menu:refresh")
+    @RequestMapping("/refresh")
+    public OutVO<NULL> refresh() {
+        ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
+        return OutVO.success();
     }
 
 }

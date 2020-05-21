@@ -35,7 +35,7 @@ public class MonitorController extends BaseController {
         fillList(model, module);
 
         model.addAttribute("id", ShiroUtil.getSession().getId());
-        model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(false)).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(0)).getData().getList());
         return "system/monitor/list";
     }
 }

@@ -1,31 +1,34 @@
-package priv.zhou.module.blog.domain.dto;
+package priv.zhou.module.blog.blogType.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.beans.BeanUtils;
+import priv.zhou.module.blog.blogType.domain.po.BlogTypePO;
 import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.module.blog.domain.po.BlogPO;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  *  数据传输模型
  *
  * @author zhou
- * @since 2020.05.15
+ * @since 2020.05.21
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BlogDTO extends DTO<BlogPO> {
+public class BlogTypeDTO extends DTO<BlogTypePO> {
 
 
     /**
@@ -33,6 +36,23 @@ public class BlogDTO extends DTO<BlogPO> {
      */
     private Integer id;
 
+    private Integer noid;
+
+    /**
+     * 标识
+     */
+    @NotBlank(message = "标识不可为空")
+    private String key;
+
+    private String keyLike;
+
+    /**
+     * 名称
+     */
+    @NotBlank(message = "名称不可为空")
+    private String name;
+
+    private String nameLike;
     /**
      * 标题
      */
@@ -42,23 +62,22 @@ public class BlogDTO extends DTO<BlogPO> {
     private String titleLike;
 
     /**
-     * 文章类型
+     * 类型
      */
-    @NotNull(message = "类型不可为空")
-    private Integer type;
-
-    private String typeStr;
+    @NotBlank(message = "类型不可为空")
+    private String desc;
 
     /**
-     * 内容
+     * 背景
      */
-    @NotBlank(message = "内容不可为空")
-    private String content;
+    @NotBlank(message = "背景不可为空")
+    private String bg;
 
     /**
-     * 页面访问量
+     * 备注
      */
-    private Long pv;
+    @NotBlank(message = "备注不可为空")
+    private String remark;
 
     /**
      * 创建时间
@@ -73,8 +92,8 @@ public class BlogDTO extends DTO<BlogPO> {
     private Date gmtModified;
 
 
-    public BlogDTO(BlogPO blogPO) {
-        super(blogPO);
+    public BlogTypeDTO(BlogTypePO blogTypePO) {
+        super(blogTypePO);
     }
 
 }

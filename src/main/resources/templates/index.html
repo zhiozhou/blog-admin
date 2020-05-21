@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
+    <style>
+        .logo{
+            color: #1890ff;
+            border-bottom: 1px solid;
+            font-size: 1.7rem;
+            font-weight: 700;
+            text-align: center;
+            line-height: 61px;
+        }
+    </style>
     <body>
         <div class="main-layout" id='main-layout'>
             <!--侧边栏-->
             <div class="main-layout-side">
-<!--                <div class="m-logo">-->
-<!--                </div>-->
+                <div>
+                    <div class="logo">ZHOU</div>
+                </div>
                 <ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
                     <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
                         <a href="#">

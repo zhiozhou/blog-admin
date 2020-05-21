@@ -1,10 +1,10 @@
-package priv.zhou.module.blog.service;
+package priv.zhou.module.blog.blog.service;
 
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
-import priv.zhou.module.blog.domain.dto.BlogDTO;
+import priv.zhou.module.blog.blog.domain.dto.BlogDTO;
 
 /**
  *  服务层定义
@@ -23,6 +23,4 @@ public interface IBlogService {
     OutVO<BlogDTO> get(BlogDTO blogDTO);
 
     OutVO<ListVO<BlogDTO>> list(BlogDTO blogDTO, Page page);
-
-    OutVO<Integer> count(BlogDTO blogDTO);
 }

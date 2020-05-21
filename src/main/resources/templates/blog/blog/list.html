@@ -17,7 +17,7 @@
                     <div class="layui-inline">
                         <select name="type">
                             <option value="">请选择一个类型</option>
-                            <option th:each="type:${typeMap.values()}" th:value="${type.code}" th:text="${type.label}"></option>
+                            <option th:each="type:${typeList}" th:value="${type.key}" th:text="${type.name}"></option>
                         </select>
                     </div>
                     <div class="layui-inline">
@@ -37,18 +37,15 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
-        <script th:inline="javascript">
-            const typeMap = [[${typeMap}]]
-        </script>
         <script th:inline="none">
-            const prefix = `${gate}blog`
+            const prefix = `${gate}blog/blog`
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
                         {field: 'title', title: '标题', align: 'center'},
-                        {field: 'type', title: '类型', align: 'center',templet:({type})=>{return typeMap[type].label}},
-                        {field: 'gmtCreate', title: '创建时间', align: 'center'},
-                        {field: 'pv', title: '页面访问量', align: 'center'},
+                        {field: 'typeName', title: '类型', align: 'center'},
+                        {field: 'gmtCreate', title: '创建时间', align: 'center',templet:({gmtCreate})=>{return formatDate(gmtCreate,'yyyy年MM月dd日')}},
+                        {field: 'pv', title: '访问量', align: 'center'},
                         {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#rud'}
                     ]]
 

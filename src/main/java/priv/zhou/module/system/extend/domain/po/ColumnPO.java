@@ -10,6 +10,9 @@ import lombok.Setter;
 @Setter
 public class ColumnPO {
 
+
+    private String key;
+
     /**
      * 名称
      */
@@ -26,4 +29,8 @@ public class ColumnPO {
      */
     private String comment;
 
+    /**
+     * 可以为空
+     */
+    private Boolean nullable;
 }

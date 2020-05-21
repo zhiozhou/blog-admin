@@ -5,12 +5,6 @@
         <div class="wrap-container">
             <form class="layui-form-pane iframe-from">
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${ o.id }" class="layui-input" disabled>
-                    </div>
-                </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">标题：</label>
@@ -20,9 +14,9 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">文章类型：</label>
+                    <label class="layui-form-label">类型：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.type }" class="layui-input" disabled>
+                        <input type="text" th:value="${ o.typeLable }" class="layui-input" disabled>
                     </div>
                 </div>
 
