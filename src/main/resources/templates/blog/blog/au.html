@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
+    <style>
+        #preview-album{
+            display: none;
+        }
+    </style>
     <body>
         <div class="page-content-wrap">
             <form class="layui-form" id="form" th:attr="action=${action}">
@@ -22,7 +27,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">类型：</label>
                             <div class="layui-input-block">
-                                <select name="type"  lay-search="">
+                                <select name="type"  lay-search="" lay-filter="type">
                                     <option th:each="type:${typeList}" th:value="${type.key}" th:field="${o.type}" th:text="${type.name}"></option>
                                 </select>
                             </div>
@@ -38,7 +43,13 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">预览：</label>
                             <div class="layui-input-block">
-                                <textarea name="preview" th:text="${o.preview}" class="layui-textarea"  maxlength="64"></textarea>
+                                <textarea th:text="${o.preview}" id="preview" class="layui-textarea"  maxlength="256"></textarea>
+
+                                <div class="layui-upload-drag" id="preview-album">
+                                    <img class="view" th:src="null != ${o.preview} ? ${o.preview} :@{/img/drag-area.png}">
+                                    <input class="input" type="hidden" th:value="${o.preview}">
+                                    <div class="tips" th:classappend="null != ${o.preview} ? 'layui-hide':''">点击上传 / 拖拽文件到此处</div>
+                                </div>
                             </div>
                         </div>
 
@@ -63,11 +74,37 @@
             </form>
         </div>
         <div th:include="include :: au-footer"></div>
+        <script th:inline="javascript">
+            const type = [[${o.type}]]
+        </script>
         <script th:inline="none">
             const prefix =  `${gate}blog/blog`
 
-            layui.use(['form'],  ()=> {
-                const {form} = layui
+            layui.use(['form','jquery','upload'],  ()=> {
+                const {form,jquery: $,upload} = layui
+
+                itemHandle(type)
+
+
+                form.on('select(type)', (data) => {
+                    itemHandle(data.value)
+                })
+
+                function itemHandle(value){
+                    if('album' === value){
+                        $('#preview').attr('name','').slideUp()
+                        $('#preview-album .input').attr('name','preview')
+                        $('#preview-album').slideDown()
+                        return
+                    }
+
+                    $('#preview').attr('name','preview').slideDown()
+                    $('#preview-album').slideUp()
+                    $('#preview-album .input').attr('name','')
+                }
+
+
+                upload.render(SINGLE_IMG('#preview-album'));
 
                 //监听提交
                 form.on('submit(submit)',  PAGE_SUBMIT)

@@ -6,7 +6,7 @@
             <div class="layui-form-item">
                 <form class="layui-form">
                     <div class="layui-inline tool-btn">
-                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-go-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
@@ -33,7 +33,7 @@
                     ]]
 
                 table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction)
+                table.on('tool(table)', handleAction2)
             })
         </script>
     </body>

@@ -7,10 +7,10 @@
     <insert id="save" parameterType="BlogTypePO">
         INSERT INTO zhousb_blog_type(
              id , 
-             key , 
+             `key` ,
              name , 
              title , 
-             desc , 
+             `desc` ,
              bg , 
              remark ,
              state,
@@ -36,7 +36,7 @@
         <set>
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="title != null and title != ''">title = #{title},</if>
-            <if test="desc != null and desc != ''">desc = #{desc},</if>
+            <if test="desc != null and desc != ''">`desc` = #{desc},</if>
             <if test="bg != null and bg != ''">bg = #{bg},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="state != null">state = #{state},</if>
@@ -86,7 +86,7 @@
         <where>
             state = 0
             <if test="noid != null ">and id != #{noid}</if>
-            <if test="key != null  and key != '' "> and key = #{key}</if>
+            <if test="key != null  and key != '' "> and `key` = #{key}</if>
             <if test="name != null  and name != '' "> and name = #{name}</if>
         </where>
     </select>

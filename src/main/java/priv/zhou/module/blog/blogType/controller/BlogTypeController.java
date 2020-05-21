@@ -23,7 +23,7 @@ public class BlogTypeController extends BaseController {
 
     private IBlogTypeService blogTypeService;
 
-    private Module module = new Module("","blog:blogType");
+    private Module module = new Module("","blog:type");
 
     public BlogTypeController(IBlogTypeService blogTypeService) {
         this.blogTypeService = blogTypeService;

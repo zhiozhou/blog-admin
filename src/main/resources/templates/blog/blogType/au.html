@@ -7,8 +7,8 @@
 
                 <div class="layui-tab" style="margin: 0;">
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/blog/blog/list}" id="superior">博客列表</a></li>
-                        <li class="layui-this"  th:text="'/rest/save'==${action}?'添加博客':'修改博客'"></li>
+                        <li><a th:href="@{/blog/type/list}" id="superior">博客类型</a></li>
+                        <li class="layui-this"  th:text="'/rest/save'==${action}?'添加类型':'修改类型'"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${o.id}">
                     <div class="layui-tab-content">
@@ -37,14 +37,18 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">描述：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="desc" lay-verify="required" th:value="${ o.desc }" class="layui-input" placeholder="请输入类型" autocomplete="off" maxlength="64">
+                                <input type="text" name="desc" th:value="${ o.desc }" class="layui-input" placeholder="请输入类型" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">背景：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="bg" lay-verify="required" th:value="${ o.bg }" class="layui-input" placeholder="请输入背景" autocomplete="off"  >
+                                <div class="layui-upload-drag" id="bg">
+                                    <img class="view" th:src="null != ${o.bg} ? ${o.bg} :@{/img/drag-area.png}">
+                                    <input type="hidden" name="bg" th:value="${o.bg}">
+                                    <div class="tips" th:classappend="null != ${o.bg} ? 'layui-hide':''">点击上传 / 拖拽文件到此处</div>
+                                </div>
                             </div>
                         </div>
 
@@ -73,11 +77,13 @@
         <script th:inline="none">
             const prefix =  `${gate}blog/type`
 
-            layui.use(['form', 'jquery'],  ()=> {
-                const {form, jquery: $} = layui
+            layui.use(['form','jquery','upload'],  ()=> {
 
+                const {form,jquery: $,upload} = layui
+
+                upload.render(SINGLE_IMG('#bg'));
                 //监听提交
-                form.on('submit(submit)',  IFRAME_SUBMIT)
+                form.on('submit(submit)',  PAGE_SUBMIT)
             })
 
         </script>

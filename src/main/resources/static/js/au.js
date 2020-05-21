@@ -1,22 +1,9 @@
+
+// 图片上传参数
+const UPLOAD_URL = 'https://zhousb.cn/file-upload/file/multipart',
+    UPLOAD_PREFIX = 'zhousb-admin'
+
 const
-    // 页面提交
-    PAGE_SUBMIT = ({form, field: data})=> {
-        post(prefix+form.getAttribute('action'),data,()=>{
-            done(()=>{
-                window.location.href = document.getElementById('superior').getAttribute('href')
-            })
-        })
-        return false
-    },
-
-    // iframe提交
-    IFRAME_SUBMIT = ({form, field: data})=> {
-        post(prefix+form.getAttribute('action'),data,()=>{
-            outDone()
-        })
-        return false
-    },
-
     // tinymce富文本默认
     TINYMCE_STAGE = {
         selector: '.tinymce',
@@ -51,3 +38,70 @@ const
         }
     }
 
+/**
+ * 页面提交
+ */
+function PAGE_SUBMIT({form, field: data}){
+    post(prefix+form.getAttribute('action'),data,()=>{
+        done(()=>{
+            window.location.href = document.getElementById('superior').getAttribute('href')
+        })
+    })
+    return false
+}
+
+/**
+ * iframe提交
+ */
+function IFRAME_SUBMIT({form, field: data}) {
+    post(prefix+form.getAttribute('action'),data,()=>{
+        outDone()
+    })
+    return false
+}
+
+function SINGLE_IMG(elem){
+    return {
+        elem: elem,
+        url: UPLOAD_URL,
+        data: {prefix: UPLOAD_PREFIX},
+        acceptMime: 'image/*',
+        before:()=>{loading()},
+        done: ({code,info,data})=>{
+            if (fail(code)) return warn(info)
+            done(null,'上传成功')
+            let src =   data[0].origin
+            layui.jquery(`${elem} .view`).show().attr('src', src).next().val(src)
+            layui.jquery(`${elem} .tips`).hide()
+            loaded()
+        }
+    }
+}
+
+
+function SINGLE_FILE(elem){
+    return {
+        elem: elem,
+        url: UPLOAD_URL,
+        data: {
+            prefix: UPLOAD_PREFIX,
+            keepName: true
+        },
+        accept: 'file',
+        choose: (obj)=>{
+            obj.preview((index, file)=>{
+                layui.jquery(elem).siblings('.view').html(file.name)
+            });
+        },
+        before:()=>{loading()},
+        done: ({code,info,data})=>{
+            if (fail(code)) return warn(info)
+            done(null,'上传成功')
+            let url  = data[0].origin
+            layui.jquery(elem)
+                .siblings('.view').attr('href',url)
+                .next().val(url)
+            loaded()
+        }
+    }
+}

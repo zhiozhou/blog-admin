@@ -16,38 +16,47 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.typeLable }" class="layui-input" disabled>
+                        <input type="text" th:value="${ o.typeName }" class="layui-input" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">内容：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.content }" class="layui-input" disabled>
+                        <textarea rows="25" th:text="${o.content}" class="layui-textarea" disabled></textarea>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">预览：</label>
+                    <div class="layui-input-block">
+                        <textarea th:if="'album' !=${o.type}" th:text="${o.preview}" class="layui-textarea" disabled></textarea>
+                        <img th:if="'album' ==${o.type}" th:src="${o.preview}">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">页面访问量：</label>
+                    <label class="layui-form-label">备注：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.pv }" class="layui-input" disabled>
+                        <textarea  th:text="${o.remark}" class="layui-textarea"  disabled></textarea>
                     </div>
                 </div>
+
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">创建时间：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.gmtCreate }" class="layui-input" disabled>
+                        <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">修改时间：</label>
+                    <label class="layui-form-label">访问量：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.gmtModified }" class="layui-input" disabled>
+                        <input type="text" th:value="${ o.pv }" class="layui-input" disabled>
                     </div>
                 </div>
-
             </form>
         </div>
         <div th:include="include :: footer"></div>

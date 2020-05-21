@@ -2068,7 +2068,7 @@
 /*图片上传*/
 .layui-upload-drag .view{
   width: 100%;
-  max-height: 550px;
+  max-height: 300px;
 }
 .layui-upload-drag .tips{
   position: absolute;

@@ -41,7 +41,7 @@ public class BlogTypePO implements Serializable{
 	private String title;
 
 	/**
-	 * 类型
+	 * 描述
 	 */
 	private String desc;
 

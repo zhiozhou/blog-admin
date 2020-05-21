@@ -16,9 +16,6 @@ layui.use(['jquery', 'util', 'layarea'], function () {
 
 });
 
-// 图片上传参数
-const UPLOAD_URL = 'http://59.110.166.116:8889/upload/file/multipart',
-    UPLOAD_PREFIX = 'admin-frame'
 
 
 // frame窗口大小参数
