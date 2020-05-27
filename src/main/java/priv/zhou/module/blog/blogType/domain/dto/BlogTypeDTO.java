@@ -53,6 +53,7 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
     private String name;
 
     private String nameLike;
+
     /**
      * 标题
      */
