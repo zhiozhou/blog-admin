@@ -40,7 +40,7 @@
     <delete id="remove" parameterType="MenuDTO">
         delete from system_menu
         where id = #{id} or id in (
-        SELECT
+            SELECT
             id
             FROM
             (

@@ -33,10 +33,9 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     public OutVO<NULL> save(MenuDTO menuDTO) {
-
-
         // 1.转换类型
         MenuPO menuPO = menuDTO.toPO();
+
 
         // 2.验证参数
         if (menuDAO.count(new MenuDTO()
