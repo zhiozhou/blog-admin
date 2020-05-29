@@ -27,7 +27,7 @@ public interface IMenuService {
     /**
      * 获取用户的权限字符set
      */
-    Set<String> keySet(Integer userId);
+    Set<String> keySet(MenuDTO menuDTO);
 
     /**
      * 结构整理为 dto.childList 格式

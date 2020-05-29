@@ -13,10 +13,5 @@ import java.util.Set;
 @Component
 public interface MenuDAO extends BaseDAO<MenuDTO, MenuPO> {
 
-    Set<String> keySet(Integer userId);
-
-
-    List<MenuPO> childList(MenuDTO menuDTO);
-
-
+    Set<String> keySet(MenuDTO menuDTO);
 }

@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.module.system.menu.controller.MenuController;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,9 +36,10 @@ public class IndexController extends BaseController {
         UserDTO userDTO = ShiroUtil.getUser();
         OutVO<List<MenuDTO>> listRes = menuService.list(
                 new MenuDTO()
-                .setUserId(userDTO.getId())
-                .setState(0)
-                .setTypes(Lists.newArrayList(0,1))
+                        .setUserId(userDTO.getId())
+                        .setFlag(MenuController.FLAG)
+                        .setState(0)
+                        .setTypes(Lists.newArrayList(0, 1))
         );
         model.addAttribute("user", userDTO);
         model.addAttribute("menuList", IMenuService.toTree(listRes.getData()));

@@ -9,6 +9,7 @@ import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
+import priv.zhou.module.system.menu.controller.MenuController;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
@@ -42,7 +43,7 @@ public class RoleController extends BaseController {
     public String add(Model model) {
         fillAdd(model, new RoleDTO().setState(0));
 
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO()).getData()));
+        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/au";
     }
@@ -56,7 +57,7 @@ public class RoleController extends BaseController {
         }
         fillUpdate(model, dtoVO.getData());
 
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO()).getData()));
+        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/au";
     }

@@ -1,5 +1,6 @@
 package priv.zhou.module.system.menu.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.vo.OutVO;
@@ -33,13 +34,22 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public OutVO<NULL> save(MenuDTO menuDTO) {
 
+
         // 1.转换类型
         MenuPO menuPO = menuDTO.toPO();
 
         // 2.验证参数
-        if (menuDAO.count(new MenuDTO().setName(menuPO.getName())) > 0) {
+        if (menuDAO.count(new MenuDTO()
+                .setName(menuPO.getName())
+                .setFlag(menuPO.getFlag())
+                .setParentId(menuPO.getParentId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
-        } else if (0 != menuPO.getType() && menuDAO.count(new MenuDTO().setKey(menuPO.getKey())) > 0) {
+        } else if (0 != menuPO.getType() &&
+                StringUtils.isNotBlank(menuDTO.getKey())
+                && menuDAO.count(new MenuDTO()
+                .setKey(menuPO.getKey())
+                .setFlag(menuPO.getFlag())
+                .setParentId(menuPO.getParentId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         }
 
@@ -56,11 +66,9 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     public OutVO<NULL> remove(MenuDTO menuDTO) {
-        if(isNull(menuDTO.getId())){
+        if (isNull(menuDTO.getId())) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
-
-        menuDTO.setChildList(DTO.ofPO(menuDAO.childList(menuDTO),MenuDTO::new));
         menuDAO.remove(menuDTO);
         roleDAO.clearMenu(new RoleDTO());
 
@@ -77,9 +85,19 @@ public class MenuServiceImpl implements IMenuService {
 
 
         // 2.验证参数
-        if (menuDAO.count(new MenuDTO().setName(menuPO.getName()).setNoid(menuPO.getId())) > 0) {
+        if (menuDAO.count(new MenuDTO()
+                .setName(menuPO.getName())
+                .setNoid(menuPO.getId())
+                .setFlag(menuDTO.getFlag())
+                .setParentId(menuPO.getParentId())) > 0
+        ) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
-        } else if (0 != menuPO.getType() && menuDAO.count(new MenuDTO().setKey(menuPO.getKey()).setNoid(menuPO.getId())) > 0) {
+        } else if (0 != menuPO.getType()
+                && menuDAO.count(new MenuDTO()
+                        .setKey(menuPO.getKey())
+                        .setNoid(menuPO.getId())
+                        .setFlag(menuDTO.getFlag())
+                        .setParentId(menuPO.getParentId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         }
 
@@ -94,7 +112,7 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public OutVO<MenuDTO> get(MenuDTO menuDTO) {
         MenuPO menuPO = menuDAO.get(menuDTO);
-        if(isNull( menuPO)){
+        if (isNull(menuPO)) {
             return new OutVO<>(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new MenuDTO(menuPO));
@@ -112,8 +130,8 @@ public class MenuServiceImpl implements IMenuService {
 
 
     @Override
-    public Set<String> keySet(Integer userId) {
-        return menuDAO.keySet(userId);
+    public Set<String> keySet(MenuDTO menuDTO) {
+        return menuDAO.keySet(menuDTO);
     }
 
 

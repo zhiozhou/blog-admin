@@ -4,7 +4,7 @@ server:
     context-path: /${spring.application.name}
 spring:
   application:
-    name: zhousb-admin
+    name: blog-admin
   datasource:
     username: root
     password: a2080211280

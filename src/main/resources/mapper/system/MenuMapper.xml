@@ -14,10 +14,12 @@
         state,
         sort,
         <if test="key != null and key != ''">`key`,</if>
+        flag,
         create_id,
         modified_id,
         gmt_create,
-        gmt_modified)
+        gmt_modified
+        )
         VALUES(
         #{parentId},
         #{name},
@@ -27,6 +29,7 @@
         #{state},
         #{sort},
         <if test="key != null and key != ''">#{key},</if>
+        #{flag},
         #{createId},
         #{createId},
         NOW(),
@@ -36,14 +39,20 @@
 
     <delete id="remove" parameterType="MenuDTO">
         delete from system_menu
-        <where>
-            id = #{id}
-            <if test="null != childList and childList.size() > 0">or id IN
-                <foreach collection="childList" index="index" item="item" open="(" separator="," close=")">
-                    #{item.id}
-                </foreach>
-            </if>
-        </where>
+        where id = #{id} or id in (
+        SELECT
+            id
+            FROM
+            (
+                SELECT
+                t1.*,
+                IF( find_in_set( parent_id, @pids ) > 0, @pids := concat( @pids, ',', id ), 0 ) AS ischild
+                FROM
+                ( SELECT id, `name`, parent_id FROM system_menu t ORDER BY parent_id, id ) t1,
+                ( SELECT @pids := #{id} ) t2
+            ) t3
+            WHERE ischild != 0
+        )
     </delete>
 
     <update id="update" parameterType="MenuPO">
@@ -60,48 +69,32 @@
             modified_id = #{modifiedId},
             gmt_modified = NOW()
         </set>
-        where id = #{id}
+        where id = #{id} and flag = #{flag}
     </update>
 
     <select id="get" parameterType="MenuDTO" resultType="MenuPO">
         SELECT
-            system_menu.id,
-            system_menu.parent_id,
-            CASE
-            system_menu.parent_id
-            WHEN 0 THEN
-            '根目录' ELSE parent_menu.name
-            END parentName,
-            system_menu.name,
-            system_menu.icon,
-            system_menu.path,
-            system_menu.type,
-            system_menu.state,
-            system_menu.sort,
-            system_menu.`key`
+        system_menu.id,
+        system_menu.parent_id,
+        CASE
+        system_menu.parent_id
+        WHEN 0 THEN
+        '根目录' ELSE parent_menu.name
+        END parentName,
+        system_menu.name,
+        system_menu.icon,
+        system_menu.path,
+        system_menu.type,
+        system_menu.state,
+        system_menu.sort,
+        system_menu.`key`
         FROM
-            system_menu
+        system_menu
         LEFT JOIN system_menu AS parent_menu ON system_menu.parent_id = parent_menu.id
         <where>
+            system_menu.flag = #{flag}
             <if test="id != null">AND system_menu.id = #{id}</if>
         </where>
-    </select>
-
-
-    <select id="childList" parameterType="MenuDTO" resultType="MenuPO">
-        SELECT
-            id
-        FROM
-            system_menu
-        WHERE
-            parent_id = #{id} UNION
-        SELECT
-            child.id
-        FROM
-            system_menu child
-            LEFT JOIN ( SELECT id, parent_id, `name` FROM system_menu ) parent ON child.parent_id = parent.id
-        WHERE
-            parent.parent_id = #{id}
     </select>
 
     <select id="list" parameterType="MenuDTO" resultType="MenuPO">
@@ -122,6 +115,7 @@
             LEFT JOIN system_user_role ON system_role_menu.role_id = system_user_role.role_id
         </if>
         <where>
+            flag = #{flag}
             <if test="userId != null">AND system_user_role.user_id = #{userId}</if>
             <if test="state != null">AND state = #{state}</if>
             <if test="types != null">AND type IN
@@ -142,14 +136,16 @@
         FROM
         system_menu
         <where>
+            flag = #{flag}
             <if test="noid != null ">and id != #{noid}</if>
+            <if test="parentId != null ">and parent_id = #{parentId}</if>
             <if test="name != null and name != ''">and name = #{name}</if>
             <if test="key != null and key != ''">and `key` = #{key}</if>
         </where>
     </select>
 
 
-    <select id="keySet" parameterType="integer" resultType="string">
+    <select id="keySet" parameterType="MenuDTO" resultType="string">
         SELECT
             `key`
         FROM
@@ -158,8 +154,9 @@
             LEFT JOIN system_user_role ON system_role_menu.role_id = system_user_role.role_id
         WHERE
             state = 0
+            AND flag = #{flag}
             AND `key` is not null
-            AND system_user_role.user_id = #{value}
+            AND system_user_role.user_id = #{userId}
     </select>
 
 

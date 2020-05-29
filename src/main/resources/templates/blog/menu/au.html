@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+    <head th:include="include :: header"></head>
+    <style>
+
+        #parentName{
+            cursor: pointer;
+        }
+
+        #icon{
+            display: inline-block;
+            width: 70%;
+            margin-right: 2%;
+        }
+
+        #menuTree {
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+    <body>
+        <div class="wrap-container">
+            <form class="layui-form iframe-from" id="form" th:attr="action=${action}">
+                <input type="hidden" name="id"  id="id" th:value="${o.id}">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父级：</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="parentId" id="parentId" th:value="${o.parentId}">
+                        <input type="text" id="parentName" lay-verify="required" th:value="${0 == o.parentId ? '根目录': o.parentName}" class="layui-input" placeholder="请选择选择父级" readonly autocomplete="off">
+                        <div id="menuTree"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" class="type" name="type" lay-filter="type" th:each="type,iterStat:${typeList}"
+                               th:value="${type.code}" th:title="${type.label}" th:id="${'type'+ type.code}" th:field="${o.type}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name"  lay-verify="required" th:value="${o.name}" class="layui-input" placeholder="请输入名称" autocomplete="off"  >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图标：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="icon" id="icon" th:value="${o.icon}" class="layui-input" placeholder="请输入图标"
+                               autocomplete="off" onkeyup="this.value=this.value.replace(/[^a-zA-Z]/g,'')" maxlength="64">
+                        <a href="https://ant.design/components/icon-cn/" target="_blank">图标库</a>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标识：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="key" id="key" th:value="${o.key}" class="layui-input" placeholder="请输入权限标识"autocomplete="off">
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item" id="path-area">
+                    <label class="layui-form-label">地址：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="path"  th:value="${o.path}" class="layui-input" placeholder="请输入请求地址"  autocomplete="off">
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">显示顺序：</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="sort" id="sort" th:value="${o.sort}" class="layui-input" placeholder="请输入显示顺序" autocomplete="off">
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="state" th:each="state:${stateList}"
+                               th:value="${state.code}" th:title="${state.label}" th:field="${o.state}">
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:include="include :: au-footer"></div>
+        <script th:inline="javascript">
+            const prefix = `${gate}blog/menu`,
+                menuTree = [{
+                    id: 0,
+                    name: '根目录',
+                    spread: true,
+                    childList: [[${menuTree}]]
+                }],
+                slidems = 500
+
+            layui.use(['form', 'tree', 'jquery'], function () {
+                const {form, tree, jquery: $} = layui
+
+                // 回显
+                areaHandle([[${o.type}]])
+
+                // 父级树
+                tree.render({
+                    elem: '#menuTree',
+                    data: formatTree(menuTree),
+                    accordion: true,
+                    onlyIconControl: true,
+                    click: ({data}) => {
+                        $('#parentId').val(data.id)
+                        $('#parentName').val(data.title)
+                        $("#menuTree").slideUp()
+                    }
+                })
+
+                //监听提交
+                form.on('submit(submit)', function (obj) {
+                    obj.field.type = $('input[name=type]:checked ').val()
+                    IFRAME_SUBMIT(obj)
+                    return false
+                })
+
+                form.on('radio(type)', function ({value}) {
+                    areaHandle(parseInt(value))
+                })
+
+                // 类型控制区域
+                function areaHandle(type){
+                    if(0==type){
+                        $('#path-area').slideUp(slidems)
+                    }else{
+                        $('#path-area').slideDown(slidems)
+                    }
+                }
+
+                // 父级树显示
+                $('#parentName').click(() => {
+                    $("#menuTree").slideToggle(slidems)
+                })
+
+
+                // 列表隐藏
+                $('#form').on('focus', 'input', function () {
+                    !$(this).is('#parentName') && $('#menuTree').slideUp();
+                })
+
+
+                // 整理列表为layuitree数据格式
+                function formatTree(tree) {
+
+                    let id = parseInt($('#id').val())
+                    parentId = parseInt($('#parentId').val())
+
+                    for (let item of tree) {
+                        item.title = item.name
+                        if (item.childList) {
+                            item.children = item.childList
+                            formatTree(item.children)
+                        }
+
+                        if(1 ==item.type || id === item.id){
+                            item.disabled = true
+                        }else if(parentId === item.id){
+                            item.spread = true
+                        }
+                        delete item.name
+                        delete item.childList
+                    }
+                    return tree
+                }
+            })
+        </script>
+    </body>
+
+</html>

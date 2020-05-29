@@ -1,6 +1,7 @@
-package priv.zhou.module.system.menu.controller;
+package priv.zhou.module.blog.menu.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +20,8 @@ import java.util.List;
  * @author zhou
  * @since 2020.03.20
  */
-@RestController
-@RequestMapping("/system/menu/rest")
+@RestController("blogMenuRestController")
+@RequestMapping("/blog/menu/rest")
 public class MenuRestController {
 
 
@@ -30,13 +31,13 @@ public class MenuRestController {
         this.menuService = menuService;
     }
 
-    @RequiresPermissions("system:menu:add")
+    @RequiresPermissions("blog:menu:add")
     @RequestMapping("/save")
     public OutVO<NULL> save(@Valid MenuDTO menuDTO) {
         return menuService.save(menuDTO.setFlag(MenuController.FLAG));
     }
 
-    @RequiresPermissions("system:menu:remove")
+    @RequiresPermissions("blog:menu:remove")
     @RequestMapping("/remove/{id}")
     public OutVO<NULL> remove(@PathVariable Integer id) {
         return menuService.remove(new MenuDTO().setId(id));
@@ -48,20 +49,20 @@ public class MenuRestController {
         return menuService.update(menuDTO.setFlag(MenuController.FLAG));
     }
 
-    @RequiresPermissions("system:menu:list")
+    @RequiresPermissions("blog:menu:list")
     @RequestMapping("/list")
     public OutVO<List<MenuDTO>> list(MenuDTO menuDTO) {
         return menuService.list(menuDTO.setFlag(MenuController.FLAG));
     }
 
-    @RequiresPermissions("system:menu:list")
+    @RequiresPermissions("blog:menu:list")
     @RequestMapping("/tree")
     public OutVO<List<MenuDTO>> trimList(MenuDTO menuDTO) {
         OutVO<List<MenuDTO>> outVO = menuService.list(menuDTO.setFlag(MenuController.FLAG));
         return outVO.setData(IMenuService.toTree(outVO.getData()));
     }
 
-    @RequiresPermissions("system:menu:refresh")
+    @RequiresPermissions("blog:menu:refresh")
     @RequestMapping("/refresh")
     public OutVO<NULL> refresh() {
         ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();

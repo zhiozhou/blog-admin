@@ -79,6 +79,11 @@ public class MenuDTO extends DTO<MenuPO> {
     private String key;
 
     /**
+     * 旗帜 区分前后台菜单
+     */
+    private Integer flag;
+
+    /**
      * 查找的范围
      */
     private List<Integer> types;

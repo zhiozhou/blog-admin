@@ -65,6 +65,11 @@ public class MenuPO implements Serializable {
 	private String key;
 
 	/**
+	 * 旗帜 区分前后台菜单
+	 */
+	private Integer flag;
+
+	/**
 	 * 创建人id
 	 */
 	private Integer createId;

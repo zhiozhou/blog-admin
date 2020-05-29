@@ -10,13 +10,13 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import priv.zhou.module.system.menu.controller.MenuController;
+import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.po.UserPO;
-
-import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
@@ -37,7 +37,7 @@ public class UserRealm extends AuthorizingRealm {
         UserDTO userDTO = (UserDTO) principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo();
         authInfo.setRoles(roleService.keySet(userDTO.getId()));
-        authInfo.setStringPermissions(menuService.keySet(userDTO.getId()));
+        authInfo.setStringPermissions(menuService.keySet(new MenuDTO().setUserId(userDTO.getId()).setFlag(MenuController.FLAG)));
         return authInfo;
     }
 

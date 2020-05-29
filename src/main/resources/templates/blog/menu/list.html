@@ -32,11 +32,6 @@
                         <i class="fa fa-plus"></i>
                         添加
                     </a>
-
-                    <a class="layui-btn layui-btn-sm refresh-btn" shiro:hasPermission=${m.permissionPrefix+':refresh'}>
-                        <i class="fa fa-refresh"></i>
-                        刷新权限
-                    </a>
                 </div>
             </div>
             <div>
@@ -49,7 +44,7 @@
                 stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
-            const prefix = `${gate}system/menu`
+            const prefix = `${gate}blog/menu`
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui
@@ -92,8 +87,8 @@
                                 return div.prop('outerHTML')
                             }
                         },
-                        {field: 'path', title: '跳转地址', align: 'center'},
-                        {field: 'key', title: '权限标识', align: 'center'},
+                        {field: 'path', title: '地址', align: 'center'},
+                        {field: 'key', title: '标识', align: 'center'},
                         {
                             field: 'type',
                             title: '类型',
@@ -137,7 +132,7 @@
                     childHandle(this)
                 })
 
-                function childHandle(btn,flag) {
+                function childHandle(btn) {
                     let $btn = $(btn),
                         id = $btn.data('id'),
                         childs = $('.parent' + id),
