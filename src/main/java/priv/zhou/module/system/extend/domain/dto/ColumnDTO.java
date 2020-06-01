@@ -5,12 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.beans.BeanUtils;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.module.system.extend.domain.po.ColumnPO;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static priv.zhou.common.param.CONSTANT.TYPE_MAP;
 
@@ -78,6 +74,9 @@ public class ColumnDTO extends DTO<ColumnPO> {
         return this;
     }
 
+    public void setNullable(String nullable) {
+        this.nullable = "YES".equals(nullable);
+    }
 
     public ColumnDTO(ColumnPO columnPO) {
         super(columnPO);

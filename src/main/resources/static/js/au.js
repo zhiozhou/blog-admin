@@ -66,6 +66,7 @@ function SINGLE_IMG(elem) {
     }
 }
 
+
 /**
  * layui 的单个文件上传的配置
  */
@@ -120,7 +121,7 @@ function IFRAME_SUBMIT({form, field: data}) {
     post(prefix + form.getAttribute('action'), data, () => {
         outDone(() => {
             parent.layer.close(parent.layer.getFrameIndex(window.name))
-            parent.table.reload('table', {
+            parent.layui.table.reload('table', {
                 where: null,
                 page: {curr: 1}
             })

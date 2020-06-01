@@ -74,46 +74,30 @@
                             dest = [...src]
                             sort(dest, src, 0)
                         }
-                        return {
-                            code, msg,
-                            "data": dest
-                        }
+                        return {code, msg, "data": dest}
                     },
                     cols: [[
                         {
-                            field: 'name',
-                            title: '名称',
-                            align: 'left',
+                            field: 'name', title: '名称', align: 'left',
                             templet: ({id, depth, parentId, childList, name}) => {
-                                let div = $('<i></i>')
-                                div.addClass(`fa parent${parentId} depth${depth}`).attr('data-id', id)
-                                if (childList) {
-                                    div.addClass('child-btn fa-chevron-right')
-                                }
-                                if (0 !== parentId) {
-                                    div.addClass('child')
-                                }
-                                let span = $('<span></span>')
-                                span.html(name)
-                                div.append(span)
+                                let div = $(`<i><span>${name}</span></i>`)
+                                    .addClass(`depth${depth}`)
+                                    .attr({'data-id': id, 'data-parent-id': parentId})
+                                childList && div.addClass('child-btn fa fa-chevron-right')
                                 return div.prop('outerHTML')
                             }
                         },
                         {field: 'path', title: '跳转地址', align: 'center'},
                         {field: 'key', title: '权限标识', align: 'center'},
                         {
-                            field: 'type',
-                            title: '类型',
-                            align: 'center',
+                            field: 'type', title: '类型', align: 'center',
                             templet: ({type}) => {
                                 let {label, css} = typeMap[type]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
                         {
-                            field: 'state',
-                            title: '状态',
-                            align: 'center',
+                            field: 'state', title: '状态', align: 'center',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
@@ -123,20 +107,10 @@
                         {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#ud'}
                     ]],
                     done: () => {
-
-
-                        $('.child').each((index,child)=>{
-                            console.log(child)
-                        })
-
-
-                        // $('.child').parents('tr').hide()
-                        // if (openId) {
-                        //     $(`[data-id=${openId}]`).parents('tr').show()
-                        //     $(`.parent${openId}`).parents('tr').show()
-                        // }
-                        console.log('done')
-                        // .parents('tr').hide()
+                        let parentId = $(`[data-id=${openId}]`).data('parent-id')
+                        $('[data-parent-id]')
+                            .not(`[data-parent-id=${openId}],[data-parent-id=${parentId}],[data-parent-id=0]`)
+                            .parents('tr').hide()
                     }
                 })
 
@@ -148,7 +122,6 @@
                     post(`${prefix}/rest/refresh`, null, () => {
                         done()
                     })
-
                 })
 
 
@@ -160,7 +133,7 @@
                 function childHandle(btn) {
                     let $btn = $(btn),
                         id = $btn.data('id'),
-                        childs = $('.parent' + id),
+                        childs = $(`[data-parent-id=${id}]`),
                         show = 'fa-chevron-down',
                         hide = 'fa-chevron-right'
 

@@ -15,7 +15,7 @@ layui.use(['table', 'form', 'jquery'], () => {
      * 使用新的页面打开添加页
      */
     $('.add-go-btn').click(() => {
-        window.location.href = `${prefix}/add/`
+        window.location.href = `${prefix}/add`
     })
 
     /**

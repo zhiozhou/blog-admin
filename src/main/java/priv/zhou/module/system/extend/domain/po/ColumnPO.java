@@ -32,5 +32,7 @@ public class ColumnPO {
     /**
      * 可以为空
      */
-    private Boolean nullable;
+    private String nullable;
+
+
 }
