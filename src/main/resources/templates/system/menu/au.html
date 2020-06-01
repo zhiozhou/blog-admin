@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <style>
 
@@ -9,7 +9,7 @@
 
         #menuTree {
             display: none;
-            max-height: 200px;
+            max-height: 235px;
             overflow-y: auto;
         }
 
@@ -41,26 +41,31 @@
     <body>
         <div class="wrap-container">
             <form class="layui-form iframe-from" id="form" th:attr="action=${action}">
-                <input type="hidden" name="id"  id="id" th:value="${o.id}">
+                <input type="hidden" name="id" id="id" th:value="${o.id}">
                 <div class="layui-form-item">
                     <label class="layui-form-label">父级：</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="parentId" id="parentId" th:value="${o.parentId}">
-                        <input type="text" id="parentName" lay-verify="required" th:value="${0 == o.parentId ? '根目录': o.parentName}" class="layui-input" placeholder="请选择选择父级" readonly autocomplete="off">
+                        <input type="text" id="parentName" lay-verify="required"
+                               th:value="${0 == o.parentId ? '根目录': o.parentName}" class="layui-input"
+                               placeholder="请选择选择父级" readonly autocomplete="off">
                         <div id="menuTree"></div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型：</label>
                     <div class="layui-input-block">
-                        <input type="radio" class="type" name="type" lay-filter="type" th:each="type,iterStat:${typeList}"
-                               th:value="${type.code}" th:title="${type.label}" th:id="${'type'+ type.code}" th:field="${o.type}">
+                        <input type="radio" class="type" name="type" lay-filter="type"
+                               th:each="type,iterStat:${typeList}"
+                               th:value="${type.code}" th:title="${type.label}" th:id="${'type'+ type.code}"
+                               th:field="${o.type}">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name"  lay-verify="required" th:value="${o.name}" class="layui-input" placeholder="请输入名称" autocomplete="off"  >
+                        <input type="text" name="name" lay-verify="required" th:value="${o.name}" class="layui-input"
+                               placeholder="请输入名称" autocomplete="off">
                     </div>
 
                 </div>
@@ -68,7 +73,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">图标：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="icon" id="icon" th:value="${o.icon}" class="layui-input" placeholder="请输入图标" readonly autocomplete="off">
+                        <input type="text" name="icon" id="icon" th:value="${o.icon}" class="layui-input"
+                               placeholder="请输入图标" readonly autocomplete="off">
                         <div id="iconList">
                             <i class="fa fa-address-book" aria-hidden="true"></i>
 
@@ -979,14 +985,16 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">权限标识：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="key" id="key" th:value="${o.key}" class="layui-input" placeholder="请输入权限标识"autocomplete="off">
+                        <input type="text" name="key" id="key" th:value="${o.key}" class="layui-input"
+                               placeholder="请输入权限标识" autocomplete="off">
                     </div>
 
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">请求地址：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="path" id="path" th:value="${o.path}" class="layui-input" placeholder="请输入请求地址"  autocomplete="off">
+                        <input type="text" name="path" id="path" th:value="${o.path}" class="layui-input"
+                               placeholder="请输入请求地址" autocomplete="off">
                     </div>
 
                 </div>
@@ -994,7 +1002,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">显示顺序：</label>
                     <div class="layui-input-block">
-                        <input type="number" name="sort" id="sort" th:value="${o.sort}" class="layui-input" placeholder="请输入显示顺序" autocomplete="off">
+                        <input type="number" name="sort" id="sort" th:value="${o.sort}" class="layui-input"
+                               placeholder="请输入显示顺序" autocomplete="off">
                     </div>
 
                 </div>
@@ -1028,7 +1037,7 @@
                 }],
                 slidems = 500,
 
-                areas = ['icon','path','key','sort'],       // 可变区域
+                areas = ['icon', 'path', 'key', 'sort'],       // 可变区域
                 areaMap = {     // 按类型显示区域
                     0: ['icon', 'sort'],
                     1: ['path', 'key', 'sort'],
@@ -1060,9 +1069,20 @@
                 })
 
                 //监听提交
-                form.on('submit(submit)', function (obj) {
-                    obj.field.type = $('input[name=type]:checked ').val()
-                    IFRAME_SUBMIT(obj)
+                form.on('submit(submit)', ({form, field: data}) => {
+                    data.type = $('input[name=type]:checked ').val()
+                    post(prefix + form.getAttribute('action'), data, () => {
+                        outDone(()=>{
+                            parent.openId = data.parentId
+                            parent.layer.close(parent.layer.getFrameIndex(window.name))
+                            parent.layui.table.reload('table', {
+                                where: null,
+                                page: {
+                                    curr: 1
+                                }
+                            })
+                        })
+                    })
                     return false
                 })
 
@@ -1072,27 +1092,27 @@
 
 
                 // 类型控制区域
-                function areaHandle(type){
-                    $('.type').prop('disabled',true)
+                function areaHandle(type) {
+                    $('.type').prop('disabled', true)
 
                     let parentId = parseInt($('#parentId').val())
 
-                    if(0 == parentId){
+                    if (0 == parentId) {
                         // 父级是根目录的话,可选菜单和目录
-                        $('#type0').prop('disabled',false)
-                        $('#type1').prop('disabled',false)
+                        $('#type0').prop('disabled', false)
+                        $('#type1').prop('disabled', false)
                     }
-                    $(`#type${type}`).prop('disabled',false)
+                    $(`#type${type}`).prop('disabled', false)
                     form.render()
 
                     // 控制表单元素
                     let viewArea = areaMap[type]
-                    if(0 == parentId && type == 1){
+                    if (0 == parentId && type == 1) {
                         viewArea.push('icon')
                     }
-                    for(let area of areas){
+                    for (let area of areas) {
                         let formItem = $(`#${area}`).parents('.layui-form-item')
-                        viewArea.includes(area) ? formItem.slideDown(slidems):  formItem.slideUp(slidems)
+                        viewArea.includes(area) ? formItem.slideDown(slidems) : formItem.slideUp(slidems)
                     }
                 }
 
@@ -1132,9 +1152,9 @@
                             formatTree(item.children)
                         }
 
-                        if(2 ==item.type || id === item.id){
+                        if (2 == item.type || id === item.id) {
                             item.disabled = true
-                        }else if(parentId === item.id){
+                        } else if (parentId === item.id) {
                             item.spread = true
 
                         }

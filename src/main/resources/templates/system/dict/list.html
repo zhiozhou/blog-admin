@@ -85,7 +85,7 @@
                             shade: [0.1, '#fff']
                         }, () => {
                             post(`${prefix}/rest/remove`, {key: tool.data.key}, () => {
-                                done()
+                                done(reloadTable)
                             })
                         })
                         return

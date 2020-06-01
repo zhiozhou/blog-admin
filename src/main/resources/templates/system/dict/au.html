@@ -8,7 +8,7 @@
                 <div class="layui-tab" style="margin: 0;">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/dict/list}" id="superior">字典列表</a></li>
-                        <li class="layui-this"  th:text="'/rest/save'==${action}?'添加字典':'修改字典'"></li>
+                        <li class="layui-this" th:text="'/rest/save'==${action}?'添加字典':'修改字典'"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${o.id}">
                     <div class="layui-tab-content">
@@ -125,7 +125,7 @@
 
 
                 //监听提交
-                form.on('submit(submit)', function ({form, field: data}) {
+                form.on('submit(submit)', function ({form, field}) {
 
                     // 数据项加入提交数据
                     let empty = true, codes = []
@@ -136,11 +136,11 @@
                                 return warn('数据项编码值不可重复')
                             }
                             let name = `dataList[${i}].`
-                            data[name + 'code'] = code
-                            data[name + 'label'] = label
-                            data[name + 'type'] = type
-                            data[name + 'top'] = top
-                            data[name + 'css'] = css
+                            field[name + 'code'] = code
+                            field[name + 'label'] = label
+                            field[name + 'type'] = type
+                            field[name + 'top'] = top
+                            field[name + 'css'] = css
                             empty = false
                             codes.push(code)
                         }
@@ -151,12 +151,7 @@
                         return warn('数据项至少存在一个')
                     }
 
-                    let action = $(form).attr('action')
-                    post(prefix + action, data, () => {
-                        done(() => {
-                            window.location.href = $('#superior').attr('href')
-                        })
-                    })
+                    PAGE_SUBMIT({form, field})
                     return false
                 })
 

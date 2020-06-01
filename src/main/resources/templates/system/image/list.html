@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="page-content-wrap">
+            <div class="layui-form-item">
+                <form class="layui-form">
+                    <div class="layui-inline tool-btn">
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-go-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                            <i class="fa fa-plus"></i>
+                            添加
+                        </a>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script th:inline="none">
+            const prefix = `${gate}system/image`
+
+            layui.use(['table', 'jquery'], () => {
+                const {table} = layui,
+                    cols = [[
+                        {field: 'url', title: '地址', align: 'center'},
+                        {field: 'thumbnailUrl', title: '缩略图', align: 'center'},
+                        {field: 'remark', title: '备注', align: 'center'},
+                        {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#rud'}
+                    ]]
+
+                table.render(fillDefault(cols))
+                table.on('tool(table)', handleAction2)
+            })
+        </script>
+    </body>
+
+</html>

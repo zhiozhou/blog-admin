@@ -1,26 +1,32 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <style>
-        .depth0{
-            padding-left:21px ;
+        .depth0 {
+            padding-left: 21px;
         }
+
         .depth1 {
             padding-left: 42px;
         }
-        .depth2{
-            padding-left:63px ;
+
+        .depth2 {
+            padding-left: 63px;
         }
-        td{
+
+        td {
             user-select: none;
         }
-        .child-btn{
+
+        .child-btn {
             cursor: pointer;
         }
-        .child-btn>span{
+
+        .child-btn > span {
             margin-left: 10px;
         }
-        .refresh-btn{
+
+        .refresh-btn {
             float: right;
         }
     </style>
@@ -28,7 +34,8 @@
         <div class="page-content-wrap">
             <div class="layui-form-item">
                 <div class="layui-inline tool-btn">
-                    <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                    <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
+                       shiro:hasPermission=${m.permissionPrefix+':add'}>
                         <i class="fa fa-plus"></i>
                         添加
                     </a>
@@ -49,6 +56,7 @@
                 stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
+            var openId
             const prefix = `${gate}system/menu`
 
             layui.use(['table', 'jquery'], () => {
@@ -57,17 +65,17 @@
                 table.render({
                     id: 'table',
                     elem: '#table',
-                    page : false,
+                    page: false,
                     method: 'post',
                     url: `${prefix}/rest/tree`,
-                    parseData: ({code, info:msg, data:src})=>{
+                    parseData: ({code, info: msg, data: src}) => {
                         let dest = null
-                        if(src){
+                        if (src) {
                             dest = [...src]
                             sort(dest, src, 0)
                         }
                         return {
-                            code,msg,
+                            code, msg,
                             "data": dest
                         }
                     },
@@ -77,13 +85,12 @@
                             title: '名称',
                             align: 'left',
                             templet: ({id, depth, parentId, childList, name}) => {
-
                                 let div = $('<i></i>')
-                                div.addClass(`fa parent${parentId} depth${depth}`).attr('data-id',id)
-                                if(childList){
+                                div.addClass(`fa parent${parentId} depth${depth}`).attr('data-id', id)
+                                if (childList) {
                                     div.addClass('child-btn fa-chevron-right')
                                 }
-                                if( 0!==parentId ){
+                                if (0 !== parentId) {
                                     div.addClass('child')
                                 }
                                 let span = $('<span></span>')
@@ -99,7 +106,7 @@
                             title: '类型',
                             align: 'center',
                             templet: ({type}) => {
-                                let {label,css} = typeMap[type]
+                                let {label, css} = typeMap[type]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
@@ -108,27 +115,40 @@
                             title: '状态',
                             align: 'center',
                             templet: ({state}) => {
-                                let {label,css} = stateMap[state]
+                                let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
                         {field: 'sort', title: '排序', align: 'center'},
-                        {title: '操作',  width:'190', fixed: 'right', align: 'center', toolbar: '#ud'}
+                        {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#ud'}
                     ]],
                     done: () => {
-                        $('.child').parents('tr').hide()
+
+
+                        $('.child').each((index,child)=>{
+                            console.log(child)
+                        })
+
+
+                        // $('.child').parents('tr').hide()
+                        // if (openId) {
+                        //     $(`[data-id=${openId}]`).parents('tr').show()
+                        //     $(`.parent${openId}`).parents('tr').show()
+                        // }
+                        console.log('done')
+                        // .parents('tr').hide()
                     }
                 })
 
                 // 交给通用操作
                 table.on('tool(table)', handleAction)
 
-
                 // 权限刷新
-                $('.refresh-btn').click(()=>{
+                $('.refresh-btn').click(() => {
                     post(`${prefix}/rest/refresh`, null, () => {
-                        done(()=>{})
+                        done()
                     })
+
                 })
 
 
@@ -137,7 +157,7 @@
                     childHandle(this)
                 })
 
-                function childHandle(btn,flag) {
+                function childHandle(btn) {
                     let $btn = $(btn),
                         id = $btn.data('id'),
                         childs = $('.parent' + id),
@@ -155,7 +175,7 @@
                         $btn.removeClass(show).addClass(hide)
                         childs.each((index, child) => {
                             // 子级为目录，孙级也隐藏
-                            if($(child).is(`.child-btn.${show}`)){
+                            if ($(child).is(`.child-btn.${show}`)) {
                                 childHandle(child)
                             }
                             $(child).parents('tr').hide()
@@ -163,9 +183,6 @@
                     }
                 }
             })
-
-
-
 
 
             // 结构排序成列表
@@ -177,7 +194,7 @@
                         // 将子元素插入父级元素后
                         dest.splice(1 + getIndex(dest, id), 0, ...childList)
                         // 子孙级递归插入
-                        sort(dest, childList,1+depth)
+                        sort(dest, childList, 1 + depth)
                         --item.depth
                     }
                 }

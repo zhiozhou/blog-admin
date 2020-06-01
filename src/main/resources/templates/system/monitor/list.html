@@ -6,10 +6,10 @@
             <div class="layui-form-item">
                 <form class="layui-form">
                     <div class="layui-inline">
-                        <input type="text" name="username" class="layui-input" placeholder="请输入用户名" autocomplete="off" >
+                        <input type="text" name="username" class="layui-input" placeholder="请输入用户名" autocomplete="off">
                     </div>
                     <div class="layui-inline">
-                        <select name="role.id"  lay-search="">
+                        <select name="role.id" lay-search="">
                             <option value="">请选择一个角色</option>
                             <option th:each="role:${roleList}" th:value="${role.id}" th:text="${role.name}"></option>
                         </select>
@@ -19,7 +19,7 @@
                             <i class="fa fa-search"></i>
                             搜索
                         </button>
-                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset-all" >
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset-all">
                             <i class="fa fa-repeat"></i>
                             重置
                         </button>
@@ -38,27 +38,40 @@
             {{#  if(d.id == id){ }}
             <a class="layui-btn layui-btn-sm layui-btn-disabled">当前账号</a>
             {{#  } else { }}
-            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="forceOff" shiro:hasPermission=${m.permissionPrefix+':forceOff'}>强退</a>
+            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="forceOff"
+               shiro:hasPermission=${m.permissionPrefix+':forceOff'}>强退</a>
             {{#  } }}
         </script>
         <script th:inline="none">
             const prefix = `${gate}system/monitor`
 
-            layui.use(['table', 'jquery','util'], () => {
-                const {table, jquery:$} = layui,
-                    cols =  [[
+            layui.use(['table', 'jquery', 'util'], () => {
+                const {table, jquery: $} = layui,
+                    cols = [[
                         {field: 'username', title: '用户名', align: 'center'},
-                        {field: 'role', title: '角色', align: 'center',templet:({role})=>{return role.name}},
+                        {
+                            field: 'role', title: '角色', align: 'center', templet: ({role}) => {
+                                return role.name
+                            }
+                        },
                         {field: 'os', title: '操作系统', align: 'center'},
                         {field: 'browser', title: '浏览器', align: 'center'},
                         {field: 'host', title: '主机地址', align: 'center'},
-                        {field: 'stateTime', title: '开始时间', align: 'center',templet:({startTime})=>{return formatDate(startTime)}},
-                        {field: 'lastAccessTime', title: '最后访问时间', align: 'center',templet:({lastAccessTime})=>{return formatDate(lastAccessTime)}},
-                        {title: '操作',  width:'65', fixed: 'right', align: 'center', toolbar: '#monitor-tool'}
+                        {
+                            field: 'stateTime', title: '开始时间', align: 'center', templet: ({startTime}) => {
+                                return formatDate(startTime)
+                            }
+                        },
+                        {
+                            field: 'lastAccessTime', title: '最后访问时间', align: 'center', templet: ({lastAccessTime}) => {
+                                return formatDate(lastAccessTime)
+                            }
+                        },
+                        {title: '操作', width: '65', fixed: 'right', align: 'center', toolbar: '#monitor-tool'}
                     ]]
 
-                table.render(fillDefault(cols,false,
-                    ({code, info:msg, data}) =>{
+                table.render(fillDefault(cols, false,
+                    ({code, info: msg, data}) => {
                         return {
                             code,
                             msg,
@@ -68,22 +81,21 @@
                 )
 
                 // 工具交给通用操作
-                table.on('tool(table)', ({data, event: action})=>{
+                table.on('tool(table)', ({data, event: action}) => {
                     switch (action) {
                         case 'forceOff':
                             layer.confirm(`确认强退该用户吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
-                            }, (index) => {
-                                post(`${prefix}/rest/force/off`,{id:data.id},()=>{
-                                    done()
+                            }, () => {
+                                post(`${prefix}/rest/force/off`, {id: data.id}, () => {
+                                    done(reloadTable)
                                 })
                             });
                             break
                     }
                 })
             })
-
 
 
         </script>
