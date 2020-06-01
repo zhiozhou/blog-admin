@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 
 /**
- *  数据传输模型
+ * 博客类型 数据传输模型
  *
  * @author zhou
  * @since 2020.05.21

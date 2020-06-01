@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * 分页通用数据传输
  * @author zhou
  */
 @Getter

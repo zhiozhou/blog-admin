@@ -7,7 +7,7 @@ import priv.zhou.common.param.NULL;
 import priv.zhou.module.blog.blog.domain.dto.BlogDTO;
 
 /**
- *  服务层定义
+ * 博客 服务层定义
  *
  * @author zhou
  * @since 2020.05.15

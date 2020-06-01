@@ -20,7 +20,7 @@ import static java.util.Objects.isNull;
 
 
 /**
- * 服务层实现
+ * 博客 服务层实现
  *
  * @author zhou
  * @since 2020.05.15
@@ -28,7 +28,7 @@ import static java.util.Objects.isNull;
 @Service
 public class BlogServiceImpl implements IBlogService {
 
-    private BlogDAO blogDAO;
+    private final BlogDAO blogDAO;
 
     public BlogServiceImpl(BlogDAO blogDAO) {
         this.blogDAO = blogDAO;

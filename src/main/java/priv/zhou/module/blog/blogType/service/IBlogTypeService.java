@@ -1,14 +1,13 @@
 package priv.zhou.module.blog.blogType.service;
 
-import com.alibaba.fastjson.JSONObject;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.NULL;
 import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
 
 /**
- *  服务层定义
+ * 博客类型 服务层定义
  *
  * @author zhou
  * @since 2020.05.21

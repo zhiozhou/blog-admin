@@ -7,15 +7,15 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * 用于list接口返回
+ * 列表分页 通用返回模型
  * @author zhou
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ListVO<T> {
+public class ListVO<DTO> {
 
-	private List<T> list;
+	private List<DTO> list;
 
 	private Long count;
 }

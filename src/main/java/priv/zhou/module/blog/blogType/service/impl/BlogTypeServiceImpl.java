@@ -20,7 +20,7 @@ import static java.util.Objects.isNull;
 
 
 /**
- * 服务层实现
+ * 博客类型 服务层实现
  *
  * @author zhou
  * @since 2020.05.21

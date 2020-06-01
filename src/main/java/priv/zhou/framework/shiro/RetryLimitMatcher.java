@@ -7,7 +7,6 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Objects.isNull;
@@ -15,7 +14,7 @@ import static priv.zhou.common.param.CONSTANT.LOGIN_ATTEMPT_LIMIT;
 
 public class RetryLimitMatcher extends HashedCredentialsMatcher {
 
-    private Cache<String, AtomicInteger> retryCache;
+    private final Cache<String, AtomicInteger> retryCache;
 
     public RetryLimitMatcher(CacheManager cacheManager) {
         retryCache = cacheManager.getCache("retryCache");

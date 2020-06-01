@@ -1,8 +1,6 @@
 package priv.zhou.common.param;
 
 
-import org.apache.shiro.web.mgt.CookieRememberMeManager;
-
 import java.util.HashMap;
 import java.util.Map;
 

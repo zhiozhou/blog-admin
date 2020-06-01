@@ -5,20 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 
 import java.util.List;
 
 /**
- * Created by Andy on 2016/11/9.
- * 全局返回VO
+ * 全局返回
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-@Slf4j
 public class OutVO<T> {
 
     /**

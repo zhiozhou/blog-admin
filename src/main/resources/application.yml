@@ -59,6 +59,6 @@ app:
   enc: UTF-8
   gate: http://127.0.0.1:8080/${spring.application.name}/
   name: ${spring.application.name}
-  email: false
+  email: true
   admin-email: flyingnoob@qq.com
   access-limit: 200

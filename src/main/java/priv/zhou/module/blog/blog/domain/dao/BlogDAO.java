@@ -8,7 +8,7 @@ import priv.zhou.module.blog.blog.domain.po.BlogPO;
 
 
 /**
- *  数据访问模型
+ * 博客 数据访问模型
  *
  * @author zhou
  * @since 2020.05.15

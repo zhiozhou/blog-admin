@@ -14,7 +14,7 @@ import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
 import priv.zhou.module.blog.blogType.service.IBlogTypeService;
 
 /**
- * 视图控制层
+ * 博客 视图控制层
  *
  * @author zhou
  * @since 2020.05.15

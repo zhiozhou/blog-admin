@@ -2,18 +2,24 @@ package priv.zhou.framework.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.AppProperties;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.HttpUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -24,18 +30,25 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalHandler {
 
+    private AppProperties appProperties;
+
+    public GlobalHandler(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
     /**
      * 全局异常
      */
     @ExceptionHandler(value = Exception.class)
     public void globalHand(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception {
-        StringBuilder builder = new StringBuilder("");
-        builder.append("未知异常: request -->").append(request.getRequestURI()).append(" | ");
+        StringBuilder builder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
         builder.append("请求参数 -->").append(HttpUtil.getParams(request)).append(" | ");
         builder.append("e -->");
         log.error(builder.toString(), e);
         HttpUtil.out(response, OutVO.fail(OutVOEnum.ERROR_SYSTEM));
-//        EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
+        if(appProperties.isEmail()){
+            EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
+        }
     }
 
 
@@ -79,5 +92,17 @@ public class GlobalHandler {
         HttpUtil.out(response, outVO);
     }
 
+
+    private String getStackTrace(Throwable e) {
+        try (ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+             PrintWriter writer = new PrintWriter(outStream)) {
+            e.printStackTrace(writer);
+            writer.flush();
+            return outStream.toString(AppProperties.ENC);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
 }

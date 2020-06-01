@@ -12,7 +12,7 @@ import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
 import priv.zhou.module.blog.blogType.service.IBlogTypeService;
 
 /**
- *  视图控制层
+ * 博客类型 视图控制层
  *
  * @author zhou
  * @since 2020.05.21
@@ -21,9 +21,9 @@ import priv.zhou.module.blog.blogType.service.IBlogTypeService;
 @RequestMapping("/blog/type")
 public class BlogTypeController extends BaseController {
 
-    private IBlogTypeService blogTypeService;
+    private final IBlogTypeService blogTypeService;
 
-    private Module module = new Module("","blog:type");
+    private final Module module = new Module("","blog:type");
 
     public BlogTypeController(IBlogTypeService blogTypeService) {
         this.blogTypeService = blogTypeService;
