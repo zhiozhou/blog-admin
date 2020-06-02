@@ -3,16 +3,16 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="page-wrap">
-            <div class="layui-form-item">
-                <form class="layui-form">
+            <form class="layui-form">
+                <div class="layui-form-item">
                     <div class="layui-inline tool-btn">
                         <a class="layui-btn layui-btn-sm layui-btn-normal add-go-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <div>
                 <table id="table" lay-filter="table"></table>
             </div>
@@ -29,7 +29,7 @@
                         {field: 'title', title: '标题', align: 'center'},
                         {field: 'desc', title: '描述', align: 'center'},
                         {field: 'remark', title: '备注', align: 'center'},
-                        {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#rud'}
                     ]]
 
                 table.render(fillDefault(cols))

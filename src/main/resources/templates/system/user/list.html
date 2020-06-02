@@ -8,8 +8,8 @@
     </style>
     <body>
         <div class="page-wrap">
-            <div class="layui-form-item">
-                <form class="layui-form">
+            <form class="layui-form">
+                <div class="layui-form-item">
                     <div class="layui-inline tool-btn">
                         <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
@@ -41,8 +41,8 @@
                             重置
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <div>
                 <table id="table" lay-filter="table"></table>
             </div>

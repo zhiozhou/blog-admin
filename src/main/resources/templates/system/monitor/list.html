@@ -3,8 +3,8 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="page-wrap">
-            <div class="layui-form-item">
-                <form class="layui-form">
+            <form class="layui-form">
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <input type="text" name="username" class="layui-input" placeholder="请输入用户名" autocomplete="off">
                     </div>
@@ -24,8 +24,8 @@
                             重置
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <div>
                 <table id="table" lay-filter="table"></table>
             </div>

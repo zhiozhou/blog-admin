@@ -3,8 +3,8 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="page-wrap">
-            <div class="layui-form-item">
-                <form class="layui-form">
+            <form class="layui-form">
+                <div class="layui-form-item">
                     <div class="layui-inline tool-btn">
                         <a class="layui-btn layui-btn-sm layui-btn-normal coffee-btn" shiro:hasPermission=${m.permissionPrefix+':extend'}>
                             <i class="fa fa-coffee"></i>
@@ -24,8 +24,8 @@
                             重置
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <div>
                 <table id="table" lay-filter="table"></table>
             </div>
