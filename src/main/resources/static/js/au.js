@@ -1,16 +1,6 @@
 //---------------------------------------------- 通用配置 ----------------------------------------------
 
 /**
- * 图片上传地址
- */
-const UPLOAD_URL = 'https://zhousb.cn/file-upload/file/multipart'
-
-/**
- * 图片上传的标识前缀
- */
-const UPLOAD_PREFIX = 'zhousb-admin'
-
-/**
  * tinymce 富文本基通用配置
  */
 const TINYMCE_STAGE = {

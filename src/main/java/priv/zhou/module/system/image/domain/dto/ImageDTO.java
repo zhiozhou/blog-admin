@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.module.system.image.domain.po.ImagePO;
 
+import java.util.List;
+
 /**
  * 图片 数据传输模型
  *

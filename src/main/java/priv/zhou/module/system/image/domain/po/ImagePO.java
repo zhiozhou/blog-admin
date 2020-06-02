@@ -2,6 +2,7 @@ package priv.zhou.module.system.image.domain.po;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 public class ImagePO implements Serializable {
 
     private Integer id;

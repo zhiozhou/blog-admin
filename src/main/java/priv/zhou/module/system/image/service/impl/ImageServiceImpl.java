@@ -2,15 +2,13 @@ package priv.zhou.module.system.image.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.image.domain.dao.ImageDAO;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
 import priv.zhou.module.system.image.domain.po.ImagePO;
@@ -35,12 +33,18 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public OutVO<NULL> upload(MultipartFile[] files) {
-        if (ArrayUtils.isEmpty(files)) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+    public OutVO<Integer> save(List<ImageDTO> imageList, String remark) {
+        if (null == imageList) {
+            return new OutVO<>(OutVOEnum.EMPTY_PARAM);
         }
 
-        return null;
+        int failCount = 0;
+        for (ImageDTO imageDTO : imageList) {
+            if (imageDAO.save(imageDTO.toPO().setRemark(remark).setCreateId(ShiroUtil.getUserId())) < 1) {
+                failCount++;
+            }
+        }
+        return OutVO.success(failCount);
     }
 
     @Override
