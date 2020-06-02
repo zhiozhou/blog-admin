@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
-    <style>
-        .logo{
-            color: #1890ff;
-            border-bottom: 1px solid;
-            font-size: 1.7rem;
-            font-weight: 700;
-            text-align: center;
-            line-height: 61px;
-        }
-    </style>
     <body>
         <div class="main-layout" id='main-layout'>
             <!--侧边栏-->
@@ -20,9 +10,7 @@
                 </div>
                 <ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
                     <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
-                        <a href="#">
-                            <span>暂无菜单</span>
-                        </a>
+                        <div>暂无菜单</div>
                     </li>
                     <li class="layui-nav-item" th:each="menu : ${menuList}">
                         <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-text=${menu.name}">
@@ -33,7 +21,7 @@
                             <dd th:each="child : ${menu.childList}">
                                 <a href="#"
                                    th:attr="data-id=${child.id} , data-url=${child.path} , data-text=${child.name}">
-                                    <span class="l-line"></span>[[${child.name}]]
+                                    <i class="line"/></i>[[${child.name}]]
                                 </a>
                             </dd>
                         </dl>
@@ -46,7 +34,7 @@
                 <div class="main-layout-header">
 					<ul class="console">
 						<li id="hide-menu"><i class="fa fa-bars"></i></li>
-						<li id="refresh-btn"><i class="fa  fa-refresh"></i></li>
+						<li id="refresh-btn"><i class="fa fa-refresh"></i></li>
 					</ul>
                     <ul class="layui-nav right-nav" lay-filter="rightNav">
                         <li class="layui-nav-item">

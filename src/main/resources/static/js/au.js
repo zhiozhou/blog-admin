@@ -22,7 +22,7 @@ const TINYMCE_STAGE = {
     statusbar: false,
     plugins: 'lists , hr ,image,table,link , autolink , fullscreen',
     toolbar: 'undo redo | bold italic | styleselect forecolor | bullist numlist hr | image table link | fullscreen',
-    images_upload_handler: function (blobInfo, succFun, failFun) {
+    images_upload_handler: function (blobInfo, successCB, failCB) {
         let file = blobInfo.blob(),
             formData = new FormData();
         formData.append('prefix', UPLOAD_PREFIX)
@@ -34,7 +34,7 @@ const TINYMCE_STAGE = {
             processData: false,  // 不处理数据
             contentType: false,   // 不设置内容类型
             success: ({code, info, data}) => {
-                fail(code) ? failFun(info) : succFun(data[0].origin)
+                fail(code) ? failCB(info) : successCB(data[0].origin)
             }
         })
     },

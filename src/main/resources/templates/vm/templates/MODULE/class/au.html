@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="wrap-container">
-            <form class="layui-form iframe-from" id="form" th:attr="action=${action}">
+        <div class="frame-wrap">
+            <form class="layui-form  " id="form" th:attr="action=${action}">
                 <input type="hidden" name="id" th:value="${o.id}">
 #set($left="${")
 #foreach ($column in $table.columnList)
