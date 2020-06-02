@@ -79,7 +79,7 @@
                     acceptMime: 'image/*',
                     choose: obj => {
                         obj.preview((index, file, result) => {
-                            if (0 === $('.layui-elem-quote').children().length) {
+                            if ($('.layui-elem-quote').children().length) {
                                 $(area).slideDown()
                             }
                             $('#images-quote').append(`<div style="background-image: url(${result})"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
@@ -117,7 +117,7 @@
 
                 $('body').on('click', '.quote-cancel', function () {
                     $(this).parent().remove()
-                    if (0 === $('.layui-elem-quote').children().length) {
+                    if ($('.layui-elem-quote').children().length) {
                         $(area).slideUp()
                     }
                 })
