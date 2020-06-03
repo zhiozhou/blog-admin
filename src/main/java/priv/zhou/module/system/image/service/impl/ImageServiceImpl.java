@@ -2,11 +2,14 @@ package priv.zhou.module.system.image.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.image.domain.dao.ImageDAO;
@@ -15,6 +18,9 @@ import priv.zhou.module.system.image.domain.po.ImagePO;
 import priv.zhou.module.system.image.service.IImageService;
 
 import java.util.List;
+import java.util.Map;
+
+import static priv.zhou.common.tools.OkHttpUtil.httpPost;
 
 
 /**
@@ -45,6 +51,16 @@ public class ImageServiceImpl implements IImageService {
             }
         }
         return OutVO.success(failCount);
+    }
+
+    @Override
+    public OutVO<NULL> remove(String url) {
+        if (StringUtils.isBlank(url)) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        }
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("url", url);
+        return httpPost("移除文件", "http://127.0.0.1:8889/file/remove", params);
     }
 
     @Override

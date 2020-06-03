@@ -139,7 +139,7 @@ function removeAction(data) {
         post(`${prefix}/rest/remove/${data.id}`, null, () => {
             done(reloadTable)
         })
-    });
+    })
 }
 
 /**

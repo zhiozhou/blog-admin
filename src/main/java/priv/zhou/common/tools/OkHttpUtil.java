@@ -19,17 +19,24 @@ import static java.util.Objects.nonNull;
 
 @Slf4j
 @SuppressWarnings("all")
+/**
+ * Okhttp 工具类
+ * 默认使用 OutVO 形式转换响应报文
+ *
+ * @author zhou
+ * @since  2020.5.15
+ */
 public class OkHttpUtil {
 
     private final static OkHttpClient httpClient = AppContextUtil.getBean(OkHttpClient.class);
 
     private final static Class<OutVO> DEFAULT_VO = OutVO.class;
 
-    public static OutVO httpGet(String desc, String url) {
+    public static <E> OutVO<E> httpGet(String desc, String url) {
         return httpGet(desc, url, Maps.newHashMap());
     }
 
-    public static OutVO httpGet(String desc, String url, Map<String, String> params) {
+    public static <E> OutVO<E> httpGet(String desc, String url, Map<String, String> params) {
         return httpGet(desc, url, params, OutVO.class);
     }
 
@@ -48,11 +55,11 @@ public class OkHttpUtil {
         return call(desc, request, clazz);
     }
 
-    public static OutVO httpPost(String desc, String url) {
+    public static <E> OutVO<E> httpPost(String desc, String url) {
         return httpPost(desc, url, Maps.newHashMap());
     }
 
-    public static OutVO httpPost(String desc, String url, Map<String, Object> params) {
+    public static <E> OutVO<E> httpPost(String desc, String url, Map<String, Object> params) {
         return httpPost(desc, url, params, OutVO.class);
     }
 
@@ -80,7 +87,7 @@ public class OkHttpUtil {
     }
 
 
-    public static OutVO httpPost(String desc, String url, JSONObject json) {
+    public static OutVO<Object> httpPost(String desc, String url, JSONObject json) {
         return httpPost(desc, url, json, DEFAULT_VO);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.NULL;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
 import priv.zhou.module.system.image.domain.dto.ImagesDTO;
 import priv.zhou.module.system.image.service.IImageService;
@@ -31,6 +32,12 @@ public class ImageRestController {
     @RequestMapping("/save")
     public OutVO<Integer> save(ImagesDTO imagesDTO) {
         return imageService.save(imagesDTO.getImageList(), imagesDTO.getRemark());
+    }
+
+    @RequiresPermissions("system:image:remove")
+    @RequestMapping("/remove")
+    public OutVO<NULL> remove(String url) {
+        return imageService.remove(url);
     }
 
 

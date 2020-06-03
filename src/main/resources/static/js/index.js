@@ -2,8 +2,17 @@ layui.use(['layer', 'element', 'jquery'], () => {
     const {element, jquery: $} = layui
     const mainLayout = $('#main-layout')
 
-    element.on('nav(leftNav)', navHandle)
-    element.on('nav(rightNav)', navHandle)
+    let openId
+
+    element.on('nav(menu-side)', navHandle)
+    element.on('nav(nav-right)', navHandle)
+    element.on('tab(tab)', ({elem}) => {
+        let id =  $(elem.context).attr('lay-id')
+        if(!id || openId === id)return
+        $('.main-layout-side .layui-this,.main-layout-header .layui-this').removeClass('layui-this')
+        $(`[data-id=${id}]`).parent().addClass('layui-this')
+        element.tabChange('nav', $(elem.context).attr('lay-id'))
+    })
 
     // 菜单控制
     $('#hide-menu').click(() => {
@@ -11,10 +20,9 @@ layui.use(['layer', 'element', 'jquery'], () => {
     })
 
     // 手机端关闭菜单
-    $('.main-mask').click(()=>{
+    $('.main-mask').click(() => {
         mainLayout.removeClass('hide-side')
     })
-
 
     // 刷新页面
     $('#refresh-btn').click(() => {
@@ -22,25 +30,24 @@ layui.use(['layer', 'element', 'jquery'], () => {
         current.attr('src', current.attr('src'))
     })
 
+
     function navHandle(obj) {
         let nav = $(obj.context),
             url = nav.data('url')
         if (!url) return
+        openId = nav.data('id')
 
-        let id = nav.data('id'),
-            text = nav.data('text')
-
-        let opened = $('.main-layout-tab .layui-tab-title').find("li[lay-id=" + id + "]");
+        let opened = $('.main-layout-tab .layui-tab-title').find("li[lay-id=" + openId + "]");
         if (opened.length > 0) {
             // 已打开进行切换
-            element.tabChange('tab', id)
+            element.tabChange('tab', openId)
         } else {
             element.tabAdd('tab', {
-                id: id,
-                title: text,
-                content: `<iframe src="${url}" name="iframe${id}" class="iframe" data-id="${id}"></iframe>`
+                id: openId,
+                title: nav.data('text'),
+                content: `<iframe src="${url}" name="iframe${openId}" class="iframe" data-id="${openId}"></iframe>`
             });
-            element.tabChange('tab', id)
+            element.tabChange('tab', openId)
         }
         mainLayout.removeClass('hide-side')
     }

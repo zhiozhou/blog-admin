@@ -18,5 +18,7 @@ public interface IImageService {
 
     OutVO<Integer> save(List<ImageDTO> imageList, String remark);
 
+    OutVO<NULL> remove(String url);
+
     OutVO<ListVO<ImageDTO>> list(ImageDTO imageDTO, Page page);
 }

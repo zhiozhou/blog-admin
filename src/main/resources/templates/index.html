@@ -8,7 +8,7 @@
                 <div>
                     <div class="logo">ZHOU</div>
                 </div>
-                <ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
+                <ul class="layui-nav layui-nav-tree" lay-filter="menu-side">
                     <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
                         <div>暂无菜单</div>
                     </li>
@@ -36,15 +36,15 @@
 						<li id="hide-menu"><i class="fa fa-bars"></i></li>
 						<li id="refresh-btn"><i class="fa fa-refresh"></i></li>
 					</ul>
-                    <ul class="layui-nav right-nav" lay-filter="rightNav">
+                    <ul class="layui-nav" lay-filter="nav-right">
                         <li class="layui-nav-item">
                             <a href="#" data-url="email.html" data-id='4' data-text="邮件系统">
                                 <i class="fa fa-envelope"></i>
                             </a>
                         </li>
                         <li class="layui-nav-item">
-                            <a href="#" data-url="admin-info.html" data-id='5' data-text="个人信息"
-                               th:text="${user.role.name}"></a>
+                            <a href="#" data-url="admin-info.html" data-id='5' data-text="个人信息" th:text="${user.role.name}">
+                            </a>
                         </li>
                         <li class="layui-nav-item"><a th:href="@{system/user/logout}">退出</a></li>
                     </ul>
