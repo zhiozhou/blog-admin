@@ -38,6 +38,8 @@ public enum OutVOEnum {
 
 	OFTEN_OPERATION("9002", "操作频繁"),
 
+	RESPONSE_TIMEOUT("9003", "响应超时"),
+
 	ERROR_SYSTEM("9999", "系统异常");
 
 

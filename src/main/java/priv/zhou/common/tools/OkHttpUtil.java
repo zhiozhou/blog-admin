@@ -9,7 +9,9 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.OutVOEnum;
 
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +26,7 @@ import static java.util.Objects.nonNull;
  * 默认使用 OutVO 形式转换响应报文
  *
  * @author zhou
- * @since  2020.5.15
+ * @since 2020.5.15
  */
 public class OkHttpUtil {
 
@@ -116,6 +118,11 @@ public class OkHttpUtil {
                 String result = response.body().string();
                 log.info("收到 {} 接口响应, 响应报文 -->{}, 耗时 {}ms", desc, result, stopWatch.elapsed(TimeUnit.MILLISECONDS));
                 return clazz.equals(String.class) ? (T) result : ParseUtil.object(result, clazz);
+            }
+        } catch (SocketTimeoutException e) {
+            log.info("断开 {} 接口响应超时, 耗时 {}ms", desc, stopWatch.elapsed(TimeUnit.MILLISECONDS));
+            if (clazz.equals(DEFAULT_VO)) {
+                return (T) OutVO.fail(OutVOEnum.RESPONSE_TIMEOUT);
             }
         } catch (Exception e) {
             log.info("收到 " + desc + " 接口响应异常 e -->", e);

@@ -57,7 +57,6 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
     /**
      * 标题
      */
-    @NotBlank(message = "标题不可为空")
     private String title;
 
     private String titleLike;
@@ -70,13 +69,15 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
     /**
      * 背景
      */
-//    @NotBlank(message = "背景不可为空")
     private String bg;
 
     /**
      * 备注
      */
     private String remark;
+
+
+    private Integer state;
 
     /**
      * 创建时间

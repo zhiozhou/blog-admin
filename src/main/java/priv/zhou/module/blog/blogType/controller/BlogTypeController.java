@@ -10,6 +10,9 @@ import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
 import priv.zhou.module.blog.blogType.service.IBlogTypeService;
+import priv.zhou.module.system.dict.domain.dto.DictDTO;
+
+import static priv.zhou.common.param.CONSTANT.SYSTEM_USER_STATE;
 
 /**
  * 博客类型 视图控制层
@@ -23,6 +26,8 @@ public class BlogTypeController extends BaseController {
 
     private final IBlogTypeService blogTypeService;
 
+    private final String STATE_KEY = "blog_type_state";
+
     private final Module module = new Module("","blog:type");
 
     public BlogTypeController(IBlogTypeService blogTypeService) {
@@ -32,7 +37,7 @@ public class BlogTypeController extends BaseController {
     @RequestMapping("/add")
     public String add(Model model) {
         fillAdd(model, new BlogTypeDTO());
-
+        model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(STATE_KEY)).getData());
         return "blog/blogType/au";
     }
 
@@ -44,7 +49,7 @@ public class BlogTypeController extends BaseController {
             return NOT_FOUNT;
         }
         fillUpdate(model, dtoVO.getData());
-
+        model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(STATE_KEY)).getData());
         return "blog/blogType/au";
     }
 
@@ -63,6 +68,7 @@ public class BlogTypeController extends BaseController {
     public String list(Model model) {
         fillList(model, module);
 
+        model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(STATE_KEY)).getData());
         return "blog/blogType/list";
     }
 }

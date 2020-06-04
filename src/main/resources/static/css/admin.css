@@ -55,13 +55,17 @@
 }
 
 .main-layout-side .layui-nav-itemed > a,
-.layui-nav-tree .layui-nav-item a:hover,
+.layui-nav-tree .layui-nav-item a:hover {
+    background: rgba(255, 255, 255, .05);
+}
+
+
+.main-layout-side .layui-nav-tree .layui-this a,
 .main-layout-side .layui-nav-tree .layui-nav-child .layui-this > a {
     background: rgba(255, 255, 255, .1);
 }
 
 
-/* 按钮样式 */
 .layui-btn-primary:hover {
     border-color: #00b5f9;
 }
@@ -74,6 +78,8 @@
 .layui-btn-sm > .fa {
     line-height: 30px;
 }
+
+
 
 
 .main-layout-container {
@@ -90,6 +96,7 @@
 
 /* 侧栏菜单 */
 .logo {
+    cursor: pointer;
     border-bottom: 1px solid;
     font-size: 1.7rem;
     font-weight: 700;
@@ -230,9 +237,12 @@
     -webkit-transition: all .3s;
 }
 
-.main-layout .layui-tab-title .welcome {
+.main-layout .layui-tab-title .home {
     padding-right: 15px;
-}
+
+}.main-layout-tab .home .layui-tab-close {
+     display: none;
+ }
 
 .main-layout-tab.layui-tab-brief > .layui-tab-title .layui-this {
     color: #000;
@@ -244,9 +254,7 @@
     border: none;
 }
 
-.main-layout-tab .welcome .layui-tab-close {
-    display: none;
-}
+
 
 .main-layout-tab .layui-tab-content {
     position: absolute;
@@ -357,6 +365,10 @@
 /* 全页面表单调整 */
 .layui-tab-title {
     margin-bottom: 15px;
+}
+
+.page-wrap .layui-tab-content{
+    max-width: 1500px;
 }
 
 /*富文本原字符开始不显示*/

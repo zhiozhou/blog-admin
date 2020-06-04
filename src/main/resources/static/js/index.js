@@ -14,6 +14,11 @@ layui.use(['layer', 'element', 'jquery'], () => {
         element.tabChange('nav', $(elem.context).attr('lay-id'))
     })
 
+    // logo 跳首页
+    $('.logo').click(()=>{
+        element.tabChange('tab', 'home')
+    })
+
     // 菜单控制
     $('#hide-menu').click(() => {
         mainLayout.hasClass('hide-side') ? -mainLayout.removeClass('hide-side') : mainLayout.addClass('hide-side')

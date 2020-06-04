@@ -43,14 +43,16 @@
                             <label class="layui-form-label">预览：</label>
                             <div class="layui-input-block">
                                 <textarea th:text="${o.preview}" id="preview" class="layui-textarea"  maxlength="256"></textarea>
-
-                                <div class="layui-upload-drag" id="preview-album">
-                                    <img class="view" th:src="null != ${o.preview} ? ${o.preview} :@{/img/drag-area.png}">
-                                    <input class="input" type="hidden" th:value="${o.preview}">
-                                    <div class="tips" th:classappend="null != ${o.preview} ? 'layui-hide':''">点击上传 / 拖拽文件到此处</div>
-                                </div>
                             </div>
                         </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">预览图：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="previewImg" th:value="${ o.previewImg }" class="layui-input" placeholder="请输入预览图" maxlength="256">
+                            </div>
+                        </div>
+
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
@@ -68,6 +70,7 @@
                                 </button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </form>
@@ -79,31 +82,9 @@
         <script th:inline="none">
             const prefix =  `${gate}blog/blog`
 
-            layui.use(['form','jquery','upload'],  ()=> {
-                const {form,jquery: $,upload} = layui
+            layui.use(['form','jquery'],  ()=> {
+                const {form,jquery: $} = layui
 
-                itemHandle(type)
-
-
-                form.on('select(type)', (data) => {
-                    itemHandle(data.value)
-                })
-
-                function itemHandle(value){
-                    if('album' === value){
-                        $('#preview').attr('name','').slideUp()
-                        $('#preview-album .input').attr('name','preview')
-                        $('#preview-album').slideDown()
-                        return
-                    }
-
-                    $('#preview').attr('name','preview').slideDown()
-                    $('#preview-album').slideUp()
-                    $('#preview-album .input').attr('name','')
-                }
-
-
-                upload.render(SINGLE_IMG('#preview-album'));
 
                 //监听提交
                 form.on('submit(submit)',  PAGE_SUBMIT)

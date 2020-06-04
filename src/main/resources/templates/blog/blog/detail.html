@@ -2,59 +2,72 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="frame-wrap">
-            <form class="layui-form-pane  ">
+        <div class="page-wrap">
+            <form class="layui-form-pane" id="form" th:attr="action=${action}">
 
+                <div class="layui-tab" style="margin: 0;">
+                    <ul class="layui-tab-title">
+                        <li><a th:href="@{/blog/type/list}" id="superior">博客类型</a></li>
+                        <li class="layui-this">类型详情</li>
+                    </ul>
+                    <input type="hidden" name="id" th:value="${o.id}">
+                    <div class="layui-tab-content">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">标题：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${ o.title }" class="layui-input" disabled>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">标题：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${ o.title }" class="layui-input" disabled>
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">类型：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${ o.typeName }" class="layui-input" disabled>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">类型：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${ o.typeName }" class="layui-input" disabled>
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">内容：</label>
+                            <div class="layui-input-block">
+                                <textarea rows="25" th:text="${o.content}" class="layui-textarea" disabled></textarea>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">内容：</label>
-                    <div class="layui-input-block">
-                        <textarea rows="25" th:text="${o.content}" class="layui-textarea" disabled></textarea>
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">创建时间：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
+                            </div>
+                        </div>
 
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">访问量：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${ o.pv }" class="layui-input" disabled>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">预览：</label>
-                    <div class="layui-input-block">
-                        <textarea th:if="'album' !=${o.type}" th:text="${o.preview}" class="layui-textarea" disabled></textarea>
-                        <img th:if="'album' ==${o.type}" th:src="${o.preview}">
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">预览：</label>
+                            <div class="layui-input-block">
+                                <textarea th:text="${o.preview}" class="layui-textarea" disabled></textarea>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注：</label>
-                    <div class="layui-input-block">
-                        <textarea  th:text="${o.remark}" class="layui-textarea"  disabled></textarea>
-                    </div>
-                </div>
+                        <div class="layui-form-item" th:if="${o.previewImg} !=null">
+                            <label class="layui-form-label">预览图：</label>
+                            <div class="layui-input-block">
+                                <img th:src="${ o.previewImg }"/>
+                            </div>
+                        </div>
 
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea th:text="${o.remark}" class="layui-textarea" disabled></textarea>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">创建时间：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">访问量：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${ o.pv }" class="layui-input" disabled>
                     </div>
                 </div>
             </form>

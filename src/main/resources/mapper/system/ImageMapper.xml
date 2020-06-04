@@ -23,6 +23,24 @@
         )
     </insert>
 
+    <delete id="remove" parameterType="ImageDTO">
+        delete from system_image where id = #{id}
+    </delete>
+
+
+    <select id="get" parameterType="ImageDTO" resultType="ImagePO">
+        SELECT
+            id,
+            url,
+            thumbnail_url,
+            remark,
+            create_id,
+            gmt_create,
+            gmt_modified
+        FROM
+            system_image
+        where id =#{id}
+    </select>
 
     <select id="list" parameterType="ImageDTO" resultType="ImagePO">
         SELECT

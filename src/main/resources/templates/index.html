@@ -5,9 +5,7 @@
         <div class="main-layout" id='main-layout'>
             <!--侧边栏-->
             <div class="main-layout-side">
-                <div>
-                    <div class="logo">ZHOU</div>
-                </div>
+                <div class="logo">ZHOU</div>
                 <ul class="layui-nav layui-nav-tree" lay-filter="menu-side">
                     <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
                         <div>暂无菜单</div>
@@ -54,7 +52,7 @@
                     <!--tab 切换-->
                     <div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
                         <ul class="layui-tab-title">
-                            <li class="layui-this welcome">
+                            <li class="layui-this home" lay-id="home">
                                 <i class="layui-icon layui-icon-home"></i>
                             </li>
                         </ul>

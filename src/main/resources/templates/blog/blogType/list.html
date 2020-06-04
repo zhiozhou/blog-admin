@@ -11,6 +11,23 @@
                             添加
                         </a>
                     </div>
+
+                    <div class="layui-inline">
+                        <select name="state">
+                            <option value="">请选择一个状态</option>
+                            <option th:each="state:${stateMap.values()}" th:value="${state.code}" th:text="${state.label}"></option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search">
+                            <i class="fa fa-search"></i>
+                            搜索
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
                 </div>
             </form>
             <div>
@@ -18,6 +35,9 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
+        <script th:inline="javascript">
+            const stateMap = [[${stateMap}]]
+        </script>
         <script th:inline="none">
             const prefix = `${gate}blog/type`
 
@@ -26,7 +46,13 @@
                     cols = [[
                         {field: 'key', title: '标识', align: 'center'},
                         {field: 'name', title: '名称', align: 'center'},
-                        {field: 'title', title: '标题', align: 'center'},
+                        {
+                            field: 'state', title: '状态', align: 'center',
+                            templet: ({state}) => {
+                                let {label, css} = stateMap[state]
+                                return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
+                            }
+                        },
                         {field: 'desc', title: '描述', align: 'center'},
                         {field: 'remark', title: '备注', align: 'center'},
                         {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#rud'}

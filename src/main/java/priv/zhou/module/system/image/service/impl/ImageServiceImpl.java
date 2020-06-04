@@ -3,7 +3,6 @@ package priv.zhou.module.system.image.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
@@ -54,13 +53,27 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public OutVO<NULL> remove(String url) {
-        if (StringUtils.isBlank(url)) {
+    public OutVO<NULL> remove(Integer id) {
+        if (null == id) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
-        Map<String, Object> params = Maps.newHashMap();
-        params.put("url", url);
-        return httpPost("移除文件", "http://127.0.0.1:8889/file/remove", params);
+        ImageDTO queryDTO = new ImageDTO().setId(id);
+        ImagePO imagePO = imageDAO.get(queryDTO);
+        if (null != imagePO) {
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("url", imagePO.getUrl());
+            OutVO<NULL> removeRes = httpPost("移除图片", "http://127.0.0.1:8889/file/remove", params);
+            if (removeRes.isFail()) {
+                return removeRes;
+            }
+            params.put("url", imagePO.getThumbnailUrl());
+            removeRes = httpPost("移除缩略图", "http://127.0.0.1:8889/file/remove", params);
+            if (removeRes.isFail()) {
+                return removeRes;
+            }
+            imageDAO.remove(queryDTO);
+        }
+        return OutVO.success();
     }
 
     @Override

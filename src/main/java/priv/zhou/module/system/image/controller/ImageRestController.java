@@ -1,6 +1,7 @@
 package priv.zhou.module.system.image.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
@@ -35,9 +36,9 @@ public class ImageRestController {
     }
 
     @RequiresPermissions("system:image:remove")
-    @RequestMapping("/remove")
-    public OutVO<NULL> remove(String url) {
-        return imageService.remove(url);
+    @RequestMapping("/remove/{id}")
+    public OutVO<NULL> remove(@PathVariable Integer id) {
+        return imageService.remove(id);
     }
 
 

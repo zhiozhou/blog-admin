@@ -30,25 +30,21 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">标题：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="title" lay-verify="required" th:value="${ o.title }" class="layui-input" placeholder="请输入标题" autocomplete="off" maxlength="64">
+                                <input type="text" name="title" th:value="${ o.title }" class="layui-input" placeholder="请输入标题" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">描述：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="desc" th:value="${ o.desc }" class="layui-input" placeholder="请输入类型" autocomplete="off" maxlength="64">
+                                <input type="text" name="desc" th:value="${ o.desc }" class="layui-input" placeholder="请输入描述" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">背景：</label>
                             <div class="layui-input-block">
-                                <div class="layui-upload-drag" id="bg">
-                                    <img class="view" th:src="null != ${o.bg} ? ${o.bg} :@{/img/drag-area.png}">
-                                    <input type="hidden" name="bg" th:value="${o.bg}">
-                                    <div class="tips" th:classappend="null != ${o.bg} ? 'layui-hide':''">点击上传 / 拖拽文件到此处</div>
-                                </div>
+                                <input type="text" name="bg" th:value="${ o.bg }" class="layui-input" placeholder="请输入背景图" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
@@ -56,6 +52,16 @@
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
                                 <textarea name="remark" th:text="${o.remark}" class="layui-textarea"  maxlength="256"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态：</label>
+                            <div class="layui-input-block">
+                                <select name="state">
+                                    <option th:each="state:${stateList}" th:value="${state.code}" th:field="${o.state}" th:text="${state.label}"></option>
+                                </select>
                             </div>
                         </div>
 
