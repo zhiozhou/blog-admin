@@ -140,7 +140,6 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public OutVO<Map<String, DictDataDTO>> dataMap(DictDTO dictDTO, boolean noSystem) {
-
         // 1.只获取非系统字典
         if (noSystem) {
             dictDTO.setDataType(NORMAL_TYPE);
