@@ -58,12 +58,14 @@
                         {field: 'browser', title: '浏览器', align: 'center'},
                         {field: 'host', title: '主机地址', align: 'center'},
                         {
-                            field: 'stateTime', title: '开始时间', align: 'center', templet: ({startTime}) => {
+                            field: 'stateTime', title: '开始时间', align: 'center',
+                            templet: ({startTime}) => {
                                 return formatDate(startTime)
                             }
                         },
                         {
-                            field: 'lastAccessTime', title: '最后访问时间', align: 'center', templet: ({lastAccessTime}) => {
+                            field: 'lastAccessTime', title: '最后访问时间', align: 'center',
+                            templet: ({lastAccessTime}) => {
                                 return formatDate(lastAccessTime)
                             }
                         },
@@ -91,7 +93,7 @@
                                 post(`${prefix}/rest/force/off`, {id: data.id}, () => {
                                     done(reloadTable)
                                 })
-                            });
+                            })
                             break
                     }
                 })

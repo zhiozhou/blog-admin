@@ -127,9 +127,21 @@
                 })
 
                 //监听提交
-                form.on('submit(submit)', function (obj) {
-                    obj.field.type = $('input[name=type]:checked ').val()
-                    IFRAME_SUBMIT(obj)
+                form.on('submit(submit)', function ({form,field:data}) {
+                    data.type = $('input[name=type]:checked ').val()
+
+                    post(prefix + form.getAttribute('action'), data, () => {
+                        outDone(()=>{
+                            parent.openId = data.parentId
+                            parent.layer.close(parent.layer.getFrameIndex(window.name))
+                            parent.layui.table.reload('table', {
+                                where: null,
+                                page: {
+                                    curr: 1
+                                }
+                            })
+                        })
+                    })
                     return false
                 })
 

@@ -6,20 +6,21 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
-                        <a class="layui-btn layui-btn-sm layui-btn-normal coffee-btn" shiro:hasPermission=${m.permissionPrefix+':extend'}>
+                        <a class="layui-btn layui-btn-sm layui-btn-normal coffee-btn"
+                           shiro:hasPermission=${m.permissionPrefix+':extend'}>
                             <i class="fa fa-coffee"></i>
                             生成
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off" >
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off">
                     </div>
                     <div class="layui-inline">
                         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search">
                             <i class="fa fa-search"></i>
                             搜索
                         </button>
-                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset">
                             <i class="fa fa-repeat"></i>
                             重置
                         </button>
@@ -35,30 +36,41 @@
             const prefix = `${gate}system/extend`
 
             layui.use(['table', 'jquery'], () => {
-                const {table,jquery:$} = layui,
+                const {table, jquery: $} = layui,
                     cols = [[
-                        {type:'checkbox'},
+                        {type: 'checkbox'},
                         {field: 'name', title: '名称', align: 'center'},
                         {field: 'comment', title: '描述', align: 'center'}
                     ]],
                     options = fillDefault(cols)
-
                 options.url = `${prefix}/rest/table/list`
                 table.render(options)
 
 
-                $('.coffee-btn').click(()=>{
-                    let {data:list} = table.checkStatus('table')
-
-                    if(0 == list.length){
+                $('.coffee-btn').click(() => {
+                    let {data: list} = table.checkStatus('table')
+                    if (0 === list.length) {
                         return warn('请选中要生成的表')
                     }
 
-                    let url = `${prefix}/rest/extend?tableNames=`
-                    for(i in list ){
-                        url+=list[i].name+','
+                    let hasEmpty = false,
+                        url = `${prefix}/rest/extend?tableNames=`
+                    for ({name, comment} of list) {
+                        url += `${name},`
+                        if (!comment) {
+                            hasEmpty = true
+                        }
                     }
-                    window.open(url)
+
+                    hasEmpty ?
+                        layer.confirm(`选中表存在空描述，会导致注释异常，确认生成吗`, {
+                            btn: ['确定', '取消'],
+                            shade: [0.1, '#fff']
+                        }, (index) => {
+                            window.open(url)
+                            layer.close(index)
+                        }) :
+                        window.open(url)
                 })
 
             })

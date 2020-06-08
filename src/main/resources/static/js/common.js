@@ -89,6 +89,33 @@ function post(u, d, cb) {
     })
 }
 
+/**
+ * 文本复制
+ * @param text 要复制的文本
+ */
+function copy(text) {
+    const input = document.createElement('input')
+    input.value = text
+    document.body.appendChild(input)
+    if (navigator.userAgent.match(/ipad|iphone/i)) {
+        // 创建一个文档的连续范围区域，如用户在浏览器窗口中用鼠标拖动选中的区域
+        let range = document.createRange()
+        range.selectNodeContents(input)
+        let selection = window.getSelection()
+        selection.removeAllRanges()
+        selection.addRange(range)
+        input.setSelectionRange(0, 999999);  //选择范围，确保全选
+    } else {
+        input.select()
+    }
+    try {
+        document.execCommand("Copy", false, null) ? done(null, '复制成功') : warn('复制失败')
+    } catch (e) {
+        warn('复制失败')
+    }
+    document.body.removeChild(input)
+}
+
 
 //---------------------------------------------- 通知类 ----------------------------------------------
 

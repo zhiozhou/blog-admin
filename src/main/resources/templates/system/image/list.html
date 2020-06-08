@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <style>
         .image-remark {
@@ -13,6 +13,10 @@
 
         .image-remark, #images-upload, .layui-elem-quote {
             display: none;
+        }
+
+        .image-view{
+            cursor: pointer;
         }
 
 
@@ -40,85 +44,110 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
+        <script type="text/html" id="cd">
+            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">链接</a>
+            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy-thumbnail">缩略图链接</a>
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove" shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
+        </script>
+
         <script th:src="@{/js/au.js}"></script>
         <script th:inline="none">
             const prefix = `${gate}system/image`
 
             layui.use(['table', 'jquery', 'upload'], () => {
-                const {table, jquery: $, upload} = layui,
-                    cols = [[
-                        {field: 'url', title: '地址', align: 'center'},
-                        {field: 'thumbnailUrl', title: '缩略图', align: 'center'},
-                        {field: 'remark', title: '备注', align: 'center'},
-                        {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#d'}
-                    ]],
-                    area = '.image-remark,#images-upload,.layui-elem-quote'
+                    const {table, jquery: $, upload} = layui,
+                        cols = [[
+                            {
+                                field: 'thumbnailUrl', title: '图片', align: 'center',
+                                templet: ({url,thumbnailUrl}) => {
+                                    return `<img src="${thumbnailUrl}" class="image-view" data-url="${url}"/>`
+                                }
+                            },
+                            {field: 'remark', title: '备注', align: 'center'},
+                            {title: '操作', width: '230', fixed: 'right', align: 'center', toolbar: '#cd'}
+                        ]],
+                        area = '.image-remark,#images-upload,.layui-elem-quote'
 
-                table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction)
-
-                // 多图片上传
-                let index = -1,
-                    failCount = 0,
-                    allData = {}
-                upload.render({
-                    elem: '#images',
-                    url: UPLOAD_URL,
-                    data: {
-                        prefix: UPLOAD_PREFIX,
-                        createThumbnail: true,
-                        thumbnailScale: 0.4
-                    },
-                    auto: false,
-                    size: 16384,
-                    multiple: true,
-                    bindAction: '#images-upload',
-                    acceptMime: 'image/*',
-                    choose: obj => {
-                        obj.preview((index, file, result) => {
-                            if (0 === $('.layui-elem-quote').children().length) {
-                                $(area).slideDown()
-                            }
-                            $('#images-quote').append(`<div style="background-image: url(${result})"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
-                        })
-                    },
-                    before: () => {
-                        loading()
-                    },
-                    done: ({code, info, data}) => {
-                        if (fail(code)) {
-                            console.log(`fail:${++failCount} | info:${info}`)
-                            return
+                    table.render(fillDefault(cols))
+                    table.on('tool(table)', toolHandle)
+                    function toolHandle({data, event: action}) {
+                        switch (action) {
+                            case 'copy':
+                                copy(data.url)
+                                break
+                            case 'copy-thumbnail':
+                                copy(data.thumbnailUrl)
+                                break
+                            case 'remove':
+                                return removeAction(data)
                         }
-                        allData[`imageList[${++index}].url`] = data[0].origin
-                        allData[`imageList[${index}].thumbnailUrl`] = data[0].thumbnail
-                    },
-                    allDone: () => {
-                        allData.remark = $('.image-remark').val()
-                        $.post(prefix + '/rest/save', allData, ({code, info, data = 0}) => {
-                            loaded()
-                            if (fail(code)) return warn(info)
-                            let msg = 0 === (failCount += data) ? '操作成功' : `失败 ${failCount} 个`
-                            allData = {}
-                            index = -1
-                            failCount = 0
-                            done(() => {
-                                reloadTable()
-                                $(area).slideUp()
-                                $('.layui-elem-quote').empty()
-                                $('.image-remark').val('')
-                            }, msg)
-                        })
                     }
-                })
 
-                $('body').on('click', '.quote-cancel', function () {
-                    $(this).parent().remove()
-                    if ($('.layui-elem-quote').children().length) {
-                        $(area).slideUp()
-                    }
-                })
-            })
+                    // 多图片上传
+                    let index = -1,
+                        failCount = 0,
+                        allData = {}
+                    upload.render({
+                        elem: '#images',
+                        url: UPLOAD_URL,
+                        data: {
+                            prefix: UPLOAD_PREFIX,
+                            createThumbnail: true,
+                            thumbnailScale: 0.4
+                        },
+                        auto: false,
+                        size: 16384,
+                        multiple: true,
+                        bindAction: '#images-upload',
+                        acceptMime: 'image/*',
+                        choose: obj => {
+                            obj.preview((index, file, result) => {
+                                if (0 === $('.layui-elem-quote').children().length) {
+                                    $(area).slideDown()
+                                }
+                                $('#images-quote').append(`<div style="background-image: url(${result})"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
+                            })
+                        },
+                        before: () => {
+                            loading()
+                        },
+                        done: ({code, info, data}) => {
+                            if (fail(code)) {
+                                console.log(`fail:${++failCount} | info:${info}`)
+                                return
+                            }
+                            allData[`imageList[${++index}].url`] = data[0].origin
+                            allData[`imageList[${index}].thumbnailUrl`] = data[0].thumbnail
+                        },
+                        allDone: () => {
+                            allData.remark = $('.image-remark').val()
+                            $.post(prefix + '/rest/save', allData, ({code, info, data = 0}) => {
+                                loaded()
+                                if (fail(code)) return warn(info)
+                                let msg = 0 === (failCount += data) ? '操作成功' : `失败 ${failCount} 个`
+                                allData = {}
+                                index = -1
+                                failCount = 0
+                                done(() => {
+                                    reloadTable()
+                                    $(area).slideUp()
+                                    $('.layui-elem-quote').empty()
+                                    $('.image-remark').val('')
+                                }, msg)
+                            })
+                        }
+                    })
+
+                    $('body').on('click', '.quote-cancel', function () {
+                        $(this).parent().remove()
+                        0 === $('.layui-elem-quote').children().length && $(area).slideUp()
+                    })
+
+                    $('body').on('click', '.image-view', function () {
+                        window.open($(this).data('url'))
+                    })
+                }
+            )
         </script>
     </body>
 
