@@ -44,7 +44,7 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        {field: 'key', title: '标识', align: 'center'},
+                        {field: 'key', title: '标识',minWidth:'100', align: 'center'},
                         {field: 'name', title: '名称', align: 'center'},
                         {
                             field: 'state', title: '状态', align: 'center',
@@ -53,9 +53,9 @@
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'desc', title: '描述', align: 'center'},
-                        {field: 'remark', title: '备注', align: 'center'},
-                        {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {field: 'desc', title: '描述', minWidth:'150',align: 'center'},
+                        {field: 'remark', title: '备注',  minWidth:'150',align: 'center'},
+                        {title: '操作',  fixed: 'right', align: 'center', toolbar: '#rud'}
                     ]]
 
                 table.render(fillDefault(cols))

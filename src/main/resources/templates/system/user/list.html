@@ -64,27 +64,21 @@
             layui.use(['table', 'jquery'], () => {
                 const {table,jquery:$} = layui,
                     cols = [[
-                        {field: 'username', title: '用户名', align: 'center'},
-                        {field: 'name', title: '姓名', align: 'center'},
-                        {field: 'phone', title: '手机号', align: 'center'},
-                        {
-                            field: 'role',
-                            title: '角色',
-                            align: 'center',
+                        {field: 'username', title: '用户名',minWidth:'100', align: 'center'},
+                        {field: 'name', title: '姓名', minWidth:'100',align: 'center'},
+                        {field: 'phone', title: '手机号', minWidth:'120',align: 'center'},
+                        {field: 'role',title: '角色', minWidth:'15=20',align: 'center',
                             templet: ({role})=>{
                                 return `<a class="role-btn" data-id="${role.id}">${role.name}</a>`
                             }
                         },
-                        {
-                            field: 'state',
-                            title: '状态',
-                            align: 'center',
+                        { field: 'state',title: '状态', align: 'center',
                             templet: ({state}) => {
                                 let {label,css} = stateMap[state]
                                 return `<a  class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#user-rud'}
+                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#user-rud'}
                     ]]
 
                 table.render(fillDefault(cols))

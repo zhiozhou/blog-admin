@@ -24,7 +24,7 @@ input:-webkit-autofill {
   width: 390px;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 56%;
   margin-left: -195px;
   margin-top: -205px;
 }
@@ -72,7 +72,7 @@ input:-webkit-autofill {
     width: 300px;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 60%;
     margin-left: -150px;
     margin-top: -240px;
   }

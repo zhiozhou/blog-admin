@@ -69,8 +69,10 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script type="text/html" id="dt-ud">
-            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="insert">插入</a>
-            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove">移除</a>
+            <div class="tool">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="insert">插入</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove">移除</a>
+            </div>
         </script>
         <script th:inline="javascript">
             const dictData = [[${o.dataList}]]
@@ -90,23 +92,18 @@
                     id: 'data-table',
                     elem: '#data-table',
                     data: dictData,
+                    cellMinWidth: '80',
                     cols: [[
                         {field: 'code', title: '编码值', align: 'center', edit: true},
                         {field: 'label', title: '标签', align: 'center', edit: true},
                         {field: 'css', title: 'class标签', align: 'center', edit: true},
-                        {
-                            field: 'type',
-                            title: '状态',
-                            align: 'center',
+                        {field: 'type',title: '状态', align: 'center',
                             templet: ({type}) => {
                                 let {css, info} = typeMap[type]
                                 return `<a data-type="${type}" class="type-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {
-                            field: 'top',
-                            title: '默认使用',
-                            align: 'center',
+                        {field: 'top',title: '默认使用',align: 'center',
                             templet: ({top}) => {
                                 let css = 'layui-bg-blue', info = '正常'
                                 if (1 === top) {
@@ -116,7 +113,7 @@
                                 return `<a class="top-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#dt-ud'}
+                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#dt-ud'}
                     ]],
                     done: () => {
                         tindex = $('.t').parents('tr').data('index')

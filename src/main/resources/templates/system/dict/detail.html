@@ -73,23 +73,18 @@
                     id: 'data-table',
                     elem: '#data-table',
                     data: dictData,
+                    cellMinWidth: '80',
                     cols: [[
                         {field: 'code', title: '编码值', align: 'center', edit: true},
                         {field: 'label', title: '标签', align: 'center', edit: true},
                         {field: 'css', title: 'class标签', align: 'center', edit: true},
-                        {
-                            field: 'type',
-                            title: '类型',
-                            align: 'center',
+                        {field: 'type',title: '类型',align: 'center',
                             templet : ({type})=>{
                                 let {css,info} = typeMap[type]
                                 return `<a class="state-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {
-                            field: 'top' ,
-                            title: '默认使用',
-                            align: 'center',
+                        {field: 'top' ,title: '默认使用',align: 'center',
                             templet:({top})=>{
                                 let css = 'layui-bg-blue', info='正常'
                                 if(1 === top){

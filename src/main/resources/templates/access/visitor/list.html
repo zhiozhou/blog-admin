@@ -38,7 +38,7 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="rub">
-            <div>
+            <div class="tool">
                 <a class="layui-btn layui-btn-sm" lay-event="detail" shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
                 <a class="layui-btn layui-btn-sm" lay-event="access" shiro:hasPermission=${'access:log:list'}>访问历史</a>
                 <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update" shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
@@ -59,7 +59,7 @@
                 const {table} = layui,
                     cols = [[
                         {field: 'id', title: 'ID', align: 'center'},
-                        { field: 'nickname', title: '名称', align: 'center',
+                        { field: 'nickname', title: '名称',minWidth:'120', align: 'center',
                             templet: ({nickname = '-', website}) => {
                                 console.log(nickname)
                                 console.log(website)
@@ -68,16 +68,16 @@
                                     nickname
                             }
                         },
-                        {field: 'email', title: '邮箱', align: 'center', templet: ({email = '-'}) => email},
+                        {field: 'email', title: '邮箱', align: 'center',minWidth:'150', templet: ({email = '-'}) => email},
                         {field: 'state', title: '状态', align: 'center',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'remark', title: '备注', align: 'center',templet: ({remark = '-'})=> remark},
-                        {field: 'lastAccessTime', title: '最后访问时间', align: 'center',templet: ({lastAccessTime}) =>  formatDate(lastAccessTime)},
-                        {title: '操作', width:'95',fixed: 'right', align: 'center', toolbar: '#rub'}
+                        {field: 'remark', title: '备注', align: 'center',minWidth:'150',emplet: ({remark = '-'})=> remark},
+                        {field: 'lastAccessTime', title: '最后访问时间',minWidth:'120', align: 'center',templet: ({lastAccessTime}) =>  formatDate(lastAccessTime)},
+                        {title: '操作',fixed: 'right', align: 'center', toolbar: '#rub'}
                     ]]
 
                 table.render(fillDefault(cols))

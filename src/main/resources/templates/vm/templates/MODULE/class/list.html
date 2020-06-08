@@ -28,7 +28,7 @@
 #foreach ($column in $table.columnList)
                         {field: '${column.attrName}', title: '${column.comment}', align: 'center'},
 #end
-                        {title: '操作', width:'190', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#rud'}
                     ]]
 
                 table.render(fillDefault(cols))

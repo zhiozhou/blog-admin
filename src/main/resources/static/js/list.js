@@ -86,8 +86,10 @@ function defaultParse({code, info: msg, data}) {
 function fillDefault(cols, page = true, parseData = defaultParse) {
     return {
         id: 'table',
+
         elem: '#table',
         page: true,
+        cellMinWidth: '80',
         method: 'post',
         url: `${prefix}/rest/list`,
         cols: cols,

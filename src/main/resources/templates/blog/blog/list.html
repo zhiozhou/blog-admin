@@ -43,15 +43,15 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        {field: 'title', title: '标题', align: 'center'},
+                        {field: 'title', title: '标题',minWidth:'150', align: 'center'},
                         {field: 'typeName', title: '类型', align: 'center'},
                         {
-                            field: 'gmtCreate', title: '创建时间', align: 'center', templet: ({gmtCreate}) => {
+                            field: 'gmtCreate', title: '创建时间', minWidth:'120',align: 'center', templet: ({gmtCreate}) => {
                                 return formatDate(gmtCreate, 'yyyy年MM月dd日')
                             }
                         },
                         {field: 'pv', title: '访问量', align: 'center'},
-                        {title: '操作', width: '190', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#rud'}
                     ]]
 
                 table.render(fillDefault(cols))

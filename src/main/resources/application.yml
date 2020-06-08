@@ -24,7 +24,7 @@ logging:
 #活动参数设置
 app:
   enc: UTF-8
-  gate: http://127.0.0.1:8080/${spring.application.name}/
+  gate: http://192.168.199.9:8080/${spring.application.name}/
   name: ${spring.application.name}
   email: false
   admin-email: flyingnoob@qq.com

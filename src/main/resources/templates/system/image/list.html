@@ -45,9 +45,11 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="cd">
-            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">链接</a>
-            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy-thumbnail">缩略图链接</a>
-            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove" shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
+            <div class="tool">
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">链接</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy-thumbnail">缩略图链接</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove" shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
+            </div>
         </script>
 
         <script th:src="@{/js/au.js}"></script>
@@ -58,13 +60,13 @@
                     const {table, jquery: $, upload} = layui,
                         cols = [[
                             {
-                                field: 'thumbnailUrl', title: '图片', align: 'center',
+                                field: 'thumbnailUrl', title: '图片', minWidth:'120',align: 'center',
                                 templet: ({url,thumbnailUrl}) => {
                                     return `<img src="${thumbnailUrl}" class="image-view" data-url="${url}"/>`
                                 }
                             },
-                            {field: 'remark', title: '备注', align: 'center'},
-                            {title: '操作', width: '230', fixed: 'right', align: 'center', toolbar: '#cd'}
+                            {field: 'remark', title: '备注',minWidth:'120',align: 'center'},
+                            {title: '操作', fixed: 'right', align: 'center', toolbar: '#cd'}
                         ]],
                         area = '.image-remark,#images-upload,.layui-elem-quote'
 

@@ -317,7 +317,7 @@
 
     ::-webkit-scrollbar {
         width: 2px;
-        height: 10px;
+        height: 0px;
     }
 }
 
@@ -360,6 +360,16 @@
         margin-left: 80px;
     }
 }
+/* 全局表格兼容 */
+.layui-table-fixed .layui-table-cell{
+    overflow-x: auto;
+    text-overflow: clip;
+
+}
+.layui-table-fixed  .tool{
+    display: inline-block;
+}
+
 
 
 /* 全页面表单调整 */
@@ -442,8 +452,3 @@
     height: 33px;
 }
 
-/* 表格 */
-.layui-table-fixed .layui-table-body{
-    /*max-width: 150px;*/
-
-}
