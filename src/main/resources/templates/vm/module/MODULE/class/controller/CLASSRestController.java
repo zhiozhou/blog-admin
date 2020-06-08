@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @RequestMapping("/${app.module}/${table.objectName}/rest")
 public class ${table.className}RestController {
 
-    private I${table.className}Service ${table.objectName}Service;
+    private final I${table.className}Service ${table.objectName}Service;
 
     public ${table.className}RestController(I${table.className}Service ${table.objectName}Service) {
         this.${table.objectName}Service = ${table.objectName}Service;

@@ -441,3 +441,9 @@
     width: 33px;
     height: 33px;
 }
+
+/* 表格 */
+.layui-table-fixed .layui-table-body{
+    /*max-width: 150px;*/
+
+}

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.function.Function;
@@ -60,6 +61,15 @@ public abstract class DTO<PO> {
         }
     }
 
+
+    /**
+     * po转dto
+     */
+    public static <DT extends DTO<P>, P extends Serializable> DT ofPO(P po, Function<P, DT> constructor) {
+        return null == po ? null : constructor.apply(po);
+    }
+
+
     /**
      * po集合转换为dto集合
      */
@@ -71,3 +81,7 @@ public abstract class DTO<PO> {
         return poList.stream().map(constructor).collect(Collectors.toList());
     }
 }
+
+
+
+

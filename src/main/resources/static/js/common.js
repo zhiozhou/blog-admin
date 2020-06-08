@@ -12,7 +12,6 @@ const UPLOAD_PREFIX = 'zhousb-admin'
 
 
 
-
 layui.config({
     base: gate + 'plugin/layui/extend/'
 })
@@ -144,6 +143,7 @@ function warn(msg) {
     return false
 }
 
+
 /**
  * 显示成功通知
  *
@@ -164,6 +164,19 @@ function done(cb, msg = '操作成功') {
 function outDone(cb, msg = '操作成功') {
     parent.layer.msg('操作成功', {icon: 1, time: 500}, cb);
 }
+
+/**
+ * 悬浮提示
+ * @param id 元素id
+ * @param msg 提示信息
+ */
+function tips(id,msg) {
+    layer.tips(msg, `#${id}`, {
+        tips: [2, "#1E9FFF"],
+        time: 1500
+    })
+}
+
 
 
 

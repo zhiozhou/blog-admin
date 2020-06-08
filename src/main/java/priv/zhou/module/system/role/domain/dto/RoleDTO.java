@@ -75,9 +75,7 @@ public class RoleDTO extends DTO<RolePO> implements Serializable {
 
     public RoleDTO(RolePO rolePO) {
         super(rolePO);
-        if (nonNull(rolePO.getMenuList())) {
-            setMenuList(DTO.ofPO(rolePO.getMenuList(), MenuDTO::new));
-        }
+        this.menuList  = ofPO(rolePO.getMenuList(), MenuDTO::new);
     }
 
 }

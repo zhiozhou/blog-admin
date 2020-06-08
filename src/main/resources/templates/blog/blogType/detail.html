@@ -54,6 +54,15 @@
                                 <textarea th:text="${o.remark}" class="layui-textarea"  disabled></textarea>
                             </div>
                         </div>
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${ o.stateStr }" class="layui-input" disabled>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </form>

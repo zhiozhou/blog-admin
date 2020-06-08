@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class ${table.className}ServiceImpl implements I${table.className}Service {
 
-    private ${table.className}DAO ${table.objectName}DAO;
+    private final ${table.className}DAO ${table.objectName}DAO;
 
     public ${table.className}ServiceImpl(${table.className}DAO ${table.objectName}DAO) {
         this.${table.objectName}DAO = ${table.objectName}DAO;

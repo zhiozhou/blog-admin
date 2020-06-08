@@ -21,9 +21,9 @@ import ${app.packet}.module.${app.module}.${table.objectName}.service.I${table.c
 @RequestMapping("/${app.module}/${table.objectName}")
 public class ${table.className}Controller extends BaseController {
 
-    private I${table.className}Service ${table.objectName}Service;
+    private final I${table.className}Service ${table.objectName}Service;
 
-    private Module module = new Module("${table.comment}","${app.module}:${table.objectName}");
+    private final Module module = new Module("${table.comment}","${app.module}:${table.objectName}");
 
     public ${table.className}Controller(I${table.className}Service ${table.objectName}Service) {
         this.${table.objectName}Service = ${table.objectName}Service;

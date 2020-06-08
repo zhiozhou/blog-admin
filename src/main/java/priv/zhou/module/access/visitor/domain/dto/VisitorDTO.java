@@ -1,4 +1,4 @@
-package priv.zhou.module.blog.blogType.domain.dto;
+package priv.zhou.module.access.visitor.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
-import priv.zhou.module.blog.blogType.domain.po.BlogTypePO;
+import priv.zhou.module.access.visitor.domain.po.VisitorPO;
 import priv.zhou.common.domain.dto.DTO;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,68 +18,64 @@ import java.util.stream.Collectors;
 
 
 /**
- * 博客类型 数据传输模型
+ * 访客 数据传输模型
  *
  * @author zhou
- * @since 2020.05.21
+ * @since 2020.06.08
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BlogTypeDTO extends DTO<BlogTypePO> {
-
+public class VisitorDTO extends DTO<VisitorPO> {
 
     /**
      * 
      */
     private Integer id;
 
-    private Integer noid;
-
-    /**
-     * 标识
-     */
-    @NotBlank(message = "标识不可为空")
-    private String key;
-
-    private String keyLike;
-
     /**
      * 名称
      */
-    @NotBlank(message = "名称不可为空")
-    private String name;
+    private String nickname;
 
-    private String nameLike;
-
-    /**
-     * 标题
-     */
-    private String title;
-
-    private String titleLike;
+    private String nicknameLike;
 
     /**
-     * 描述
+     * 邮箱
      */
-    private String desc;
+    private String email;
 
     /**
-     * 背景
+     * 站点
      */
-    private String bg;
+    private String website;
+
+    /**
+     * 状态
+     */
+    private Integer state;
+
+    private String stateStr;
+
+    /**
+     * 通知
+     */
+    private Integer notify;
 
     /**
      * 备注
      */
     private String remark;
 
+    private String remarkLike;
 
-    private Integer state;
-
-    private String stateStr;
+    /**
+     * 最后访问时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date lastAccessTime;
 
     /**
      * 创建时间
@@ -94,8 +90,8 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
     private Date gmtModified;
 
 
-    public BlogTypeDTO(BlogTypePO blogTypePO) {
-        super(blogTypePO);
+    public VisitorDTO(VisitorPO visitorPO) {
+        super(visitorPO);
     }
 
 }

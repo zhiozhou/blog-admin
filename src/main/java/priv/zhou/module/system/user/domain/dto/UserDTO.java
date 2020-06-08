@@ -104,7 +104,7 @@ public class UserDTO extends DTO<UserPO> implements Serializable {
 
     public UserDTO(UserPO userPO) {
         super(userPO);
-        setRole(new RoleDTO(userPO.getRole()));
+        this.role = ofPO(userPO.getRole(),RoleDTO::new);
     }
 
 

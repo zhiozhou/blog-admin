@@ -77,8 +77,7 @@
                         return {code, msg, "data": dest}
                     },
                     cols: [[
-                        {
-                            field: 'name', title: '名称', align: 'left',
+                        { field: 'name', title: '名称', align: 'left',
                             templet: ({id, depth, parentId, childList, name}) => {
                                 let div = $(`<i><span>${name}</span></i>`)
                                     .addClass(`depth${depth}`)
@@ -89,15 +88,13 @@
                         },
                         {field: 'path', title: '跳转地址', align: 'center'},
                         {field: 'key', title: '权限标识', align: 'center'},
-                        {
-                            field: 'type', title: '类型', align: 'center',
+                        {field: 'type', title: '类型', align: 'center',
                             templet: ({type}) => {
                                 let {label, css} = typeMap[type]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {
-                            field: 'state', title: '状态', align: 'center',
+                        {field: 'state', title: '状态', align: 'center',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`

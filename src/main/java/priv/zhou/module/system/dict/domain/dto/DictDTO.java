@@ -125,7 +125,6 @@ public class DictDTO extends DTO<DictPO> {
 
     public DictDTO(DictPO dictPO) {
         super(dictPO);
-        setDataList(nonNull(dictPO.getDataList()) ?
-                DTO.ofPO(dictPO.getDataList(), DictDataDTO::new) : null);
+        this.dataList = ofPO(dictPO.getDataList(), DictDataDTO::new);
     }
 }

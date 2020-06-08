@@ -4,15 +4,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
 import priv.zhou.module.blog.blogType.service.IBlogTypeService;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
-
-import static priv.zhou.common.param.CONSTANT.SYSTEM_USER_STATE;
 
 /**
  * 博客类型 视图控制层
@@ -28,7 +25,7 @@ public class BlogTypeController extends BaseController {
 
     private final String STATE_KEY = "blog_type_state";
 
-    private final Module module = new Module("","blog:type");
+    private final Module module = new Module("", "blog:type");
 
     public BlogTypeController(IBlogTypeService blogTypeService) {
         this.blogTypeService = blogTypeService;
@@ -59,6 +56,8 @@ public class BlogTypeController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
+        BlogTypeDTO blogTypeDTO = dtoVO.getData();
+        blogTypeDTO.setStateStr(dictService.getData(new DictDTO().setKey(STATE_KEY).setCode(blogTypeDTO.getState())).getData().getLabel());
         fillDetail(model, dtoVO.getData());
 
         return "blog/blogType/detail";
