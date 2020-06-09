@@ -21,7 +21,24 @@ import priv.zhou.module.access.accessLog.service.IAccessLogService;
 @RequestMapping("/access/log")
 public class AccessLogController extends BaseController {
 
-    private final Module module = new Module("访问日志","access:accessLog");
+    private final IAccessLogService accessLogService;
+
+    private final Module module = new Module("访问日志","access:log");
+
+    public AccessLogController(IAccessLogService accessLogService) {
+        this.accessLogService = accessLogService;
+    }
+
+    @RequestMapping("/detail/{id}")
+    public String detail(Model model, @PathVariable Integer id) {
+        OutVO<AccessLogDTO> dtoVO = accessLogService.get(new AccessLogDTO().setId(id));
+        if (dtoVO.isFail()) {
+            return NOT_FOUNT;
+        }
+        fillDetail(model, dtoVO.getData());
+        return "access/log/detail";
+    }
+
 
     @RequestMapping("/list")
     public String list(Model model) {

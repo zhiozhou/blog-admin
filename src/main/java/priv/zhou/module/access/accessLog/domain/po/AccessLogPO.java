@@ -37,6 +37,16 @@ public class AccessLogPO implements Serializable {
     private String host;
 
     /**
+     * 厂商
+     */
+    private String mfrs;
+
+    /**
+     * 设备
+     */
+    private String device;
+
+    /**
      * 操作系统
      */
     private String os;
@@ -47,9 +57,19 @@ public class AccessLogPO implements Serializable {
     private String browser;
 
     /**
-     * 访问接口
+     * 请求接口
      */
     private String api;
+
+    /**
+     * 请求参数
+     */
+    private String param;
+
+    /**
+     * 请求参数
+     */
+    private String userAgent;
 
     /**
      * 创建时间

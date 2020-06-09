@@ -2,7 +2,6 @@ package priv.zhou.framework.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -30,7 +29,7 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalHandler {
 
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     public GlobalHandler(AppProperties appProperties) {
         this.appProperties = appProperties;
@@ -46,7 +45,7 @@ public class GlobalHandler {
         builder.append("e -->");
         log.error(builder.toString(), e);
         HttpUtil.out(response, OutVO.fail(OutVOEnum.ERROR_SYSTEM));
-        if(appProperties.isEmail()){
+        if (appProperties.isEmail()) {
             EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
         }
     }
@@ -67,7 +66,7 @@ public class GlobalHandler {
     @ExceptionHandler(BindException.class)
     public void bindHand(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
         List<ObjectError> errs = e.getBindingResult().getAllErrors();
-        OutVO<NULL> outVO = OutVO.fail(OutVOEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
+        OutVO<?> outVO = OutVO.fail(OutVOEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), outVO);
         HttpUtil.out(response, outVO);
     }

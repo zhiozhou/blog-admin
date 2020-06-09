@@ -91,6 +91,11 @@ public class DictDTO extends DTO<DictPO> {
     private List<DictDataDTO> dataList;
 
     /**
+     * 提交版本
+     */
+    private Integer version;
+
+    /**
      * 创建人
      */
     private Integer createId;

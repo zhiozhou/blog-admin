@@ -1,10 +1,8 @@
 package priv.zhou.module.access.accessLog.service;
 
-import com.alibaba.fastjson.JSONObject;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.module.access.accessLog.domain.dto.AccessLogDTO;
 
 /**
@@ -15,7 +13,7 @@ import priv.zhou.module.access.accessLog.domain.dto.AccessLogDTO;
  */
 public interface IAccessLogService {
 
-    OutVO<ListVO<AccessLogDTO>> list(AccessLogDTO accessLogDTO, Page page);
+    OutVO<AccessLogDTO> get(AccessLogDTO accessLogDTO);
 
-    OutVO<Integer> count(AccessLogDTO accessLogDTO);
+    OutVO<ListVO<AccessLogDTO>> list(AccessLogDTO accessLogDTO, Page page);
 }

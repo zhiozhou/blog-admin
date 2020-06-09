@@ -43,6 +43,16 @@ public class AccessLogDTO extends DTO<AccessLogPO> {
     private String host;
 
     /**
+     * 厂商
+     */
+    private String mfrs;
+
+    /**
+     * 设备
+     */
+    private String device;
+
+    /**
      * 操作系统
      */
     private String os;
@@ -58,6 +68,18 @@ public class AccessLogDTO extends DTO<AccessLogPO> {
     private String api;
 
     private String apiLike;
+
+    /**
+     * 请求参数
+     */
+    private String param;
+
+    private String paramLike;
+
+    /**
+     * 请求参数
+     */
+    private String userAgent;
 
     /**
      * 创建时间

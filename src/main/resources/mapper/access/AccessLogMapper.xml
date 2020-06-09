@@ -7,9 +7,13 @@
     <resultMap id="accessLogMap" type="AccessLogPO">
         <id column="id" property="id"/>
         <result column="host" property="host"/>
+        <result column="mfrs" property="mfrs"/>
+        <result column="device" property="device"/>
         <result column="os" property="os"/>
         <result column="browser" property="browser"/>
         <result column="api" property="api"/>
+        <result column="param" property="param"/>
+        <result column="user_agent" property="userAgent"/>
         <result column="gmt_create" property="gmtCreate"/>
         <association property="visitor" javaType="VisitorPO">
             <result column="visitor_id" property="id"/>
@@ -17,15 +21,37 @@
         </association>
     </resultMap>
 
+    <select id="get" parameterType="AccessLogDTO" resultMap="accessLogMap">
+        SELECT
+            visitor_id,
+            nickname,
+            `host`,
+            mfrs,
+            device,
+            os,
+            browser,
+            api,
+            param,
+            user_agent,
+            zhousb_access_log.gmt_create
+        FROM
+            zhousb_access_log
+            LEFT JOIN zhousb_visitor ON zhousb_access_log.visitor_id = zhousb_visitor.id
+        WHERE
+            zhousb_access_log.id = #{id}
+
+    </select>
+
     <select id="list" parameterType="AccessLogDTO" resultMap="accessLogMap">
         SELECT
             zhousb_access_log.id,
             visitor_id,
             nickname,
             `host`,
+            mfrs,
             os,
-            browser,
             api,
+            param,
             zhousb_access_log.gmt_create
         FROM
             zhousb_access_log
@@ -33,19 +59,9 @@
         <where>
             <if test="visitor != null  and visitor.id != null "> and visitor_id = #{visitor.id}</if>
             <if test="apiLike != null  and apiLike != '' "> and api LIKE CONCAT('%',#{apiLike},'%') </if>
+            <if test="paramLike != null  and paramLike != '' "> and param LIKE CONCAT('%',#{paramLike},'%') </if>
         </where>
         ORDER BY id DESC
-    </select>
-
-    <select id="count" parameterType="AccessLogDTO" resultType="Integer">
-        SELECT
-            count(0)
-        FROM
-        zhousb_access_log
-        <where>
-            <if test="visitor != null  and visitor.id != null "> and visitor_id = #{visitor.id}</if>
-            <if test="api != null  and api != '' "> and api = #{api}</if>
-        </where>
     </select>
 
 </mapper>

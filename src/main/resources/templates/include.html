@@ -47,13 +47,21 @@
 			<a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"  shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
 			<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"  shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
 		</div>
+
 	</script>
 
+	<script type="text/html" id="r">
+		<div class="tool">
+			<a class="layui-btn layui-btn-sm" lay-event="detail"  shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
+		</div>
+	</script>
 	<script type="text/html" id="d">
 		<div class="tool">
 			<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"  shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
 		</div>
 	</script>
+
+
 
 </div>
 

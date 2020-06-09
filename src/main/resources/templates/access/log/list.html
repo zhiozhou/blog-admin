@@ -10,7 +10,10 @@
                                autocomplete="off">
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="apiLike" class="layui-input" placeholder="请输入访问接口" autocomplete="off">
+                        <input type="text" name="apiLike" class="layui-input" placeholder="请输入请求接口" autocomplete="off">
+                    </div>
+                    <div class="layui-inline">
+                        <input type="text" name="paramLike" class="layui-input" placeholder="请输入请求参数" autocomplete="off">
                     </div>
                     <div class="layui-inline">
                         <button id="id" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search">
@@ -41,16 +44,19 @@
                                 return `<div id="${id}" onmouseenter="tips(${id},'${visitorId}')">${nickname}</div>`
                             }
                         },
-                        {field: 'host', title: '主机', minWidth:'120',align: 'center'},
+                        {field: 'host', title: '主机地址', minWidth:'120',align: 'center'},
+                        {field: 'mfrs', title: '设备厂商',minWidth:'150', align: 'center'},
                         {field: 'os', title: '操作系统',minWidth:'150', align: 'center'},
-                        {field: 'browser', title: '浏览器',minWidth:'120', align: 'center'},
-                        {field: 'api', title: '访问接口',minWidth:'120',align: 'center'},
+                        {field: 'api', title: '请求接口',minWidth:'120',align: 'center'},
+                        {field: 'param', title: '请求参数',minWidth:'120',align: 'center',templet:({param})=>param?param:'-'},
                         {
                             field: 'gmtCreate', title: '访问时间', minWidth:'120',align: 'center',
                             templet: ({gmtCreate}) => formatDate(gmtCreate)
-                        }
+                        },
+                        {title: '操作',fixed: 'right', align: 'center', toolbar: '#r'}
                     ]]
                 table.render(fillDefault(cols))
+                table.on('tool(table)', handleAction2)
             })
         </script>
     </body>

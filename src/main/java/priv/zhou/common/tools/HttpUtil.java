@@ -57,7 +57,7 @@ public class HttpUtil {
     /**
      * 返回错误信息
      */
-    public static void out(HttpServletResponse response, OutVO outVO) throws IOException {
+    public static void out(HttpServletResponse response, OutVO<?> outVO) throws IOException {
         response.setCharacterEncoding(AppProperties.ENC);
         response.setContentType("application/json; charset=utf-8");
         try (PrintWriter out = response.getWriter()) {

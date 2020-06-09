@@ -80,8 +80,6 @@
 }
 
 
-
-
 .main-layout-container {
     position: absolute;
     top: 0;
@@ -240,9 +238,11 @@
 .main-layout .layui-tab-title .home {
     padding-right: 15px;
 
-}.main-layout-tab .home .layui-tab-close {
-     display: none;
- }
+}
+
+.main-layout-tab .home .layui-tab-close {
+    display: none;
+}
 
 .main-layout-tab.layui-tab-brief > .layui-tab-title .layui-this {
     color: #000;
@@ -253,7 +253,6 @@
     width: 100%;
     border: none;
 }
-
 
 
 .main-layout-tab .layui-tab-content {
@@ -360,16 +359,21 @@
         margin-left: 80px;
     }
 }
-/* 全局表格兼容 */
-.layui-table-fixed .layui-table-cell{
-    overflow-x: auto;
-    text-overflow: clip;
 
-}
-.layui-table-fixed  .tool{
+.layui-table-fixed > .tool {
     display: inline-block;
 }
 
+/*.layui-table-main .layui-table-col-special > .layui-table-cell {*/
+/*    width: auto;*/
+/*}*/
+
+/* 全局表格兼容 */
+.layui-table-fixed  .layui-table-col-special > .layui-table-cell {
+    overflow-x: auto;
+    text-overflow: clip;
+    min-width: 135px;
+}
 
 
 /* 全页面表单调整 */
@@ -377,7 +381,7 @@
     margin-bottom: 15px;
 }
 
-.page-wrap .layui-tab-content{
+.page-wrap .layui-tab-content {
     max-width: 1500px;
 }
 

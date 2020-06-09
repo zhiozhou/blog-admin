@@ -7,6 +7,7 @@ import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.module.access.accessLog.domain.dao.AccessLogDAO;
 import priv.zhou.module.access.accessLog.domain.dto.AccessLogDTO;
 import priv.zhou.module.access.accessLog.domain.po.AccessLogPO;
@@ -31,15 +32,19 @@ public class AccessLogServiceImpl implements IAccessLogService {
     }
 
     @Override
+    public OutVO<AccessLogDTO> get(AccessLogDTO accessLogDTO) {
+        AccessLogPO accessLogPO = accessLogDAO.get(accessLogDTO);
+        if (null == accessLogPO) {
+            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+        }
+        return OutVO.success(DTO.ofPO(accessLogPO, AccessLogDTO::new));
+    }
+
+    @Override
     public OutVO<ListVO<AccessLogDTO>> list(AccessLogDTO accessLogDTO, Page page) {
         PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
         List<AccessLogPO> poList = accessLogDAO.list(accessLogDTO);
         PageInfo<AccessLogPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, AccessLogDTO::new), pageInfo.getTotal());
-    }
-
-    @Override
-    public OutVO<Integer> count(AccessLogDTO accessLogDTO) {
-        return OutVO.success(accessLogDAO.count(accessLogDTO));
     }
 }

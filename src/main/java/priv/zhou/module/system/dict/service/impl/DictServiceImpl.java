@@ -92,10 +92,8 @@ public class DictServiceImpl implements IDictService {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         }
 
-
         // 3.补充参数
         dictPO.setModifiedId(ShiroUtil.getUserId());
-
 
         // 4.修改key值后，将数据也删除
         DictPO db = dictDAO.get(new DictDTO().setId(dictPO.getId()));
