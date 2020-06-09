@@ -65,7 +65,7 @@ public class OutVO<T> {
     /**
      * 返回api错误
      */
-    public static OutVO<NULL> fail(OutVOEnum outVoEnum) {
+    public static <E> OutVO<E> fail(OutVOEnum outVoEnum) {
         return new OutVO<>(outVoEnum);
     }
 

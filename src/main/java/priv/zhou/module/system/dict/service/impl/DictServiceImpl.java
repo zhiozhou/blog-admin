@@ -57,10 +57,10 @@ public class DictServiceImpl implements IDictService {
 
         // 3.补充参数
         dictPO.setCreateId(ShiroUtil.getUserId());
-        if(dictDAO.save(dictPO)<1){
+        if (dictDAO.save(dictPO) < 1) {
             OutVO.fail(OutVOEnum.FAIL_OPERATION);
         }
-        if(null != dictPO.getDataList() && !dictPO.getDataList().isEmpty()){
+        if (null != dictPO.getDataList() && !dictPO.getDataList().isEmpty()) {
             dictDAO.saveData(dictPO);
         }
         return OutVO.success();
@@ -103,12 +103,12 @@ public class DictServiceImpl implements IDictService {
             dictDAO.removeData(new DictDTO().setKey(db.getKey()));
         }
 
-        if(dictDAO.update(dictPO)<1){
+        if (dictDAO.update(dictPO) < 1) {
             OutVO.fail(OutVOEnum.FAIL_OPERATION);
         }
 
         dictDAO.removeData(dictDTO);
-        if(null != dictPO.getDataList() && !dictPO.getDataList().isEmpty()){
+        if (null != dictPO.getDataList() && !dictPO.getDataList().isEmpty()) {
             dictDAO.saveData(dictPO);
         }
         return OutVO.success();
@@ -119,7 +119,7 @@ public class DictServiceImpl implements IDictService {
     public OutVO<DictDTO> get(DictDTO dictDTO) {
         DictPO dictPO = dictDAO.get(dictDTO);
         if (isNull(dictPO)) {
-            return new OutVO<>(OutVOEnum.EMPTY_DATA);
+            return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new DictDTO(dictPO));
     }

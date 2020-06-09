@@ -18,7 +18,6 @@ import priv.zhou.module.system.role.domain.po.RolePO;
 import priv.zhou.module.system.role.service.IRoleService;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
@@ -68,7 +67,8 @@ public class RoleServiceImpl implements IRoleService {
         if (isNull(roleDTO.getId())) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         } else if (roleDAO.countUser(roleDTO) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_RELATION).setInfo("角色下尚有用户，不可删除");
+            OutVO<NULL> outVO = OutVO.fail(OutVOEnum.EXIST_RELATION);
+            return outVO.setInfo("角色下尚有用户，不可删除");
         }
 
         roleDAO.remove(roleDTO);
@@ -115,7 +115,7 @@ public class RoleServiceImpl implements IRoleService {
 
         RolePO rolePO = roleDAO.get(roleDTO);
         if (isNull(rolePO)) {
-            return new OutVO<>(OutVOEnum.EMPTY_DATA);
+            return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new RoleDTO(rolePO));
     }

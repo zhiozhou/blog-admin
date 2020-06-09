@@ -112,7 +112,7 @@ public class MenuServiceImpl implements IMenuService {
     public OutVO<MenuDTO> get(MenuDTO menuDTO) {
         MenuPO menuPO = menuDAO.get(menuDTO);
         if (isNull(menuPO)) {
-            return new OutVO<>(OutVOEnum.EMPTY_DATA);
+            return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new MenuDTO(menuPO));
     }

@@ -115,7 +115,7 @@ public class UserServiceImpl implements IUserService {
     public OutVO<UserDTO> get(UserDTO userDTO) {
         UserPO userPO = userDAO.get(userDTO);
         if (isNull(userPO)) {
-            return new OutVO<>(OutVOEnum.EMPTY_DATA);
+            return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new UserDTO(userPO));
     }

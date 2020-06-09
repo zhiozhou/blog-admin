@@ -40,7 +40,7 @@ public class ImageServiceImpl implements IImageService {
     @Override
     public OutVO<Integer> save(List<ImageDTO> imageList, String remark) {
         if (null == imageList) {
-            return new OutVO<>(OutVOEnum.EMPTY_PARAM);
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
         int failCount = 0;

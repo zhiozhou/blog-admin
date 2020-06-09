@@ -57,7 +57,7 @@ public class ExtendServiceImpl implements IExtendService {
     public OutVO<byte[]> module(List<String> tableNames) throws Exception {
 
         if (isNull(tableNames) || tableNames.isEmpty()) {
-            return new OutVO<>(OutVOEnum.EMPTY_PARAM);
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
         Map<String, DictDataDTO> configMap = dictService.dataMap(new DictDTO().setKey("extend_config")).getData();
