@@ -86,6 +86,7 @@ function post(u, d, cb) {
         if (fail(code)) return warn(info)
         cb(data)
     })
+    return false
 }
 
 /**

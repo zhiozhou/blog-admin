@@ -58,11 +58,9 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        {field: 'id', title: 'ID', align: 'center'},
+                        { field: 'id', title: 'ID', align: 'center'},
                         { field: 'nickname', title: '名称',minWidth:'120', align: 'center',
                             templet: ({nickname = '-', website}) => {
-                                console.log(nickname)
-                                console.log(website)
                                 return website ?
                                     `<a href="${website}" target="_blank">${nickname}</a>` :
                                     nickname
@@ -75,7 +73,7 @@
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'remark', title: '备注', align: 'center',minWidth:'150',emplet: ({remark = '-'})=> remark},
+                        {field: 'remark', title: '备注', align: 'center',minWidth:'150',templet: ({remark = '-'})=> remark},
                         {field: 'lastAccessTime', title: '最后访问时间',minWidth:'120', align: 'center',templet: ({lastAccessTime}) =>  formatDate(lastAccessTime)},
                         {title: '操作',fixed: 'right', align: 'center', toolbar: '#rub'}
                     ]]
