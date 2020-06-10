@@ -52,11 +52,6 @@ public class DictPO implements Serializable{
 	private List<DictDataPO> dataList;
 
 	/**
-	 * 提交版本
-	 */
-	private Integer version;
-
-	/**
 	 * 创建人
 	 */
 	private Integer createId;

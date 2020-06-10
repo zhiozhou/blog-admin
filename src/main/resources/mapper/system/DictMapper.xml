@@ -10,7 +10,6 @@
         <result column="key" property="key"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
-        <result column="version" property="version"/>
         <collection property="dataList"  ofType="DictDataPO">
             <result column="code" property="code"/>
             <result column="label" property="label" />
@@ -36,7 +35,6 @@
             <if test="key != null  and key != '' "> `key` ,</if>
             <if test="state != null  "> state ,</if>
             <if test="remark != null  and remark != '' "> remark ,</if>
-            version ,
             create_id,
             modified_id,
             gmt_create,
@@ -71,7 +69,6 @@
             <if test="key != null and key != ''">`key` = #{key},</if>
             <if test="state != null"> state = #{state},</if>
             <if test="remark != null and remark != ''"> remark = #{remark},</if>
-            version = version + 1,
             modified_id = #{modifiedId},
             gmt_modified = NOW()
         </set>
@@ -84,7 +81,6 @@
             name,
             `key`,
             system_dict.state,
-            version,
             remark,
             code,
             label,
@@ -118,8 +114,7 @@
             name ,
             `key` ,
             state ,
-            remark,
-            version
+            remark
         FROM system_dict
         <where>
             <if test="nameLike != null and nameLike != ''">and name LIKE CONCAT('%',#{nameLike},'%')</if>

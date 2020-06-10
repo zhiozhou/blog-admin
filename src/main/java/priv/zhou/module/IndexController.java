@@ -24,7 +24,7 @@ import java.util.List;
 @Controller
 public class IndexController extends BaseController {
 
-    private IMenuService menuService;
+    private final IMenuService menuService;
 
     public IndexController(IMenuService menuService) {
         this.menuService = menuService;
@@ -41,6 +41,7 @@ public class IndexController extends BaseController {
                         .setState(0)
                         .setTypes(Lists.newArrayList(0, 1))
         );
+
         model.addAttribute("user", userDTO);
         model.addAttribute("menuList", IMenuService.toTree(listRes.getData()));
         model.addAttribute(GATE_KEY, appProperties.getGate());
