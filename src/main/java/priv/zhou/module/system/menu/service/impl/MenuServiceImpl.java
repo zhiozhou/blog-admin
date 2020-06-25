@@ -1,12 +1,15 @@
 package priv.zhou.module.system.menu.service.impl;
 
+import io.lettuce.core.RedisURI;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.module.blog.menu.controller.MenuController;
 import priv.zhou.module.system.menu.domain.dao.MenuDAO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
@@ -18,6 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
+import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_MENU_KEY;
+import static priv.zhou.common.param.CONSTANT.MENU_MODIFIED_KEY;
 
 @Service
 public class MenuServiceImpl implements IMenuService {
@@ -56,18 +61,34 @@ public class MenuServiceImpl implements IMenuService {
         // 3.补充参数
         menuPO.setCreateId(ShiroUtil.getUserId());
 
-
         // 4.保存
-        return menuDAO.save(menuPO) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        if(menuDAO.save(menuPO) <1){
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        }
+
+        // 5.移除服务端缓存
+        if(MenuController.FLAG.equals(menuDTO.getFlag())){
+            RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
+            RedisUtil.delete(MENU_MODIFIED_KEY);
+        }
+
+        return OutVO.success();
     }
 
     @Override
     public OutVO<NULL> remove(MenuDTO menuDTO) {
-        if (isNull(menuDTO.getId())) {
+        if (null == menuDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
+
+        MenuPO menuPO = menuDAO.get(menuDTO);
+        if(null == menuPO){
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+        }else if(MenuController.FLAG.equals(menuPO.getFlag())){
+            RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
+            RedisUtil.delete(MENU_MODIFIED_KEY);
+        }
+
         menuDAO.remove(menuDTO);
         roleDAO.clearMenu(new RoleDTO());
 
@@ -81,7 +102,6 @@ public class MenuServiceImpl implements IMenuService {
 
         // 1.转换类型
         MenuPO menuPO = menuDTO.toPO();
-
 
         // 2.验证参数
         if (menuDAO.count(new MenuDTO()
@@ -103,9 +123,19 @@ public class MenuServiceImpl implements IMenuService {
         // 3.补充参数
         menuPO.setModifiedId(ShiroUtil.getUserId());
 
-        return menuDAO.update(menuPO) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+
+        // 4.修改菜单
+        if( menuDAO.update(menuPO) < 1){
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        }
+
+        // 5.移除服务端缓存
+        if(MenuController.FLAG.equals(menuDTO.getFlag())){
+            RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
+            RedisUtil.delete(MENU_MODIFIED_KEY);
+        }
+
+        return OutVO.success();
     }
 
     @Override

@@ -11,6 +11,7 @@ import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.dict.domain.dao.DictDAO;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Objects.isNull;
+import static priv.zhou.common.param.CONSTANT.DICT_DATA_KEY;
+import static priv.zhou.common.param.CONSTANT.DICT_DATA_MODIFIED_KEY;
 
 
 /**
@@ -37,6 +40,8 @@ public class DictServiceImpl implements IDictService {
     private final DictDAO dictDAO;
 
     private final Integer NORMAL_TYPE = 0;
+
+    private final String DICT_SNS_KEY = "zhou_sns";
 
     public DictServiceImpl(DictDAO dictDAO) {
         this.dictDAO = dictDAO;
@@ -101,13 +106,20 @@ public class DictServiceImpl implements IDictService {
             dictDAO.removeData(new DictDTO().setKey(db.getKey()));
         }
 
+        // 5.修改字典
         if (dictDAO.update(dictPO) < 1) {
             OutVO.fail(OutVOEnum.FAIL_OPERATION);
         }
-
+        // 6,保存字典数据
         dictDAO.removeData(dictDTO);
         if (null != dictPO.getDataList() && !dictPO.getDataList().isEmpty()) {
             dictDAO.saveData(dictPO);
+        }
+
+
+        if (DICT_SNS_KEY.equals(dictDTO.getKey())) {
+            RedisUtil.delete(DICT_DATA_KEY + dictDTO.getKey());
+            RedisUtil.delete(DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
         }
         return OutVO.success();
     }

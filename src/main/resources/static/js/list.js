@@ -148,10 +148,7 @@ function removeAction(data) {
  * 刷新表格
  */
 function reloadTable() {
-    layui.table.reload('table', {
-        where: null,
-        page: {curr: 1}
-    })
+    layui.table.reload('table')
 }
 
 

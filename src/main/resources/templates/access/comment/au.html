@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="frame-wrap">
+            <form class="layui-form  " id="form" th:attr="action=${action}">
+                <input type="hidden" name="id" th:value="${o.id}">
+                <input type="hidden" name="repliedComment.id" th:if="${null != o.repliedComment}" th:value="${o.repliedComment.id}">
+                <div class="layui-form-item">
+                    <textarea name="content" th:text="${o.content}" placeholder="请输入回复内容" class="layui-textarea" maxlength="256" rows="6"></textarea>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:include="include :: au-footer"></div>
+        <script th:inline="none">
+            const prefix =  `${gate}access/comment`
+
+            layui.use(['form', 'jquery'],  ()=> {
+                const {form, jquery: $} = layui
+
+                //监听提交
+                form.on('submit(submit)',  IFRAME_SUBMIT)
+            })
+
+        </script>
+    </body>
+
+</html>

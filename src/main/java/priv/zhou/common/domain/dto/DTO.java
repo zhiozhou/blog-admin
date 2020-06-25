@@ -47,6 +47,14 @@ public abstract class DTO<PO> {
     }
 
     /**
+     * DTO转PO判空
+     * 为空返回null
+     */
+    protected <DT extends DTO<P>, P> P toPO(DT dto) {
+        return null == dto ? null : dto.toPO();
+    }
+
+    /**
      * 创建定义的PO对象
      * 获取当前类指定的第一个泛型<PO>并实例化
      */

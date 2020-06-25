@@ -49,15 +49,16 @@ function formatDate(date, format = 'yyyy年MM月dd日 HH:mm:ss') {
  * 创建 iframe 窗口，手机端自动全屏
  * @param title 窗口标题
  * @param url 地址
+ * @param area 窗口尺寸
  */
-function newFrame(title, url) {
+function newFrame(title, url, area) {
     const sizePC = ['700px', '620px'],
         sizeMobile = ['320px', '620px']
     let isPc = window.innerWidth > 768
     let index = layer.open({
         type: 2,
         title: title,
-        area: isPc ? sizePC : sizeMobile,
+        area: area?area : isPc ? sizePC : sizeMobile,
         fixed: false, //不固定
         content: url
     })

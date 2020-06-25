@@ -41,6 +41,11 @@ public class VisitorPO implements Serializable{
 	private String website;
 
 	/**
+	 * 头像
+	 */
+	private String avatar;
+
+	/**
 	 * 状态
 	 */
 	private Integer state;

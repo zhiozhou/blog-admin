@@ -87,7 +87,8 @@
         system_menu.type,
         system_menu.state,
         system_menu.sort,
-        system_menu.`key`
+        system_menu.`key`,
+        system_menu.flag
         FROM
         system_menu
         LEFT JOIN system_menu AS parent_menu ON system_menu.parent_id = parent_menu.id

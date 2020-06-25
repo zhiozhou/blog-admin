@@ -110,10 +110,8 @@ public class UserDTO extends DTO<UserPO> implements Serializable {
 
     @Override
     public UserPO toPO() {
-        UserPO po = new UserPO();
-        BeanUtils.copyProperties(this, po);
-        po.setRole(getRole().toPO());
-        return po;
+        return super.toPO()
+                .setRole(toPO(role));
     }
 
 

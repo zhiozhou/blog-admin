@@ -46,7 +46,6 @@
             <if test="key != null and key != ''">#{key} ,</if>
             <if test="state != null">#{state} ,</if>
             <if test="remark != null and remark != ''">#{remark} ,</if>
-            0 ,
             #{createId},
             #{createId},
             NOW(),

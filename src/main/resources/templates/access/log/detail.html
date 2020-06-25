@@ -3,92 +3,85 @@
     <head th:include="include :: header"></head>
     <body>
         <body>
-            <div class="page-wrap">
-                <form class="layui-form-pane" id="form" th:attr="action=${action}">
+            <div class="frame-wrap">
+                <form class="layui-form-pane  ">
 
-                    <div class="layui-tab" style="margin: 0;">
-                        <ul class="layui-tab-title">
-                            <li><a th:href="@{/access/log/list}" id="superior">访问日志</a></li>
-                            <li class="layui-this">日志详情</li>
-                        </ul>
-                        <div class="layui-tab-content">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">名称：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ null == o.visitor.nickname? '-': o.visitor.nickname}" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">主机：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.host }" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">厂商：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.mfrs }" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">设备：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.device }" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">系统：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.os }" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">浏览器：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.browser }" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求接口：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.api }" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求参数：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.api }" class="layui-input" disabled>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">用户代理：</label>
-                                <div class="layui-input-block">
-                                    <textarea th:text="${o.userAgent}" class="layui-textarea" disabled></textarea>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">访问时间：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
-                                </div>
-                            </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">名称：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ null == o.visitor.nickname? '-': o.visitor.nickname}"
+                                   class="layui-input" disabled>
                         </div>
                     </div>
-            </form>
-        </div>
-        <div th:include="include :: footer"></div>
-        <script th:inline="javascript">
 
-        </script>
-    </body>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">主机：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.host }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">厂商：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.mfrs }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">设备：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.device }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">系统：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.os }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">浏览器：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.browser }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求接口：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.api }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求参数：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.api }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户代理：</label>
+                        <div class="layui-input-block">
+                            <textarea th:text="${o.userAgent}" class="layui-textarea" disabled></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">访问时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div th:include="include :: footer"></div>
+            <script th:inline="javascript">
+
+            </script>
+        </body>
 
 </html>

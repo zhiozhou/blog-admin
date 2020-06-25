@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.access.comment.domain.dao.CommentDAO">
+
+    <insert id="save" parameterType="CommentPO">
+        INSERT INTO zhousb_comment(
+             blog_id , 
+             topic_id , 
+             replied_id , 
+             to_vid , 
+             from_vid , 
+             content , 
+             state , 
+             gmt_create , 
+             gmt_modified 
+        )
+        VALUES(
+            #{blog.id} ,
+            #{topicId} , 
+            #{repliedComment.id} ,
+            #{toVisitor.id} ,
+            #{fromVisitor.id} ,
+            #{content} , 
+            #{state} ,
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="CommentPO">
+        UPDATE zhousb_comment
+        <set>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="state != null">state = #{state},</if>
+            gmt_modified = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="remove" parameterType="CommentDTO" >
+        delete from zhousb_comment where id = #{id}
+    </delete>
+
+
+    <resultMap id="commentMap" type="CommentPO">
+        <id column="comment_id" property="id"/>
+        <result column="comment_topic_id" property="topicId"/>
+        <result column="comment_content" property="content"/>
+        <result column="comment_state" property="state"/>
+        <result column="comment_gmt_create" property="gmtCreate"/>
+        <association property="blog" javaType="BlogPO">
+            <id column="blog_id" property="id"/>
+            <result column="blog_title" property="title"/>
+        </association>
+        <association property="repliedComment" javaType="CommentPO">
+            <id column="replied_id" property="id"/>
+            <result column="replied_content" property="content"/>
+        </association>
+        <association property="fromVisitor" javaType="VisitorPO">
+            <id column="from_visitor_id" property="id"/>
+            <result column="from_visitor_nickname" property="nickname"/>
+            <result column="from_visitor_remark" property="remark"/>
+        </association>
+    </resultMap>
+
+
+    <select id="get" parameterType="CommentDTO" resultMap="commentMap">
+        SELECT
+            zhousb_blog.id AS blog_id,
+            zhousb_blog.title AS blog_title,
+            zhousb_comment.id AS comment_id,
+            zhousb_comment.topic_id AS comment_topic_id,
+            zhousb_comment.content AS comment_content,
+            zhousb_comment.state AS comment_state,
+            zhousb_comment.gmt_create AS comment_gmt_create,
+            replied_comment.id AS replied_id,
+            replied_comment.content AS replied_content,
+            from_visitor.id AS from_visitor_id,
+            from_visitor.nickname AS from_visitor_nickname,
+            from_visitor.remark AS from_visitor_remark
+        FROM
+            zhousb_comment
+            LEFT JOIN zhousb_blog ON zhousb_comment.blog_id = zhousb_blog.id
+            LEFT JOIN zhousb_comment AS replied_comment ON zhousb_comment.replied_id = replied_comment.id
+            LEFT JOIN zhousb_visitor AS from_visitor ON zhousb_comment.from_vid = from_visitor.id
+        WHERE zhousb_comment.id = #{id}
+    </select>
+
+
+    <select id="list" parameterType="CommentDTO" resultMap="commentMap">
+        SELECT
+            zhousb_comment.id AS comment_id,
+            zhousb_comment.content AS comment_content,
+            zhousb_comment.state AS comment_state,
+            zhousb_comment.gmt_create AS comment_gmt_create,
+            from_visitor.id AS from_visitor_id,
+            from_visitor.nickname AS from_visitor_nickname,
+            from_visitor.remark AS from_visitor_remark
+        FROM
+            zhousb_comment
+            LEFT JOIN zhousb_visitor AS from_visitor ON from_vid = from_visitor.id
+        <where>
+            <if test="blog != null and blog.id != null "> and blog_id = #{blog.id}</if>
+            <if test="repliedComment != null  and repliedComment.id != null "> and replied_id = #{repliedComment.id}</if>
+            <if test="fromVisitor != null and fromVisitor.id != null"> and from_vid = #{fromVisitor.id}</if>
+            <if test="contentLike != null  and contentLike != '' "> and content LIKE CONCAT('%',#{contentLike},'%')</if>
+            <if test="state != null  "> and zhousb_comment.state = #{state}</if>
+        </where>
+        ORDER BY
+            zhousb_comment.state ASC,
+            zhousb_comment.id DESC
+    </select>
+
+</mapper>

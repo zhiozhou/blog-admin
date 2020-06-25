@@ -72,17 +72,16 @@
 
                     table.render(fillDefault(cols))
                     table.on('tool(table)', toolHandle)
-                    function toolHandle({data, event: action}) {
-                        switch (action) {
+                    function toolHandle({data, event}) {
+                        switch (event) {
                             case 'copy':
                                 copy(data.url)
                                 break
                             case 'copy-thumbnail':
                                 copy(data.thumbnailUrl)
                                 break
-                            case 'remove':
-                                return removeAction(data)
                         }
+                        toolHandle({data,event})
                     }
 
                     // 多图片上传

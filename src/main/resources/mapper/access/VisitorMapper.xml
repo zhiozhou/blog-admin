@@ -10,6 +10,7 @@
             <if test="nickname != null and nickname != ''">nickname = #{nickname},</if>
             <if test="email != null and email != ''">email = #{email},</if>
             <if test="website != null and website != ''">website = #{website},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
             <if test="state != null ">state = #{state},</if>
             <if test="notify != null">notify = #{notify},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
@@ -26,6 +27,7 @@
             email ,
             website ,
             state ,
+            avatar,
             notify ,
             remark ,
             last_access_time ,

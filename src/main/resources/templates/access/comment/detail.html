@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="page-wrap">
+            <form class="layui-form-pane" id="form" th:attr="action=${action}">
+                <input type="hidden" name="id" th:value="${o.id}">
+                <div class="layui-tab-content">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">博客：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.blog.title }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">访客：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.fromVisitor.nickname }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" th:if="${null != o.repliedComment}">
+                        <label class="layui-form-label">父级评论：</label>
+                        <div class="layui-input-block">
+                            <textarea th:text="${o.repliedComment.content }" class="layui-textarea" disabled></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">内容：</label>
+                        <div class="layui-input-block">
+                            <textarea th:text="${o.content }" class="layui-textarea" disabled></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.stateStr }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+
+        </script>
+    </body>
+
+</html>

@@ -80,19 +80,13 @@
                 table.render(fillDefault(cols))
                 table.on('tool(table)', toolHandle)
 
-                function toolHandle({data, event: action}) {
-                    switch (action) {
-                        case 'detail':
-                            newFrame(`${m.name}详情`, `${prefix}/detail/${data.id}`)
-                            break
-                        case 'update':
-                            newFrame(`修改${m.name}`, `${prefix}/update/${data.id}`)
-                            break
+                function toolHandle({data, event}) {
+                    switch (event) {
                         case 'block':
                             return layer.confirm(`确认阻塞 ${data.nickname?data.nickname:'该访客'} 吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
-                            }, (index) => {
+                            }, () => {
                                 post(`${prefix}/rest/block/${data.id}`, null, () => {
                                     done(reloadTable)
                                 })
@@ -107,6 +101,7 @@
                                 })
                             })
                     }
+                    handleAction({data,event})
                 }
             })
 

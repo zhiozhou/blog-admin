@@ -111,10 +111,7 @@ function IFRAME_SUBMIT({form, field: data}) {
     post(prefix + form.getAttribute('action'), data, () => {
         outDone(() => {
             parent.layer.close(parent.layer.getFrameIndex(window.name))
-            parent.layui.table.reload('table', {
-                where: null,
-                page: {curr: 1}
-            })
+            parent.layui.table.reload('table')
         })
     })
     return false
