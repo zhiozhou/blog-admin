@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Objects.isNull;
-import static priv.zhou.common.param.CONSTANT.DICT_DATA_KEY;
-import static priv.zhou.common.param.CONSTANT.DICT_DATA_MODIFIED_KEY;
+import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_DICT_DATA_KEY;
+import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_DICT_DATA_MODIFIED_KEY;
 
 
 /**
@@ -118,8 +118,8 @@ public class DictServiceImpl implements IDictService {
 
 
         if (DICT_SNS_KEY.equals(dictDTO.getKey())) {
-            RedisUtil.delete(DICT_DATA_KEY + dictDTO.getKey());
-            RedisUtil.delete(DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
+            RedisUtil.delete(BLOG_SERVICE_DICT_DATA_KEY + dictDTO.getKey());
+            RedisUtil.delete(BLOG_SERVICE_DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
         }
         return OutVO.success();
     }

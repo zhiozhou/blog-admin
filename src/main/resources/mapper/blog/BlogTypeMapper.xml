@@ -63,7 +63,10 @@
 
     <select id="get" parameterType="BlogTypeDTO" resultType="BlogTypePO">
         <include refid="selectSQL"/>
-        WHERE state != 11 and id = #{id}
+        <where>
+            <if test="id != null ">id = #{id}</if>
+            <if test="key != null ">key = #{key}</if>
+        </where>
     </select>
 
 

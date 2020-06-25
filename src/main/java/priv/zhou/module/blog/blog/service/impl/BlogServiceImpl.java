@@ -9,14 +9,19 @@ import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.module.blog.blog.domain.dao.BlogDAO;
 import priv.zhou.module.blog.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.blog.domain.po.BlogPO;
 import priv.zhou.module.blog.blog.service.IBlogService;
+import priv.zhou.module.blog.blogType.domain.dao.BlogTypeDAO;
+import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
+import priv.zhou.module.blog.blogType.domain.po.BlogTypePO;
 
 import java.util.List;
 
 import static java.util.Objects.isNull;
+import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_BLOG_KEY;
 
 
 /**
@@ -30,8 +35,13 @@ public class BlogServiceImpl implements IBlogService {
 
     private final BlogDAO blogDAO;
 
-    public BlogServiceImpl(BlogDAO blogDAO) {
+    private final BlogTypeDAO blogTypeDAO;
+
+    private final Integer SINGLE_BLOG_STATE = 7;
+
+    public BlogServiceImpl(BlogDAO blogDAO, BlogTypeDAO blogTypeDAO) {
         this.blogDAO = blogDAO;
+        this.blogTypeDAO = blogTypeDAO;
     }
 
     @Override
@@ -60,9 +70,17 @@ public class BlogServiceImpl implements IBlogService {
     @Override
     public OutVO<NULL> update(BlogDTO blogDTO) {
         BlogPO blogPO = blogDTO.toPO();
-        return blogDAO.update(blogPO) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+
+        BlogTypePO blogTypePO = blogTypeDAO.get(new BlogTypeDTO().setKey(blogDTO.getType()));
+        if (null == blogTypePO) {
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+        } else if (blogDAO.update(blogPO) < 1) {
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        }
+
+        RedisUtil.delete(BLOG_SERVICE_BLOG_KEY +
+                (SINGLE_BLOG_STATE.equals(blogTypePO.getState()) ? blogTypePO.getKey() : blogPO.getId()));
+        return OutVO.success();
 
     }
 

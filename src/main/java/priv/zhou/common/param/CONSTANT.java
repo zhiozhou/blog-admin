@@ -1,8 +1,6 @@
 package priv.zhou.common.param;
 
 
-import priv.zhou.module.access.comment.domain.po.CommentPO;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,13 +25,15 @@ public interface CONSTANT {
 
     String BLOG_SERVICE_PREFIX = "BLOG_REDIS_PREFIX_";
 
+    String BLOG_SERVICE_BLOG_KEY = BLOG_SERVICE_PREFIX + "BLOG_KEY_";
+
     String BLOG_SERVICE_MENU_KEY = BLOG_SERVICE_PREFIX + "MENU_KEY";
 
     String MENU_MODIFIED_KEY = BLOG_SERVICE_MENU_KEY + "MODIFIED_KEY";
 
-    String DICT_DATA_KEY = BLOG_SERVICE_PREFIX + "DICT_DATA_KEY_";
+    String BLOG_SERVICE_DICT_DATA_KEY = BLOG_SERVICE_PREFIX + "DICT_DATA_KEY_";
 
-    String DICT_DATA_MODIFIED_KEY = DICT_DATA_KEY + "MODIFIED_KEY";
+    String BLOG_SERVICE_DICT_DATA_MODIFIED_KEY = BLOG_SERVICE_DICT_DATA_KEY + "MODIFIED_KEY";
 
     //----------------------------------------------------------------------    shiro    ----------------------------------------------------------------------
 
