@@ -20,12 +20,24 @@ public interface CONSTANT {
     Integer ZHOU_VISITOR_ID = 0;
 
 
+    /**
+     * 单文章类型
+     */
+    int SINGLE_BLOG_STATE = 7;
+
+    /**
+     * 占位文章类型
+     */
+    int SEAT_BLOG_STATE = 10;
+
 
     //----------------------------------------------------------------------    服务端缓存key    ----------------------------------------------------------------------
 
     String BLOG_SERVICE_PREFIX = "BLOG_REDIS_PREFIX_";
 
     String BLOG_SERVICE_BLOG_KEY = BLOG_SERVICE_PREFIX + "BLOG_KEY_";
+
+    String BLOG_SERVICE_BLOG_TYPE_KEY = BLOG_SERVICE_PREFIX + "BLOG_TYPE_KEY_";
 
     String BLOG_SERVICE_MENU_KEY = BLOG_SERVICE_PREFIX + "MENU_KEY";
 
@@ -72,7 +84,7 @@ public interface CONSTANT {
     /**
      * session缓存名
      */
-    String SESSION_CACHE_NAME =  "activeSessionCache";
+    String SESSION_CACHE_NAME = "activeSessionCache";
 
     /**
      * session踢出标识

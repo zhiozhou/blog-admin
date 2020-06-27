@@ -9,6 +9,10 @@ import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.tools.RedisUtil;
+import priv.zhou.module.blog.blog.domain.dao.BlogDAO;
+import priv.zhou.module.blog.blog.domain.dto.BlogDTO;
+import priv.zhou.module.blog.blog.domain.po.BlogPO;
 import priv.zhou.module.blog.blogType.domain.dao.BlogTypeDAO;
 import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
 import priv.zhou.module.blog.blogType.domain.po.BlogTypePO;
@@ -17,6 +21,7 @@ import priv.zhou.module.blog.blogType.service.IBlogTypeService;
 import java.util.List;
 
 import static java.util.Objects.isNull;
+import static priv.zhou.common.param.CONSTANT.*;
 
 
 /**
@@ -28,9 +33,12 @@ import static java.util.Objects.isNull;
 @Service
 public class BlogTypeServiceImpl implements IBlogTypeService {
 
+    private final BlogDAO blogDAO;
+
     private final BlogTypeDAO blogTypeDAO;
 
-    public BlogTypeServiceImpl(BlogTypeDAO blogTypeDAO) {
+    public BlogTypeServiceImpl(BlogDAO blogDAO, BlogTypeDAO blogTypeDAO) {
+        this.blogDAO = blogDAO;
         this.blogTypeDAO = blogTypeDAO;
     }
 
@@ -75,11 +83,26 @@ public class BlogTypeServiceImpl implements IBlogTypeService {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
         } else if (blogTypeDAO.count(new BlogTypeDTO().setKey(blogTypePO.getKey()).setNoid(blogTypePO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
+        } else if (blogTypeDAO.update(blogTypePO) < 1) {
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
         }
 
-        return blogTypeDAO.update(blogTypePO) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        RedisUtil.delete(BLOG_SERVICE_BLOG_TYPE_KEY + blogTypePO.getKey());
+
+        switch (blogTypePO.getState()) {
+            default:
+                for (BlogPO blogPO : blogDAO.list(new BlogDTO().setType(blogTypePO.getKey()))) {
+                    RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogPO.getId());
+                }
+                break;
+
+            case SINGLE_BLOG_STATE:
+                RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogTypePO.getKey());
+                break;
+            case SEAT_BLOG_STATE:
+                break;
+        }
+        return OutVO.success();
     }
 
 

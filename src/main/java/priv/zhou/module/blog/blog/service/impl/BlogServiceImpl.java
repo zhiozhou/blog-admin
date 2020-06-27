@@ -21,7 +21,7 @@ import priv.zhou.module.blog.blogType.domain.po.BlogTypePO;
 import java.util.List;
 
 import static java.util.Objects.isNull;
-import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_BLOG_KEY;
+import static priv.zhou.common.param.CONSTANT.*;
 
 
 /**
@@ -36,8 +36,6 @@ public class BlogServiceImpl implements IBlogService {
     private final BlogDAO blogDAO;
 
     private final BlogTypeDAO blogTypeDAO;
-
-    private final Integer SINGLE_BLOG_STATE = 7;
 
     public BlogServiceImpl(BlogDAO blogDAO, BlogTypeDAO blogTypeDAO) {
         this.blogDAO = blogDAO;
@@ -79,7 +77,7 @@ public class BlogServiceImpl implements IBlogService {
         }
 
         RedisUtil.delete(BLOG_SERVICE_BLOG_KEY +
-                (SINGLE_BLOG_STATE.equals(blogTypePO.getState()) ? blogTypePO.getKey() : blogPO.getId()));
+                (SINGLE_BLOG_STATE == blogTypePO.getState() ? blogTypePO.getKey() : blogPO.getId()));
         return OutVO.success();
 
     }
