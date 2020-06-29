@@ -8,6 +8,7 @@ import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.AppProperties;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.common.tools.ShiroUtil;
@@ -33,8 +34,11 @@ public class ImageServiceImpl implements IImageService {
 
     private final ImageDAO imageDAO;
 
-    public ImageServiceImpl(ImageDAO imageDAO) {
+    private final AppProperties appProperties;
+
+    public ImageServiceImpl(ImageDAO imageDAO, AppProperties appProperties) {
         this.imageDAO = imageDAO;
+        this.appProperties = appProperties;
     }
 
     @Override
@@ -62,12 +66,12 @@ public class ImageServiceImpl implements IImageService {
         if (null != imagePO) {
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", imagePO.getUrl());
-            OutVO<NULL> removeRes = httpPost("移除图片", "http://127.0.0.1:8889/file/remove", params);
+            OutVO<NULL> removeRes = httpPost("移除图片",appProperties.getFileService()+"/remove", params);
             if (removeRes.isFail()) {
                 return removeRes;
             }
             params.put("url", imagePO.getThumbnailUrl());
-            removeRes = httpPost("移除缩略图", "http://127.0.0.1:8889/file/remove", params);
+            removeRes = httpPost("移除缩略图", appProperties.getFileService()+"/remove", params);
             if (removeRes.isFail()) {
                 return removeRes;
             }

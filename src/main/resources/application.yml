@@ -43,22 +43,20 @@ app:
   access-limit: 200
 ---
 server:
-  port: 8080
-  servlet:
-    context-path: /${spring.application.name}
+  port: 8101
 spring:
   profiles: prod
   application:
     name: blog-admin
   datasource:
-    username: root
-    password: a2080211280
-    url: jdbc:mysql://59.110.166.116:3306/zhousb_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
+    username: ENC(4tON3HWNbp+2fpzDD/CJdQ==)
+    password: ENC(7tU3j83fuVlwx3i3s8bxZAzAVaY39mpp)
+    url: jdbc:mysql://127.0.0.1:3306/zhousb_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     database: 0
     host: 127.0.0.1
-    password:
+    password: ENC(H1dbY0iQVMvilQXpfEMuoxCeWyfg7Emx)
     port: 6379
     timeout: 50s
     jedis:
@@ -81,8 +79,9 @@ logging:
 #活动参数设置
 app:
   enc: UTF-8
-  gate: http://127.0.0.1:8080/${spring.application.name}/
-  name: ${spring.application.name}
+  gate: https://zhousb.cn/blog-admin/
+  name: blog-admin
   email: true
   admin-email: flyingnoob@qq.com
   access-limit: 200
+  file-service:  https://zhousb.cn/file-service/

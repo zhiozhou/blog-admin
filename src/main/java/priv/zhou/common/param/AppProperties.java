@@ -24,6 +24,8 @@ public class AppProperties {
 
 	private String adminEmail;
 
+	private String fileService;
+
 	private Integer accessLimit;
 
 	private Integer cacheSecond = 60 * 60 * 24 * 30 * 12; //缓存一年
