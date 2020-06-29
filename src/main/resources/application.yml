@@ -46,8 +46,6 @@ server:
   port: 8101
 spring:
   profiles: prod
-  application:
-    name: blog-admin
   datasource:
     username: ENC(4tON3HWNbp+2fpzDD/CJdQ==)
     password: ENC(7tU3j83fuVlwx3i3s8bxZAzAVaY39mpp)
