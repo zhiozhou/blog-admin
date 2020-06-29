@@ -19,12 +19,6 @@ public interface CONSTANT {
      */
     Integer ZHOU_VISITOR_ID = 0;
 
-
-    /**
-     * 单文章类型
-     */
-    int SINGLE_BLOG_STATE = 7;
-
     /**
      * 占位文章类型
      */

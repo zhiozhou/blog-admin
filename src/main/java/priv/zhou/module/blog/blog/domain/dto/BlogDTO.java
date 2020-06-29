@@ -59,7 +59,6 @@ public class BlogDTO extends DTO<BlogPO> {
     /**
      * 预览
      */
-    @NotBlank(message = "预览不可为空")
     private String preview;
 
     /**

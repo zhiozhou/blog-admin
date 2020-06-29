@@ -88,19 +88,8 @@ public class BlogTypeServiceImpl implements IBlogTypeService {
         }
 
         RedisUtil.delete(BLOG_SERVICE_BLOG_TYPE_KEY + blogTypePO.getKey());
-
-        switch (blogTypePO.getState()) {
-            default:
-                for (BlogPO blogPO : blogDAO.list(new BlogDTO().setType(blogTypePO.getKey()))) {
-                    RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogPO.getId());
-                }
-                break;
-
-            case SINGLE_BLOG_STATE:
-                RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogTypePO.getKey());
-                break;
-            case SEAT_BLOG_STATE:
-                break;
+        for (BlogPO blogPO : blogDAO.list(new BlogDTO().setType(blogTypePO.getKey()))) {
+            RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogPO.getId());
         }
         return OutVO.success();
     }

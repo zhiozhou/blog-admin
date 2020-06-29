@@ -69,15 +69,10 @@ public class BlogServiceImpl implements IBlogService {
     public OutVO<NULL> update(BlogDTO blogDTO) {
         BlogPO blogPO = blogDTO.toPO();
 
-        BlogTypePO blogTypePO = blogTypeDAO.get(new BlogTypeDTO().setKey(blogDTO.getType()));
-        if (null == blogTypePO) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
-        } else if (blogDAO.update(blogPO) < 1) {
+        if (blogDAO.update(blogPO) < 1) {
             return OutVO.fail(OutVOEnum.FAIL_OPERATION);
         }
-
-        RedisUtil.delete(BLOG_SERVICE_BLOG_KEY +
-                (SINGLE_BLOG_STATE == blogTypePO.getState() ? blogTypePO.getKey() : blogPO.getId()));
+        RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogPO.getId());
         return OutVO.success();
 
     }
