@@ -18,6 +18,10 @@
         .image-view{
             cursor: pointer;
         }
+        .layui-table-cell{
+            height: auto;
+        }
+
 
 
     </style>
@@ -106,9 +110,6 @@
                                 if (0 === $('.layui-elem-quote').children().length) {
                                     $(area).slideDown()
                                 }
-                                return compress(data, (data2) => {
-                                    upload(data2, name, '.jpg', cb);
-                                })
                                 $('#images-quote').append(`<div style="background-image: url(${result})"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
                             })
                         },

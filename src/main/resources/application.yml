@@ -41,11 +41,13 @@ app:
   email: false
   admin-email: flyingnoob@qq.com
   access-limit: 200
----
+--- # --------------------------------------------- 正式环境 -------------------------------------------------------
 server:
   port: 8101
 spring:
   profiles: prod
+  application:
+    name: blog-admin
   datasource:
     username: ENC(4tON3HWNbp+2fpzDD/CJdQ==)
     password: ENC(7tU3j83fuVlwx3i3s8bxZAzAVaY39mpp)
@@ -77,8 +79,8 @@ logging:
 #活动参数设置
 app:
   enc: UTF-8
-  gate: https://zhousb.cn/blog-admin/
-  name: blog-admin
+  gate: https://zhousb.cn/${spring.application.name}/
+  name: ${spring.application.name}
   email: true
   admin-email: flyingnoob@qq.com
   access-limit: 200
