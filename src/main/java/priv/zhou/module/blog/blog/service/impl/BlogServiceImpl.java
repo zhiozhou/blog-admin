@@ -3,6 +3,7 @@ package priv.zhou.module.blog.blog.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
@@ -65,6 +66,8 @@ public class BlogServiceImpl implements IBlogService {
                 OutVO.fail(OutVOEnum.FAIL_OPERATION);
     }
 
+
+    @Transactional
     @Override
     public OutVO<NULL> update(BlogDTO blogDTO) {
         BlogPO blogPO = blogDTO.toPO();
@@ -74,7 +77,6 @@ public class BlogServiceImpl implements IBlogService {
         }
         RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogPO.getId());
         return OutVO.success();
-
     }
 
 

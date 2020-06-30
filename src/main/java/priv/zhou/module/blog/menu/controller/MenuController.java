@@ -1,6 +1,7 @@
 package priv.zhou.module.blog.menu.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
