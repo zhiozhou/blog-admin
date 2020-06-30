@@ -46,6 +46,8 @@
                     cols = [[
                         {field: 'key', title: '标识',minWidth:'100', align: 'center'},
                         {field: 'name', title: '名称', align: 'center'},
+                        {field: 'title', title: '标题', align: 'center'},
+                        {field: 'desc', title: '描述', minWidth:'150',align: 'center'},
                         {
                             field: 'state', title: '状态', align: 'center',
                             templet: ({state}) => {
@@ -53,8 +55,6 @@
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'desc', title: '描述', minWidth:'150',align: 'center'},
-                        {field: 'remark', title: '备注',  minWidth:'150',align: 'center'},
                         {title: '操作',  fixed: 'right', align: 'center', toolbar: '#rud'}
                     ]]
 

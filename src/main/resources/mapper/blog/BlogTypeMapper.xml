@@ -34,12 +34,12 @@
     <update id="update" parameterType="BlogTypePO">
         UPDATE zhousb_blog_type
         <set>
-            <if test="name != null and name != ''">name = #{name},</if>
-            <if test="title != null and title != ''">title = #{title},</if>
-            <if test="desc != null and desc != ''">`desc` = #{desc},</if>
-            <if test="bg != null and bg != ''">bg = #{bg},</if>
-            <if test="remark != null and remark != ''">remark = #{remark},</if>
-            <if test="state != null">state = #{state},</if>
+            name = #{name},
+            title = #{title},
+            `desc` = #{desc},
+            bg = #{bg},
+            remark = #{remark},
+            state = #{state},
             gmt_modified = NOW()
         </set>
         WHERE id = #{id}

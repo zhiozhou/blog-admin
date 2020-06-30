@@ -56,6 +56,23 @@ function SINGLE_IMG(elem) {
     }
 }
 
+// 标准大小
+var m2 = 2 * 1024 * 1024;
+
+/**
+ * 获取文件的dataURL形式
+ */
+function getDataUrl(file, cb) {
+    var reader = new FileReader();
+    // 以 Data URL读取文件后加载为imgase64格式
+    reader.readAsDataURL(file, 'gb2312');
+    reader.onload = function () {
+        cb && cb(this.result)
+    }
+}
+
+
+
 
 /**
  * layui 的单个文件上传的配置
@@ -87,6 +104,53 @@ function SINGLE_FILE(elem) {
             loaded()
         }
     }
+}
+
+
+/**
+ * 压缩图片，返回dataURL格式
+ */
+function compress(data, cb) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var img = new Image();
+    img.src = data;
+    img.onload = function () {
+        var width = img.width;
+        var height = img.height;
+        var ration = Math.sqrt(width * height / m2);
+        width /= ration;
+        height /= ration;
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // 将canvas中的图片转化为base64格式
+
+        console.log('aaa')
+        cb && cb(canvas.toDataURL('image/jpeg', 0.92));
+    }
+}
+
+function dataURLtoFile(dataURL) {
+    return blobToFile(dataURLtoBlob(dataURL))
+}
+
+function dataURLtoBlob(dataURL) {
+    var arr = dataURL.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n)
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new Blob([u8arr], {type: mime})
+}
+
+function blobToFile(theBlob, fileName) {
+    theBlob.lastModifiedDate = new Date()
+    theBlob.name = fileName
+    return theBlob
 }
 
 
