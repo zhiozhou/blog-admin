@@ -11,7 +11,6 @@ const UPLOAD_URL = 'https://zhousb.cn/file-service/upload/multipart'
 const UPLOAD_PREFIX = 'zhousb-admin'
 
 
-
 layui.config({
     base: gate + 'plugin/layui/extend/'
 })

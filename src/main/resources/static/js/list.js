@@ -1,8 +1,5 @@
 layui.use(['table', 'form', 'jquery'], () => {
-    const table = layui.table,
-        form = layui.form,
-        $ = layui.jquery
-
+    const {table, form, jquery: $} = layui
 
     /**
      * 使用iframe方式打开添加页面
@@ -21,9 +18,9 @@ layui.use(['table', 'form', 'jquery'], () => {
     /**
      * 表格筛选
      */
-    form.on('submit(search)', ({field: data}) => {
+    form.on('submit(search)', ({field: where}) => {
         table.reload('table', {
-            where: data,
+            where,
             page: {
                 curr: 1
             }
@@ -34,10 +31,8 @@ layui.use(['table', 'form', 'jquery'], () => {
     /**
      * 表格筛选无分页
      */
-    form.on('submit(search-all)', ({field: data}) => {
-        table.reload('table', {
-            where: data
-        })
+    form.on('submit(search-all)', ({field: where}) => {
+        table.reload('table', {where})
         return false
     })
 
@@ -60,8 +55,6 @@ layui.use(['table', 'form', 'jquery'], () => {
         })
     })
 })
-
-
 
 
 /**

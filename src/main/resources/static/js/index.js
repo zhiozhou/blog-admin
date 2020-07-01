@@ -2,61 +2,60 @@ layui.use(['layer', 'element', 'jquery'], () => {
     const {element, jquery: $} = layui
     const mainLayout = $('#main-layout')
 
-    let openId
+    var tabId
+    const menuHideClass = 'hide-side'
 
     element.on('nav(menu-side)', navHandle)
     element.on('nav(nav-right)', navHandle)
     element.on('tab(tab)', ({elem}) => {
-        let id =  $(elem.context).attr('lay-id')
-        if(!id || openId === id)return
+        let id = $(elem.context).attr('lay-id')
+        if (!id || tabId === id) return
         $('.main-layout-side .layui-this,.main-layout-header .layui-this').removeClass('layui-this')
         $(`[data-id=${id}]`).parent().addClass('layui-this')
-        element.tabChange('nav', $(elem.context).attr('lay-id'))
+        element.tabChange('nav', id)
     })
 
     // logo 跳首页
-    $('.logo').click(()=>{
+    $('.logo').click(() => {
         element.tabChange('tab', 'home')
     })
 
+
+
     // 菜单控制
     $('#hide-menu').click(() => {
-        mainLayout.hasClass('hide-side') ? -mainLayout.removeClass('hide-side') : mainLayout.addClass('hide-side')
+        mainLayout.hasClass(menuHideClass) ?
+            mainLayout.removeClass(menuHideClass) :
+            mainLayout.addClass(menuHideClass)
     })
 
     // 手机端关闭菜单
     $('.main-mask').click(() => {
-        mainLayout.removeClass('hide-side')
+        mainLayout.removeClass(menuHideClass)
     })
 
     // 刷新页面
     $('#refresh-btn').click(() => {
-        let current = $(".layui-tab-item.layui-show>iframe")
-        current.attr('src', current.attr('src'))
+        let frame = $('.layui-tab-item.layui-show>iframe')
+        frame.attr('src', frame.attr('src'))
     })
 
-
-    function navHandle(obj) {
-        let nav = $(obj.context),
-            url = nav.data('url')
+    function navHandle({context}) {
+        let $nav = $(context),
+            url = $nav.data('url')
         if (!url) return
-        openId = nav.data('id')
-
-        let opened = $('.main-layout-tab .layui-tab-title').find("li[lay-id=" + openId + "]");
-        if (opened.length > 0) {
-            // 已打开进行切换
-            element.tabChange('tab', openId)
-        } else {
+        tabId = $nav.data('id')
+        let opened = $('.main-layout-tab .layui-tab-title').find("li[lay-id=" + tabId + "]")
+        if(0 === opened.length){
             element.tabAdd('tab', {
-                id: openId,
-                title: nav.data('text'),
-                content: `<iframe src="${url}" name="iframe${openId}" class="iframe" data-id="${openId}"></iframe>`
-            });
-            element.tabChange('tab', openId)
+                id: tabId,
+                title: $nav.data('text'),
+                content: `<iframe src="${url}" name="iframe${tabId}" class="iframe" data-id="${tabId}"></iframe>`
+            })
         }
-        mainLayout.removeClass('hide-side')
+        element.tabChange('tab', tabId)
+        mainLayout.removeClass(menuHideClass)
     }
-
 
     //示范一个公告层
 //	layer.open({

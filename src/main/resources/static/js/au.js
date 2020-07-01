@@ -57,23 +57,7 @@ function SINGLE_IMG(elem) {
 }
 
 // 标准大小
-var m2 = 2 * 1024 * 1024;
-
-/**
- * 获取文件的dataURL形式
- */
-function getDataUrl(file, cb) {
-    var reader = new FileReader();
-    // 以 Data URL读取文件后加载为imgase64格式
-    reader.readAsDataURL(file, 'gb2312');
-    reader.onload = function () {
-        cb && cb(this.result)
-    }
-}
-
-
-
-
+const m2 = 2 * 1024 * 1024;
 /**
  * layui 的单个文件上传的配置
  */
