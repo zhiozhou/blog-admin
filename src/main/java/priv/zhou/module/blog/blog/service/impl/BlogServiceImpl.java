@@ -36,11 +36,8 @@ public class BlogServiceImpl implements IBlogService {
 
     private final BlogDAO blogDAO;
 
-    private final BlogTypeDAO blogTypeDAO;
-
-    public BlogServiceImpl(BlogDAO blogDAO, BlogTypeDAO blogTypeDAO) {
+    public BlogServiceImpl(BlogDAO blogDAO) {
         this.blogDAO = blogDAO;
-        this.blogTypeDAO = blogTypeDAO;
     }
 
     @Override

@@ -108,16 +108,13 @@
                         bindAction: '#images-upload',
                         acceptMime: 'image/*',
                         choose: obj => {
-                            console.log(obj)
                             obj.preview((index, file, result) => {
                                 if (0 === $('.layui-elem-quote').children().length) {
                                     $(area).slideDown()
                                 }
                                 $('#images-quote').append(`<div style="background-image: url(${result})"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
-                                getDataUrl(file, (dataURL) => {
-                                    compress(dataURL, (base64) => {
-                                        obj.resetFile(index, dataURLtoFile(base64), 'default.jpg')
-                                    })
+                                compress(result, (dataURL) => {
+                                    obj.resetFile(index, dataURLtoFile(dataURL), 'example.jpg')
                                 })
                             })
                         },
