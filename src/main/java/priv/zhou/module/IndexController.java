@@ -44,7 +44,6 @@ public class IndexController extends BaseController {
 
         model.addAttribute("user", userDTO);
         model.addAttribute("menuList", IMenuService.toTree(listRes.getData()));
-        model.addAttribute(GATE_KEY, appProperties.getGate());
         return "index";
     }
 

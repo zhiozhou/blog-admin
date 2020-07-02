@@ -22,8 +22,6 @@ public class BaseController {
 
     protected String NOT_FOUNT = "404";
 
-    @Autowired
-    protected AppProperties appProperties;
 
     @Autowired
     protected IDictService dictService;
@@ -49,7 +47,6 @@ public class BaseController {
      * 详情页添新宠 gate,dto对象
      */
     protected void fillDetail(Model model, Object object) {
-        model.addAttribute(GATE_KEY, appProperties.getGate());
         model.addAttribute(OBJECT_KEY, object);
     }
 
@@ -59,7 +56,6 @@ public class BaseController {
      */
     protected void fillList(Model model, Module module) {
         model.addAttribute(MODULE_KEY, module);
-        model.addAttribute(GATE_KEY, appProperties.getGate());
     }
 
 }

@@ -40,7 +40,7 @@ public class UserController extends BaseController {
 
     @RequestMapping("/login")
     public String login(Model model) {
-        model.addAttribute(GATE_KEY, appProperties.getGate());
+        model.addAttribute("rsaPublicKey", RSA_PUBLIC_KEY);
         return "system/user/login";
     }
 

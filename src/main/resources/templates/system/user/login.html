@@ -39,13 +39,25 @@
             </div>
         </div>
         <div th:include="include :: footer"></div>
+        <script th:src="@{/plugin/jsencrypt.min.js}"></script>
+        <script th:inline="javascript">
+            const rsaUtil = new JSEncrypt(),
+                rsaPublicKey = [[${rsaPublicKey}]]
+            rsaUtil.setPublicKey(rsaPublicKey)
+        </script>
         <script>
             layui.use(['form', 'jquery'], () => {
                 const {form} = layui
                 if (location.href.indexOf('loginLimit') > 0) {
                     warn('账号在其他设备登陆')
                 }
-                form.on('submit(login)', ({field: data}) => post(`${gate}system/user/rest/login`, data, () => location.href = `${gate}index`))
+                form.on('submit(login)', ({field: data}) => {
+                    data.password = rsaUtil.encrypt(data.password)
+                    return post(`${gate}system/user/rest/login`, data, () => {
+                        loading()
+                        location.href = `${gate}index`
+                    })
+                })
             })
         </script>
     </body>

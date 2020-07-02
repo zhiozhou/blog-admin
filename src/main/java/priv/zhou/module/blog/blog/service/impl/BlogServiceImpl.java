@@ -15,14 +15,11 @@ import priv.zhou.module.blog.blog.domain.dao.BlogDAO;
 import priv.zhou.module.blog.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.blog.domain.po.BlogPO;
 import priv.zhou.module.blog.blog.service.IBlogService;
-import priv.zhou.module.blog.blogType.domain.dao.BlogTypeDAO;
-import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
-import priv.zhou.module.blog.blogType.domain.po.BlogTypePO;
 
 import java.util.List;
 
 import static java.util.Objects.isNull;
-import static priv.zhou.common.param.CONSTANT.*;
+import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_BLOG_KEY;
 
 
 /**
@@ -57,7 +54,7 @@ public class BlogServiceImpl implements IBlogService {
         if (isNull(blogDTO.getId())) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
-
+        RedisUtil.delete(BLOG_SERVICE_BLOG_KEY + blogDTO.getId());
         return blogDAO.update(new BlogPO().setId(blogDTO.getId()).setState(11)) > 0 ?
                 OutVO.success() :
                 OutVO.fail(OutVOEnum.FAIL_OPERATION);

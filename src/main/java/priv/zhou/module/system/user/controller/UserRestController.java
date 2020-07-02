@@ -15,10 +15,13 @@ import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.common.tools.ParseUtil;
+import priv.zhou.common.tools.RsaUtil;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.service.IUserService;
 
 import javax.validation.Valid;
+
+import static priv.zhou.common.param.CONSTANT.RSA_PRIVATE_KEY;
 
 /**
  * 用户rest 控制层
@@ -39,7 +42,13 @@ public class UserRestController {
     @RequestMapping("/login")
     public OutVO<NULL> login(UserDTO userDTO) {
         try {
-//            SecurityUtils.getSubject().login(new UsernamePasswordToken("zhou", "123456"));
+            // 参数传入时需要将+号替换为%2B
+            userDTO.setPassword(RsaUtil.decode(userDTO.getPassword(), RSA_PRIVATE_KEY));
+        } catch (Exception e) {
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+        }
+
+        try {
             SecurityUtils.getSubject().login(new UsernamePasswordToken(userDTO.getUsername(), userDTO.getPassword(), ParseUtil.unBox(userDTO.getRememberMe())));
         } catch (UnknownAccountException e) {
             return OutVO.fail(OutVOEnum.NONE_USERNAME);
