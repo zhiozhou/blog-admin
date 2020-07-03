@@ -39,8 +39,8 @@ const TINYMCE_STAGE = {
 function SINGLE_IMG(elem) {
     return {
         elem: elem,
-        url: UPLOAD_URL,
-        data: {prefix: UPLOAD_PREFIX},
+        url: uploadURL+ 'upload/multipart',
+        data: {prefix: uploadPrefix},
         acceptMime: 'image/*',
         before: () => {
             loading()

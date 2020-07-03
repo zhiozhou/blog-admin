@@ -35,14 +35,14 @@ public class AccessLogController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillDetail(model, dtoVO.getData());
+        supplyDetail(model, dtoVO.getData());
         return "access/log/detail";
     }
 
 
     @RequestMapping("/list")
     public String list(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
         return "access/log/list";
     }
 }

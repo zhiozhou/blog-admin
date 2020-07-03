@@ -1,5 +1,6 @@
 package priv.zhou.common.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
@@ -9,8 +10,6 @@ import priv.zhou.module.system.dict.service.IDictService;
 public class BaseController {
 
     protected String MODULE_KEY = "m";
-
-    protected String GATE_KEY = "g";
 
     protected String OBJECT_KEY = "o";
 
@@ -22,31 +21,38 @@ public class BaseController {
 
     protected String NOT_FOUNT = "404";
 
+    @Autowired
+    protected AppProperties appProperties;
 
     @Autowired
     protected IDictService dictService;
 
 
+    protected void supplyUpload(Model model)  {
+        model.addAttribute("uploadURL", appProperties.getFileService());
+        model.addAttribute("uploadPrefix", appProperties.getFileUploadPrefix());
+    }
+
     /**
      * 新增页填充 gate，提交后缀，dto对象
      */
-    protected void fillAdd(Model model, Object object) {
-        fillDetail(model, object);
+    protected void supplyAdd(Model model, Object object) {
+        supplyDetail(model, object);
         model.addAttribute(ACTION_KEY, ADD_ACTION);
     }
 
     /**
      * 修改页填充 gate，提交后缀，dto对象
      */
-    protected void fillUpdate(Model model, Object object) {
-        fillDetail(model, object);
+    protected void supplyUpdate(Model model, Object object) {
+        supplyDetail(model, object);
         model.addAttribute(ACTION_KEY, UPDATE_ACTION);
     }
 
     /**
      * 详情页添新宠 gate,dto对象
      */
-    protected void fillDetail(Model model, Object object) {
+    protected void supplyDetail(Model model, Object object) {
         model.addAttribute(OBJECT_KEY, object);
     }
 
@@ -54,7 +60,7 @@ public class BaseController {
     /**
      * 列表页填充 模块对象，gate
      */
-    protected void fillList(Model model, Module module) {
+    protected void supplyList(Model model, Module module) {
         model.addAttribute(MODULE_KEY, module);
     }
 

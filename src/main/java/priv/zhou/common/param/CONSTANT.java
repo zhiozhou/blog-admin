@@ -35,11 +35,13 @@ public interface CONSTANT {
 
     String BLOG_SERVICE_MENU_KEY = BLOG_SERVICE_PREFIX + "MENU_KEY";
 
-    String MENU_MODIFIED_KEY = BLOG_SERVICE_MENU_KEY + "MODIFIED_KEY";
+    String BLOG_SERVICE_MENU_MODIFIED_KEY = BLOG_SERVICE_MENU_KEY + "MODIFIED_KEY";
 
     String BLOG_SERVICE_DICT_DATA_KEY = BLOG_SERVICE_PREFIX + "DICT_DATA_KEY_";
 
     String BLOG_SERVICE_DICT_DATA_MODIFIED_KEY = BLOG_SERVICE_DICT_DATA_KEY + "MODIFIED_KEY";
+
+    String FILE_SERVICE_IP_SET_KEY = "FILE_UPLOAD_REDIS_IP_SET_";
 
     //----------------------------------------------------------------------    shiro    ----------------------------------------------------------------------
 

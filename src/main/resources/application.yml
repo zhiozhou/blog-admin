@@ -33,13 +33,14 @@ mybatis:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   path: logs/
-#活动参数设置
 app:
   enc: UTF-8
   name: ${spring.application.name}
   email: false
   admin-email: flyingnoob@qq.com
   access-limit: 200
+  file-service:  http://127.0.0.1:8889/file/
+  file-upload-prefix: zhousb-admin
 --- # --------------------------------------------- 正式环境 -------------------------------------------------------
 server:
   port: 8101
@@ -75,7 +76,6 @@ mybatis:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   path: logs/
-#活动参数设置
 app:
   enc: UTF-8
   name: ${spring.application.name}
@@ -83,3 +83,4 @@ app:
   admin-email: flyingnoob@qq.com
   access-limit: 200
   file-service:  https://zhousb.cn/file-service/
+  file-upload-prefix: zhousb-admin

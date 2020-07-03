@@ -37,7 +37,7 @@ public class BlogController extends BaseController {
 
     @RequestMapping("/add")
     public String add(Model model) {
-        fillAdd(model, new BlogDTO());
+        supplyAdd(model, new BlogDTO());
 
         model.addAttribute("typeList", blogTypeService.list(new BlogTypeDTO(), new Page(0)).getData().getList());
         return "blog/blog/au";
@@ -50,7 +50,7 @@ public class BlogController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillUpdate(model, dtoVO.getData());
+        supplyUpdate(model, dtoVO.getData());
         model.addAttribute("typeList", blogTypeService.list(new BlogTypeDTO(), new Page(0)).getData().getList());
         return "blog/blog/au";
     }
@@ -61,13 +61,13 @@ public class BlogController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillDetail(model, dtoVO.getData());
+        supplyDetail(model, dtoVO.getData());
         return "blog/blog/detail";
     }
 
     @RequestMapping("/list")
     public String list(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
         model.addAttribute("typeList", blogTypeService.list(new BlogTypeDTO(), new Page(0)).getData().getList());
         return "blog/blog/list";
     }

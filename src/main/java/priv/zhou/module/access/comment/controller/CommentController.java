@@ -35,7 +35,7 @@ public class CommentController extends BaseController {
     @RequestMapping("/reply/{repliedId}")
     public String add(Model model, @PathVariable Integer repliedId) {
 
-        fillDetail(model, new CommentDTO()
+        supplyDetail(model, new CommentDTO()
                 .setRepliedComment(new CommentDTO().setId(repliedId)));
         model.addAttribute(ACTION_KEY, "/rest/reply");
         return "access/comment/au";
@@ -47,7 +47,7 @@ public class CommentController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillUpdate(model, dtoVO.getData());
+        supplyUpdate(model, dtoVO.getData());
         return "access/comment/au";
     }
 
@@ -59,13 +59,13 @@ public class CommentController extends BaseController {
         }
         CommentDTO commentDTO = dtoVO.getData();
         commentDTO.setStateStr(dictService.getData(new DictDTO().setKey(STATE_KEY).setCode(commentDTO.getState())).getData().getLabel());
-        fillDetail(model, dtoVO.getData());
+        supplyDetail(model, dtoVO.getData());
         return "access/comment/detail";
     }
 
     @RequestMapping("/list")
     public String list(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(STATE_KEY)).getData());
         return "access/comment/list";

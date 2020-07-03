@@ -1,6 +1,5 @@
 package priv.zhou.module.system.menu.service.impl;
 
-import io.lettuce.core.RedisURI;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
@@ -22,7 +21,7 @@ import java.util.Set;
 
 import static java.util.Objects.isNull;
 import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_MENU_KEY;
-import static priv.zhou.common.param.CONSTANT.MENU_MODIFIED_KEY;
+import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_MENU_MODIFIED_KEY;
 
 @Service
 public class MenuServiceImpl implements IMenuService {
@@ -69,7 +68,7 @@ public class MenuServiceImpl implements IMenuService {
         // 5.移除服务端缓存
         if(MenuController.FLAG.equals(menuDTO.getFlag())){
             RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
-            RedisUtil.delete(MENU_MODIFIED_KEY);
+            RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
         }
 
         return OutVO.success();
@@ -86,7 +85,7 @@ public class MenuServiceImpl implements IMenuService {
             return OutVO.fail(OutVOEnum.FAIL_PARAM);
         }else if(MenuController.FLAG.equals(menuPO.getFlag())){
             RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
-            RedisUtil.delete(MENU_MODIFIED_KEY);
+            RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
         }
 
         menuDAO.remove(menuDTO);
@@ -132,7 +131,7 @@ public class MenuServiceImpl implements IMenuService {
         // 5.移除服务端缓存
         if(MenuController.FLAG.equals(menuDTO.getFlag())){
             RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
-            RedisUtil.delete(MENU_MODIFIED_KEY);
+            RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
         }
 
         return OutVO.success();

@@ -12,8 +12,6 @@ import priv.zhou.module.access.visitor.domain.dto.VisitorDTO;
 import priv.zhou.module.access.visitor.service.IVisitorService;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 
-import static priv.zhou.common.param.CONSTANT.SYSTEM_ROLE_STATE;
-
 /**
  * 访客 视图控制层
  *
@@ -41,7 +39,7 @@ public class VisitorController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillUpdate(model, dtoVO.getData());
+        supplyUpdate(model, dtoVO.getData());
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(STATE_KEY)).getData());
         return "access/visitor/au";
     }
@@ -54,13 +52,13 @@ public class VisitorController extends BaseController {
         }
         VisitorDTO visitorDTO = dtoVO.getData();
         visitorDTO.setStateStr(dictService.getData(new DictDTO().setKey(STATE_KEY).setCode(visitorDTO.getState())).getData().getLabel());
-        fillDetail(model, dtoVO.getData());
+        supplyDetail(model, dtoVO.getData());
         return "access/visitor/detail";
     }
 
     @RequestMapping("/list")
     public String list(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(STATE_KEY)).getData());
         return "access/visitor/list";

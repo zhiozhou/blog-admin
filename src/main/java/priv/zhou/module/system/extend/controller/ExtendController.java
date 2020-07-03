@@ -22,7 +22,7 @@ public class ExtendController extends BaseController {
     @RequiresPermissions("system:extend:index")
     @RequestMapping("/index")
     public String index(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
 
         return "system/extend/index";
     }

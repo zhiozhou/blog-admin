@@ -38,7 +38,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("system:menu:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        fillAdd(model, new MenuDTO().setParentId(0).setType(0).setState(0));
+        supplyAdd(model, new MenuDTO().setParentId(0).setType(0).setState(0));
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(FLAG)).getData()));
         model.addAttribute("typeList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_TYPE)).getData());
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());
@@ -52,7 +52,7 @@ public class MenuController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillUpdate(model, dtoVO.getData());
+        supplyUpdate(model, dtoVO.getData());
 
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(FLAG)).getData()));
         model.addAttribute("typeList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_TYPE)).getData());
@@ -63,7 +63,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("system:menu:list")
     @RequestMapping("/list")
     public String login(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
 
         model.addAttribute("typeMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_MENU_TYPE)).getData());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());

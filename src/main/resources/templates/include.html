@@ -9,7 +9,9 @@
 	<link rel="stylesheet" th:href="@{/css/admin.css}" />
 	<link rel="stylesheet" th:href="@{/css/font-awesome.css}" />
 	<script th:inline="javascript">
-		const gate = [[@{/}]]
+		const gate = [[@{/}]],
+			uploadURL = [[${uploadURL}]],
+			uploadPrefix =  [[${uploadPrefix}]]
 	</script>
 </head>
 

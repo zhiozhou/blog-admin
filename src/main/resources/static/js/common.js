@@ -1,16 +1,3 @@
-
-/**
- * 图片上传地址
- */
-const UPLOAD_URL = 'https://zhousb.cn/file-service/upload/multipart'
-// const UPLOAD_URL = 'http://127.0.0.1:8889/file/upload/multipart'
-
-/**
- * 图片上传的标识前缀
- */
-const UPLOAD_PREFIX = 'zhousb-admin'
-
-
 layui.config({
     base: gate + 'plugin/layui/extend/'
 })

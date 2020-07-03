@@ -41,7 +41,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("system:role:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        fillAdd(model, new RoleDTO().setState(0));
+        supplyAdd(model, new RoleDTO().setState(0));
 
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
@@ -55,7 +55,7 @@ public class RoleController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillUpdate(model, dtoVO.getData());
+        supplyUpdate(model, dtoVO.getData());
 
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
@@ -72,14 +72,14 @@ public class RoleController extends BaseController {
         RoleDTO roleDTO = dtoVO.getData();
         roleDTO.setMenuList(IMenuService.toTree(roleDTO.getMenuList()))
                 .setStateStr(dictService.getData(new DictDTO().setKey(SYSTEM_ROLE_STATE).setCode(roleDTO.getState())).getData().getLabel());
-        fillDetail(model, roleDTO);
+        supplyDetail(model, roleDTO);
         return "system/role/detail";
     }
 
     @RequiresPermissions("system:role:list")
     @RequestMapping("/list")
     public String list(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/list";

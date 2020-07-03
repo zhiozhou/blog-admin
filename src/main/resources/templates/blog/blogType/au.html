@@ -8,50 +8,57 @@
                 <div class="layui-tab" style="margin: 0;">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/blog/type/list}" id="superior">博客类型</a></li>
-                        <li class="layui-this"  th:text="'/rest/save'==${action}?'添加类型':'修改类型'"></li>
+                        <li class="layui-this" th:text="'/rest/save'==${action}?'添加类型':'修改类型'"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${o.id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="key" lay-verify="required" th:value="${ o.key }" class="layui-input"
-                                       placeholder="请输入标识" autocomplete="off" maxlength="64" th:disabled="'/rest/save' != ${action}" >
+                                <input type="text" name="key" lay-verify="required" th:value="${ o.key }"
+                                       class="layui-input"
+                                       placeholder="请输入标识" autocomplete="off" maxlength="64"
+                                       th:disabled="'/rest/save' != ${action}">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="name" lay-verify="required" th:value="${ o.name }" class="layui-input" placeholder="请输入名称" autocomplete="off"  maxlength="64">
+                                <input type="text" name="name" lay-verify="required" th:value="${ o.name }"
+                                       class="layui-input" placeholder="请输入名称" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">标题：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="title" th:value="${ o.title }" class="layui-input" placeholder="请输入标题" autocomplete="off" maxlength="64">
+                                <input type="text" name="title" th:value="${ o.title }" class="layui-input"
+                                       placeholder="请输入标题" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">描述：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="desc" th:value="${ o.desc }" class="layui-input" placeholder="请输入描述" autocomplete="off" maxlength="64">
+                                <input type="text" name="desc" th:value="${ o.desc }" class="layui-input"
+                                       placeholder="请输入描述" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">背景：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="bg" th:value="${ o.bg }" class="layui-input" placeholder="请输入背景图" autocomplete="off" maxlength="64">
+                                <input type="text" name="bg" th:value="${ o.bg }" class="layui-input"
+                                       placeholder="请输入背景图" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea name="remark" th:text="${o.remark}" class="layui-textarea"  maxlength="256"></textarea>
+                                <textarea name="remark" th:text="${o.remark}" class="layui-textarea"
+                                          maxlength="256"></textarea>
                             </div>
                         </div>
 
@@ -60,7 +67,8 @@
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
                                 <select name="state">
-                                    <option th:each="state:${stateList}" th:value="${state.code}" th:field="${o.state}" th:text="${state.label}"></option>
+                                    <option th:each="state:${stateList}" th:value="${state.code}" th:field="${o.state}"
+                                            th:text="${state.label}"></option>
                                 </select>
                             </div>
                         </div>
@@ -81,15 +89,12 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="none">
-            const prefix =  `${gate}blog/type`
+            const prefix = `${gate}blog/type`
 
-            layui.use(['form','jquery','upload'],  ()=> {
-
-                const {form,jquery: $,upload} = layui
-
-                upload.render(SINGLE_IMG('#bg'));
+            layui.use(['form', 'jquery'], () => {
+                const {form} = layui
                 //监听提交
-                form.on('submit(submit)',  PAGE_SUBMIT)
+                form.on('submit(submit)', PAGE_SUBMIT)
             })
 
         </script>

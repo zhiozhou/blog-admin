@@ -98,9 +98,9 @@
                         isCompress = false
                     const uploader = upload.render({
                         elem: '#image-add',
-                        url: UPLOAD_URL,
+                        url: uploadURL + 'upload/multipart',
                         data: {
-                            prefix: UPLOAD_PREFIX,
+                            prefix: uploadPrefix,
                             createThumbnail: true,
                             thumbnailScale: 0.4
                         },
@@ -109,7 +109,9 @@
                         multiple: true,
                         bindAction: '#images-upload',
                         acceptMime: 'image/*',
-                        choose: obj => {
+                        choose: function (obj) {
+
+                            console.log(this)
                             let files = this.files = obj.pushFile()
                             obj.preview((index, file, result) => {
                                 let $quote = $('#image-quote')
@@ -132,7 +134,7 @@
                                 }
                             })
                         },
-                        before: () => {
+                        before:  () =>{
                             loading()
                         },
                         done: function ({code, info, data}, fileIndex) {

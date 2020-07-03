@@ -47,7 +47,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        fillAdd(model, new UserDTO().setState(0));
+        supplyAdd(model, new UserDTO().setState(0));
 
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_USER_STATE)).getData());
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(0)).getData().getList());
@@ -61,7 +61,7 @@ public class UserController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillUpdate(model, dtoVO.getData());
+        supplyUpdate(model, dtoVO.getData());
 
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_USER_STATE)).getData());
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(0)).getData().getList());
@@ -77,14 +77,14 @@ public class UserController extends BaseController {
         }
         UserDTO userDTO = dtoVO.getData();
         userDTO.setStateStr(dictService.getData(new DictDTO().setKey(SYSTEM_USER_STATE).setCode(userDTO.getState())).getData().getLabel());
-        fillDetail(model, userDTO);
+        supplyDetail(model, userDTO);
         return "system/user/detail";
     }
 
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
     public String list(Model model) {
-        fillList(model, module);
+        supplyList(model, module);
 
         model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(0)).getData().getList());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_USER_STATE), false).getData());
