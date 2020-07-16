@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IImageService {
 
-    OutVO<Integer> save(List<ImageDTO> imageList, String remark);
+    OutVO<Integer> save(List<String> urlList, String remark);
 
     OutVO<NULL> remove(Integer id);
 

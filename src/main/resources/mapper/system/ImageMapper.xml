@@ -8,7 +8,6 @@
         INSERT INTO system_image
         (
             url,
-            thumbnail_url,
             remark,
             create_id,
             gmt_create,
@@ -32,7 +31,6 @@
         SELECT
             id,
             url,
-            thumbnail_url,
             remark,
             create_id,
             gmt_create,
@@ -46,7 +44,6 @@
         SELECT
             id,
             url,
-            thumbnail_url,
             remark,
             create_id,
             gmt_create,

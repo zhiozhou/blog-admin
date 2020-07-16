@@ -42,14 +42,14 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public OutVO<Integer> save(List<ImageDTO> imageList, String remark) {
-        if (null == imageList) {
+    public OutVO<Integer> save(List<String> urlList, String remark) {
+        if (null == urlList) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
-
         int failCount = 0;
-        for (ImageDTO imageDTO : imageList) {
-            if (imageDAO.save(imageDTO.toPO().setRemark(remark).setCreateId(ShiroUtil.getUserId())) < 1) {
+        Integer userId = ShiroUtil.getUserId();
+        for (String url : urlList) {
+            if (imageDAO.save(new ImagePO().setUrl(url).setRemark(remark).setCreateId(userId)) < 1) {
                 failCount++;
             }
         }
@@ -66,12 +66,7 @@ public class ImageServiceImpl implements IImageService {
         if (null != imagePO) {
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", imagePO.getUrl());
-            OutVO<NULL> removeRes = httpPost("移除图片",appProperties.getFileService()+"/remove", params);
-            if (removeRes.isFail()) {
-                return removeRes;
-            }
-            params.put("url", imagePO.getThumbnailUrl());
-            removeRes = httpPost("移除缩略图", appProperties.getFileService()+"/remove", params);
+            OutVO<NULL> removeRes = httpPost("移除图片", appProperties.getFileService() + "/remove", params);
             if (removeRes.isFail()) {
                 return removeRes;
             }

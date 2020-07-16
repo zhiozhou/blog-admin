@@ -39,7 +39,7 @@ app:
   email: false
   admin-email: flyingnoob@qq.com
   access-limit: 200
-  file-service:  http://127.0.0.1:8889/file/
+  file-service:  https://zhousb.cn/file-service/
   file-upload-prefix: zhousb-admin
 --- # --------------------------------------------- 正式环境 -------------------------------------------------------
 server:

@@ -31,11 +31,6 @@ public class ImageDTO extends DTO<ImagePO> {
     private String url;
 
     /**
-     * 缩略图地址
-     */
-    private String thumbnailUrl;
-
-    /**
      * 备注
      */
     private String remark;
