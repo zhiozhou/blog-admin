@@ -32,7 +32,7 @@
         </div>
 
         <script type="text/html" id="comment">
-            <a class="layui-btn layui-btn-sm" lay-event="detail"  shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
+            <a class="layui-btn layui-btn-sm" lay-event="detail"  shiro:hasPermi=ssion=${m.permissionPrefix+':detail'}>查看</a>
             {{#  if(d.state == 1 ){ }}
                 {{#  if(d.fromVisitor.id != 0 ){ }}
                     <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="reply"  shiro:hasPermission=${m.permissionPrefix+':reply'}>回复</a>

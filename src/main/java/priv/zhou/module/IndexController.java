@@ -47,9 +47,9 @@ public class IndexController extends BaseController {
         return "index";
     }
 
-    @RequestMapping("/welcome")
+    @RequestMapping("/home")
     public String main() {
-        return "welcome";
+        return "home";
     }
 
 

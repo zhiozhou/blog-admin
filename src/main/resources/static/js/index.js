@@ -1,41 +1,44 @@
 layui.use(['layer', 'element', 'jquery'], () => {
     const {element, jquery: $} = layui
-    const mainLayout = $('#main-layout')
 
-    var tabId
-    const menuHideClass = 'hide-side'
+    const $root = $('#root')
 
-    element.on('nav(menu-side)', navHandle)
-    element.on('nav(nav-right)', navHandle)
-    element.on('tab(tab)', ({elem}) => {
+    const tabId = 'layout-tab'
+
+
+
+    let currentTabId
+
+    element.on('nav(layout-sider)', navHandle)
+    element.on('nav(user-aux-group)', navHandle)
+
+    element.on(`tab(${tabId})`, ({elem}) => {
         let id = $(elem.context).attr('lay-id')
-        if (!id || tabId === id) return
-        $('.main-layout-side .layui-this,.main-layout-header .layui-this').removeClass('layui-this')
+        if (!id || currentTabId === id) return
+
+        $('#layout-sider .layui-this,#layout-header .layui-this').removeClass('layui-this')
         $(`[data-id=${id}]`).parent().addClass('layui-this')
         element.tabChange('nav', id)
     })
 
     // logo 跳首页
     $('.logo').click(() => {
-        element.tabChange('tab', 'home')
+        element.tabChange(tabId, 'home')
     })
 
 
-
-    // 菜单控制
-    $('#hide-menu').click(() => {
-        mainLayout.hasClass(menuHideClass) ?
-            mainLayout.removeClass(menuHideClass) :
-            mainLayout.addClass(menuHideClass)
+    const loseSider = 'lose-sider'
+    $('#sider-trigger').click(() => {
+        $root.hasClass(loseSider) ? $root.removeClass(loseSider) : $root.addClass(loseSider);
     })
 
     // 手机端关闭菜单
-    $('.main-mask').click(() => {
-        mainLayout.removeClass(menuHideClass)
+    $('#layout-sider-mask').click(() => {
+        $root.removeClass(loseSider)
     })
 
     // 刷新页面
-    $('#refresh-btn').click(() => {
+    $('#refresh-content').click(() => {
         let frame = $('.layui-tab-item.layui-show>iframe')
         frame.attr('src', frame.attr('src'))
     })
@@ -44,17 +47,18 @@ layui.use(['layer', 'element', 'jquery'], () => {
         let $nav = $(context),
             url = $nav.data('url')
         if (!url) return
-        tabId = $nav.data('id')
-        let opened = $('.main-layout-tab .layui-tab-title').find("li[lay-id=" + tabId + "]")
-        if(0 === opened.length){
-            element.tabAdd('tab', {
-                id: tabId,
+        currentTabId = $nav.data('id')
+        let opened = $(`#${tabId} .layui-tab-title`).find(`li[lay-id=${currentTabId}]`)
+        console.log(opened)
+        if (0 === opened.length) {
+            element.tabAdd(tabId, {
+                id: currentTabId,
                 title: $nav.data('text'),
-                content: `<iframe src="${url}" name="iframe${tabId}" class="iframe" data-id="${tabId}"></iframe>`
+                content: `<iframe src="${url}" name="iframe${currentTabId}" class="iframe" data-id="${currentTabId}"></iframe>`
             })
         }
-        element.tabChange('tab', tabId)
-        mainLayout.removeClass(menuHideClass)
+        element.tabChange(tabId, currentTabId)
+        $root.removeClass(loseSider)
     }
 
     //示范一个公告层

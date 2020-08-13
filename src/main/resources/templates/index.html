@@ -2,72 +2,74 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="main-layout" id='main-layout'>
-            <!--侧边栏-->
-            <div class="main-layout-side">
-                <div class="logo">ZHOU</div>
-                <ul class="layui-nav layui-nav-tree" lay-filter="menu-side">
-                    <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
-                        <div>暂无菜单</div>
-                    </li>
-                    <li class="layui-nav-item" th:each="menu : ${menuList}">
-                        <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-text=${menu.name}">
-                            <i class="fa" th:classappend="${menu.icon}"></i>
-                            <span th:text="${menu.name}"></span>
-                        </a>
-                        <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.childList)}">
-                            <dd th:each="child : ${menu.childList}">
-                                <a href="#"
-                                   th:attr="data-id=${child.id} , data-url=${child.path} , data-text=${child.name}">
-                                    <i class="line"/></i>[[${child.name}]]
-                                </a>
-                            </dd>
-                        </dl>
-                    </li>
-                </ul>
-            </div>
-            <!--右侧内容-->
-            <div class="main-layout-container">
-                <!--头部-->
-                <div class="main-layout-header">
-					<ul class="console">
-						<li id="hide-menu"><i class="fa fa-bars"></i></li>
-						<li id="refresh-btn"><i class="fa fa-refresh"></i></li>
-					</ul>
-                    <ul class="layui-nav" lay-filter="nav-right">
-                        <li class="layui-nav-item">
-                            <a href="#" data-url="email.html" data-id='4' data-text="邮件系统">
-                                <i class="fa fa-envelope"></i>
-                            </a>
+        <div id="root">
+            <div id="layout-sider">
+                <div>
+
+                    <div class="logo">ZHOU</div>
+                    <ul class="layui-nav layui-nav-tree" lay-filter="layout-sider">
+                        <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
+                            <div>暂无菜单</div>
                         </li>
-                        <li class="layui-nav-item">
-                            <a href="#" data-url="admin-info.html" data-id='5' data-text="个人信息" th:text="${user.role.name}">
+                        <li class="layui-nav-item" th:each="menu : ${menuList}">
+                            <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-text=${menu.name}">
+                                <i class="fa" th:classappend="${menu.icon}"></i>
+                                <span th:text="${menu.name}"></span>
                             </a>
+                            <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.childList)}">
+                                <dd th:each="child : ${menu.childList}">
+                                    <a href="#"
+                                       th:attr="data-id=${child.id} , data-url=${child.path} , data-text=${child.name}">
+                                        [[${child.name}]]
+                                    </a>
+                                </dd>
+                            </dl>
                         </li>
-                        <li class="layui-nav-item"><a th:href="@{system/user/logout}">退出</a></li>
                     </ul>
                 </div>
-                <!--主体内容-->
-                <div class="main-layout-body">
-                    <!--tab 切换-->
-                    <div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
+            </div>
+            <div id="layout-container">
+                <div id="layout-header">
+                    <ul class="layout-aux-group">
+                        <li id="sider-trigger">
+                            <div class="sider-trigger-holder">
+                                <i class="sider-trigger-icon"></i>
+                            </div>
+                        </li>
+                        <li id="refresh-content">
+                            <i class="fa fa-refresh"></i>
+                        </li>
+                    </ul>
+                    <ul class="layui-nav" lay-filter="user-aux-group">
+                        <li class="layui-nav-item">
+                            <a href="#" data-id='user-info' data-url="user-info.html" data-text="用户信息">
+                                [[${user.role.name}]]
+                            </a>
+                        </li>
+                        <li class="layui-nav-item">
+                            <a th:href="@{system/user/logout}">
+                                <i class="fa fa-sign-out"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="layout-body">
+                    <div id="layout-tab" class="layui-tab layui-tab-brief" lay-filter="layout-tab"
+                         lay-allowClose="true">
                         <ul class="layui-tab-title">
                             <li class="layui-this home" lay-id="home">
                                 <i class="layui-icon layui-icon-home"></i>
                             </li>
                         </ul>
                         <div class="layui-tab-content">
-                            <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
-                                <iframe src="welcome" name="iframe" class="iframe"></iframe>
+                            <div class="layui-tab-item layui-show">
+                                <iframe src="home" name="home"></iframe>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--遮罩-->
-            <div class="main-mask">
-
-            </div>
+            <div id="layout-sider-mask"></div>
         </div>
 
         <div th:include="include :: footer"></div>
