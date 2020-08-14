@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
         <div class="page-wrap">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
-                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
+                           shiro:hasPermission=${m.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off" >
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off">
                     </div>
                     <div class="layui-inline">
                         <select name="state">
                             <option value="">请选择一个状态</option>
-                            <option value="0" th:each="state:${stateMap.values()}" th:value="${state.code}" th:text="${state.label}"></option>
+                            <option value="0" th:each="state:${stateMap.values()}" th:value="${state.code}"
+                                    th:text="${state.label}"></option>
                         </select>
                     </div>
                     <div class="layui-inline">
@@ -25,7 +27,7 @@
                             <i class="fa fa-search"></i>
                             搜索
                         </button>
-                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset">
                             <i class="fa fa-repeat"></i>
                             重置
                         </button>
@@ -41,28 +43,28 @@
             const stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
-            const prefix =  `${gate}system/role`
+            const prefix = `${gate}system/role`
 
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        {field: 'name', title: '名称',minWidth:'120', align: 'center'},
+                        {field: 'name', title: '名称', minWidth: '120', align: 'center'},
                         {field: 'key', title: '角色标识', align: 'center'},
                         {
                             field: 'state',
                             title: '状态',
                             align: 'center',
                             templet: ({state}) => {
-                                let {label,css} = stateMap[state]
+                                let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'remark', title: '备注', minWidth:'150',align: 'center'},
-                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {field: 'remark', title: '备注', minWidth: '150', align: 'center'},
+                        {title: '操作', align: 'center', toolbar: '#rud'}
                     ]]
 
-                table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction)
+                tableRender(table, {cols})
+                table.on('tool(table)', frameAction)
             })
         </script>
     </body>

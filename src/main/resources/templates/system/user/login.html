@@ -53,9 +53,13 @@
                 }
                 form.on('submit(login)', ({field: data}) => {
                     data.password = rsaUtil.encrypt(data.password)
-                    return post(`${gate}system/user/rest/login`, data, () => {
-                        loading()
-                        location.href = `${gate}index`
+                    return httpPost({
+                        url: `${gate}system/user/rest/login`,
+                        data,
+                        cb: () => {
+                            loading()
+                            location.href = `${gate}index`
+                        }
                     })
                 })
             })

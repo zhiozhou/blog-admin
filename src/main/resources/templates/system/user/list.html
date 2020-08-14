@@ -78,11 +78,11 @@
                                 return `<a  class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#user-rud'}
+                        {title: '操作',   align: 'center', toolbar: '#user-rud'}
                     ]]
 
-                table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction)
+                 tableRender(table,{cols})
+                table.on('tool(table)', frameAction)
 
                 $('body').on('click','.role-btn',({target})=>{
                     let id = $(target).data('id')

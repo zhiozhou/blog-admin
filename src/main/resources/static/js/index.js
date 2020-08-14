@@ -1,18 +1,14 @@
 layui.use(['layer', 'element', 'jquery'], () => {
     const {element, jquery: $} = layui
-
     const $root = $('#root')
 
-    const tabId = 'layout-tab'
-
-
+    const tabKey = 'layout-tab'
 
     let currentTabId
 
     element.on('nav(layout-sider)', navHandle)
     element.on('nav(user-aux-group)', navHandle)
-
-    element.on(`tab(${tabId})`, ({elem}) => {
+    element.on(`tab(${tabKey})`, ({elem}) => {
         let id = $(elem.context).attr('lay-id')
         if (!id || currentTabId === id) return
 
@@ -21,9 +17,27 @@ layui.use(['layer', 'element', 'jquery'], () => {
         element.tabChange('nav', id)
     })
 
+    function navHandle({context}) {
+        let $nav = $(context),
+            url = $nav.data('url')
+        if (url) {
+            currentTabId = $nav.data('id')
+            let opened = $(`#${tabKey} .layui-tab-title`).find(`li[lay-id=${currentTabId}]`)
+
+            0 === opened.length && element.tabAdd(tabKey, {
+                id: currentTabId,
+                title: $nav.data('text'),
+                content: `<iframe src="${url}" name="iframe${currentTabId}" class="iframe" data-id="${currentTabId}"></iframe>`
+            })
+            element.tabChange(tabKey, currentTabId)
+            $root.removeClass(loseSider)
+        }
+    }
+
+
     // logo 跳首页
     $('.logo').click(() => {
-        element.tabChange(tabId, 'home')
+        element.tabChange(tabKey, 'home')
     })
 
 
@@ -42,24 +56,6 @@ layui.use(['layer', 'element', 'jquery'], () => {
         let frame = $('.layui-tab-item.layui-show>iframe')
         frame.attr('src', frame.attr('src'))
     })
-
-    function navHandle({context}) {
-        let $nav = $(context),
-            url = $nav.data('url')
-        if (!url) return
-        currentTabId = $nav.data('id')
-        let opened = $(`#${tabId} .layui-tab-title`).find(`li[lay-id=${currentTabId}]`)
-        console.log(opened)
-        if (0 === opened.length) {
-            element.tabAdd(tabId, {
-                id: currentTabId,
-                title: $nav.data('text'),
-                content: `<iframe src="${url}" name="iframe${currentTabId}" class="iframe" data-id="${currentTabId}"></iframe>`
-            })
-        }
-        element.tabChange(tabId, currentTabId)
-        $root.removeClass(loseSider)
-    }
 
     //示范一个公告层
 //	layer.open({

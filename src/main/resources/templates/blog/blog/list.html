@@ -51,11 +51,11 @@
                             }
                         },
                         {field: 'pv', title: '访问量', align: 'center'},
-                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {title: '操作', align: 'center', toolbar: '#rud'}
                     ]]
 
-                table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction2)
+                tableRender(table,{cols})
+                table.on('tool(table)', pageAction)
             })
         </script>
     </body>

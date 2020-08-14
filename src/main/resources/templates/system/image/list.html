@@ -18,7 +18,7 @@
             height: auto;
         }
 
-        #image-quote>div:after{
+        #image-quote > div:after {
             content: attr(data-text);
             position: absolute;
             left: 35%;
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="layui-inline">
-                        <input type="checkbox"lay-filter="isCompress"lay-skin="switch" lay-text="压缩|原图">
+                        <input type="checkbox" lay-filter="isCompress" lay-skin="switch" lay-text="压缩|原图">
                     </div>
                     <div class="layui-inline">
                         <input type="text" name="remark" class="layui-input image-remark rove" placeholder="请输入备注"
@@ -59,7 +59,8 @@
         <script type="text/html" id="cd">
             <div class="tool">
                 <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">Copy URL</a>
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove" shiro:hasPermission=${m.permissionPrefix+':remove'}>Remove</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
+                   shiro:hasPermission=${m.permissionPrefix+':remove'}>Remove</a>
             </div>
         </script>
 
@@ -67,19 +68,19 @@
         <script th:inline="none">
             const prefix = `${gate}system/image`
 
-            layui.use(['table', 'jquery', 'upload','form'], () => {
-                    const {table, jquery: $, upload,form} = layui,
+            layui.use(['table', 'jquery', 'upload', 'form'], () => {
+                    const {table, jquery: $, upload, form} = layui,
                         cols = [[
                             {
                                 field: 'url', title: '图片', minWidth: '120', align: 'center',
                                 templet: ({url}) => `<img src="${url}" class="image-view"/>`
                             },
                             {field: 'remark', title: '备注', minWidth: '120', align: 'center'},
-                            {title: '操作', fixed: 'right', align: 'center', toolbar: '#cd'}
+                            {title: '操作', align: 'center', toolbar: '#cd'}
                         ]],
                         area = '.rove'
 
-                    table.render(fillDefault(cols))
+                    tableRender(table, {cols})
                     table.on('tool(table)', toolHandle)
 
                     function toolHandle({data, event}) {
@@ -88,11 +89,11 @@
                                 copy(data.url)
                                 break
                         }
-                        handleAction({data, event})
+                        frameAction({data, event})
                     }
 
                     // 多图片上传
-                    let urlList =[],
+                    let urlList = [],
                         failCount = 0,
                         isCompress = false
                     const uploader = upload.render({
@@ -113,7 +114,7 @@
                                 if (0 === $quote.children().length) {
                                     $(area).slideDown()
                                 }
-                                const $view = $(`<div style="background-image: url(${result})" data-text="${isCompress?'压缩':'原图'}"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
+                                const $view = $(`<div style="background-image: url(${result})" data-text="${isCompress ? '压缩' : '原图'}"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
                                 $view.click(() => {
                                     $view.remove()
                                     delete files[index]
@@ -122,14 +123,14 @@
                                 })
                                 $quote.append($view)
                                 // 压缩
-                                if(isCompress){
+                                if (isCompress) {
                                     compress(result, (dataURL) => {
                                         obj.resetFile(index, dataURLtoFile(dataURL), 'example.jpg')
                                     })
                                 }
                             })
                         },
-                        before:  () =>{
+                        before: () => {
                             loading()
                         },
                         done: function ({code, info, data}, fileIndex) {
@@ -142,23 +143,27 @@
                         },
                         allDone: () => {
                             let remark = $('.image-remark').val()
-                            $.post(prefix + '/rest/save', {urlList,remark}, ({code, info, data = 0}) => {
-                                loaded()
-                                if (fail(code)) return warn(info)
-                                let msg = 0 === (failCount += data) ? '操作成功' : `失败 ${failCount} 个`
-                                urlList = []
-                                failCount = 0
-                                done(() => {
-                                    reloadTable()
-                                    $(area).slideUp()
-                                    $('.layui-elem-quote').empty()
-                                    $('.image-remark').val('')
-                                }, msg)
+                            httpPost({
+                                url: prefix + '/rest/save',
+                                data: {urlList, remark},
+                                cb: ({code, info, data = 0}) => {
+                                    loaded()
+                                    if (fail(code)) return warn(info)
+                                    let msg = 0 === (failCount += data) ? '操作成功' : `失败 ${failCount} 个`
+                                    urlList = []
+                                    failCount = 0
+                                    done(() => {
+                                        reloadTable()
+                                        $(area).slideUp()
+                                        $('.layui-elem-quote').empty()
+                                        $('.image-remark').val('')
+                                    }, msg)
+                                }
                             })
                         }
                     })
 
-                    form.on('switch(isCompress)', (data)=>{
+                    form.on('switch(isCompress)', (data) => {
                         isCompress = data.elem.checked
                     });
 

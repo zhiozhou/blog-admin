@@ -6,7 +6,8 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
-                        <a class="layui-btn layui-btn-sm layui-btn-normal add-go-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-go-btn"
+                           shiro:hasPermission=${m.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
@@ -47,8 +48,8 @@
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui,
                     cols = [[
-                        {field: 'name', title: '名称', minWidth:'120',align: 'center'},
-                        {field: 'key', title: '字典标识',minWidth:'150',align: 'center'},
+                        {field: 'name', title: '名称', minWidth: '120', align: 'center'},
+                        {field: 'key', title: '字典标识', minWidth: '150', align: 'center'},
                         {
                             field: 'state',
                             title: '状态',
@@ -68,12 +69,12 @@
                                 return `<a class="layui-btn layui-btn-xs ${css}" >${info}</a>`
                             }
                         },
-                        {field: 'remark', title: '备注', minWidth:'150',align: 'center'},
-                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {field: 'remark', title: '备注', minWidth: '150', align: 'center'},
+                        {title: '操作', align: 'center', toolbar: '#rud'}
                     ]]
 
 
-                table.render(fillDefault(cols))
+                tableRender(table, {cols})
 
                 table.on('tool(table)', wrapHandle)
 
@@ -83,13 +84,15 @@
                             btn: ['确定', '取消'],
                             shade: [0.1, '#fff']
                         }, () => {
-                            post(`${prefix}/rest/remove`, {key: tool.data.key}, () => {
-                                done(reloadTable)
+                            httpPost({
+                                url: `${prefix}/rest/remove`,
+                                data: {key: tool.data.key},
+                                cb: () => done(reloadTable)
                             })
                         })
                         return
                     }
-                    handleAction2(tool)
+                    pageAction(tool)
                 }
             })
         </script>

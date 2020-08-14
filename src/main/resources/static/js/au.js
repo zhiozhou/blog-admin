@@ -39,7 +39,7 @@ const TINYMCE_STAGE = {
 function SINGLE_IMG(elem) {
     return {
         elem: elem,
-        url: uploadURL+ 'upload/multipart',
+        url: uploadURL + 'upload/multipart',
         data: {prefix: uploadPrefix},
         acceptMime: 'image/*',
         before: () => {
@@ -58,6 +58,7 @@ function SINGLE_IMG(elem) {
 
 // 标准大小
 const m2 = 2 * 1024 * 1024;
+
 /**
  * layui 的单个文件上传的配置
  */
@@ -144,8 +145,10 @@ function blobToFile(theBlob, fileName) {
  * 页面形式的表单提交，成功后跳转 #superior 的href页
  */
 function PAGE_SUBMIT({form, field: data}) {
-    post(prefix + form.getAttribute('action'), data, () => {
-        done(() => {
+    httpPost({
+        url: prefix + form.getAttribute('action'),
+        data,
+        cb: () => done(() => {
             window.location.href = document.getElementById('superior').getAttribute('href')
         })
     })
@@ -156,8 +159,10 @@ function PAGE_SUBMIT({form, field: data}) {
  * iframe页面内的提交，成功后刷新父级表格
  */
 function IFRAME_SUBMIT({form, field: data}) {
-    post(prefix + form.getAttribute('action'), data, () => {
-        outDone(() => {
+    httpPost({
+        url: prefix + form.getAttribute('action'),
+        data,
+        cb: () => outDone(() => {
             parent.layer.close(parent.layer.getFrameIndex(window.name))
             parent.layui.table.reload('table')
         })

@@ -41,11 +41,9 @@
                         {type: 'checkbox'},
                         {field: 'name', title: '名称', align: 'center'},
                         {field: 'comment', title: '描述', align: 'center'}
-                    ]],
-                    options = fillDefault(cols)
-                options.url = `${prefix}/rest/table/list`
-                table.render(options)
+                    ]]
 
+                tableRender(table,{cols,url:`${prefix}/rest/table/list`})
 
                 $('.coffee-btn').click(() => {
                     let {data: list} = table.checkStatus('table')

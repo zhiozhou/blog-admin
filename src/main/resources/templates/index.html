@@ -14,7 +14,7 @@
                         <li class="layui-nav-item" th:each="menu : ${menuList}">
                             <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-text=${menu.name}">
                                 <i class="fa" th:classappend="${menu.icon}"></i>
-                                <span th:text="${menu.name}"></span>
+                                [[${menu.name}]]
                             </a>
                             <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.childList)}">
                                 <dd th:each="child : ${menu.childList}">

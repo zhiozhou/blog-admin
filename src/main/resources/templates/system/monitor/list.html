@@ -36,12 +36,12 @@
         </script>
         <script type="text/html" id="monitor-tool">
             <div class="tool">
-                {{#  if(d.id == id){ }}
+                {{# if(d.id == id){ }}
                 <a class="layui-btn layui-btn-sm layui-btn-disabled">当前账号</a>
-                {{#  } else { }}
+                {{# } else { }}
                 <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="forceOff"
                    shiro:hasPermission=${m.permissionPrefix+':forceOff'}>强退</a>
-                {{#  } }}
+                {{# } }}
             </div>
         </script>
         <script th:inline="none">
@@ -50,35 +50,37 @@
             layui.use(['table', 'jquery', 'util'], () => {
                 const {table, jquery: $} = layui,
                     cols = [[
-                        {field: 'username', title: '用户名', minWidth:'100', align: 'center'},
-                        {field: 'role', title: '角色',minWidth:'120',  align: 'center', templet: ({role}) => role.name},
-                        {field: 'host', title: '主机地址', minWidth:'120', align: 'center'},
-                        {field: 'os', title: '操作系统', minWidth:'150', align: 'center'},
-                        {field: 'browser', title: '浏览器',minWidth:'120',  align: 'center'},
+                        {field: 'username', title: '用户名', minWidth: '100', align: 'center'},
+                        {field: 'role', title: '角色', minWidth: '120', align: 'center', templet: ({role}) => role.name},
+                        {field: 'host', title: '主机地址', minWidth: '120', align: 'center'},
+                        {field: 'os', title: '操作系统', minWidth: '150', align: 'center'},
+                        {field: 'browser', title: '浏览器', minWidth: '120', align: 'center'},
                         {
-                            field: 'stateTime', title: '开始时间',minWidth:'120',  align: 'center',
+                            field: 'stateTime', title: '开始时间', minWidth: '120', align: 'center',
                             templet: ({startTime}) => {
                                 return formatDate(startTime)
                             }
                         },
                         {
-                            field: 'lastAccessTime', title: '最后访问时间', minWidth:'120', align: 'center',
+                            field: 'lastAccessTime', title: '最后访问时间', minWidth: '120', align: 'center',
                             templet: ({lastAccessTime}) => {
                                 return formatDate(lastAccessTime)
                             }
                         },
-                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#monitor-tool'}
+                        {title: '操作', align: 'center', toolbar: '#monitor-tool'}
                     ]]
 
-                table.render(fillDefault(cols, false,
-                    ({code, info: msg, data}) => {
+                tableRender(table, {
+                    cols,
+                    page: false,
+                    parseData: ({code, info: msg, data}) => {
                         return {
                             code,
                             msg,
                             data
                         }
-                    })
-                )
+                    }
+                })
 
                 // 工具交给通用操作
                 table.on('tool(table)', ({data, event: action}) => {
@@ -88,8 +90,10 @@
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
                             }, () => {
-                                post(`${prefix}/rest/force/off`, {id: data.id}, () => {
-                                    done(reloadTable)
+                                httpPost({
+                                    url: `${prefix}/rest/force/off`,
+                                    data: {id: data.id},
+                                    cb: () => done(reloadTable)
                                 })
                             })
                             break

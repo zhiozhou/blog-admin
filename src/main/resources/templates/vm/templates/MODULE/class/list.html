@@ -28,11 +28,11 @@
 #foreach ($column in $table.columnList)
                         {field: '${column.attrName}', title: '${column.comment}', align: 'center'},
 #end
-                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {title: '操作', align: 'center', toolbar: '#rud'}
                     ]]
 
-                table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction)
+                 tableRender(table,{cols})
+                table.on('tool(table)', frameAction)
             })
         </script>
     </body>

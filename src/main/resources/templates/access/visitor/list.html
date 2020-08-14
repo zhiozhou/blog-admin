@@ -9,12 +9,14 @@
                         <input type="text" name="id" class="layui-input" placeholder="请输入ID" autocomplete="off">
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="nicknameLike" class="layui-input" placeholder="请输入名称" autocomplete="off">
+                        <input type="text" name="nicknameLike" class="layui-input" placeholder="请输入名称"
+                               autocomplete="off">
                     </div>
                     <div class="layui-inline">
                         <select name="state">
                             <option value="">请选择一个状态</option>
-                            <option th:each="state:${stateMap.values()}" th:value="${state.code}" th:text="${state.label}"></option>
+                            <option th:each="state:${stateMap.values()}" th:value="${state.code}"
+                                    th:text="${state.label}"></option>
                         </select>
                     </div>
                     <div class="layui-inline">
@@ -39,13 +41,17 @@
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="rub">
             <div class="tool">
-                <a class="layui-btn layui-btn-sm" lay-event="detail" shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update" shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
-                {{#  if(d.state != 11){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="block" shiro:hasPermission=${m.permissionPrefix+':block'}>阻塞</a>
-                {{#  } else { }}
-                <a class="layui-btn layui-bg-orange  layui-btn-sm" lay-event="unblock" shiro:hasPermission=${m.permissionPrefix+':block'}>取消阻塞</a>
-                {{#  } }}
+                <a class="layui-btn layui-btn-sm" lay-event="detail"
+                   shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"
+                   shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
+                {{# if(d.state != 11){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="block"
+                   shiro:hasPermission=${m.permissionPrefix+':block'}>阻塞</a>
+                {{# } else { }}
+                <a class="layui-btn layui-bg-orange  layui-btn-sm" lay-event="unblock"
+                   shiro:hasPermission=${m.permissionPrefix+':block'}>取消阻塞</a>
+                {{# } }}
             </div>
         </script>
         <script th:inline="javascript">
@@ -57,51 +63,73 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        { field: 'id', title: 'ID', align: 'center'},
-                        { field: 'nickname', title: '名称',minWidth:'100', align: 'center',
+                        {field: 'id', title: 'ID', align: 'center'},
+                        {
+                            field: 'nickname', title: '名称', minWidth: '100', align: 'center',
                             templet: ({nickname = '-', website}) => {
                                 return website ?
                                     `<a href="${website}" target="_blank">${nickname}</a>` :
                                     nickname
                             }
                         },
-                        {field: 'email', title: '邮箱', align: 'center',minWidth:'120', templet: ({email = '-'}) => email},
-                        {field: 'state', title: '状态', align: 'center',
+                        {
+                            field: 'email',
+                            title: '邮箱',
+                            align: 'center',
+                            minWidth: '120',
+                            templet: ({email = '-'}) => email
+                        },
+                        {
+                            field: 'state', title: '状态', align: 'center',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'remark', title: '备注', align: 'center',minWidth:'100',templet: ({remark = '-'})=> remark},
-                        {field: 'lastAccessTime', title: '最后访问时间',minWidth:'120', align: 'center',templet: ({lastAccessTime}) =>  formatDate(lastAccessTime)},
-                        {title: '操作',fixed: 'right', align: 'center', toolbar: '#rub'}
+                        {
+                            field: 'remark',
+                            title: '备注',
+                            align: 'center',
+                            minWidth: '100',
+                            templet: ({remark = '-'}) => remark
+                        },
+                        {
+                            field: 'lastAccessTime',
+                            title: '最后访问时间',
+                            minWidth: '120',
+                            align: 'center',
+                            templet: ({lastAccessTime}) => formatDate(lastAccessTime)
+                        },
+                        {title: '操作', align: 'center', toolbar: '#rub'}
                     ]]
 
-                table.render(fillDefault(cols))
+                tableRender(table, {cols})
                 table.on('tool(table)', toolHandle)
 
                 function toolHandle({data, event}) {
                     switch (event) {
                         case 'block':
-                            return layer.confirm(`确认阻塞 ${data.nickname?data.nickname:'该访客'} 吗`, {
+                            return layer.confirm(`确认阻塞 ${data.nickname ? data.nickname : '该访客'} 吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
                             }, () => {
-                                post(`${prefix}/rest/block/${data.id}`, null, () => {
-                                    done(reloadTable)
+                                httpPost({
+                                    url: `${prefix}/rest/block/${data.id}`,
+                                    cb: ()=>done(reloadTable)
                                 })
                             })
                         case 'unblock':
-                            return layer.confirm(`确认取消对${data.nickname?data.nickname:'该访客'} 的阻塞吗`, {
+                            return layer.confirm(`确认取消对${data.nickname ? data.nickname : '该访客'} 的阻塞吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
                             }, () => {
-                                post(`${prefix}/rest/unblock/${data.id}`, null, () => {
-                                    done(reloadTable)
+                                httpPost({
+                                    url:`${prefix}/rest/unblock/${data.id}`,
+                                    cb: ()=>done(reloadTable)
                                 })
                             })
                     }
-                    handleAction({data,event})
+                    frameAction({data, event})
                 }
             })
 

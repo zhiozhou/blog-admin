@@ -58,43 +58,35 @@ layui.use(['table', 'form', 'jquery'], () => {
 
 
 /**
- * 通用解析列表的响应格式
+ * 表格渲染通用配置
  */
-function defaultParse({code, info: msg, data}) {
-    return {
-        code,
-        msg,
-        count: data.count,
-        data: data.list
-    }
-}
-
-/**
- * 表格的通用配置
- *
- * @param cols 自定义列信息
- * @param page 是否开启分页
- * @param parseData 自定义解析格式
- */
-function fillDefault(cols, page = true, parseData = defaultParse) {
-    return {
-        id: 'table',
-
-        elem: '#table',
-        page: true,
-        cellMinWidth: '80',
-        method: 'post',
-        url: `${prefix}/rest/list`,
-        cols: cols,
-        parseData: parseData
-    }
+function tableRender(table, options) {
+    table.render({
+        ...{
+            id: 'table',
+            elem: '#table',
+            page: true,
+            cellMinWidth: '80',
+            method: 'post',
+            url: `${prefix}/rest/list`,
+            parseData: ({code, info: msg, data}) => {
+                return {
+                    code,
+                    msg,
+                    count: data.count,
+                    data: data.list
+                }
+            }
+        },
+        ...options
+    })
 }
 
 
 /**
  * 通用表格的工具栏（删 改 查），全部以iframe窗口方式打开
  */
-function handleAction({data, event: action}) {
+function frameAction({data, event: action}) {
     switch (action) {
         case 'detail':
             newFrame(`${m.name}详情`, `${prefix}/detail/${data.id}`)
@@ -110,7 +102,7 @@ function handleAction({data, event: action}) {
 /**
  * 通用表格的工具栏（删 改 查），全部新页面的方式打开
  */
-function handleAction2({data, event: action}) {
+function pageAction({data, event: action}) {
     switch (action) {
         case 'detail':
             window.location.href = `${prefix}/detail/${data.id}`
@@ -131,8 +123,9 @@ function removeAction(data) {
         btn: ['确定', '取消'],
         shade: [0.1, '#fff']
     }, (index) => {
-        post(`${prefix}/rest/remove/${data.id}`, null, () => {
-            done(reloadTable)
+        httpPost({
+            url: `${prefix}/rest/remove/${data.id}`,
+            cb: () => done(reloadTable)
         })
     })
 }

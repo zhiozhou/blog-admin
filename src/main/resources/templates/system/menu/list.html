@@ -102,7 +102,7 @@
                             }
                         },
                         {field: 'sort', title: '排序', align: 'center'},
-                        {title: '操作', fixed: 'right', align: 'center', toolbar: '#ud'}
+                        {title: '操作',   align: 'center', toolbar: '#ud'}
                     ]],
                     done: () => {
                         let parentId = $(`[data-id=${openId}]`).data('parent-id')
@@ -113,12 +113,13 @@
                 })
 
                 // 交给通用操作
-                table.on('tool(table)', handleAction)
+                table.on('tool(table)', frameAction)
 
                 // 权限刷新
                 $('.refresh-btn').click(() => {
-                    post(`${prefix}/rest/refresh`, null, () => {
-                        done()
+                    httpPost({
+                        url:`${prefix}/rest/refresh`,
+                        cb:()=>done()
                     })
                 })
 

@@ -55,11 +55,11 @@
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {title: '操作',  fixed: 'right', align: 'center', toolbar: '#rud'}
+                        {title: '操作',    align: 'center', toolbar: '#rud'}
                     ]]
 
-                table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction2)
+                 tableRender(table,{cols})
+                table.on('tool(table)', pageAction)
             })
         </script>
     </body>

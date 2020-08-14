@@ -9,14 +9,10 @@ layui.use(['jquery', 'util', 'layarea'], function () {
     const {jquery: $, layarea} = layui
 
     // 初始化地区三级联动
-    layarea.render({
-        elem: '#area-picker'
-    })
+    layarea.render({elem: '#area-picker'})
 
     // 初始化时间
-    $('.date-field').each((index, field) => {
-        $(field).val(formatDate($(field).val(), $(field).data('format')))
-    })
+    $('.date-field').each((index, field) => $(field).val(formatDate($(field).val(), $(field).data('format'))))
 
 })
 
@@ -38,18 +34,14 @@ function formatDate(date, format = 'yyyy年MM月dd日 HH:mm:ss') {
  * @param area 窗口尺寸
  */
 function newFrame(title, url, area) {
-    const sizePC = ['700px', '620px'],
-        sizeMobile = ['320px', '620px']
-    let isPc = window.innerWidth > 768
     let index = layer.open({
         type: 2,
         title: title,
-        area: area?area : isPc ? sizePC : sizeMobile,
+        area: area ? area : ['700px', '620px'],
         fixed: false, //不固定
         content: url
     })
-    // 手机端全屏
-    if (!isPc) layer.full(index)
+    window.innerWidth < 768 && layer.full(index)
 }
 
 /**
@@ -61,14 +53,11 @@ function fail(code) {
 }
 
 /**
- * 自动加载框的 post 请求
- * @param u 请求地质
- * @param d 请求数据
- * @param cb 成功的回调函数，失败则使用警告提醒
+ * 全局http请求
  */
-function post(u, d, cb) {
+function httpPost({url, data, cb}) {
     loading()
-    layui.jquery.post(u, d, ({code, info, data}) => {
+    layui.jquery.post(url, data, ({code, info, data}) => {
         loaded()
         if (fail(code)) return warn(info)
         cb(data)
@@ -158,7 +147,7 @@ function outDone(cb, msg = '操作成功') {
  * @param id 元素id
  * @param msg 提示信息
  */
-function tips(id,msg) {
+function tips(id, msg) {
     layer.tips(msg, `#${id}`, {
         tips: [2, "#1E9FFF"],
         time: 1500

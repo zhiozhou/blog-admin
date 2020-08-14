@@ -53,10 +53,10 @@
                             field: 'gmtCreate', title: '访问时间', minWidth:'120',align: 'center',
                             templet: ({gmtCreate}) => formatDate(gmtCreate)
                         },
-                        {title: '操作',fixed: 'right', align: 'center', toolbar: '#r'}
+                        {title: '操作',  align: 'center', toolbar: '#r'}
                     ]]
-                table.render(fillDefault(cols))
-                table.on('tool(table)', handleAction2)
+                 tableRender(table,{cols})
+                table.on('tool(table)', pageAction)
             })
         </script>
     </body>
