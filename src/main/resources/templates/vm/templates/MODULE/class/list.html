@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -26,13 +26,13 @@
                 const {table} = layui,
                     cols = [[
 #foreach ($column in $table.columnList)
-                        {field: '${column.attrName}', title: '${column.comment}', align: 'center'},
+                        {field: '${column.attrName}', title: '${column.comment}'},
 #end
-                        {title: '操作', align: 'center', toolbar: '#rud'}
+                        {title: '操作',  toolbar: '#rud'}
                     ]]
 
                  tableRender(table,{cols})
-                table.on('tool(table)', frameAction)
+                table.on('tool(table)', iframeAction)
             })
         </script>
     </body>

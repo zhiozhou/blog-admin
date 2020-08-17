@@ -156,7 +156,7 @@ function PAGE_SUBMIT({form, field: data}) {
 }
 
 /**
- * iframe页面内的提交，成功后刷新父级表格
+ * 内联页面通用提交，成功后刷新父级表格
  */
 function IFRAME_SUBMIT({form, field: data}) {
     httpPost({

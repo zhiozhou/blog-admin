@@ -78,6 +78,27 @@ public class UserRestController {
         return userService.update(userDTO);
     }
 
+
+    @RequiresPermissions("system:user:resetPwd")
+    @RequestMapping("/resetPwd")
+    public OutVO<NULL> resetPassword(UserDTO userDTO) {
+        return userService.resetPassword(userDTO);
+    }
+
+
+    @RequiresPermissions("system:user:freeze")
+    @RequestMapping("/freeze/{id}")
+    public OutVO<NULL> freeze(@PathVariable Integer id) {
+        return userService.updateState(new UserDTO().setId(id).setState(11));
+    }
+
+    @RequiresPermissions("system:user:freeze")
+    @RequestMapping("/unfreeze/{id}")
+    public OutVO<NULL> unfreeze(@PathVariable Integer id) {
+        return userService.updateState(new UserDTO().setId(id).setState(0));
+    }
+
+
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
     public OutVO<ListVO<UserDTO>> list(UserDTO userDTO, Page page) {

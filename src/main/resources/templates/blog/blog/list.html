@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
@@ -43,15 +43,15 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        {field: 'title', title: '标题',minWidth:'150', align: 'center'},
-                        {field: 'typeName', title: '类型', align: 'center'},
+                        {field: 'title', title: '标题',minWidth:'150'},
+                        {field: 'typeName', title: '类型'},
                         {
-                            field: 'gmtCreate', title: '创建时间', minWidth:'120',align: 'center', templet: ({gmtCreate}) => {
+                            field: 'gmtCreate', title: '创建时间', minWidth:'120', templet: ({gmtCreate}) => {
                                 return formatDate(gmtCreate, 'yyyy年MM月dd日')
                             }
                         },
-                        {field: 'pv', title: '访问量', align: 'center'},
-                        {title: '操作', align: 'center', toolbar: '#rud'}
+                        {field: 'pv', title: '访问量'},
+                        {title: '操作',  toolbar: '#rud'}
                     ]]
 
                 tableRender(table,{cols})

@@ -68,6 +68,18 @@ public class UserController extends BaseController {
         return "system/user/au";
     }
 
+    @RequiresPermissions("system:user:resetPwd")
+    @RequestMapping("/resetPwd/{id}")
+    public String resetPwd(Model model, @PathVariable Integer id) {
+        OutVO<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
+        if (dtoVO.isFail()) {
+            return NOT_FOUNT;
+        }
+        supplyUpdate(model, dtoVO.getData());
+        return "system/user/resetPwd";
+    }
+
+
     @RequiresPermissions("system:user:detail")
     @RequestMapping("/detail/{id}")
     public String read(Model model, @PathVariable Integer id) {

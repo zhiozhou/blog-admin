@@ -68,7 +68,6 @@ public class UserDTO extends DTO<UserPO> implements Serializable {
     /**
      * 状态 关联字典
      */
-    @NotNull(message = "状态不可为空")
     private Integer state;
 
     /**

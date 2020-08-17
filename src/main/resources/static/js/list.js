@@ -86,7 +86,7 @@ function tableRender(table, options) {
 /**
  * 通用表格的工具栏（删 改 查），全部以iframe窗口方式打开
  */
-function frameAction({data, event: action}) {
+function iframeAction({data, event: action}) {
     switch (action) {
         case 'detail':
             newFrame(`${m.name}详情`, `${prefix}/detail/${data.id}`)

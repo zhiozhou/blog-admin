@@ -1,32 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <style>
-        .role-btn{
+        .role-btn {
             cursor: pointer;
         }
     </style>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
-                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=${m.permissionPrefix+':add'}>
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
+                           shiro:hasPermission=${m.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入姓名" autocomplete="off" >
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入姓名" autocomplete="off">
                     </div>
                     <div class="layui-inline">
                         <select name="state">
                             <option value="">请选择一个状态</option>
-                            <option th:each="state:${stateMap.values()}" th:value="${state.code}" th:text="${state.label}"></option>
+                            <option th:each="state:${stateMap.values()}" th:value="${state.code}"
+                                    th:text="${state.label}"></option>
                         </select>
                     </div>
                     <div class="layui-inline">
-                        <select name="role.id"  lay-search="">
+                        <select name="role.id" lay-search="">
                             <option value="">请选择一个角色</option>
                             <option th:each="role:${roleList}" th:value="${role.id}" th:text="${role.name}"></option>
                         </select>
@@ -36,7 +38,7 @@
                             <i class="fa fa-search"></i>
                             搜索
                         </button>
-                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset" >
+                        <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset">
                             <i class="fa fa-repeat"></i>
                             重置
                         </button>
@@ -49,10 +51,16 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="user-rud">
-            <a class="layui-btn layui-btn-sm" lay-event="detail"  shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
+            <a class="layui-btn layui-btn-sm" lay-event="detail" shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
             {{#  if(d.state != 12){ }}
-            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"  shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
-            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"  shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"  shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="resetPwd"  shiro:hasPermission=${m.permissionPrefix+':resetPwd'}>修改密码</a>
+                {{#  if(d.state != 11){ }}
+                    <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="freeze"  shiro:hasPermission=${m.permissionPrefix+':freeze'}>冻结</a>
+                {{# }else{ }}
+                    <a class="layui-btn layui-btn-sm" lay-event="unfreeze" shiro:hasPermission=${m.permissionPrefix+':freeze'}>解冻</a>
+                {{#  } }}
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove" shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
             {{#  } }}
         </script>
         <script th:inline="javascript">
@@ -62,29 +70,40 @@
             const prefix = `${gate}system/user`
 
             layui.use(['table', 'jquery'], () => {
-                const {table,jquery:$} = layui,
+                const {table, jquery: $} = layui,
                     cols = [[
-                        {field: 'username', title: '用户名',minWidth:'100', align: 'center'},
-                        {field: 'name', title: '姓名', minWidth:'100',align: 'center'},
-                        {field: 'phone', title: '手机号', minWidth:'120',align: 'center'},
-                        {field: 'role',title: '角色', minWidth:'120',align: 'center',
-                            templet: ({role})=>{
-                                return `<a class="role-btn" data-id="${role.id}">${role.name}</a>`
-                            }
+                        {field: 'username', title: '用户名', minWidth: '100'},
+                        {field: 'name', title: '姓名', minWidth: '100'},
+                        {field: 'phone', title: '手机号', minWidth: '120'},
+                        {
+                            field: 'role', title: '角色', minWidth: '120',
+                            templet: ({role}) => `<a class="role-btn" data-id="${role.id}">${role.name}</a>`
                         },
-                        { field: 'state',title: '状态', align: 'center',
+                        {
+                            field: 'state', title: '状态',
                             templet: ({state}) => {
-                                let {label,css} = stateMap[state]
+                                let {label, css} = stateMap[state]
                                 return `<a  class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {title: '操作',   align: 'center', toolbar: '#user-rud'}
+                        {title: '操作',  toolbar: '#user-rud'}
                     ]]
 
-                 tableRender(table,{cols})
-                table.on('tool(table)', frameAction)
+                tableRender(table, {cols})
+                table.on('tool(table)', ({data, event}) => {
+                    switch (event) {
+                        case 'resetPwd':
+                            return newFrame(`修改密码`, `${gate}/system/user/resetPwd/${data.id}`)
+                        case 'freeze':
+                            return httpPost({url:`${prefix}/rest/freeze/${data.id}`,cb:()=>done(reloadTable())})
+                        case 'unfreeze':
+                            return httpPost({url:`${prefix}/rest/unfreeze/${data.id}`,cb:()=>done(reloadTable())})
+                    }
+                    iframeAction({data, event})
+                })
 
-                $('body').on('click','.role-btn',({target})=>{
+
+                $('body').on('click', '.role-btn', ({target}) => {
                     let id = $(target).data('id')
                     newFrame(`角色详情`, `${gate}/system/role/detail/${id}`)
                 })

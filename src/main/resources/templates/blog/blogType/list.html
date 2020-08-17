@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
@@ -44,18 +44,18 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        {field: 'key', title: '标识',minWidth:'100', align: 'center'},
-                        {field: 'name', title: '名称', align: 'center'},
-                        {field: 'title', title: '标题', align: 'center'},
-                        {field: 'desc', title: '描述', minWidth:'150',align: 'center'},
+                        {field: 'key', title: '标识',minWidth:'100'},
+                        {field: 'name', title: '名称'},
+                        {field: 'title', title: '标题'},
+                        {field: 'desc', title: '描述', minWidth:'150',},
                         {
-                            field: 'state', title: '状态', align: 'center',
+                            field: 'state', title: '状态',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {title: '操作',    align: 'center', toolbar: '#rud'}
+                        {title: '操作',     toolbar: '#rud'}
                     ]]
 
                  tableRender(table,{cols})

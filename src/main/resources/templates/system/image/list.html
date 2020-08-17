@@ -25,7 +25,7 @@
         }
     </style>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -72,11 +72,11 @@
                     const {table, jquery: $, upload, form} = layui,
                         cols = [[
                             {
-                                field: 'url', title: '图片', minWidth: '120', align: 'center',
+                                field: 'url', title: '图片', minWidth: '120',
                                 templet: ({url}) => `<img src="${url}" class="image-view"/>`
                             },
-                            {field: 'remark', title: '备注', minWidth: '120', align: 'center'},
-                            {title: '操作', align: 'center', toolbar: '#cd'}
+                            {field: 'remark', title: '备注', minWidth: '120'},
+                            {title: '操作',  toolbar: '#cd'}
                         ]],
                         area = '.rove'
 
@@ -89,7 +89,7 @@
                                 copy(data.url)
                                 break
                         }
-                        frameAction({data, event})
+                        iframeAction({data, event})
                     }
 
                     // 多图片上传

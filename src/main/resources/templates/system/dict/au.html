@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form" id="form" th:attr="action=${action}">
 
                 <div class="layui-tab" style="margin: 0;">
@@ -94,16 +94,16 @@
                     data: dictData,
                     cellMinWidth: '80',
                     cols: [[
-                        {field: 'code', title: '编码值', align: 'center', edit: true},
-                        {field: 'label', title: '标签', align: 'center', edit: true},
-                        {field: 'css', title: 'class标签', align: 'center', edit: true},
-                        {field: 'type',title: '状态', align: 'center',
+                        {field: 'code', title: '编码值',  edit: true},
+                        {field: 'label', title: '标签',  edit: true},
+                        {field: 'css', title: 'class标签',  edit: true},
+                        {field: 'type',title: '状态',
                             templet: ({type}) => {
                                 let {css, info} = typeMap[type]
                                 return `<a data-type="${type}" class="type-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {field: 'top',title: '默认使用',align: 'center',
+                        {field: 'top',title: '默认使用',
                             templet: ({top}) => {
                                 let css = 'layui-bg-blue', info = '正常'
                                 if (1 === top) {
@@ -113,7 +113,7 @@
                                 return `<a class="top-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {title: '操作',   align: 'center', toolbar: '#dt-ud'}
+                        {title: '操作',    toolbar: '#dt-ud'}
                     ]],
                     done: () => {
                         tindex = $('.t').parents('tr').data('index')

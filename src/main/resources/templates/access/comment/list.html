@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -61,19 +61,19 @@
                 const {table} = layui,
                     cols = [[
                         {
-                            field: 'fromVisitor', title: '昵称', align: 'center',
+                            field: 'fromVisitor', title: '昵称',
                             templet: ({fromVisitor}) => fromVisitor.nickname
                         },
-                        {field: 'content', title: '内容', align: 'center'},
-                        {field: 'gmtCreate', title: '评论时间', align: 'center'},
+                        {field: 'content', title: '内容'},
+                        {field: 'gmtCreate', title: '评论时间'},
                         {
-                            field: 'state', title: '状态', align: 'center',
+                            field: 'state', title: '状态',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {title: '操作', align: 'center', toolbar: '#comment'}
+                        {title: '操作',  toolbar: '#comment'}
                     ]]
 
                 tableRender(table, {cols})
@@ -92,7 +92,7 @@
                             })
                             break
                     }
-                    frameAction({data, event})
+                    iframeAction({data, event})
                 }
             })
         </script>

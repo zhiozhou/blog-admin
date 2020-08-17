@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -50,24 +50,24 @@
             layui.use(['table', 'jquery', 'util'], () => {
                 const {table, jquery: $} = layui,
                     cols = [[
-                        {field: 'username', title: '用户名', minWidth: '100', align: 'center'},
-                        {field: 'role', title: '角色', minWidth: '120', align: 'center', templet: ({role}) => role.name},
-                        {field: 'host', title: '主机地址', minWidth: '120', align: 'center'},
-                        {field: 'os', title: '操作系统', minWidth: '150', align: 'center'},
-                        {field: 'browser', title: '浏览器', minWidth: '120', align: 'center'},
+                        {field: 'username', title: '用户名', minWidth: '100'},
+                        {field: 'role', title: '角色', minWidth: '120',  templet: ({role}) => role.name},
+                        {field: 'host', title: '主机地址', minWidth: '120'},
+                        {field: 'os', title: '操作系统', minWidth: '150'},
+                        {field: 'browser', title: '浏览器', minWidth: '120'},
                         {
-                            field: 'stateTime', title: '开始时间', minWidth: '120', align: 'center',
+                            field: 'stateTime', title: '开始时间', minWidth: '120',
                             templet: ({startTime}) => {
                                 return formatDate(startTime)
                             }
                         },
                         {
-                            field: 'lastAccessTime', title: '最后访问时间', minWidth: '120', align: 'center',
+                            field: 'lastAccessTime', title: '最后访问时间', minWidth: '120',
                             templet: ({lastAccessTime}) => {
                                 return formatDate(lastAccessTime)
                             }
                         },
-                        {title: '操作', align: 'center', toolbar: '#monitor-tool'}
+                        {title: '操作',  toolbar: '#monitor-tool'}
                     ]]
 
                 tableRender(table, {

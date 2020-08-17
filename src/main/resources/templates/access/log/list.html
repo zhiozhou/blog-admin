@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -38,22 +38,22 @@
                 const {table} = layui,
                     cols = [[
                         {
-                            field: 'visitor', title: '访客',minWidth:'120', align: 'center',
+                            field: 'visitor', title: '访客',minWidth:'120',
                             templet: ({id, visitor}) => {
                                 let {id: visitorId, nickname = '-'} = visitor
                                 return `<div id="${id}" onmouseenter="tips(${id},'${visitorId}')">${nickname}</div>`
                             }
                         },
-                        {field: 'host', title: '主机地址', minWidth:'120',align: 'center'},
-                        {field: 'mfrs', title: '设备厂商',minWidth:'150', align: 'center'},
-                        {field: 'os', title: '操作系统',minWidth:'150', align: 'center'},
-                        {field: 'api', title: '请求接口',minWidth:'120',align: 'center'},
-                        {field: 'param', title: '请求参数',minWidth:'120',align: 'center',templet:({param})=>param?param:'-'},
+                        {field: 'host', title: '主机地址', minWidth:'120',},
+                        {field: 'mfrs', title: '设备厂商',minWidth:'150'},
+                        {field: 'os', title: '操作系统',minWidth:'150'},
+                        {field: 'api', title: '请求接口',minWidth:'120',},
+                        {field: 'param', title: '请求参数',minWidth:'120',templet:({param})=>param?param:'-'},
                         {
-                            field: 'gmtCreate', title: '访问时间', minWidth:'120',align: 'center',
+                            field: 'gmtCreate', title: '访问时间', minWidth:'120',
                             templet: ({gmtCreate}) => formatDate(gmtCreate)
                         },
-                        {title: '操作',  align: 'center', toolbar: '#r'}
+                        {title: '操作',   toolbar: '#r'}
                     ]]
                  tableRender(table,{cols})
                 table.on('tool(table)', pageAction)

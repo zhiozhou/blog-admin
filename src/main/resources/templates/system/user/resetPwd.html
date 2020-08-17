@@ -3,18 +3,23 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form  " id="form" th:attr="action=${action}">
+            <form class="layui-form" id="form" action="/rest/resetPwd">
                 <input type="hidden" name="id" th:value="${o.id}">
-#set($left="${")
-#foreach ($column in $table.columnList)
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">${column.comment}：</label>
+                    <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="${column.attrName}" lay-verify="required" th:value="$left o.${column.attrName} }" class="layui-input" placeholder="请输入${column.comment}" autocomplete="off"  >
+                        <input type="text" name="username" class="layui-input layui-disabled"
+                               th:value="${ o.username }"/>
                     </div>
                 </div>
-#end
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码：</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" class="layui-input" lay-verify="required" utocomplete="off" placeholder="请输入密码">
+                    </div>
+                </div>
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
@@ -28,14 +33,11 @@
             </form>
         </div>
         <div th:include="include :: au-footer"></div>
-        <script th:inline="none">
-            const prefix =  `${gate}${app.module}/${table.objectName}`
-
-            layui.use(['form', 'jquery'],  ()=> {
-                const {form, jquery: $} = layui
-
-                //监听提交
-                form.on('submit(submit)',  IFRAME_SUBMIT)
+        <script th:inline="javascript">
+            const prefix = `${gate}system/user`
+            layui.use(['form'], () => {
+                const {form} = layui
+                form.on('submit(submit)', IFRAME_SUBMIT)
             })
 
         </script>

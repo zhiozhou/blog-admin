@@ -1,41 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
-    <style>
-        .frame-wrap{
-            overflow-y: visible;
-            overflow-x: visible;
-        }
-        .layui-form-item .layui-input-inline{
-            width: 300px;
-        }
-    </style>
     <body>
-        <div class="frame-wrap">
-            <form class="layui-form  " id="form" th:attr="action=${action}">
+        <div class="layout-iframe">
+            <form class="layui-form" id="form" th:attr="action=${action}">
                 <input type="hidden" name="id" th:value="${o.id}">
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" lay-verify="required"  class="layui-input" placeholder="请输入用户名" autocomplete="off"
-                               th:value="${ o.username }" th:classappend="'/rest/save' != ${action}?'layui-disabled':''" th:disabled="'/rest/save' != ${action}" >
+                        <input type="text" name="username" class="layui-input" placeholder="请输入用户名" autocomplete="off"
+                               th:value="${ o.username }" th:classappend="'/rest/save' != ${action}?'layui-disabled':''"
+                               th:disabled="'/rest/save' != ${action}">
                     </div>
                 </div>
 
-
-                <div class="layui-form-item">
+                <div class="layui-form-item" th:if="'/rest/save' == ${action}">
                     <label class="layui-form-label">密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password" class="layui-input" autocomplete="off"
-                               th:attr="lay-verify='/rest/save' == ${action}?'required':''" th:placeholder="'/rest/save' == ${action}?'请输入密码':'不修改请勿输入'">
+                        <input type="password" name="password" class="layui-input" lay-verify="required"
+                               autocomplete="off" placeholder="请输入密码">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">姓名：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" th:value="${ o.name }" class="layui-input" placeholder="请输入姓名" autocomplete="off"  >
+                        <input type="text" name="name" lay-verify="required" th:value="${ o.name }" class="layui-input"
+                               placeholder="请输入姓名" autocomplete="off">
                     </div>
                 </div>
 
@@ -43,16 +35,9 @@
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
                         <select name="role.id" lay-verify="required" lay-search="">
-                            <option th:each="role:${roleList}" th:value="${role.id}" th:field="${o.role.id}" th:text="${role.name}"></option>
+                            <option th:each="role:${roleList}" th:value="${role.id}" th:field="${o.role.id}"
+                                    th:text="${role.name}"></option>
                         </select>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态：</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="state" th:each="state:${stateList}"
-                               th:value="${state.code}" th:title="${state.label}" th:field="${o.state}">
                     </div>
                 </div>
 
@@ -69,12 +54,11 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
-            const prefix =  `${gate}system/user`
+            const prefix = `${gate}system/user`
 
-            layui.use(['form'],  ()=> {
+            layui.use(['form'], () => {
                 const {form} = layui
-
-                form.on('submit(submit)',  IFRAME_SUBMIT)
+                form.on('submit(submit)', IFRAME_SUBMIT)
             })
 
         </script>

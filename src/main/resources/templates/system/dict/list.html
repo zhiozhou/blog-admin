@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
@@ -48,12 +48,12 @@
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui,
                     cols = [[
-                        {field: 'name', title: '名称', minWidth: '120', align: 'center'},
-                        {field: 'key', title: '字典标识', minWidth: '150', align: 'center'},
+                        {field: 'name', title: '名称', minWidth: '120'},
+                        {field: 'key', title: '字典标识', minWidth: '150'},
                         {
                             field: 'state',
                             title: '状态',
-                            align: 'center',
+
                             templet: ({state}) => {
                                 let css, info
                                 switch (state) {
@@ -69,8 +69,8 @@
                                 return `<a class="layui-btn layui-btn-xs ${css}" >${info}</a>`
                             }
                         },
-                        {field: 'remark', title: '备注', minWidth: '150', align: 'center'},
-                        {title: '操作', align: 'center', toolbar: '#rud'}
+                        {field: 'remark', title: '备注', minWidth: '150'},
+                        {title: '操作',  toolbar: '#rud'}
                     ]]
 
 

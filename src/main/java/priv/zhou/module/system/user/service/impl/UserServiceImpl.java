@@ -83,31 +83,46 @@ public class UserServiceImpl implements IUserService {
     @Override
     public OutVO<NULL> update(UserDTO userDTO) {
 
-        // 1.转换类型
         UserPO userPO = userDTO.toPO();
 
-
-        // 2.验证参数
         if (userDAO.count(new UserDTO().setUsername(userPO.getUsername()).setNoid(userPO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
-        }
-
-        // 3.修改密码
-        if (StringUtils.isNotBlank(userDTO.getPassword())) {
-            UserPO db = userDAO.get(new UserDTO().setId(userPO.getId()));
-            userPO.setPassword(new SimpleHash(SHIRO_ALGORITHM, userPO.getPassword(), ByteSource.Util.bytes(db.getSalt()), SHIRO_ITERATIONS).toString());
-            ShiroUtil.getUserRealm().clearAllCachedAuthenticationInfo();
-        }
-
-
-        if (userDAO.update(userPO) < 1) {
+        } else if (userDAO.update(userPO) < 1) {
             return OutVO.fail(OutVOEnum.FAIL_OPERATION);
         }
 
         userDAO.removeRole(userPO);
         userDAO.saveRole(userPO);
         return OutVO.success();
+    }
 
+    @Override
+    public OutVO<NULL> updateState(UserDTO userDTO) {
+        if (null == userDTO.getId() || null == userDTO.getState()) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        }
+        return userDAO.update(userDTO.toPO()) > 0 ? OutVO.success() : OutVO.fail(OutVOEnum.FAIL_OPERATION);
+    }
+
+
+
+
+
+    @Override
+    public OutVO<NULL> resetPassword(UserDTO userDTO) {
+
+        if (null == userDTO.getId() || StringUtils.isBlank(userDTO.getPassword())) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        }
+
+        UserPO userPO = userDTO.toPO(),
+                db = userDAO.get(new UserDTO().setId(userPO.getId()));
+        if (null == db) {
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+        }
+        userPO.setPassword(new SimpleHash(SHIRO_ALGORITHM, userPO.getPassword(), ByteSource.Util.bytes(db.getSalt()), SHIRO_ITERATIONS).toString());
+        ShiroUtil.getUserRealm().clearAllCachedAuthenticationInfo();
+        return userDAO.update(userPO) > 0 ? OutVO.success() : OutVO.fail(OutVOEnum.FAIL_OPERATION);
     }
 
 

@@ -20,6 +20,10 @@ public interface IUserService {
 
     OutVO<NULL> update(UserDTO userDTO);
 
+    OutVO<NULL> updateState(UserDTO userDTO);
+
+    OutVO<NULL> resetPassword(UserDTO userDTO);
+
     OutVO<UserDTO> get(UserDTO userDTO);
 
     OutVO<ListVO<UserDTO>> list(UserDTO userDTO, Page page);

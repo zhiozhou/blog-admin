@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
@@ -39,8 +39,8 @@
                 const {table, jquery: $} = layui,
                     cols = [[
                         {type: 'checkbox'},
-                        {field: 'name', title: '名称', align: 'center'},
-                        {field: 'comment', title: '描述', align: 'center'}
+                        {field: 'name', title: '名称'},
+                        {field: 'comment', title: '描述'}
                     ]]
 
                 tableRender(table,{cols,url:`${prefix}/rest/table/list`})

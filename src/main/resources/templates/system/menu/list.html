@@ -31,7 +31,7 @@
         }
     </style>
     <body>
-        <div class="page-wrap">
+        <div class="layout-page">
             <div class="layui-form-item">
                 <div class="layui-inline  ">
                     <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
@@ -87,22 +87,22 @@
                                 return div.prop('outerHTML')
                             }
                         },
-                        {field: 'path', title: '跳转地址', minWidth:'150',align: 'center'},
-                        {field: 'key', title: '权限标识',  minWidth:'150',align: 'center'},
-                        {field: 'type', title: '类型', align: 'center',
+                        {field: 'path', title: '跳转地址', minWidth:'150',},
+                        {field: 'key', title: '权限标识',  minWidth:'150',},
+                        {field: 'type', title: '类型',
                             templet: ({type}) => {
                                 let {label, css} = typeMap[type]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'state', title: '状态', align: 'center',
+                        {field: 'state', title: '状态',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'sort', title: '排序', align: 'center'},
-                        {title: '操作',   align: 'center', toolbar: '#ud'}
+                        {field: 'sort', title: '排序'},
+                        {title: '操作',    toolbar: '#ud'}
                     ]],
                     done: () => {
                         let parentId = $(`[data-id=${openId}]`).data('parent-id')
@@ -113,7 +113,7 @@
                 })
 
                 // 交给通用操作
-                table.on('tool(table)', frameAction)
+                table.on('tool(table)', iframeAction)
 
                 // 权限刷新
                 $('.refresh-btn').click(() => {

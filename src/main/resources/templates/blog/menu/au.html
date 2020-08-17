@@ -20,7 +20,7 @@
         }
     </style>
     <body>
-        <div class="frame-wrap">
+        <div class="layout-iframe">
             <form class="layui-form  " id="form" th:attr="action=${action}">
                 <input type="hidden" name="id" id="id" th:value="${o.id}">
                 <div class="layui-form-item">
@@ -137,7 +137,7 @@
                 })
 
                 //监听提交
-                form.on('submit(submit)', function ({form, field: data}) {
+                form.on('submit(submit)', ({form, field: data}) => {
                     data.type = $('input[name=type]:checked ').val()
 
                     httpPost({
@@ -157,17 +157,15 @@
                     return false
                 })
 
-                form.on('radio(type)', function ({value}) {
+
+                form.on('radio(type)', ({value}) => {
                     areaHandle(parseInt(value))
                 })
 
                 // 类型控制区域
+
                 function areaHandle(type) {
-                    if (0 == type) {
-                        $('#path-area').slideUp(slidems)
-                    } else {
-                        $('#path-area').slideDown(slidems)
-                    }
+                    0 === type ? $('#path-area').slideUp(slidems) : $('#path-area').slideDown(slidems)
                 }
 
                 // 父级树显示
@@ -186,7 +184,7 @@
                 function formatTree(tree) {
 
                     let id = parseInt($('#id').val())
-                    parentId = parseInt($('#parentId').val())
+                    var parentId = parseInt($('#parentId').val())
 
                     for (let item of tree) {
                         item.title = item.name
