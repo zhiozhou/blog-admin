@@ -1,8 +1,14 @@
 layui.use(['layer', 'element', 'jquery'], () => {
     const {element, jquery: $} = layui
+    const body = document.body
     const $root = $('#root')
-
     const tabKey = 'layout-tab'
+
+    exitFullScreen =
+        document.exitFullScreen ? document.exitFullScreen :
+            document.mozCancelFullScreen ? document.mozCancelFullScreen :
+                document.webkitExitFullscreen ? document.webkitExitFullscreen :
+                    element.msExitFullscreen ? element.msExitFullscreen : null
 
     let currentTabId
 
@@ -56,6 +62,24 @@ layui.use(['layer', 'element', 'jquery'], () => {
         let frame = $('.layui-tab-item.layui-show>iframe')
         frame.attr('src', frame.attr('src'))
     })
+
+    // 全屏
+    const fullScreenPrefix =
+        document.fullscreenEnabled ? true :
+            document.msFullscreenEnabled ? 'ms' :
+                document.mozFullScreenEnabled ? 'moz' :
+                    document.webkitFullscreenEnabled ? 'webkit' : false
+    $('#full-screen').click(function () {
+        if (!fullScreenPrefix) return warn('当前浏览器不支持全屏')
+        let $icon = $(this).children('.fa')
+        $icon.hasClass('fa-expand') ?
+            $icon.removeClass('fa-expand').addClass('fa-compress') &&
+            document.body[true === fullScreenPrefix ? 'requestFullscreen' : `${fullScreenPrefix}RequestFullScreen`]()
+            :
+            $icon.removeClass('fa-compress').addClass('fa-expand') &&
+            document[true === fullScreenPrefix ? 'exitFullscreen' : `${fullScreenPrefix}ExitFullscreen`]()
+    })
+
 
     //示范一个公告层
 //	layer.open({

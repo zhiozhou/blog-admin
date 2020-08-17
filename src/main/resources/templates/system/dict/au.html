@@ -5,7 +5,7 @@
         <div class="layout-page">
             <form class="layui-form" id="form" th:attr="action=${action}">
 
-                <div class="layui-tab" style="margin: 0;">
+                <div class="layui-tab" >
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/dict/list}" id="superior">字典列表</a></li>
                         <li class="layui-this" th:text="'/rest/save'==${action}?'添加字典':'修改字典'"></li>

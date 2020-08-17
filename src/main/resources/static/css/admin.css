@@ -10,7 +10,7 @@
     --text-color: #666;
     --text-color-hover: #333;
 
-    --border-color: #f2f3f5;
+    --border-color: #e6e6e6;
 
     --sider-background: #1f1f1f;
     --sider-background-active: #555;
@@ -196,15 +196,6 @@
     width: 10px;
 }
 
-#refresh-content > .fa {
-    transform: rotate(0deg);
-    transition: transform .12s;
-}
-
-#refresh-content:active .fa {
-    transform: rotate(180deg);
-}
-
 
 /* 用户组按钮 */
 #layout-header .layui-nav {
@@ -251,7 +242,6 @@
 #layout-tab {
     display: flex;
     flex-direction: column;
-    margin-top: 0;
     height: 100%;
     background: var(--component-background);
 }
@@ -431,6 +421,20 @@
     vertical-align: bottom;
 }
 
+.layui-tab{
+
+    margin-top: 0 !important;
+}
+
+.layui-tree {
+    min-height: 26px;
+    border: 1px solid var(--border-color);
+    padding: 5px 0;
+}
+
+.layui-tree-entry{
+    line-height: 17px;
+}
 
 /*富文本原字符开始不显示*/
 .tinymce {

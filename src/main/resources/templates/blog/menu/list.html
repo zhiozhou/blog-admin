@@ -2,6 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <style>
+
+        td {
+            user-select: none;
+        }
+
         .depth0 {
             padding-left: 21px;
         }
@@ -14,20 +19,12 @@
             padding-left: 63px;
         }
 
-        td {
-            user-select: none;
-        }
-
         .child-btn {
             cursor: pointer;
         }
 
         .child-btn > span {
             margin-left: 10px;
-        }
-
-        .refresh-btn {
-            float: right;
         }
     </style>
     <body>
@@ -103,7 +100,7 @@
                             }
                         },
                         {field: 'sort', title: '排序'},
-                        {title: '操作',  toolbar: '#ud'}
+                        {title: '操作', toolbar: '#ud'}
                     ]],
                     done: () => {
                         let parentId = $(`[data-id=${openId}]`).data('parent-id')
@@ -118,12 +115,10 @@
 
 
                 // 权限刷新
-                $('.refresh-btn').click(() => {
-                    httpPost({
-                        url: `${prefix}/rest/refresh`,
-                        cb: () => done
-                    })
-                })
+                $('.refresh-auth').click(() => httpPost({
+                    url: `${prefix}/rest/refresh`,
+                    cb: () => done
+                }))
 
 
                 // 子级列表 显示/隐藏
