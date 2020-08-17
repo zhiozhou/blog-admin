@@ -321,6 +321,7 @@
         z-index: 100;
     }
 
+
     #layout-container {
         left: 0;
         transition: transform .3s cubic-bezier(0.7, 0.3, 0.1, 1);;
@@ -348,6 +349,11 @@
 
     #root.lose-sider .sider-trigger-icon:after {
         transform: translateY(-5px) rotate(-45deg);
+    }
+
+
+    #full-screen {
+        display: none;
     }
 
 }
@@ -421,7 +427,7 @@
     vertical-align: bottom;
 }
 
-.layui-tab{
+.layui-tab {
 
     margin-top: 0 !important;
 }
@@ -432,7 +438,7 @@
     padding: 5px 0;
 }
 
-.layui-tree-entry{
+.layui-tree-entry {
     line-height: 17px;
 }
 
