@@ -2,52 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-iframe">
+        <div class="layout-page">
             <form class="layui-form-pane  ">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">名称：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${o.name}" class="layui-input" disabled>
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li><a th:href="@{/system/role/list}">角色列表</a></li>
+                        <li class="layui-this">角色详情</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">名称：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${o.name}" class="layui-input" disabled>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色标识：</label>
+                            <div class="layui-input-block">
+                                <input type="text" th:value="${o.key}" class="layui-input" disabled>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">菜单权限：</label>
+                            <div class="layui-input-block">
+                                <div id="menuTree"></div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" th:value="${o.stateStr}" disabled>
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea th:text="${o.remark}" class="layui-textarea" disabled></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">角色标识：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${o.key}" class="layui-input" disabled>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">菜单权限：</label>
-                    <div class="layui-input-block">
-                        <div id="menuTree"></div>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态：</label>
-                    <div class="layui-input-block">
-                        <input type="text"  class="layui-input" th:value="${o.stateStr}" disabled>
-                    </div>
-
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注：</label>
-                    <div class="layui-input-block">
-                        <textarea  th:text="${o.remark}" class="layui-textarea" disabled></textarea>
-                    </div>
-
-                </div>
-
-
             </form>
         </div>
         <div th:include="include :: footer"></div>
         <script th:inline="javascript">
 
-            layui.use('tree',  ()=> {
+            layui.use('tree', () => {
                 const {tree} = layui,
                     menuTree = [{
                         id: 0,
@@ -57,10 +62,10 @@
 
                 // 菜单树
                 tree.render({
-                    id:'menuTree',
+                    id: 'menuTree',
                     elem: '#menuTree',
                     data: formatTree(menuTree),
-                    text: { none: '无菜单权限'}
+                    text: {none: '无菜单权限'}
                 })
 
             })

@@ -401,7 +401,7 @@
     border-color: var(--primary-color);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 576px) {
     .layui-form-pane .layui-form-label {
         width: 80px;
     }

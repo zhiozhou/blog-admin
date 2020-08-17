@@ -2,54 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-iframe">
-            <form class="layui-form  " id="form" th:attr="action=${action}">
-                <input type="hidden" name="id" th:value="${o.id}">
+        <div class="layout-page">
+            <form class="layui-form" id="form" th:attr="action=${action}">
+                <div class="layui-tab" style="margin: 0;">
+                    <ul class="layui-tab-title">
+                        <li><a th:href="@{/system/role/list}" id="superior">角色列表</a></li>
+                        <li class="layui-this" th:text="'/rest/save'==${action}?'添加角色':'修改角色'"></li>
+                    </ul>
+                    <input type="hidden" name="id" th:value="${o.id}">
+                    <div class="layui-tab-content">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">名称：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" lay-verify="required" th:value="${o.name}"
+                                       class="layui-input" placeholder="请输入名称" autocomplete="off">
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">名称：</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="name"  lay-verify="required" th:value="${o.name}" class="layui-input" placeholder="请输入名称" autocomplete="off"  >
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色标识：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="key" id="key" th:value="${o.key}" class="layui-input"
+                                       placeholder="默认为名称拼音" autocomplete="off">
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">角色标识：</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="key" id="key" th:value="${o.key}" class="layui-input" placeholder="默认为名称拼音"autocomplete="off">
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">菜单权限：</label>
+                            <div class="layui-input-block">
+                                <div id="menuTree"></div>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">菜单权限：</label>
-                    <div class="layui-input-block">
-                        <div id="menuTree"></div>
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态：</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="state" th:each="state:${stateList}"
+                                       th:value="${state.code}" th:title="${state.label}" th:field="${o.state}">
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态：</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="state" th:each="state:${stateList}"
-                               th:value="${state.code}" th:title="${state.label}" th:field="${o.state}">
-                    </div>
-                </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea name="remark" th:text="${o.remark}" placeholder="请输入备注"
+                                          class="layui-textarea"></textarea>
+                            </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注：</label>
-                    <div class="layui-input-block">
-                        <textarea name="remark" th:text="${o.remark}" placeholder="请输入备注" class="layui-textarea"></textarea>
-                    </div>
+                        </div>
 
-                </div>
-
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">
-                            <i class="fa fa-repeat"></i>
-                            重置
-                        </button>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">
+                                    <i class="fa fa-repeat"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -65,26 +75,26 @@
                 menuList = [[${o.menuList}]]        // 当前用户持有的菜单列表
 
 
-            layui.use(['form','tree', 'jquery'],  ()=> {
+            layui.use(['form', 'tree', 'jquery'], () => {
                 const {form, tree, jquery: $} = layui
 
                 // 菜单树
                 tree.render({
-                    id:'menuTree',
+                    id: 'menuTree',
                     elem: '#menuTree',
                     data: formatTree(menuTree),
-                    showCheckbox:true
+                    showCheckbox: true
                 })
 
                 //监听提交
-                form.on('submit(submit)',  (obj) => {
+                form.on('submit(submit)', (obj) => {
 
-                    let {field:data} = obj,
+                    let {field: data} = obj,
                         index = 0
 
                     delete data.layuiTreeCheck_0
                     for (param in data) {
-                        if(/layuiTreeCheck*/.test(param)){
+                        if (/layuiTreeCheck*/.test(param)) {
                             data[`menuList[${index++}].id`] = data[param]
                             delete data[param]
                         }
@@ -104,7 +114,7 @@
                         item.spread = hasMenu(item.id)
                         item.children = item.childList
                         formatTree(item.children)
-                    }else{
+                    } else {
                         // 只选择最底层,避免父节点被选中子节点则全部选中
                         item.checked = hasMenu(item.id)
                     }
@@ -114,14 +124,14 @@
                 return tree
             }
 
-            function hasMenu(id){
-                if(0 == id){
+            function hasMenu(id) {
+                if (0 == id) {
                     return true
-                }else if(!menuList){
+                } else if (!menuList) {
                     return false
                 }
-                for(menu of menuList){
-                    if(id === menu.id){
+                for (menu of menuList) {
+                    if (id === menu.id) {
                         return true
                     }
                 }
