@@ -44,8 +44,8 @@
                     </ul>
                     <ul class="layui-nav" lay-filter="user-aux-group">
                         <li class="layui-nav-item">
-                            <a href="#" data-id='user-info' data-url="user-info.html" data-text="用户信息">
-                                [[${user.role.name}]]
+                            <a href="#" data-id='user-info' th:attr="data-url=@{system/user/detail/{userId}(userId=${user.id})}" data-text="用户信息">
+                                [[${user.name}]]
                             </a>
                         </li>
                         <li class="layui-nav-item">

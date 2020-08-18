@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
+    <style>
+        body{
+            background: var(--component-background);
+        }
+    </style>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form-pane  ">
+            <form class="layui-form-pane">
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
@@ -16,6 +21,13 @@
                     <label class="layui-form-label">姓名：</label>
                     <div class="layui-input-block">
                         <input type="text" th:value="${ o.name }" class="layui-input" disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${ o.role.name }" class="layui-input" disabled>
                     </div>
                 </div>
 
@@ -33,12 +45,6 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">修改时间：</label>
-                    <div class="layui-input-block">
-                        <input type="text" th:value="${ o.gmtModified }" class="layui-input date-field" disabled>
-                    </div>
-                </div>
 
             </form>
         </div>

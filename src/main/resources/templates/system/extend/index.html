@@ -43,7 +43,7 @@
                         {field: 'comment', title: '描述'}
                     ]]
 
-                tableRender(table,{cols,url:`${prefix}/rest/table/list`})
+                tableRender(table, {cols, url: `${prefix}/rest/table/list`})
 
                 $('.coffee-btn').click(() => {
                     let {data: list} = table.checkStatus('table')

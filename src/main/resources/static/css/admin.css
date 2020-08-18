@@ -422,9 +422,16 @@
     text-overflow: inherit;
 }
 
+.layui-table-col-special  .laytable-cell-checkbox{
+    width: 48px;
+}
+
 .layui-btn-sm > .fa {
     line-height: inherit;
     vertical-align: bottom;
+}
+.layui-form-radio{
+    margin: 6px 0 0 10px;
 }
 
 .layui-tab {
