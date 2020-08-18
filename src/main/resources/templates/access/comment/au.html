@@ -3,11 +3,11 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form  " id="form" th:attr="action=${action}">
-                <input type="hidden" name="id" th:value="${o.id}">
-                <input type="hidden" name="repliedComment.id" th:if="${null != o.repliedComment}" th:value="${o.repliedComment.id}">
+            <form class="layui-form  " id="form" th:attr="action=${_action}">
+                <input type="hidden" name="id" th:value="${_vo.id}">
+                <input type="hidden" name="repliedComment.id" th:if="${null != _vo.repliedComment}" th:value="${_vo.repliedComment.id}">
                 <div class="layui-form-item">
-                    <textarea name="content" th:text="${o.content}" placeholder="请输入回复内容" class="layui-textarea" maxlength="256" rows="6"></textarea>
+                    <textarea name="content" th:text="${_vo.content}" placeholder="请输入回复内容" class="layui-textarea" maxlength="256" rows="6"></textarea>
                 </div>
 
                 <div class="layui-form-item">
@@ -23,7 +23,7 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="none">
-            const prefix =  `${gate}access/comment`
+            const prefix =  `${_gate}access/comment`
 
             layui.use(['form', 'jquery'],  ()=> {
                 const {form, jquery: $} = layui

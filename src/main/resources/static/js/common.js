@@ -1,5 +1,5 @@
 layui.config({
-    base: gate + 'plugin/layui/extend/'
+    base: _gate + 'plugin/layui/extend/'
 })
 
 /**

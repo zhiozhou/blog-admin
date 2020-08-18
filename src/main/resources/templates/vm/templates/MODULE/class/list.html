@@ -7,7 +7,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline">
 #set($left="${")
-                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=$left m.permissionPrefix+':add'}>
+                        <a class="layui-btn layui-btn-sm layui-btn-normal add-btn" shiro:hasPermission=$left _module.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i> 添加
                         </a>
                     </div>
@@ -19,7 +19,7 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script th:inline="none">
-            const prefix = `${gate}${app.module}/${table.objectName}`
+            const prefix = `${_gate}${app.module}/${table.objectName}`
 
 
             layui.use(['table', 'jquery'], () => {

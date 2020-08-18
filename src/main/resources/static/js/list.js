@@ -5,7 +5,7 @@ layui.use(['table', 'form', 'jquery'], () => {
      * 使用iframe方式打开添加页面
      */
     $('.add-btn').click(() => {
-        newFrame(`添加${m.name}`, `${prefix}/add`)
+        newFrame(`添加${_module.name}`, `${prefix}/add`)
     })
 
     /**
@@ -89,10 +89,10 @@ function tableRender(table, options) {
 function iframeAction({data, event: action}) {
     switch (action) {
         case 'detail':
-            newFrame(`${m.name}详情`, `${prefix}/detail/${data.id}`)
+            newFrame(`${_module.name}详情`, `${prefix}/detail/${data.id}`)
             break
         case 'update':
-            newFrame(`修改${m.name}`, `${prefix}/update/${data.id}`)
+            newFrame(`修改${_module.name}`, `${prefix}/update/${data.id}`)
             break
         case 'remove':
             return removeAction(data)
@@ -119,7 +119,7 @@ function pageAction({data, event: action}) {
  * 通用删除操作
  */
 function removeAction(data) {
-    layer.confirm(`确认移除该${m.name}吗`, {
+    layer.confirm(`确认移除该${_module.name}吗`, {
         btn: ['确定', '取消'],
         shade: [0.1, '#fff']
     }, (index) => {

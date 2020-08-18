@@ -3,19 +3,19 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form" id="form" th:attr="action=${action}">
+            <form class="layui-form" id="form" th:attr="action=${_action}">
 
                 <div class="layui-tab" >
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/dict/list}" id="superior">字典列表</a></li>
-                        <li class="layui-this" th:text="'/rest/save'==${action}?'添加字典':'修改字典'"></li>
+                        <li class="layui-this" th:text="'/rest/save'==${_action}?'添加字典':'修改字典'"></li>
                     </ul>
-                    <input type="hidden" name="id" th:value="${o.id}">
+                    <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="name" lay-verify="required" th:value="${ o.name }"
+                                <input type="text" name="name" lay-verify="required" th:value="${ _vo.name }"
                                        class="layui-input" placeholder="请输入名称" autocomplete="off">
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">字典标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="key" lay-verify="required" th:value="${ o.key }"
+                                <input type="text" name="key" lay-verify="required" th:value="${ _vo.key }"
                                        class="layui-input" placeholder="请输入字典标识" autocomplete="off">
                             </div>
                         </div>
@@ -31,15 +31,15 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="state" value="0" th:field="${o.state}" title="正常">
-                                <input type="radio" name="state" value="11" th:field="${o.state}" title="冻结">
+                                <input type="radio" name="state" value="0" th:field="${_vo.state}" title="正常">
+                                <input type="radio" name="state" value="11" th:field="${_vo.state}" title="冻结">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea name="remark" th:text="${o.remark}" placeholder="请输入备注"
+                                <textarea name="remark" th:text="${_vo.remark}" placeholder="请输入备注"
                                           class="layui-textarea"></textarea>
                             </div>
                         </div>
@@ -75,10 +75,10 @@
             </div>
         </script>
         <script th:inline="javascript">
-            const dictData = [[${o.dataList}]]
+            const dictData = [[${_vo.dataList}]]
         </script>
         <script th:inline="none">
-            const prefix = `${gate}system/dict`,
+            const prefix = `${_gate}system/dict`,
                 typeMap = {
                     0: {css: 'layui-bg-blue', info: '正常'},
                     1: {css: 'layui-btn-primary', info: '预留'},

@@ -34,7 +34,7 @@ public class DictController extends BaseController {
     @RequiresPermissions("system:dict:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        supplyAdd(model, new DictDTO().setState(0).setDataList(Lists.newArrayList(new DictDataDTO().setType(0).setTop(0))));
+        super.add(model, new DictDTO().setState(0).setDataList(Lists.newArrayList(new DictDataDTO().setType(0).setTop(0))));
         return "system/dict/au";
     }
 
@@ -45,7 +45,7 @@ public class DictController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyUpdate(model, dtoVO.getData());
+        super.update(model, dtoVO.getData());
         return "system/dict/au";
     }
 
@@ -56,14 +56,14 @@ public class DictController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyDetail(model, dtoVO.getData());
+        super.detail(model, dtoVO.getData());
         return "system/dict/detail";
     }
 
     @RequiresPermissions("system:dict:list")
     @RequestMapping("/list")
     public String login(Model model) {
-        supplyList(model, module);
+        super.list(model, module);
         return "system/dict/list";
     }
 }

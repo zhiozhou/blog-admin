@@ -4,10 +4,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.access.accessLog.domain.dto.AccessLogDTO;
 import priv.zhou.module.access.accessLog.service.IAccessLogService;
 
@@ -23,7 +22,7 @@ public class AccessLogController extends BaseController {
 
     private final IAccessLogService accessLogService;
 
-    private final Module module = new Module("访问日志","access:log");
+    private final Module module = new Module("访问日志", "access:log");
 
     public AccessLogController(IAccessLogService accessLogService) {
         this.accessLogService = accessLogService;
@@ -35,14 +34,14 @@ public class AccessLogController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyDetail(model, dtoVO.getData());
+        super.detail(model, dtoVO.getData());
         return "access/log/detail";
     }
 
 
     @RequestMapping("/list")
     public String list(Model model) {
-        supplyList(model, module);
+        super.list(model, module);
         return "access/log/list";
     }
 }

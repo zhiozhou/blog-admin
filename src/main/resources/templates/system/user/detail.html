@@ -13,35 +13,35 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.username }" class="layui-input" disabled>
+                        <input type="text" th:value="${ _vo.username }" class="layui-input" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">姓名：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.name }" class="layui-input" disabled>
+                        <input type="text" th:value="${ _vo.name }" class="layui-input" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.role.name }" class="layui-input" disabled>
+                        <input type="text" th:value="${ _vo.role.name }" class="layui-input" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
-                        <input type="text"  class="layui-input" th:value="${o.stateStr}" disabled>
+                        <input type="text"  class="layui-input" th:value="${_vo.stateStr}" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">创建时间：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
+                        <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field" disabled>
                     </div>
                 </div>
 

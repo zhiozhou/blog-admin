@@ -3,15 +3,15 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form  " id="form" th:attr="action=${action}">
-                <input type="hidden" name="id" th:value="${o.id}">
+            <form class="layui-form  " id="form" th:attr="_action=${_action}">
+                <input type="hidden" name="id" th:value="${_vo.id}">
 #set($left="${")
 #foreach ($column in $table.columnList)
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">${column.comment}：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="${column.attrName}" lay-verify="required" th:value="$left o.${column.attrName} }" class="layui-input" placeholder="请输入${column.comment}" autocomplete="off"  >
+                        <input type="text" name="${column.attrName}" lay-verify="required" th:value="$left _vo.${column.attrName} }" class="layui-input" placeholder="请输入${column.comment}" autocomplete="off"  >
                     </div>
                 </div>
 #end
@@ -29,7 +29,7 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="none">
-            const prefix =  `${gate}${app.module}/${table.objectName}`
+            const prefix =  `${_gate}${app.module}/${table.objectName}`
 
             layui.use(['form', 'jquery'],  ()=> {
                 const {form, jquery: $} = layui

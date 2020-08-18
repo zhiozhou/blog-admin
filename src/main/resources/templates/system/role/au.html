@@ -3,18 +3,18 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form" id="form" th:attr="action=${action}">
+            <form class="layui-form" id="form" th:attr="action=${_action}">
                 <div class="layui-tab" >
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/role/list}" id="superior">角色列表</a></li>
-                        <li class="layui-this" th:text="'/rest/save'==${action}?'添加角色':'修改角色'"></li>
+                        <li class="layui-this" th:text="'/rest/save'==${_action}?'添加角色':'修改角色'"></li>
                     </ul>
-                    <input type="hidden" name="id" th:value="${o.id}">
+                    <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="name" lay-verify="required" th:value="${o.name}"
+                                <input type="text" name="name" lay-verify="required" th:value="${_vo.name}"
                                        class="layui-input" placeholder="请输入名称" autocomplete="off">
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">角色标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="key" id="key" th:value="${o.key}" class="layui-input"
+                                <input type="text" name="key" id="key" th:value="${_vo.key}" class="layui-input"
                                        placeholder="默认为名称拼音" autocomplete="off">
                             </div>
                         </div>
@@ -38,14 +38,14 @@
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
                                 <input type="radio" name="state" th:each="state:${stateList}"
-                                       th:value="${state.code}" th:title="${state.label}" th:field="${o.state}">
+                                       th:value="${state.code}" th:title="${state.label}" th:field="${_vo.state}">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea name="remark" th:text="${o.remark}" placeholder="请输入备注"
+                                <textarea name="remark" th:text="${_vo.remark}" placeholder="请输入备注"
                                           class="layui-textarea"></textarea>
                             </div>
 
@@ -66,13 +66,13 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
-            const prefix = `${gate}system/role`,
+            const prefix = `${_gate}system/role`,
                 menuTree = [{
                     id: 0,
                     name: '根目录',
                     childList: [[${menuTree}]]
                 }],
-                menuList = [[${o.menuList}]]        // 当前用户持有的菜单列表
+                menuList = [[${_vo.menuList}]]        // 当前用户持有的菜单列表
 
 
             layui.use(['form', 'tree', 'jquery'], () => {

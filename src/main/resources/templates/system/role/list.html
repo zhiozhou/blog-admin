@@ -7,7 +7,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
                         <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
-                           shiro:hasPermission=${m.permissionPrefix+':add'}>
+                           shiro:hasPermission=${_module.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
@@ -43,7 +43,7 @@
             const stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
-            const prefix = `${gate}system/role`
+            const prefix = `${_gate}system/role`
 
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,

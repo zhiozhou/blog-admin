@@ -35,28 +35,28 @@
 
         <script type="text/html" id="comment">
             <a class="layui-btn layui-btn-sm" lay-event="detail"
-               shiro:hasPermi=ssion=${m.permissionPrefix+':detail'}>查看</a>
+               shiro:hasPermi=ssion=${_module.permissionPrefix+':detail'}>查看</a>
             {{#  if(d.state == 1 ){ }}
             {{#  if(d.fromVisitor.id != 0 ){ }}
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="reply"
-               shiro:hasPermission=${m.permissionPrefix+':reply'}>回复</a>
+               shiro:hasPermission=${_module.permissionPrefix+':reply'}>回复</a>
             {{#  } else { }}
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="update"
-               shiro:hasPermission=${m.permissionPrefix+':reply'}>修改</a>
+               shiro:hasPermission=${_module.permissionPrefix+':reply'}>修改</a>
             {{#  } }}
             {{#  } else if( d.state == 0) { }}
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass"
-               shiro:hasPermission=${m.permissionPrefix+':check'}>通过</a>
+               shiro:hasPermission=${_module.permissionPrefix+':check'}>通过</a>
             {{#  } }}
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
-               shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
+               shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
         </script>
         <div th:include="include :: list-footer"></div>
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
-            const prefix = `${gate}access/comment`
+            const prefix = `${_gate}access/comment`
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
@@ -82,7 +82,7 @@
                 function toolHandle({data, event}) {
                     switch (event) {
                         case 'reply':
-                            newFrame(`回复${m.name}`, `${prefix}/reply/${data.id}`, ['700px', '300px'])
+                            newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`, ['700px', '300px'])
                             break
                         case 'pass':
                             httpPost({

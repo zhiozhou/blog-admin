@@ -54,11 +54,11 @@
                 form.on('submit(login)', ({field: data}) => {
                     data.password = rsaUtil.encrypt(data.password)
                     return httpPost({
-                        url: `${gate}system/user/rest/login`,
+                        url: `${_gate}system/user/rest/login`,
                         data,
                         cb: () => {
                             loading()
-                            location.href = `${gate}index`
+                            location.href = `${_gate}index`
                         }
                     })
                 })

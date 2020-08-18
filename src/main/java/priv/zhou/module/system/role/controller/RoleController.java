@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.menu.controller.MenuController;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
@@ -41,8 +41,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("system:role:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        supplyAdd(model, new RoleDTO().setState(0));
-
+        super.add(model, new RoleDTO().setState(0));
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/au";
@@ -55,7 +54,7 @@ public class RoleController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyUpdate(model, dtoVO.getData());
+        super.update(model, dtoVO.getData());
 
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
@@ -72,14 +71,14 @@ public class RoleController extends BaseController {
         RoleDTO roleDTO = dtoVO.getData();
         roleDTO.setMenuList(IMenuService.toTree(roleDTO.getMenuList()))
                 .setStateStr(dictService.getData(new DictDTO().setKey(SYSTEM_ROLE_STATE).setCode(roleDTO.getState())).getData().getLabel());
-        supplyDetail(model, roleDTO);
+        super.detail(model, roleDTO);
         return "system/role/detail";
     }
 
     @RequiresPermissions("system:role:list")
     @RequestMapping("/list")
     public String list(Model model) {
-        supplyList(model, module);
+        super.list(model, module);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/list";

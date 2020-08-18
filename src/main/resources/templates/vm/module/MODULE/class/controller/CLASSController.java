@@ -31,7 +31,7 @@ public class ${table.className}Controller extends BaseController {
 
     @RequestMapping("/add")
     public String add(Model model) {
-        fillAdd(model, new ${table.className}DTO());
+        super.add(model, new ${table.className}DTO());
 
         return "${app.module}/${table.objectName}/au";
     }
@@ -43,7 +43,7 @@ public class ${table.className}Controller extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillUpdate(model, dtoVO.getData());
+        super.update(model, dtoVO.getData());
 
         return "${app.module}/${table.objectName}/au";
     }
@@ -54,14 +54,14 @@ public class ${table.className}Controller extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        fillDetail(model, dtoVO.getData());
+        super.detail(model, dtoVO.getData());
 
         return "${app.module}/${table.objectName}/detail";
     }
 
     @RequestMapping("/list")
     public String list(Model model) {
-        fillList(model, module);
+        super.list(model, module);
 
         return "${app.module}/${table.objectName}/list";
     }

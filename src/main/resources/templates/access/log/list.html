@@ -33,7 +33,7 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script th:inline="none">
-            const prefix = `${gate}access/log`
+            const prefix = `${_gate}access/log`
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[

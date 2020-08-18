@@ -12,7 +12,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
                         <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
-                           shiro:hasPermission=${m.permissionPrefix+':add'}>
+                           shiro:hasPermission=${_module.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
@@ -51,23 +51,23 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="user-rud">
-            <a class="layui-btn layui-btn-sm" lay-event="detail" shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
+            <a class="layui-btn layui-btn-sm" lay-event="detail" shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
             {{#  if(d.state != 12){ }}
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"  shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="resetPwd"  shiro:hasPermission=${m.permissionPrefix+':resetPwd'}>修改密码</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"  shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="resetPwd"  shiro:hasPermission=${_module.permissionPrefix+':resetPwd'}>修改密码</a>
                 {{#  if(d.state != 11){ }}
-                    <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="freeze"  shiro:hasPermission=${m.permissionPrefix+':freeze'}>冻结</a>
+                    <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="freeze"  shiro:hasPermission=${_module.permissionPrefix+':freeze'}>冻结</a>
                 {{# }else{ }}
-                    <a class="layui-btn layui-btn-sm" lay-event="unfreeze" shiro:hasPermission=${m.permissionPrefix+':freeze'}>解冻</a>
+                    <a class="layui-btn layui-btn-sm" lay-event="unfreeze" shiro:hasPermission=${_module.permissionPrefix+':freeze'}>解冻</a>
                 {{#  } }}
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove" shiro:hasPermission=${m.permissionPrefix+':remove'}>移除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove" shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
             {{#  } }}
         </script>
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
-            const prefix = `${gate}system/user`
+            const prefix = `${_gate}system/user`
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui,
@@ -93,7 +93,7 @@
                 table.on('tool(table)', ({data, event}) => {
                     switch (event) {
                         case 'resetPwd':
-                            return newFrame(`修改密码`, `${gate}/system/user/resetPwd/${data.id}`)
+                            return newFrame(`修改密码`, `${_gate}/system/user/resetPwd/${data.id}`)
                         case 'freeze':
                             return httpPost({url:`${prefix}/rest/freeze/${data.id}`,cb:()=>done(reloadTable())})
                         case 'unfreeze':
@@ -105,7 +105,7 @@
 
                 $('body').on('click', '.role-btn', ({target}) => {
                     let id = $(target).data('id')
-                    newFrame(`角色详情`, `${gate}/system/role/detail/${id}`)
+                    newFrame(`角色详情`, `${_gate}/system/role/detail/${id}`)
                 })
             })
         </script>

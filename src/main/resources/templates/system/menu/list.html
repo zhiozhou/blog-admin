@@ -3,15 +3,28 @@
     <head th:include="include :: header"></head>
     <style>
         .depth0 {
-            padding-left: 14px;
+            padding-left: 19px;
+        }
+
+        .depth1 {
+            padding-left: 19px;
         }
 
         .depth2 {
-            padding-left: 28px;
+            padding-left: 38px;
         }
 
         td {
             user-select: none;
+        }
+
+        td i {
+            font-style: inherit;
+        }
+
+        td i:before {
+            display: inline-block;
+            width: 14px;
         }
 
         .child-btn {
@@ -27,12 +40,13 @@
             <div class="layui-form-item">
                 <div class="layui-inline  ">
                     <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
-                       shiro:hasPermission=${m.permissionPrefix+':add'}>
+                       shiro:hasPermission=${_module.permissionPrefix+':add'}>
                         <i class="fa fa-plus"></i>
                         添加
                     </a>
 
-                    <a class="layui-btn layui-btn-sm refresh-btn" shiro:hasPermission=${m.permissionPrefix+':refresh'}>
+                    <a class="layui-btn layui-btn-sm refresh-btn"
+                       shiro:hasPermission=${_module.permissionPrefix+':refresh'}>
                         <i class="fa fa-refresh"></i>
                         刷新权限
                     </a>
@@ -49,7 +63,7 @@
         </script>
         <script th:inline="none">
             var openId
-            const prefix = `${gate}system/menu`
+            const prefix = `${_gate}system/menu`
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui
@@ -70,7 +84,8 @@
                         return {code, msg, "data": dest}
                     },
                     cols: [[
-                        { field: 'name', title: '名称', minWidth:'150',align: 'left',
+                        {
+                            field: 'name', title: '名称', minWidth: '150', align: 'left',
                             templet: ({id, depth, parentId, childList, name}) => {
                                 let div = $(`<i><span>${name}</span></i>`)
                                     .addClass(`depth${depth}`)
@@ -79,22 +94,24 @@
                                 return div.prop('outerHTML')
                             }
                         },
-                        {field: 'path', title: '跳转地址', minWidth:'150',},
-                        {field: 'key', title: '权限标识',  minWidth:'150',},
-                        {field: 'type', title: '类型',
+                        {field: 'path', title: '跳转地址', minWidth: '150',},
+                        {field: 'key', title: '权限标识', minWidth: '150',},
+                        {
+                            field: 'type', title: '类型',
                             templet: ({type}) => {
                                 let {label, css} = typeMap[type]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
-                        {field: 'state', title: '状态',
+                        {
+                            field: 'state', title: '状态',
                             templet: ({state}) => {
                                 let {label, css} = stateMap[state]
                                 return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
                             }
                         },
                         {field: 'sort', title: '排序'},
-                        {title: '操作',    toolbar: '#ud'}
+                        {title: '操作', toolbar: '#ud'}
                     ]],
                     done: () => {
                         let parentId = $(`[data-id=${openId}]`).data('parent-id')
@@ -110,8 +127,8 @@
                 // 权限刷新
                 $('.refresh-btn').click(() => {
                     httpPost({
-                        url:`${prefix}/rest/refresh`,
-                        cb:()=>done()
+                        url: `${prefix}/rest/refresh`,
+                        cb: () => done()
                     })
                 })
 

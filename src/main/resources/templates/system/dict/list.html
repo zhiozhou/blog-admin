@@ -7,7 +7,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
                         <a class="layui-btn layui-btn-sm layui-btn-normal add-go-btn"
-                           shiro:hasPermission=${m.permissionPrefix+':add'}>
+                           shiro:hasPermission=${_module.permissionPrefix+':add'}>
                             <i class="fa fa-plus"></i>
                             添加
                         </a>
@@ -43,7 +43,7 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script th:inline="none">
-            const prefix = `${gate}system/dict`
+            const prefix = `${_gate}system/dict`
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui,
@@ -80,7 +80,7 @@
 
                 function wrapHandle(tool) {
                     if ('remove' === tool.event) {
-                        layer.confirm(`确认移除该${m.name}吗`, {
+                        layer.confirm(`确认移除该${_module.name}吗`, {
                             btn: ['确定', '取消'],
                             shade: [0.1, '#fff']
                         }, () => {

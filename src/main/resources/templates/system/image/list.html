@@ -60,13 +60,13 @@
             <div class="tool">
                 <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">Copy URL</a>
                 <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
-                   shiro:hasPermission=${m.permissionPrefix+':remove'}>Remove</a>
+                   shiro:hasPermission=${_module.permissionPrefix+':remove'}>Remove</a>
             </div>
         </script>
 
         <script th:src="@{/js/au.js}"></script>
         <script th:inline="none">
-            const prefix = `${gate}system/image`
+            const prefix = `${_gate}system/image`
 
             layui.use(['table', 'jquery', 'upload', 'form'], () => {
                     const {table, jquery: $, upload, form} = layui,
@@ -98,9 +98,9 @@
                         isCompress = false
                     const uploader = upload.render({
                         elem: '#image-add',
-                        url: uploadURL + 'upload/multipart',
+                        url: _upload.url + 'upload/multipart',
                         data: {
-                            prefix: uploadPrefix
+                            prefix: _upload.prefix
                         },
                         auto: false,
                         size: 16384,

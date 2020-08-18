@@ -8,18 +8,18 @@
     </style>
     <body>
         <div class="layout-page">
-            <form class="layui-form" id="form" th:attr="action=${action}">
+            <form class="layui-form" id="form" th:attr="action=${_action}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/blog/blog/list}" id="superior">博客列表</a></li>
-                        <li class="layui-this"  th:text="'/rest/save'==${action}?'添加博客':'修改博客'"></li>
+                        <li class="layui-this"  th:text="'/rest/save'==${_action}?'添加博客':'修改博客'"></li>
                     </ul>
-                    <input type="hidden" name="id" th:value="${o.id}">
+                    <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">标题：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="title" lay-verify="required" th:value="${ o.title }" class="layui-input" placeholder="请输入标题" autocomplete="off" maxlength="64">
+                                <input type="text" name="title" lay-verify="required" th:value="${ _vo.title }" class="layui-input" placeholder="请输入标题" autocomplete="off" maxlength="64">
                             </div>
                         </div>
 
@@ -27,7 +27,7 @@
                             <label class="layui-form-label">类型：</label>
                             <div class="layui-input-block">
                                 <select name="type"  lay-search="" lay-filter="type">
-                                    <option th:each="type:${typeList}" th:value="${type.key}" th:field="${o.type}" th:text="${type.name}"></option>
+                                    <option th:each="type:${typeList}" th:value="${type.key}" th:field="${_vo.type}" th:text="${type.name}"></option>
                                 </select>
                             </div>
                         </div>
@@ -35,21 +35,21 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">内容：</label>
                             <div class="layui-input-block">
-                                <textarea name="content" rows="25" th:text="${o.content}" class="layui-textarea"></textarea>
+                                <textarea name="content" rows="25" th:text="${_vo.content}" class="layui-textarea"></textarea>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">预览：</label>
                             <div class="layui-input-block">
-                                <textarea th:text="${o.preview}" id="preview" name="preview" class="layui-textarea"  maxlength="256"></textarea>
+                                <textarea th:text="${_vo.preview}" id="preview" name="preview" class="layui-textarea"  maxlength="256"></textarea>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">预览图：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="previewImg" th:value="${ o.previewImg }" class="layui-input" placeholder="请输入预览图" maxlength="256">
+                                <input type="text" name="previewImg" th:value="${ _vo.previewImg }" class="layui-input" placeholder="请输入预览图" maxlength="256">
                             </div>
                         </div>
 
@@ -57,7 +57,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea name="remark" th:text="${o.remark}" class="layui-textarea"  maxlength="256"></textarea>
+                                <textarea name="remark" th:text="${_vo.remark}" class="layui-textarea"  maxlength="256"></textarea>
                             </div>
                         </div>
 
@@ -77,10 +77,10 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
-            const type = [[${o.type}]]
+            const type = [[${_vo.type}]]
         </script>
         <script th:inline="none">
-            const prefix =  `${gate}blog/blog`
+            const prefix =  `${_gate}blog/blog`
 
             layui.use(['form','jquery'],  ()=> {
                 const {form,jquery: $} = layui

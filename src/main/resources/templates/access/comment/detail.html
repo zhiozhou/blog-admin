@@ -3,49 +3,49 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form-pane" id="form" th:attr="action=${action}">
-                <input type="hidden" name="id" th:value="${o.id}">
+            <form class="layui-form-pane" id="form" th:attr="action=${_action}">
+                <input type="hidden" name="id" th:value="${_vo.id}">
                 <div class="layui-tab-content">
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">博客：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ o.blog.title }" class="layui-input" disabled>
+                            <input type="text" th:value="${ _vo.blog.title }" class="layui-input" disabled>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">访客：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ o.fromVisitor.nickname }" class="layui-input" disabled>
+                            <input type="text" th:value="${ _vo.fromVisitor.nickname }" class="layui-input" disabled>
                         </div>
                     </div>
 
-                    <div class="layui-form-item" th:if="${null != o.repliedComment}">
+                    <div class="layui-form-item" th:if="${null != _vo.repliedComment}">
                         <label class="layui-form-label">父级评论：</label>
                         <div class="layui-input-block">
-                            <textarea th:text="${o.repliedComment.content }" class="layui-textarea" disabled></textarea>
+                            <textarea th:text="${_vo.repliedComment.content }" class="layui-textarea" disabled></textarea>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">内容：</label>
                         <div class="layui-input-block">
-                            <textarea th:text="${o.content }" class="layui-textarea" disabled></textarea>
+                            <textarea th:text="${_vo.content }" class="layui-textarea" disabled></textarea>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">状态：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ o.stateStr }" class="layui-input" disabled>
+                            <input type="text" th:value="${ _vo.stateStr }" class="layui-input" disabled>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">创建时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
+                            <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field" disabled>
                         </div>
                     </div>
                 </div>

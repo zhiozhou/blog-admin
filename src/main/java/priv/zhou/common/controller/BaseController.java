@@ -1,25 +1,14 @@
 package priv.zhou.common.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.param.AppProperties;
 import priv.zhou.module.system.dict.service.IDictService;
 
+import java.util.HashMap;
+
 public class BaseController {
-
-    protected String MODULE_KEY = "m";
-
-    protected String OBJECT_KEY = "o";
-
-    protected String ACTION_KEY = "action";
-
-    protected String ADD_ACTION = "/rest/save";
-
-    protected String UPDATE_ACTION = "/rest/update";
-
-    protected String NOT_FOUNT = "404";
 
     @Autowired
     protected AppProperties appProperties;
@@ -27,41 +16,61 @@ public class BaseController {
     @Autowired
     protected IDictService dictService;
 
+    protected final String MODULE_KEY = "_module";
 
-    protected void supplyUpload(Model model)  {
-        model.addAttribute("uploadURL", appProperties.getFileService());
-        model.addAttribute("uploadPrefix", appProperties.getFileUploadPrefix());
-    }
+    protected final String VO_KEY = "_vo";
+
+    protected final String ACTION_KEY = "_action";
+
+    protected final String ADD_ACTION = "/rest/save";
+
+    protected final String UPDATE_ACTION = "/rest/update";
+
+    protected final String UPLOAD_PARAM_KEY = "_upload";
+
+    protected final String NOT_FOUNT = "404";
+
 
     /**
-     * 新增页填充 gate，提交后缀，dto对象
+     * 新增页填充 提交地址，vo对象
      */
-    protected void supplyAdd(Model model, Object object) {
-        supplyDetail(model, object);
+    protected void add(Model model, Object vo) {
+        model.addAttribute(VO_KEY, vo);
         model.addAttribute(ACTION_KEY, ADD_ACTION);
     }
 
     /**
-     * 修改页填充 gate，提交后缀，dto对象
+     * 修改页填充 提交地址，vo对象
      */
-    protected void supplyUpdate(Model model, Object object) {
-        supplyDetail(model, object);
+    protected void update(Model model, Object vo) {
+        model.addAttribute(VO_KEY, vo);
         model.addAttribute(ACTION_KEY, UPDATE_ACTION);
     }
 
     /**
-     * 详情页添新宠 gate,dto对象
+     * 详情页填充：vo对象
      */
-    protected void supplyDetail(Model model, Object object) {
-        model.addAttribute(OBJECT_KEY, object);
+    protected void detail(Model model, Object vo) {
+        model.addAttribute(VO_KEY, vo);
     }
 
 
     /**
-     * 列表页填充 模块对象，gate
+     * 列表页填充：模块对象
      */
-    protected void supplyList(Model model, Module module) {
+    protected void list(Model model, Module module) {
         model.addAttribute(MODULE_KEY, module);
+    }
+
+
+    /**
+     * 上传功能参数：{url，prefix}
+     */
+    protected void upload(Model model) {
+        model.addAttribute(UPLOAD_PARAM_KEY, new HashMap<String, Object>() {{
+            put("url", appProperties.getFileService());
+            put("prefix", appProperties.getFileUploadPrefix());
+        }});
     }
 
 }

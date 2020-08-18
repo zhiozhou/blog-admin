@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.module.blog.blogType.domain.dto.BlogTypeDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
@@ -39,7 +40,8 @@ public class MenuController extends BaseController {
     @RequiresPermissions("blog:menu:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        supplyAdd(model, new MenuDTO().setParentId(0).setType(0).setState(0));
+
+        super.add(model, new MenuDTO().setParentId(0).setType(0).setState(0));
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(FLAG)).getData()));
         model.addAttribute("typeList", dictService.dataList(new DictDTO().setKey(TYPE_KEY)).getData());
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());
@@ -53,7 +55,7 @@ public class MenuController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyUpdate(model, dtoVO.getData());
+        super.update(model, dtoVO.getData());
 
         model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(FLAG)).getData()));
         model.addAttribute("typeList", dictService.dataList(new DictDTO().setKey(TYPE_KEY)).getData());
@@ -64,7 +66,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("blog:menu:list")
     @RequestMapping("/list")
     public String login(Model model) {
-        supplyList(model, module);
+        super.list(model, module);
 
         model.addAttribute("typeMap", dictService.dataMap(new DictDTO().setKey(TYPE_KEY)).getData());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());

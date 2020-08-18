@@ -22,28 +22,28 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ o.name }" class="layui-input" disabled>
+                                <input type="text" th:value="${ _vo.name }" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">字典标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ o.key }" class="layui-input" disabled>
+                                <input type="text" th:value="${ _vo.key }" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${0 ==o.state?'正常':'冻结'}" class="layui-input" disabled>
+                                <input type="text" th:value="${0 ==_vo.state?'正常':'冻结'}" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea  th:text="${o.remark}" class="layui-textarea" disabled></textarea>
+                                <textarea  th:text="${_vo.remark}" class="layui-textarea" disabled></textarea>
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@
         </div>
         <div th:include="include :: footer"></div>
         <script th:inline="javascript">
-            const dictData = [[${o.dataList}]]
+            const dictData = [[${_vo.dataList}]]
         </script>
         <script th:inline="none">
             const typeMap = {

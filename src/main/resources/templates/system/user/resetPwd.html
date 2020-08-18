@@ -4,13 +4,13 @@
     <body>
         <div class="layout-iframe">
             <form class="layui-form" id="form" action="/rest/resetPwd">
-                <input type="hidden" name="id" th:value="${o.id}">
+                <input type="hidden" name="id" th:value="${_vo.id}">
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
                         <input type="text" name="username" class="layui-input layui-disabled"
-                               th:value="${ o.username }"/>
+                               th:value="${ _vo.username }"/>
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
-            const prefix = `${gate}system/user`
+            const prefix = `${_gate}system/user`
             layui.use(['form'], () => {
                 const {form} = layui
                 form.on('submit(submit)', IFRAME_SUBMIT)

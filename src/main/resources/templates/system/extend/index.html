@@ -7,7 +7,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline  ">
                         <a class="layui-btn layui-btn-sm layui-btn-normal coffee-btn"
-                           shiro:hasPermission=${m.permissionPrefix+':extend'}>
+                           shiro:hasPermission=${_module.permissionPrefix+':extend'}>
                             <i class="fa fa-coffee"></i>
                             生成
                         </a>
@@ -33,7 +33,7 @@
         </div>
         <div th:include="include :: list-footer"></div>
         <script th:inline="none">
-            const prefix = `${gate}system/extend`
+            const prefix = `${_gate}system/extend`
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui,

@@ -33,7 +33,7 @@ public class BlogTypeController extends BaseController {
 
     @RequestMapping("/add")
     public String add(Model model) {
-        supplyAdd(model, new BlogTypeDTO());
+        super.add(model, new BlogTypeDTO());
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(STATE_KEY)).getData());
         return "blog/blogType/au";
     }
@@ -45,7 +45,7 @@ public class BlogTypeController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyUpdate(model, dtoVO.getData());
+        super.update(model, dtoVO.getData());
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(STATE_KEY)).getData());
         return "blog/blogType/au";
     }
@@ -58,14 +58,14 @@ public class BlogTypeController extends BaseController {
         }
         BlogTypeDTO blogTypeDTO = dtoVO.getData();
         blogTypeDTO.setStateStr(dictService.getData(new DictDTO().setKey(STATE_KEY).setCode(blogTypeDTO.getState())).getData().getLabel());
-        supplyDetail(model, dtoVO.getData());
+        super.detail(model, dtoVO.getData());
 
         return "blog/blogType/detail";
     }
 
     @RequestMapping("/list")
     public String list(Model model) {
-        supplyList(model, module);
+        super.list(model, module);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(STATE_KEY)).getData());
         return "blog/blogType/list";

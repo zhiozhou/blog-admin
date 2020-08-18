@@ -3,16 +3,29 @@
     <head th:include="include :: header"></head>
     <style>
 
+        .depth0 {
+            padding-left: 19px;
+        }
+
+        .depth1 {
+            padding-left: 19px;
+        }
+
+        .depth2 {
+            padding-left: 38px;
+        }
+
         td {
             user-select: none;
         }
 
-        .depth0 {
-            padding-left: 14px;
+        td i {
+            font-style: inherit;
         }
 
-        .depth2 {
-            padding-left: 28px;
+        td i:before {
+            display: inline-block;
+            width: 14px;
         }
 
         .child-btn {
@@ -20,7 +33,7 @@
         }
 
         .child-btn > span {
-            margin-left: 10px;
+            margin-left: 5px;
         }
     </style>
     <body>
@@ -28,7 +41,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline  ">
                     <a class="layui-btn layui-btn-sm layui-btn-normal add-btn"
-                       shiro:hasPermission=${m.permissionPrefix+':add'}>
+                       shiro:hasPermission=${_module.permissionPrefix+':add'}>
                         <i class="fa fa-plus"></i>
                         添加
                     </a>
@@ -45,7 +58,7 @@
         </script>
         <script th:inline="none">
             var openId
-            const prefix = `${gate}blog/menu`
+            const prefix = `${_gate}blog/menu`
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui

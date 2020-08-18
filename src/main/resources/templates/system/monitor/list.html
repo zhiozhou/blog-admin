@@ -40,12 +40,12 @@
                 <a class="layui-btn layui-btn-sm layui-btn-disabled">当前账号</a>
                 {{# } else { }}
                 <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="forceOff"
-                   shiro:hasPermission=${m.permissionPrefix+':forceOff'}>强退</a>
+                   shiro:hasPermission=${_module.permissionPrefix+':forceOff'}>强退</a>
                 {{# } }}
             </div>
         </script>
         <script th:inline="none">
-            const prefix = `${gate}system/monitor`
+            const prefix = `${_gate}system/monitor`
 
             layui.use(['table', 'jquery', 'util'], () => {
                 const {table, jquery: $} = layui,

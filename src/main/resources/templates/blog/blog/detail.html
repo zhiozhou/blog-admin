@@ -3,68 +3,68 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form-pane" id="form" th:attr="action=${action}">
+            <form class="layui-form-pane" id="form" th:attr="action=${_action}">
 
                 <div class="layui-tab" >
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/blog/type/list}" id="superior">博客类型</a></li>
                         <li class="layui-this">类型详情</li>
                     </ul>
-                    <input type="hidden" name="id" th:value="${o.id}">
+                    <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">标题：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ o.title }" class="layui-input" disabled>
+                                <input type="text" th:value="${ _vo.title }" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">类型：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ o.typeName }" class="layui-input" disabled>
+                                <input type="text" th:value="${ _vo.typeName }" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">内容：</label>
                             <div class="layui-input-block">
-                                <textarea rows="25" th:text="${o.content}" class="layui-textarea" disabled></textarea>
+                                <textarea rows="25" th:text="${_vo.content}" class="layui-textarea" disabled></textarea>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">创建时间：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ o.gmtCreate }" class="layui-input date-field" disabled>
+                                <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">访问量：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ o.pv }" class="layui-input" disabled>
+                                <input type="text" th:value="${ _vo.pv }" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">预览：</label>
                             <div class="layui-input-block">
-                                <textarea th:text="${o.preview}" class="layui-textarea" disabled></textarea>
+                                <textarea th:text="${_vo.preview}" class="layui-textarea" disabled></textarea>
                             </div>
                         </div>
 
-                        <div class="layui-form-item" th:if="${o.previewImg} !=null">
+                        <div class="layui-form-item" th:if="${_vo.previewImg} !=null">
                             <label class="layui-form-label">预览图：</label>
                             <div class="layui-input-block">
-                                <img th:src="${ o.previewImg }"/>
+                                <img th:src="${ _vo.previewImg }"/>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea th:text="${o.remark}" class="layui-textarea" disabled></textarea>
+                                <textarea th:text="${_vo.remark}" class="layui-textarea" disabled></textarea>
                             </div>
                         </div>
 

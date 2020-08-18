@@ -5,17 +5,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.service.IUserService;
 
-import static priv.zhou.common.param.CONSTANT.*;
+import static priv.zhou.common.param.CONSTANT.RSA_PUBLIC_KEY;
+import static priv.zhou.common.param.CONSTANT.SYSTEM_USER_STATE;
 
 /**
  * 用户 视图控制层
@@ -47,8 +48,8 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        supplyAdd(model, new UserDTO().setState(0));
 
+        super.add(model, new UserDTO().setState(0));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_USER_STATE)).getData());
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(0)).getData().getList());
         return "system/user/au";
@@ -61,7 +62,7 @@ public class UserController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyUpdate(model, dtoVO.getData());
+        model.addAttribute(VO_KEY, dtoVO.getData());
 
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_USER_STATE)).getData());
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(0)).getData().getList());
@@ -75,7 +76,7 @@ public class UserController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        supplyUpdate(model, dtoVO.getData());
+        super.update(model, dtoVO.getData());
         return "system/user/resetPwd";
     }
 
@@ -89,14 +90,14 @@ public class UserController extends BaseController {
         }
         UserDTO userDTO = dtoVO.getData();
         userDTO.setStateStr(dictService.getData(new DictDTO().setKey(SYSTEM_USER_STATE).setCode(userDTO.getState())).getData().getLabel());
-        supplyDetail(model, userDTO);
+        super.detail(model, userDTO);
         return "system/user/detail";
     }
 
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
     public String list(Model model) {
-        supplyList(model, module);
+        super.list(model, module);
 
         model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(0)).getData().getList());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_USER_STATE), false).getData());

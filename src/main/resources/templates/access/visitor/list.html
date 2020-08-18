@@ -42,15 +42,15 @@
         <script type="text/html" id="rub">
             <div class="tool">
                 <a class="layui-btn layui-btn-sm" lay-event="detail"
-                   shiro:hasPermission=${m.permissionPrefix+':detail'}>查看</a>
+                   shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
                 <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"
-                   shiro:hasPermission=${m.permissionPrefix+':update'}>修改</a>
+                   shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
                 {{# if(d.state != 11){ }}
                 <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="block"
-                   shiro:hasPermission=${m.permissionPrefix+':block'}>阻塞</a>
+                   shiro:hasPermission=${_module.permissionPrefix+':block'}>阻塞</a>
                 {{# } else { }}
                 <a class="layui-btn layui-bg-orange  layui-btn-sm" lay-event="unblock"
-                   shiro:hasPermission=${m.permissionPrefix+':block'}>取消阻塞</a>
+                   shiro:hasPermission=${_module.permissionPrefix+':block'}>取消阻塞</a>
                 {{# } }}
             </div>
         </script>
@@ -58,7 +58,7 @@
             const stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
-            const prefix = `${gate}access/visitor`
+            const prefix = `${_gate}access/visitor`
 
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,

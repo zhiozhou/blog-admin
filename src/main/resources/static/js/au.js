@@ -15,10 +15,10 @@ const TINYMCE_STAGE = {
     images_upload_handler: function (blobInfo, successCB, failCB) {
         let file = blobInfo.blob(),
             formData = new FormData();
-        formData.append('prefix', UPLOAD_PREFIX)
+        formData.append('prefix', _upload.prefix)
         formData.append('file', file, file.name)
         layui.jquery.ajax({
-            url: UPLOAD_URL,
+            url: _upload.url,
             type: "POST",
             data: formData,
             processData: false,  // 不处理数据
@@ -39,8 +39,8 @@ const TINYMCE_STAGE = {
 function SINGLE_IMG(elem) {
     return {
         elem: elem,
-        url: uploadURL + 'upload/multipart',
-        data: {prefix: uploadPrefix},
+        url: _upload.url + 'upload/multipart',
+        data: {prefix: _upload.prefix},
         acceptMime: 'image/*',
         before: () => {
             loading()
@@ -65,9 +65,9 @@ const m2 = 2 * 1024 * 1024;
 function SINGLE_FILE(elem) {
     return {
         elem: elem,
-        url: UPLOAD_URL,
+        url: _upload.url,
         data: {
-            prefix: UPLOAD_PREFIX,
+            prefix: _upload.prefix,
             keepName: true
         },
         accept: 'file',

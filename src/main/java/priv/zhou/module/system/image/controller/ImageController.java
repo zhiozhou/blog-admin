@@ -28,8 +28,8 @@ public class ImageController extends BaseController {
     @RequiresPermissions("system:image:list")
     @RequestMapping("/list")
     public String list(Model model, HttpServletRequest request) {
-        supplyUpload(model);
-        supplyList(model, module);
+        super.upload(model);
+        super.list(model, module);
         RedisUtil.addSet(FILE_SERVICE_IP_SET_KEY, HttpUtil.getIpAddress(request));
         return "system/image/list";
     }
