@@ -50,9 +50,4 @@ public class ${table.className}RestController {
         return ${table.objectName}Service.list(${table.objectName}DTO, page);
     }
 
-    @RequestMapping("/count")
-    public OutVO<Integer> count(${table.className}DTO ${table.objectName}DTO) {
-        return ${table.objectName}Service.count(${table.objectName}DTO);
-    }
-
 }

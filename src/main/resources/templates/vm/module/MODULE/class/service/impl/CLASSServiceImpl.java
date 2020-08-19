@@ -78,9 +78,4 @@ public class ${table.className}ServiceImpl implements I${table.className}Service
         PageInfo<${table.className}PO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList,${table.className}DTO::new),  pageInfo.getTotal());
     }
-
-    @Override
-    public OutVO<Integer> count(${table.className}DTO ${table.objectName}DTO) {
-        return OutVO.success(${table.objectName}DAO.count(${table.objectName}DTO));
-    }
 }

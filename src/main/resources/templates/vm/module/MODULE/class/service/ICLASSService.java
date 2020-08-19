@@ -24,6 +24,4 @@ public interface I${table.className}Service {
     OutVO<${table.className}DTO> get(${table.className}DTO ${table.objectName}DTO);
 
     OutVO<ListVO<${table.className}DTO>> list(${table.className}DTO ${table.objectName}DTO, Page page);
-
-    OutVO<Integer> count(${table.className}DTO ${table.objectName}DTO);
 }
