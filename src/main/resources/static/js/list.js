@@ -4,14 +4,14 @@ layui.use(['table', 'form', 'jquery'], () => {
     /**
      * 使用iframe方式打开添加页面
      */
-    $('.add-btn').click(() => {
+    $('.add-iframe-btn').click(() => {
         newFrame(`添加${_module.name}`, `${prefix}/add`)
     })
 
     /**
      * 使用新的页面打开添加页
      */
-    $('.add-go-btn').click(() => {
+    $('.add-page-btn').click(() => {
         window.location.href = `${prefix}/add`
     })
 
