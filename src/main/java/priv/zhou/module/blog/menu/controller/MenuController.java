@@ -31,9 +31,8 @@ public class MenuController extends BaseController {
 
     private final String TYPE_KEY = "blog_menu_type";
 
-    private final Module module = new Module("菜单", "blog:menu");
-
     public MenuController(IMenuService menuService) {
+        super(new Module("菜单", "blog:menu"));
         this.menuService = menuService;
     }
 
@@ -66,7 +65,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("blog:menu:list")
     @RequestMapping("/list")
     public String login(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         model.addAttribute("typeMap", dictService.dataMap(new DictDTO().setKey(TYPE_KEY)).getData());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());

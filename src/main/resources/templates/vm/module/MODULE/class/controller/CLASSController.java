@@ -23,9 +23,8 @@ public class ${table.className}Controller extends BaseController {
 
     private final I${table.className}Service ${table.objectName}Service;
 
-    private final Module module = new Module("${table.comment}","${app.module}:${table.objectName}");
-
     public ${table.className}Controller(I${table.className}Service ${table.objectName}Service) {
+        super(new Module("${table.comment}","${app.module}:${table.objectName}"));
         this.${table.objectName}Service = ${table.objectName}Service;
     }
 
@@ -61,7 +60,7 @@ public class ${table.className}Controller extends BaseController {
 
     @RequestMapping("/list")
     public String list(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         return "${app.module}/${table.objectName}/list";
     }

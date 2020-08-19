@@ -32,9 +32,8 @@ public class UserController extends BaseController {
 
     private final IRoleService roleService;
 
-    private final Module module = new Module("用户", "system:user");
-
     public UserController(IUserService userService, IRoleService roleService) {
+        super(new Module("用户", "system:user"));
         this.userService = userService;
         this.roleService = roleService;
     }
@@ -97,7 +96,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
     public String list(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(0)).getData().getList());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_USER_STATE), false).getData());

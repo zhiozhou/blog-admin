@@ -31,9 +31,8 @@ public class RoleController extends BaseController {
 
     private final IMenuService menuService;
 
-    private final Module module = new Module("角色", "system:role");
-
     public RoleController(IRoleService roleService, IMenuService menuService) {
+        super(new Module("角色", "system:role"));
         this.roleService = roleService;
         this.menuService = menuService;
     }
@@ -78,7 +77,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("system:role:list")
     @RequestMapping("/list")
     public String list(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/list";

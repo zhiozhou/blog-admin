@@ -2,20 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-iframe">
-            <form class="layui-form" id="form" th:attr="action=${_action}">
+        <div class="layout-iframe" th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_action}">
                 <input type="hidden" name="id" th:value="${_vo.id}">
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
                         <input type="text" name="username" class="layui-input" placeholder="请输入用户名" autocomplete="off"
-                               th:value="${ _vo.username }" th:classappend="'/rest/save' != ${_action}?'layui-disabled':''"
-                               th:disabled="'/rest/save' != ${_action}">
+                               th:value="${ _vo.username }"
+                               th:classappend="${isAdd}?'': 'layui-disabled'"
+                               th:disabled="${!isAdd}">
                     </div>
                 </div>
 
-                <div class="layui-form-item" th:if="'/rest/save' == ${_action}">
+                <div class="layui-form-item" th:if="${isAdd}">
                     <label class="layui-form-label">密码：</label>
                     <div class="layui-input-block">
                         <input type="password" name="password" class="layui-input" lay-verify="required"
@@ -26,7 +27,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">姓名：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" th:value="${ _vo.name }" class="layui-input"
+                        <input type="text" name="name" lay-verify="required" th:value="${ _vo.name }"
+                               class="layui-input"
                                placeholder="请输入姓名" autocomplete="off">
                     </div>
                 </div>

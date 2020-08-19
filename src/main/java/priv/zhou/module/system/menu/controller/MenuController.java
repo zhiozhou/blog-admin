@@ -29,9 +29,8 @@ public class MenuController extends BaseController {
 
     public final static Integer FLAG = 1;
 
-    private final Module module = new Module("菜单", "system:menu");
-
     public MenuController(IMenuService menuService) {
+        super(new Module("菜单", "system:menu"));
         this.menuService = menuService;
     }
 
@@ -64,7 +63,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("system:menu:list")
     @RequestMapping("/list")
     public String login(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         model.addAttribute("typeMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_MENU_TYPE)).getData());
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());

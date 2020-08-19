@@ -23,16 +23,15 @@ public class MonitorController extends BaseController {
 
     private final IRoleService roleService;
 
-    private final Module module = new Module("监控", "system:monitor");
-
     public MonitorController(IRoleService roleService) {
+        super(new Module("监控", "system:monitor"));
         this.roleService = roleService;
     }
 
     @RequiresPermissions("system:monitor:list")
     @RequestMapping("/list")
     public String login(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         model.addAttribute("id", ShiroUtil.getSession().getId());
         model.addAttribute("roleList", roleService.list(new RoleDTO(), new Page(0)).getData().getList());

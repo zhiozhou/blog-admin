@@ -3,7 +3,7 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form-pane" id="form" th:attr="action=${_action}">
+            <form class="layui-form-pane" th:attr="action=${_action}">
                 <input type="hidden" name="id" th:value="${_vo.id}">
                 <div class="layui-tab-content">
 

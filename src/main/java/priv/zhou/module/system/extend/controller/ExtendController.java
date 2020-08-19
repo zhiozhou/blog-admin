@@ -17,12 +17,14 @@ import priv.zhou.common.controller.BaseController;
 @RequestMapping("/system/extend")
 public class ExtendController extends BaseController {
 
-    private final Module module = new Module("模块", "system:extend");
+    public ExtendController(){
+        super(new Module("模块", "system:extend"));
+    }
 
     @RequiresPermissions("system:extend:index")
     @RequestMapping("/index")
     public String index(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         return "system/extend/index";
     }

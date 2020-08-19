@@ -25,9 +25,8 @@ public class BlogTypeController extends BaseController {
 
     private final String STATE_KEY = "blog_type_state";
 
-    private final Module module = new Module("", "blog:type");
-
     public BlogTypeController(IBlogTypeService blogTypeService) {
+        super(new Module("博客类型", "blog:type"));
         this.blogTypeService = blogTypeService;
     }
 
@@ -65,7 +64,7 @@ public class BlogTypeController extends BaseController {
 
     @RequestMapping("/list")
     public String list(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(STATE_KEY)).getData());
         return "blog/blogType/list";

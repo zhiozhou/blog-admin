@@ -120,18 +120,21 @@ function blobToFile(theBlob, fileName) {
 //---------------------------------------------- 通用表单提交 ----------------------------------------------
 
 /**
- * 页面形式的表单提交，成功后跳转 #superior 的href页
+ * 页面形式的表单提交，成功后跳转前一级标签
  */
 function pageSubmit({form, field: data}) {
     httpPost({
         url: prefix + form.getAttribute('action'),
         data,
         cb: () => done(() => {
-            window.location.href = document.getElementById('superior').getAttribute('href')
+            window.location.href = layui.jquery('.layui-form>.layui-tab .layui-this').prev().children('a').attr('href')
         })
     })
+
     return false
 }
+
+
 
 /**
  * 内联页面通用提交，成功后刷新父级表格

@@ -23,13 +23,15 @@ import static priv.zhou.common.param.CONSTANT.FILE_SERVICE_IP_SET_KEY;
 @RequestMapping("/system/image")
 public class ImageController extends BaseController {
 
-    private final Module module = new Module("图片", "system:image");
+    public ImageController() {
+        super(new Module("图片", "system:image"));
+    }
 
     @RequiresPermissions("system:image:list")
     @RequestMapping("/list")
     public String list(Model model, HttpServletRequest request) {
         super.upload(model);
-        super.list(model, module);
+        super.list(model);
         RedisUtil.addSet(FILE_SERVICE_IP_SET_KEY, HttpUtil.getIpAddress(request));
         return "system/image/list";
     }

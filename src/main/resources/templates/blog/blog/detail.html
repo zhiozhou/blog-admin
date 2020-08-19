@@ -3,12 +3,12 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form-pane" id="form" th:attr="action=${_action}">
+            <form class="layui-form-pane" th:attr="action=${_action}">
 
                 <div class="layui-tab" >
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/blog/type/list}" id="superior">博客类型</a></li>
-                        <li class="layui-this">类型详情</li>
+                        <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
+                        <li class="layui-this" th:text="${_module.name}+详情"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">

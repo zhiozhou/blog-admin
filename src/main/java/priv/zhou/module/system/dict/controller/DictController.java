@@ -25,9 +25,9 @@ public class DictController extends BaseController {
 
     private final IDictService dictService;
 
-    private final Module module = new Module("字典", "system:dict");
 
     public DictController(IDictService dictService) {
+        super(new Module("字典", "system:dict"));
         this.dictService = dictService;
     }
 
@@ -63,7 +63,7 @@ public class DictController extends BaseController {
     @RequiresPermissions("system:dict:list")
     @RequestMapping("/list")
     public String login(Model model) {
-        super.list(model, module);
+        super.list(model);
         return "system/dict/list";
     }
 }

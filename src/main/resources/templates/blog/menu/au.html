@@ -21,7 +21,7 @@
     </style>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form  " id="form" th:attr="action=${_action}">
+            <form class="layui-form  " th:attr="action=${_action}">
                 <input type="hidden" name="id" id="id" th:value="${_vo.id}">
                 <div class="layui-form-item">
                     <label class="layui-form-label">父级：</label>
@@ -175,7 +175,7 @@
 
 
                 // 列表隐藏
-                $('#form').on('focus', 'input', function () {
+                $('.layui-form').on('focus', 'input', function () {
                     !$(this).is('#parentName') && $('#menuTree').slideUp();
                 })
 

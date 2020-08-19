@@ -25,9 +25,9 @@ public class CommentController extends BaseController {
 
     private final String STATE_KEY = "comment_state";
 
-    private final Module module = new Module("评论", "access:comment");
 
     public CommentController(ICommentService commentService) {
+        super(new Module("评论", "access:comment"));
         this.commentService = commentService;
     }
 
@@ -63,7 +63,7 @@ public class CommentController extends BaseController {
 
     @RequestMapping("/list")
     public String list(Model model) {
-        super.list(model, module);
+        super.list(model);
 
         model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(STATE_KEY)).getData());
         return "access/comment/list";

@@ -22,9 +22,9 @@ public class AccessLogController extends BaseController {
 
     private final IAccessLogService accessLogService;
 
-    private final Module module = new Module("访问日志", "access:log");
 
     public AccessLogController(IAccessLogService accessLogService) {
+        super(new Module("访问日志", "access:log"));
         this.accessLogService = accessLogService;
     }
 
@@ -41,7 +41,7 @@ public class AccessLogController extends BaseController {
 
     @RequestMapping("/list")
     public String list(Model model) {
-        super.list(model, module);
+        super.list(model);
         return "access/log/list";
     }
 }

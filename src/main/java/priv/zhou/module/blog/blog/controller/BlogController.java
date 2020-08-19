@@ -28,9 +28,8 @@ public class BlogController extends BaseController {
     private final IBlogTypeService blogTypeService;
 
 
-    private final Module module = new Module("", "blog:blog");
-
     public BlogController(IBlogService blogService, IBlogTypeService blogTypeService) {
+        super(new Module("博客", "blog:blog"));
         this.blogService = blogService;
         this.blogTypeService = blogTypeService;
     }
@@ -67,7 +66,7 @@ public class BlogController extends BaseController {
 
     @RequestMapping("/list")
     public String list(Model model) {
-        super.list(model, module);
+        super.list(model);
         model.addAttribute("typeList", blogTypeService.list(new BlogTypeDTO(), new Page(0)).getData().getList());
         return "blog/blog/list";
     }

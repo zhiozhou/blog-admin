@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-page">
-            <form class="layui-form" id="form" th:attr="action=${_action}">
+        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">>
+            <form class="layui-form" th:attr="action=${_action}">
 
                 <div class="layui-tab" >
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/blog/type/list}" id="superior">博客类型</a></li>
-                        <li class="layui-this" th:text="'/rest/save'==${_action}?'添加类型':'修改类型'"></li>
+                        <li><a th:href="@{/blog/type/list}" th:text="${_module}">博客类型</a></li>
+                        <li class="layui-this"  th:text="(isAdd?添加:修改)+${_module.name}"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">
@@ -18,7 +18,8 @@
                                 <input type="text" name="key" lay-verify="required" th:value="${ _vo.key }"
                                        class="layui-input"
                                        placeholder="请输入标识" autocomplete="off" maxlength="64"
-                                       th:disabled="'/rest/save' != ${_action}">
+                                       th:classappend="${isAdd}?'': 'layui-disabled'"
+                                       th:disabled="${!isAdd}">
                             </div>
                         </div>
 

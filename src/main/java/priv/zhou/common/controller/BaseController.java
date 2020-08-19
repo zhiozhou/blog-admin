@@ -16,6 +16,8 @@ public class BaseController {
     @Autowired
     protected IDictService dictService;
 
+    protected Module module;
+
     protected final String MODULE_KEY = "_module";
 
     protected final String VO_KEY = "_vo";
@@ -30,12 +32,16 @@ public class BaseController {
 
     protected final String NOT_FOUNT = "404";
 
+    public BaseController(Module module) {
+        this.module = module;
+    }
 
     /**
      * 新增页填充 提交地址，vo对象
      */
     protected void add(Model model, Object vo) {
         model.addAttribute(VO_KEY, vo);
+        model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, ADD_ACTION);
     }
 
@@ -44,6 +50,7 @@ public class BaseController {
      */
     protected void update(Model model, Object vo) {
         model.addAttribute(VO_KEY, vo);
+        model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, UPDATE_ACTION);
     }
 
@@ -52,14 +59,16 @@ public class BaseController {
      */
     protected void detail(Model model, Object vo) {
         model.addAttribute(VO_KEY, vo);
+        model.addAttribute(MODULE_KEY, module);
     }
 
 
     /**
      * 列表页填充：模块对象
      */
-    protected void list(Model model, Module module) {
+    protected String list(Model model) {
         model.addAttribute(MODULE_KEY, module);
+        return "";
     }
 
 

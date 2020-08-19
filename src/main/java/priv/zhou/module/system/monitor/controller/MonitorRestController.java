@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
-import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.system.monitor.domain.dto.OnlineDTO;
 import priv.zhou.module.system.monitor.service.IOnlineService;
 
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/system/monitor/rest")
-public class MonitorRestController extends BaseController {
+public class MonitorRestController {
 
     private final IOnlineService onlineService;
 

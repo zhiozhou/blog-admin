@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-page">
-            <form class="layui-form" id="form" th:attr="action=${_action}">
-                <div class="layui-tab" >
+        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_action}">
+                <div class="layui-tab">
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/system/role/list}" id="superior">角色列表</a></li>
-                        <li class="layui-this" th:text="'/rest/save'==${_action}?'添加角色':'修改角色'"></li>
+                        <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
+                        <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">

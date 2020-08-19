@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
-    <style>
-        #preview-album{
-            display: none;
-        }
-    </style>
     <body>
-        <div class="layout-page">
-            <form class="layui-form" id="form" th:attr="action=${_action}">
+        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_action}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/blog/blog/list}" id="superior">博客列表</a></li>
-                        <li class="layui-this"  th:text="'/rest/save'==${_action}?'添加博客':'修改博客'"></li>
+                        <li><a th:href="@{/blog/blog/list}" th:text="${_module.name}+列表">博客列表</a></li>
+                        <li class="layui-this"  th:text="(isAdd?添加:修改)+${_module.name}"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${_vo.id}">
                     <div class="layui-tab-content">
