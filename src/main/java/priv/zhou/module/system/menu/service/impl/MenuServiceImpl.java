@@ -8,7 +8,7 @@ import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.module.blog.menu.controller.MenuController;
+import priv.zhou.module.system.menu.controller.MenuController;
 import priv.zhou.module.system.menu.domain.dao.MenuDAO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.po.MenuPO;

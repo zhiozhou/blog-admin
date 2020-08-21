@@ -35,14 +35,12 @@
             const id = [[${id}]]
         </script>
         <script type="text/html" id="monitor-tool">
-            <div class="tool">
-                {{# if(d.id == id){ }}
-                <a class="layui-btn layui-btn-sm layui-btn-disabled">当前账号</a>
-                {{# } else { }}
-                <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="forceOff"
-                   shiro:hasPermission=${_module.permissionPrefix+':forceOff'}>强退</a>
-                {{# } }}
-            </div>
+            {{# if(d.id == id){ }}
+            <a class="layui-btn layui-btn-sm layui-btn-disabled">当前账号</a>
+            {{# } else { }}
+            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="forceOff"
+               shiro:hasPermission=${_module.permissionPrefix+':forceOff'}>强退</a>
+            {{# } }}
         </script>
         <script th:inline="none">
             const prefix = `${_gate}system/monitor`

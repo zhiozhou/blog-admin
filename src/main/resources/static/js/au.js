@@ -57,11 +57,11 @@ function uploadRender(upload, options) {
             },
             before: () => loading(),
             done: ({code, info, data}) => {
+                loaded()
                 if (fail(code)) return warn(info)
                 done(null, '上传成功')
                 let url = data[0].origin
                 layui.jquery(elem).siblings('.view').attr('href', url).next().val(url)
-                loaded()
             }
         },
         ...options
@@ -88,8 +88,6 @@ function compress(data, cb) {
         canvas.height = height;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         // 将canvas中的图片转化为base64格式
-
-        console.log('aaa')
         cb && cb(canvas.toDataURL('image/jpeg', 0.92));
     }
 }

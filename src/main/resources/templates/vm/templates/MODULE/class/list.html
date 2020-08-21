@@ -3,17 +3,13 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-#set($left="${")
-                        <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn" shiro:hasPermission=$left _module.permissionPrefix+':add'}>
-                            <i class="fa fa-plus"></i> 添加
-                        </a>
-                    </div>
-                </div>
-            </form>
             <div>
+                <div class="layout-table-tool">
+#set($left="${")
+                    <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn" shiro:hasPermission=$left _module.permissionPrefix+':add'}>
+                        <i class="fa fa-plus"></i> 添加
+                    </a>
+                </div>
                 <table id="table" lay-filter="table"></table>
             </div>
         </div>

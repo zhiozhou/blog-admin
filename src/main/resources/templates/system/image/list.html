@@ -29,7 +29,7 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-bg-blue" id="image-add">添加图片</button>
+                        <button type="button" class="layui-btn layui-bg-blue layui-btn-sm" id="image-add">添加图片</button>
                     </div>
 
                     <div class="layui-inline">
@@ -56,12 +56,10 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
-        <script type="text/html" id="cd">
-            <div class="tool">
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">Copy URL</a>
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
-                   shiro:hasPermission=${_module.permissionPrefix+':remove'}>Remove</a>
-            </div>
+        <script type="text/html" id="image-tool">
+            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">Copy URL</a>
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
+               shiro:hasPermission=${_module.permissionPrefix+':remove'}>Remove</a>
         </script>
 
         <script th:src="@{/js/au.js}"></script>
@@ -76,7 +74,7 @@
                                 templet: ({url}) => `<img src="${url}" class="image-view"/>`
                             },
                             {field: 'remark', title: '备注', minWidth: '120'},
-                            {title: '操作',  toolbar: '#cd'}
+                            {title: '操作',  toolbar: '#image-tool'}
                         ]],
                         area = '.rove'
 

@@ -5,11 +5,8 @@ layui.config({
 /**
  * 全局初始化方法
  */
-layui.use(['jquery', 'util', 'layarea'], function () {
-    const {jquery: $, layarea} = layui
-
-    // 初始化地区三级联动
-    layarea.render({elem: '#area-picker'})
+layui.use(['jquery', 'util'], function () {
+    const {jquery: $} = layui
 
     // 初始化时间
     $('.date-field').each((index, field) => $(field).val(formatDate($(field).val(), $(field).data('format'))))

@@ -39,7 +39,7 @@ public class MenuRestController {
     @RequiresPermissions("system:menu:remove")
     @RequestMapping("/remove/{id}")
     public OutVO<NULL> remove(@PathVariable Integer id) {
-        return menuService.remove(new MenuDTO().setId(id));
+        return menuService.remove(new MenuDTO().setId(id).setFlag(MenuController.FLAG));
     }
 
     @RequiresPermissions("system:menu:update")

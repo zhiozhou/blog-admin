@@ -7,7 +7,7 @@
 
                 <div class="layui-tab" >
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
+                        <li><a th:href="@{/system/dict/list}" th:text="${_module.name}+列表"></a></li>
                         <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
                     </ul>
                     <input type="hidden" name="id" th:value="${_vo.id}">
@@ -68,11 +68,9 @@
             </form>
         </div>
         <div th:include="include :: au-footer"></div>
-        <script type="text/html" id="dt-ud">
-            <div class="tool">
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="insert">插入</a>
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove">移除</a>
-            </div>
+        <script type="text/html" id="dict-tool">
+            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="insert">插入</a>
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove">移除</a>
         </script>
         <script th:inline="javascript">
             const dictData = [[${_vo.dataList}]]
@@ -113,7 +111,7 @@
                                 return `<a class="top-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {title: '操作',    toolbar: '#dt-ud'}
+                        {title: '操作',    toolbar: '#dict-tool'}
                     ]],
                     done: () => {
                         tindex = $('.t').parents('tr').data('index')
@@ -123,28 +121,23 @@
 
                 //监听提交
                 form.on('submit(submit)', function ({form, field}) {
-
                     // 数据项加入提交数据
-                    let empty = true, codes = []
-                    for (i in dictData) {
-                        let {code, label, type, top, css} = dictData[i]
+                    let codeSet = []
+                    for (let i in dictData) {
+                        let temp = dictData[i],
+                            {code, label} = temp
                         if (code && label) {
-                            if (codes.includes(code)) {
+                            if (codeSet.includes(code)) {
                                 return warn('数据项编码值不可重复')
                             }
-                            let name = `dataList[${i}].`
-                            field[name + 'code'] = code
-                            field[name + 'label'] = label
-                            field[name + 'type'] = type
-                            field[name + 'top'] = top
-                            field[name + 'css'] = css
-                            empty = false
-                            codes.push(code)
+                            codeSet.push(code)
+                            for (let key in temp) {
+                                field[`dataList[${i}].${key}`] = temp[key]
+                            }
                         }
                     }
-
                     // 判空
-                    if (empty) {
+                    if (0 === codeSet.length) {
                         return warn('数据项至少存在一个')
                     }
 

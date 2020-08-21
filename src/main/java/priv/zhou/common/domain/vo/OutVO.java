@@ -69,6 +69,14 @@ public class OutVO<T> {
         return new OutVO<>(outVoEnum);
     }
 
+    /**
+     * 返回api错误
+     */
+    public static <E> OutVO<E> fail(OutVOEnum outVoEnum, String info) {
+        OutVO<E> outVO = fail(outVoEnum);
+        return outVO.setInfo(info);
+    }
+
 
     /**
      * 返回api成功

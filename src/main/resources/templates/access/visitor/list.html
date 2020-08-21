@@ -39,20 +39,18 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
-        <script type="text/html" id="rub">
-            <div class="tool">
-                <a class="layui-btn layui-btn-sm" lay-event="detail"
-                   shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
-                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"
-                   shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
-                {{# if(d.state != 11){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="block"
-                   shiro:hasPermission=${_module.permissionPrefix+':block'}>阻塞</a>
-                {{# } else { }}
-                <a class="layui-btn layui-bg-orange  layui-btn-sm" lay-event="unblock"
-                   shiro:hasPermission=${_module.permissionPrefix+':block'}>取消阻塞</a>
-                {{# } }}
-            </div>
+        <script type="text/html" id="visitor-tool">
+            <a class="layui-btn layui-btn-sm" lay-event="detail"
+               shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"
+               shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
+            {{# if(d.state != 11){ }}
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="block"
+               shiro:hasPermission=${_module.permissionPrefix+':block'}>阻塞</a>
+            {{# } else { }}
+            <a class="layui-btn layui-bg-orange  layui-btn-sm" lay-event="unblock"
+               shiro:hasPermission=${_module.permissionPrefix+':block'}>取消阻塞</a>
+            {{# } }}
         </script>
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]
@@ -100,7 +98,7 @@
 
                             templet: ({lastAccessTime}) => formatDate(lastAccessTime)
                         },
-                        {title: '操作',  toolbar: '#rub'}
+                        {title: '操作',  toolbar: '#visitor-tool'}
                     ]]
 
                 tableRender(table, {cols})

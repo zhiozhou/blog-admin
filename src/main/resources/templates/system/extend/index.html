@@ -5,13 +5,6 @@
         <div class="layout-page">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <div class="layui-inline  ">
-                        <a class="layui-btn layui-btn-sm layui-btn-normal coffee-btn"
-                           shiro:hasPermission=${_module.permissionPrefix+':extend'}>
-                            <i class="fa fa-coffee"></i>
-                            生成
-                        </a>
-                    </div>
                     <div class="layui-inline">
                         <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off">
                     </div>
@@ -28,6 +21,13 @@
                 </div>
             </form>
             <div>
+                <div class="layout-table-tool">
+                    <a class="layui-btn layui-btn-sm layui-btn-normal coffee-btn"
+                       shiro:hasPermission=${_module.permissionPrefix+':extend'}>
+                        <i class="fa fa-coffee"></i>
+                        生成
+                    </a>
+                </div>
                 <table id="table" lay-filter="table"></table>
             </div>
         </div>

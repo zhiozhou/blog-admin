@@ -13,7 +13,7 @@
                 <div class="layui-tab" >
 
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
+                        <li><a th:href="@{/system/dict/list}" th:text="${_module.name}+列表"></a></li>
                         <li class="layui-this" th:text="${_module.name}+详情"></li>
                     </ul>
 
@@ -76,13 +76,13 @@
                     data: dictData,
                     cellMinWidth: '80',
                     cols: [[
-                        {field: 'code', title: '编码值',  edit: true},
-                        {field: 'label', title: '标签',  edit: true},
-                        {field: 'css', title: 'class标签',  edit: true},
+                        {field: 'code', title: '编码值'},
+                        {field: 'label', title: '标签'},
+                        {field: 'css', title: 'class标签',},
                         {field: 'type',title: '类型',
                             templet : ({type})=>{
                                 let {css,info} = typeMap[type]
-                                return `<a class="state-btn layui-btn layui-btn-xs ${css}">${info}</a>`
+                                return `<a class="layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
                         {field: 'top' ,title: '默认使用',
@@ -92,7 +92,7 @@
                                     css ='t'
                                     info = '默认'
                                 }
-                                return `<a class="top-btn layui-btn layui-btn-xs ${css}">${info}</a>`
+                                return `<a class="layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         }
 

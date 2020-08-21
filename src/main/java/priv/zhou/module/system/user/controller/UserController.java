@@ -76,6 +76,7 @@ public class UserController extends BaseController {
             return NOT_FOUNT;
         }
         super.update(model, dtoVO.getData());
+        model.addAttribute(ACTION_KEY, "/rest/resetPwd");
         return "system/user/resetPwd";
     }
 
