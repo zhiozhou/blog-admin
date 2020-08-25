@@ -2,56 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <style>
+        .layout-table-tool {
+            text-align: left;
+        }
+        .layui-table-cell{
+            height: auto;
+        }
+
         .rove {
             display: none;
+        }
+
+        .layui-elem-quote > .compress {
+            border-color: var(--layui-green);
         }
 
         .image-view {
             cursor: pointer;
         }
-
-        .layui-form-switch {
-            min-width: 50px;
-        }
-
-        .layui-table-cell {
-            height: auto;
-        }
-
-        #image-quote > div:after {
-            content: attr(data-text);
-            position: absolute;
-            left: 35%;
-        }
     </style>
     <body>
         <div class="layout-page">
-            <form class="layui-form">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-bg-blue layui-btn-sm" id="image-add">添加图片</button>
-                    </div>
-
-                    <div class="layui-inline">
-                        <input type="checkbox" lay-filter="isCompress" lay-skin="switch" lay-text="压缩|原图">
-                    </div>
-                    <div class="layui-inline">
-                        <input type="text" name="remark" class="layui-input image-remark rove" placeholder="请输入备注"
-                               autocomplete="off">
-                    </div>
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-normal rove" id="images-upload" lay-submit
-                                lay-filter="submit">
-                            开始上传
-                        </button>
-                    </div>
-                    <div>
-                        <blockquote class="layui-elem-quote layui-quote-nm rove" id="image-quote">
-                        </blockquote>
+            <div>
+                <div class="layout-table-tool">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-btn-sm layui-bg-blue add-image">原图添加</button>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-btn-sm add-image" data-type="compress">压缩添加
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <input type="text" name="remark" class="layui-input image-remark rove" placeholder="请输入备注"
+                                   autocomplete="off">
+                        </div>
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal rove"
+                                    id="images-upload" lay-submit
+                                    lay-filter="submit">
+                                开始上传
+                            </button>
+                        </div>
+                        <blockquote class="layui-elem-quote layui-quote-nm rove" id="image-upload-quote"></blockquote>
                     </div>
                 </div>
-            </form>
-            <div>
                 <table id="table" lay-filter="table"></table>
             </div>
         </div>
@@ -67,16 +62,15 @@
             const prefix = `${_gate}system/image`
 
             layui.use(['table', 'jquery', 'upload', 'form'], () => {
-                    const {table, jquery: $, upload, form} = layui,
+                    const {table, jquery: $, upload} = layui,
                         cols = [[
                             {
                                 field: 'url', title: '图片', minWidth: '120',
                                 templet: ({url}) => `<img src="${url}" class="image-view"/>`
                             },
                             {field: 'remark', title: '备注', minWidth: '120'},
-                            {title: '操作',  toolbar: '#image-tool'}
-                        ]],
-                        area = '.rove'
+                            {title: '操作', toolbar: '#image-tool'}
+                        ]]
 
                     tableRender(table, {cols})
                     table.on('tool(table)', toolHandle)
@@ -84,58 +78,54 @@
                     function toolHandle({data, event}) {
                         switch (event) {
                             case 'copy':
-                                copy(data.url)
-                                break
+                                return copy(data.url)
                         }
                         iframeAction({data, event})
                     }
 
+                    $(document.body).on('click', '.image-view', function () {
+                        window.open($(this).attr('src'))
+                    })
+
+                    $('.add-image').click(function(){
+                        isCompress = $(this).data('type')
+                    })
+
                     // 多图片上传
                     let urlList = [],
                         failCount = 0,
-                        isCompress = false
-                    const uploader = upload.render({
-                        elem: '#image-add',
-                        url: _upload.url + 'upload/multipart',
-                        data: {
-                            prefix: _upload.prefix
-                        },
+                        isCompress
+
+                    const uploader = uploadRender(upload, {
+                        elem: '.add-image',
+                        data: {keepName: false},
                         auto: false,
                         size: 16384,
                         multiple: true,
-                        bindAction: '#images-upload',
+                        bindAction: '#image-upload',
                         acceptMime: 'image/*',
                         choose: function (obj) {
+                            console.log(obj)
                             let files = this.files = obj.pushFile()
                             obj.preview((index, file, result) => {
-                                let $quote = $('#image-quote')
-                                if (0 === $quote.children().length) {
-                                    $(area).slideDown()
-                                }
-                                const $view = $(`<div style="background-image: url(${result})" data-text="${isCompress ? '压缩' : '原图'}"><div class="quote-cancel"><i class="fa fa-remove"></i></div></div>`)
+                                let $quote = $('#image-upload-quote')
+                                0 === $quote.children().length && $('.rove').slideDown()
+                                const $view = $(`<div style="background-image: url(${result})" class="${isCompress && 'compress'}"><div class="elem-quote-remove"><i class="fa fa-remove"></i></div></div>`)
                                 $view.click(() => {
                                     $view.remove()
                                     delete files[index]
                                     uploader.config.elem.next()[0].value = ''
-                                    0 === $quote.children().length && $(area).slideUp()
+                                    0 === $quote.children().length && $('.rove').slideUp()
                                 })
                                 $quote.append($view)
-                                // 压缩
-                                if (isCompress) {
-                                    compress(result, (dataURL) => {
-                                        obj.resetFile(index, dataURLtoFile(dataURL), 'example.jpg')
-                                    })
-                                }
+                                isCompress && compress(result, (dataURL) => {
+                                    obj.resetFile(index, dataURLtoFile(dataURL), 'example.jpg')
+                                })
                             })
                         },
-                        before: () => {
-                            loading()
-                        },
+                        before: () => loading(),
                         done: function ({code, info, data}, fileIndex) {
-                            if (fail(code)) {
-                                console.log(`fail:${++failCount} | info:${info}`)
-                                return
-                            }
+                            if (fail(code)) return console.log(`fail:${++failCount} | info:${info}`)
                             delete this.files[fileIndex]
                             urlList.push(data[0].origin)
                         },
@@ -147,27 +137,19 @@
                                 cb: ({code, info, data = 0}) => {
                                     loaded()
                                     if (fail(code)) return warn(info)
-                                    let msg = 0 === (failCount += data) ? '操作成功' : `失败 ${failCount} 个`
                                     urlList = []
                                     failCount = 0
                                     done(() => {
                                         reloadTable()
-                                        $(area).slideUp()
+                                        $('.rove').slideUp()
                                         $('.layui-elem-quote').empty()
                                         $('.image-remark').val('')
-                                    }, msg)
+                                    }, 0 === (failCount += data) ? '操作成功' : `失败 ${failCount} 个`)
                                 }
                             })
                         }
                     })
 
-                    form.on('switch(isCompress)', (data) => {
-                        isCompress = data.elem.checked
-                    });
-
-                    $('body').on('click', '.image-view', function () {
-                        window.open($(this).data('url'))
-                    })
                 }
             )
 

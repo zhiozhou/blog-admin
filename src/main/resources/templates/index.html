@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <body>
         <div id="root">
             <div id="layout-sider">
@@ -11,14 +12,14 @@
                             <div>暂无菜单</div>
                         </li>
                         <li class="layui-nav-item" th:each="menu : ${menuList}">
-                            <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-text=${menu.name}">
+                            <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-title=${menu.name}">
                                 <i class="fa" th:classappend="${menu.icon}"></i>
                                 [[${menu.name}]]
                             </a>
                             <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.childList)}">
                                 <dd th:each="child : ${menu.childList}">
                                     <a href="#"
-                                       th:attr="data-id=${child.id} , data-url=${child.path} , data-text=${child.name}">
+                                       th:attr="data-id=${child.id} , data-url=${child.path} , data-title=${child.name}">
                                         [[${child.name}]]
                                     </a>
                                 </dd>
@@ -44,7 +45,7 @@
                     </ul>
                     <ul class="layui-nav" lay-filter="user-aux-group">
                         <li class="layui-nav-item">
-                            <a href="#" data-id='user-info' th:attr="data-url=@{system/user/detail/{userId}(userId=${user.id})}" data-text="用户信息">
+                            <a href="#" data-id='user-info' th:attr="data-url=@{system/user/detail/{userId}(userId=${user.id})}" data-title="用户信息">
                                 [[${user.name}]]
                             </a>
                         </li>

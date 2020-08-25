@@ -54,6 +54,7 @@ public class UserServiceImpl implements IUserService {
 
         // 2.转换类型
         UserPO userPO = userDTO.toPO()
+                .setState(0)
                 .setSalt(RandomUtil.chars(6));
 
         // 3.密码加密

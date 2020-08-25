@@ -95,10 +95,13 @@
     <select id="list" parameterType="UserDTO" resultMap="userMap">
         <include refid="selectSQL"/>
         <where>
+            <if test="noid != null ">and system_user.id != #{noid}</if>
             <if test="name != null  and name != '' "> and system_user.name = #{name}</if>
             <if test="nameLike != null and nameLike != ''">and system_user.name LIKE CONCAT('%',#{nameLike},'%')</if>
+            <if test="username != null  and username != '' "> and system_user.username = #{username}</if>
             <if test="state != null  "> and system_user.state = #{state}</if>
             <if test="role != null and role.id != null "> and system_role.id = #{role.id}</if>
+            <if test="role != null and role.key != null "> and system_role.key = #{role.key}</if>
         </where>
         ORDER BY system_user.state asc,system_user.id DESC
     </select>
@@ -113,7 +116,11 @@
         <where>
             <if test="noid != null ">and system_user.id != #{noid}</if>
             <if test="name != null  and name != '' "> and system_user.name = #{name}</if>
+            <if test="nameLike != null and nameLike != ''">and system_user.name LIKE CONCAT('%',#{nameLike},'%')</if>
             <if test="username != null  and username != '' "> and system_user.username = #{username}</if>
+            <if test="state != null  "> and system_user.state = #{state}</if>
+            <if test="role != null and role.id != null "> and system_role.id = #{role.id}</if>
+            <if test="role != null and role.key != null "> and system_role.key = #{role.key}</if>
         </where>
     </select>
 </mapper>

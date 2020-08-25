@@ -1,0 +1,208 @@
+:root {
+    --primary-color: #1890ff;
+
+    --popover-background: #f2f2f2;
+
+    --component-background: #fff;
+    --component-background-hover: #f6f6f6;
+
+    --text-color: #666;
+    --text-color-hover: #333;
+
+    --border-color: #e6e6e6;
+
+    --sider-background: #1f1f1f;
+    --sider-background-active: #555;
+
+    --layui-blue: #1e9fff;
+    --layui-green: #009688;
+
+}
+
+html, body {
+    height: 100%;
+}
+
+
+/* 页面布局 */
+.layout-page {
+    margin: 1%;
+    padding: 20px;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+    background: var(--component-background);
+}
+
+.layout-page .layui-tab-content {
+    max-width: 1500px;
+}
+
+.layout-iframe {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.layout-iframe > .layui-form,
+.layout-iframe > .layui-form-pane {
+    width: 85%;
+    margin: 40px auto;
+}
+
+
+/* 全局样式 */
+.layui-form-label,
+.layui-form-select dl dd.layui-this {
+    color: var(--text-color);
+    background: var(--popover-background);
+}
+
+.layui-btn-primary:hover {
+    border-color: var(--primary-color);
+}
+
+@media (max-width: 576px) {
+    .layui-form-pane .layui-form-label {
+        width: 80px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 80px;
+    }
+}
+
+@media (min-width: 768px) {
+    .layui-layer-iframe {
+        max-width: 85%;
+        max-height: 80%;
+    }
+}
+
+/* 全局兼容 */
+.layui-table-box tr > td:last-child.layui-table-col-special {
+    width: 100%;
+    border-right: none !important;
+}
+
+.layui-table-box tr > td:last-child.layui-table-col-special .layui-table-cell {
+    display: inline-block;
+    width: auto;
+    min-width: 100%;
+    height: auto;
+    overflow: visible;
+    text-overflow: inherit;
+}
+
+.layui-table-box .layui-form-checkbox[lay-skin=primary] {
+    margin-top: 0;
+}
+
+.layout-table-tool {
+    text-align: right;
+}
+
+.layout-table-tool > .layui-btn {
+    margin-bottom: 5px;
+}
+
+.layui-input-block > .layui-table-view {
+    margin-top: 0;
+}
+
+.layui-btn-sm > .fa {
+    line-height: inherit;
+    vertical-align: bottom;
+}
+
+.layui-form-radio {
+    margin: 6px 0 0 10px;
+}
+
+.layui-tab {
+
+    margin-top: 0 !important;
+}
+
+.layui-tree {
+    min-height: 26px;
+    border: 1px solid var(--border-color);
+    padding: 5px 0;
+}
+
+.layui-tree-entry {
+    line-height: 17px;
+}
+
+/*富文本原字符开始不显示*/
+.tinymce {
+    display: none;
+}
+
+
+/* 时间选择 */
+.date-picker {
+    cursor: pointer;
+}
+
+
+/*图片上传*/
+.layui-upload-drag .view {
+    width: 100%;
+    max-height: 300px;
+}
+
+.layui-upload-drag .tips {
+    position: absolute;
+    top: 45%;
+    left: 0;
+    right: 0;
+}
+
+/*多图片上传*/
+.layui-elem-quote {
+    margin-top: 15px;
+    display: table;
+    padding: 10px 10px 10px 5px;
+    border-left: 5px solid #00b5f9;
+}
+
+.layui-elem-quote > div {
+    display: inline-block;
+    position: relative;
+    margin: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 2px;
+    border: 1px solid var(--layui-blue);
+    background-size: cover;
+    background-position: center;
+}
+
+.elem-quote-remove {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    color: white;
+    cursor: pointer;
+    padding-top: 35%;
+    font-size: 1.5rem;
+    text-align: center;
+    background: rgba(0, 0, 0, .33);
+    transition: opacity .2s;
+}
+
+.elem-quote-remove:hover {
+    opacity: 1;
+}
+
+
+.load {
+    background: url('../plugin/layui/css/modules/layer/default/loading-2.gif') no-repeat;
+    width: 33px;
+    height: 33px;
+}
+

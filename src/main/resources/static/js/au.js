@@ -43,17 +43,16 @@ function tinymceRender(tinymce, options) {
  * layui 文件上传通用配置
  */
 function uploadRender(upload, options) {
-    upload.render({
+    return upload.render({
         ...{
-            elem: elem,
-            url: _upload.url,
+            url: `${_upload.url}upload/multipart`,
             data: {
                 prefix: _upload.prefix,
                 keepName: true
             },
             accept: 'file',
             choose: (obj) => {
-                obj.preview((index, file) => layui.jquery(elem).siblings('.view').html(file.name))
+                obj.preview((index, file) => layui.jquery(options.elem).siblings('.view').html(file.name))
             },
             before: () => loading(),
             done: ({code, info, data}) => {
@@ -61,12 +60,13 @@ function uploadRender(upload, options) {
                 if (fail(code)) return warn(info)
                 done(null, '上传成功')
                 let url = data[0].origin
-                layui.jquery(elem).siblings('.view').attr('href', url).next().val(url)
+                layui.jquery(options.elem).siblings('.view').attr('href', url).next().val(url)
             }
         },
         ...options
     })
 }
+
 
 /**
  * 压缩图片，返回dataURL格式
@@ -88,6 +88,8 @@ function compress(data, cb) {
         canvas.height = height;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         // 将canvas中的图片转化为base64格式
+
+        console.log('aaa')
         cb && cb(canvas.toDataURL('image/jpeg', 0.92));
     }
 }
