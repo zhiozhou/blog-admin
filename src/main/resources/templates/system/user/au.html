@@ -9,9 +9,10 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" class="layui-input" placeholder="请输入用户名" autocomplete="off"
+                        <input type="text" class="layui-input" autocomplete="off"
+                               name="username" placeholder="请输入用户名"
                                th:value="${ _vo.username }"
-                               th:classappend="${isAdd}?'': 'layui-disabled'"
+                               th:classappend="${isAdd}&&'layui-disabled'"
                                th:disabled="${!isAdd}">
                     </div>
                 </div>
@@ -19,17 +20,17 @@
                 <div class="layui-form-item" th:if="${isAdd}">
                     <label class="layui-form-label">密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password" class="layui-input" lay-verify="required"
-                               autocomplete="off" placeholder="请输入密码">
+                        <input type="password" class="layui-input" autocomplete="off" lay-verify="required"
+                               name="password" placeholder="请输入密码">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">姓名：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" th:value="${ _vo.name }"
-                               class="layui-input"
-                               placeholder="请输入姓名" autocomplete="off">
+                        <input type="text" class="layui-input" autocomplete="off" lay-verify="required"
+                               name="name" placeholder="请输入姓名"
+                               th:value="${ _vo.name }">
                     </div>
                 </div>
 
@@ -37,7 +38,9 @@
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
                         <select name="role.id" lay-verify="required" lay-search="">
-                            <option th:each="role:${roleList}" th:value="${role.id}" th:field="${_vo.role.id}"
+                            <option th:each="role:${roleList}"
+                                    th:value="${role.id}"
+                                    th:field="${_vo.role.id}"
                                     th:text="${role.name}"></option>
                         </select>
                     </div>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <script>
         // 父级页面跳转
-        if (window != top) {
+        if (window !== top) {
             top.location.href = location.href
         }
     </script>
@@ -11,7 +11,6 @@
     <body>
         <div id="root">
             <div class="login">
-                <div class="title">后台系统登录</div>
                 <div class="login-holder">
                     <form class="layui-form">
                         <div class="layui-form-item">
@@ -22,16 +21,10 @@
                             <input type="password" name="password" class="layui-input" lay-verify="required"
                                    placeholder="密码" autocomplete="off">
                         </div>
-                        <div class="layui-form-item btn-item">
-                            <div class="layui-inline">
-                                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="login">登录</button>
-                            </div>
-                            <div class="layui-inline">
-                                <button type="reset" class="layui-btn layui-btn-primary">取消</button>
-                            </div>
-                            <div class="layui-inline">
-                                <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住我">
-                            </div>
+                        <div class="layui-form-item btn-group">
+                            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="login">登录</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+                            <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住我">
                         </div>
                     </form>
                 </div>

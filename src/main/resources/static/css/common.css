@@ -80,6 +80,12 @@ html, body {
 }
 
 /* 全局兼容 */
+
+.layui-table-view, .layui-table-box {
+    max-width: 100% !important;
+}
+
+
 .layui-table-box tr > td:last-child.layui-table-col-special {
     width: 100%;
     border-right: none !important;
@@ -92,6 +98,11 @@ html, body {
     height: auto;
     overflow: visible;
     text-overflow: inherit;
+}
+
+
+.layui-table-header tr > th:last-child.layui-table-col-special .layui-table-cell{
+    width: 600px;
 }
 
 .layui-table-box .layui-form-checkbox[lay-skin=primary] {

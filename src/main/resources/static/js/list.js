@@ -82,12 +82,23 @@ function tableRender(table, options) {
     })
 }
 
+/**
+ * 通用的字典字段渲染
+ * @param code 字段值
+ * @param dictMap 字典Map
+ * @returns {string} html标签
+ */
+function dictRender(code, dictMap) {
+    let {label, css} = dictMap[code]
+    return `<a  class="layui-btn layui-btn-xs ${css}">${label}</a>`
+}
+
 
 /**
  * 通用表格的工具栏（删 改 查），全部以iframe窗口方式打开
  */
-function iframeAction({data, event: action}) {
-    switch (action) {
+function iframeAction({data, event}) {
+    switch (event) {
         case 'detail':
             newFrame(`${_module.name}详情`, `${prefix}/detail/${data.id}`)
             break
@@ -102,8 +113,8 @@ function iframeAction({data, event: action}) {
 /**
  * 通用表格的工具栏（删 改 查），全部新页面的方式打开
  */
-function pageAction({data, event: action}) {
-    switch (action) {
+function pageAction({data, event}) {
+    switch (event) {
         case 'detail':
             window.location.href = `${prefix}/detail/${data.id}`
             break

@@ -61,7 +61,7 @@ public class UserController extends BaseController {
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        model.addAttribute(VO_KEY, dtoVO.getData());
+        super.update(model, dtoVO.getData());
 
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_USER_STATE)).getData());
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0), new Page(0)).getData().getList());

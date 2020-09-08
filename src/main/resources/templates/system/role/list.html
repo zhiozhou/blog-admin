@@ -6,12 +6,15 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off">
+                        <input type="text" class="layui-input" autocomplete="off"
+                               name="nameLike" placeholder="请输入名称">
                     </div>
                     <div class="layui-inline">
                         <select name="state">
                             <option value="">请选择一个状态</option>
-                            <option value="0" th:each="state:${stateMap.values()}" th:value="${state.code}"
+                            <option value="0"
+                                    th:each="state:${stateMap.values()}"
+                                    th:value="${state.code}"
                                     th:text="${state.label}"></option>
                         </select>
                     </div>
@@ -51,18 +54,12 @@
                         {field: 'name', title: '名称', minWidth: '120'},
                         {field: 'key', title: '角色标识'},
                         {
-                            field: 'state',
-                            title: '状态',
-
-                            templet: ({state}) => {
-                                let {label, css} = stateMap[state]
-                                return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
-                            }
+                            field: 'state', title: '状态',
+                            templet: ({state}) => dictRender(state, stateMap)
                         },
                         {field: 'remark', title: '备注', minWidth: '150'},
-                        {title: '操作',  toolbar: '#rud'}
+                        {title: '操作', toolbar: '#rud'}
                     ]]
-
                 tableRender(table, {cols})
                 table.on('tool(table)', pageAction)
             })

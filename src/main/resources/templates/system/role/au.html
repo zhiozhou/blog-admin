@@ -14,16 +14,19 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="name" lay-verify="required" th:value="${_vo.name}"
-                                       class="layui-input" placeholder="请输入名称" autocomplete="off">
+                                <input type="text" class="layui-input" autocomplete="off" lay-verify="required"
+                                       name="name" placeholder="请输入名称"
+                                       th:value="${_vo.name}">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">角色标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="key" id="key" th:value="${_vo.key}" class="layui-input"
-                                       placeholder="默认为名称拼音" autocomplete="off">
+                                <input type="text" class="layui-input" autocomplete="off"
+                                       name="key" id="key" placeholder="默认为名称拼音"
+                                       th:value="${_vo.key}"
+                                >
                             </div>
                         </div>
 
@@ -37,16 +40,20 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="state" th:each="state:${stateList}"
-                                       th:value="${state.code}" th:title="${state.label}" th:field="${_vo.state}">
+                                <input type="radio" name="state"
+                                       th:each="state:${stateList}"
+                                       th:value="${state.code}"
+                                       th:title="${state.label}"
+                                       th:field="${_vo.state}">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea name="remark" th:text="${_vo.remark}" placeholder="请输入备注"
-                                          class="layui-textarea"></textarea>
+                                <textarea class="layui-textarea" name="remark" placeholder="请输入备注"
+                                          th:text="${_vo.remark}"
+                                ></textarea>
                             </div>
 
                         </div>
@@ -125,7 +132,7 @@
             }
 
             function hasMenu(id) {
-                if (0 == id) {
+                if (0 === id) {
                     return true
                 } else if (!menuList) {
                     return false
