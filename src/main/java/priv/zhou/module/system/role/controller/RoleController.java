@@ -16,6 +16,7 @@ import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.service.IRoleService;
 
 import static priv.zhou.common.param.CONSTANT.SYSTEM_ROLE_STATE;
+import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 /**
  * 角色 视图控制层
@@ -41,7 +42,7 @@ public class RoleController extends BaseController {
     @RequestMapping("/add")
     public String add(Model model) {
         super.add(model, new RoleDTO().setState(0));
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
+        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/au";
     }
@@ -55,7 +56,7 @@ public class RoleController extends BaseController {
         }
         super.update(model, dtoVO.getData());
 
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(MenuController.FLAG)).getData()));
+        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_ROLE_STATE)).getData());
         return "system/role/au";
     }

@@ -66,7 +66,7 @@ public class MenuServiceImpl implements IMenuService {
         }
 
         // 5.移除服务端缓存
-        if(MenuController.FLAG.equals(menuDTO.getFlag())){
+        if(SERVICE_FLAG.equals(menuDTO.getFlag())){
             RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
             RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
         }
@@ -83,7 +83,7 @@ public class MenuServiceImpl implements IMenuService {
         MenuPO menuPO = menuDAO.get(menuDTO);
         if(null == menuPO){
             return OutVO.fail(OutVOEnum.FAIL_PARAM);
-        }else if(MenuController.FLAG.equals(menuPO.getFlag())){
+        }else if(SERVICE_FLAG.equals(menuPO.getFlag())){
             RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
             RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
         }
@@ -129,7 +129,7 @@ public class MenuServiceImpl implements IMenuService {
         }
 
         // 5.移除服务端缓存
-        if(MenuController.FLAG.equals(menuDTO.getFlag())){
+        if(SERVICE_FLAG.equals(menuDTO.getFlag())){
             RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
             RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
         }

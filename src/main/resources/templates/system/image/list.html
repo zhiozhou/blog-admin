@@ -5,7 +5,8 @@
         .layout-table-tool {
             text-align: left;
         }
-        .layui-table-cell{
+
+        .layui-table-cell {
             height: auto;
         }
 
@@ -73,21 +74,21 @@
                         ]]
 
                     tableRender(table, {cols})
-                    table.on('tool(table)', toolHandle)
-
-                    function toolHandle({data, event}) {
-                        switch (event) {
-                            case 'copy':
-                                return copy(data.url)
+                    table.on('tool(table)', ({data, event}) => {
+                            switch (event) {
+                                case 'copy':
+                                    return copy(data.url)
+                            }
+                            iframeAction({data, event})
                         }
-                        iframeAction({data, event})
-                    }
+                    )
+
 
                     $(document.body).on('click', '.image-view', function () {
                         window.open($(this).attr('src'))
                     })
 
-                    $('.add-image').click(function(){
+                    $('.add-image').click(function () {
                         isCompress = $(this).data('type')
                     })
 

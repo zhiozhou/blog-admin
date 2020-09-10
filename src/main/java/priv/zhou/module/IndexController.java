@@ -15,6 +15,8 @@ import priv.zhou.module.system.user.domain.dto.UserDTO;
 
 import java.util.List;
 
+import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
+
 
 /**
  * 索引 controller
@@ -39,7 +41,7 @@ public class IndexController extends BaseController {
         OutVO<List<MenuDTO>> listRes = menuService.list(
                 new MenuDTO()
                         .setUserId(userDTO.getId())
-                        .setFlag(MenuController.FLAG)
+                        .setFlag(ADMIN_FLAG)
                         .setState(0)
                         .setTypes(Lists.newArrayList(0, 1))
         );

@@ -13,6 +13,8 @@ import priv.zhou.module.system.menu.service.IMenuService;
 import javax.validation.Valid;
 import java.util.List;
 
+import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
+
 /**
  * 菜单 接口控制层
  *
@@ -33,31 +35,31 @@ public class MenuRestController {
     @RequiresPermissions("system:menu:add")
     @RequestMapping("/save")
     public OutVO<NULL> save(@Valid MenuDTO menuDTO) {
-        return menuService.save(menuDTO.setFlag(MenuController.FLAG));
+        return menuService.save(menuDTO.setFlag(ADMIN_FLAG));
     }
 
     @RequiresPermissions("system:menu:remove")
     @RequestMapping("/remove/{id}")
     public OutVO<NULL> remove(@PathVariable Integer id) {
-        return menuService.remove(new MenuDTO().setId(id).setFlag(MenuController.FLAG));
+        return menuService.remove(new MenuDTO().setId(id).setFlag(ADMIN_FLAG));
     }
 
     @RequiresPermissions("system:menu:update")
     @RequestMapping("/update")
     public OutVO<NULL> update(@Valid MenuDTO menuDTO) {
-        return menuService.update(menuDTO.setFlag(MenuController.FLAG));
+        return menuService.update(menuDTO.setFlag(ADMIN_FLAG));
     }
 
     @RequiresPermissions("system:menu:list")
     @RequestMapping("/list")
     public OutVO<List<MenuDTO>> list(MenuDTO menuDTO) {
-        return menuService.list(menuDTO.setFlag(MenuController.FLAG));
+        return menuService.list(menuDTO.setFlag(ADMIN_FLAG));
     }
 
     @RequiresPermissions("system:menu:list")
     @RequestMapping("/tree")
     public OutVO<List<MenuDTO>> trimList(MenuDTO menuDTO) {
-        OutVO<List<MenuDTO>> outVO = menuService.list(menuDTO.setFlag(MenuController.FLAG));
+        OutVO<List<MenuDTO>> outVO = menuService.list(menuDTO.setFlag(ADMIN_FLAG));
         return outVO.setData(IMenuService.toTree(outVO.getData()));
     }
 

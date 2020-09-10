@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 
 public interface IMenuService {
 
+
+     Integer ADMIN_FLAG = 1;
+
+     Integer SERVICE_FLAG = 2;
+
     OutVO<NULL> save(MenuDTO menuDTO);
 
     OutVO<NULL> remove(MenuDTO menuDTO);

@@ -14,6 +14,7 @@ import priv.zhou.module.system.menu.service.IMenuService;
 
 import static priv.zhou.common.param.CONSTANT.SYSTEM_MENU_STATE;
 import static priv.zhou.common.param.CONSTANT.SYSTEM_MENU_TYPE;
+import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 /**
  * 菜单 视图控制层
@@ -27,8 +28,6 @@ public class MenuController extends BaseController {
 
     private final IMenuService menuService;
 
-    public final static Integer FLAG = 1;
-
     public MenuController(IMenuService menuService) {
         super(new Module("菜单", "system:menu"));
         this.menuService = menuService;
@@ -39,7 +38,7 @@ public class MenuController extends BaseController {
     public String add(Model model) {
 
         super.add(model, new MenuDTO().setParentId(0).setType(0).setState(0));
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(FLAG)).getData()));
+        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("typeList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_TYPE)).getData());
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());
         return "system/menu/au";
@@ -48,13 +47,13 @@ public class MenuController extends BaseController {
     @RequiresPermissions("system:menu:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        OutVO<MenuDTO> dtoVO = menuService.get(new MenuDTO().setId(id).setFlag(FLAG));
+        OutVO<MenuDTO> dtoVO = menuService.get(new MenuDTO().setId(id).setFlag(ADMIN_FLAG));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
         super.update(model, dtoVO.getData());
 
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(FLAG)).getData()));
+        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("typeList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_TYPE)).getData());
         model.addAttribute("stateList", dictService.dataList(new DictDTO().setKey(SYSTEM_MENU_STATE)).getData());
         return "system/menu/au";

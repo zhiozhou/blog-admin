@@ -19,6 +19,7 @@ import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.po.UserPO;
 
 import static java.util.Objects.isNull;
+import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 public class UserRealm extends AuthorizingRealm {
 
@@ -37,7 +38,7 @@ public class UserRealm extends AuthorizingRealm {
         UserDTO userDTO = (UserDTO) principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo();
         authInfo.setRoles(roleService.keySet(userDTO.getId()));
-        authInfo.setStringPermissions(menuService.keySet(new MenuDTO().setUserId(userDTO.getId()).setFlag(MenuController.FLAG)));
+        authInfo.setStringPermissions(menuService.keySet(new MenuDTO().setUserId(userDTO.getId()).setFlag(ADMIN_FLAG)));
         return authInfo;
     }
 

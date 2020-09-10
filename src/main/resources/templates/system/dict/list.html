@@ -53,7 +53,6 @@
                         {
                             field: 'state',
                             title: '状态',
-
                             templet: ({state}) => {
                                 let css, info
                                 switch (state) {
@@ -70,7 +69,7 @@
                             }
                         },
                         {field: 'remark', title: '备注', minWidth: '150'},
-                        {title: '操作',  toolbar: '#rud'}
+                        {title: '操作', toolbar: '#rud'}
                     ]]
 
 
@@ -81,15 +80,14 @@
                 function wrapHandle(tool) {
                     if ('remove' === tool.event) {
                         layer.confirm(`确认移除该${_module.name}吗`, {
-                            btn: ['确定', '取消'],
-                            shade: [0.1, '#fff']
-                        }, () => {
-                            httpPost({
+                                btn: ['确定', '取消'],
+                                shade: [0.1, '#fff']
+                            }, () => httpPost({
                                 url: `${prefix}/rest/remove`,
                                 data: {key: tool.data.key},
                                 cb: () => done(reloadTable)
                             })
-                        })
+                        )
                         return
                     }
                     pageAction(tool)

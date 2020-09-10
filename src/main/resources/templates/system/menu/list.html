@@ -96,17 +96,11 @@
                         {field: 'key', title: '权限标识', minWidth: '150',},
                         {
                             field: 'type', title: '类型',
-                            templet: ({type}) => {
-                                let {label, css} = typeMap[type]
-                                return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
-                            }
+                            templet: ({type}) => dictRender(type,typeMap)
                         },
                         {
                             field: 'state', title: '状态',
-                            templet: ({state}) => {
-                                let {label, css} = stateMap[state]
-                                return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
-                            }
+                            templet: ({state}) => dictRender(state,stateMap)
                         },
                         {field: 'sort', title: '排序'},
                         {title: '操作', toolbar: '#ud'}
