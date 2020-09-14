@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="layout-page">
+            <div>
+                <div class="layout-table-tool">
+                    <a class="layui-btn layui-btn-sm layui-btn-normal add-page-btn" shiro:hasPermission=${_module.permissionPrefix+':add'}>
+                    <i class="fa fa-plus"></i> 添加
+                    </a>
+                </div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script th:inline="javascript">
+            const stateMap = [[${stateMap}]]
+        </script>
+        <script th:inline="none">
+            const prefix = `${_gate}blog`
+
+
+            layui.use(['table', 'jquery'], () => {
+                const {table} = layui,
+                    cols = [[
+                        {field: 'title', title: '标题'},
+                        {field: 'state', title: '状态', templet: ({state}) => dictRender(state, stateMap)},
+                        {field: 'pv', title: '页面访问量'},
+                        {field: 'gmtCreate', title: '创建时间'},
+                        {title: '操作', toolbar: '#rud'}
+                    ]]
+
+                tableRender(table, {cols})
+                table.on('tool(table)', pageAction)
+            })
+        </script>
+    </body>
+
+</html>

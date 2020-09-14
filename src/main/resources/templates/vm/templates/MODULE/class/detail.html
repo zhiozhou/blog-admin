@@ -10,7 +10,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">${column.comment}：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="$left _vo.${column.attrName} }" class="layui-input" disabled>
+                        <input type="text" class="layui-input" disabled
+                               th:value="$left _vo.${column.attrName} }" >
                     </div>
                 </div>
 #end

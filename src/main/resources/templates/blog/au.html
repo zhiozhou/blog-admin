@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_action}">
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li><a th:href="@{/blog/list}" th:text="${_module.name}+列表"></a></li>
+                        <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
+                    </ul>
+                    <input type="hidden" name="id" th:value="${_vo.id}">
+                    <div class="layui-tab-content">
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">标题：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" autocomplete="off"
+                                       lay-verify="required" maxlength="256"
+                                       name="title" placeholder="请输入标题"
+                                       th:value="${ _vo.title }">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">内容：</label>
+                            <div class="layui-input-block">
+                          <textarea class="layui-textarea"
+                                    lay-verify="required"
+                                    name="content" placeholder="请输入内容"
+                                    th:text="${ _vo.content }"
+                          ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">预览：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" autocomplete="off"
+                                       lay-verify="required" maxlength="512"
+                                       name="preview" placeholder="请输入预览"
+                                       th:value="${ _vo.preview }">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" autocomplete="off"
+                                       lay-verify="required" maxlength="64"
+                                       name="remark" placeholder="请输入备注"
+                                       th:value="${ _vo.remark }">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">
+                                    <i class="fa fa-repeat"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:include="include :: au-footer"></div>
+        <script th:inline="none">
+            const prefix = `${_gate}blog`
+
+            layui.use(['form', 'jquery'], () => {
+                const {form, jquery: $} = layui
+
+                //监听提交
+                form.on('submit(submit)', ({form, field}) => {
+                        field.abs = getAbs(field.content)
+                        pageSubmit({form, field})
+                    }
+                )
+            })
+
+            function getAbs(content) {
+                return !content ? '' :
+                    content.replace(/(\*\*|__)(.*?)(\*\*|__)/g, '')         //内粗体
+                        .replace(/\!\[[\s\S]*?\]\([\s\S]*?\)/g, '')         //图片
+                        .replace(/\[[\s\S]*?\]\([\s\S]*?\)/g, '')           //连接
+                        .replace(/<\/?.+?\/?>/g, '')                        //html标签
+                        .replace(/(\*)(.*?)(\*)/g, '')                      //内联代码块
+                        .replace(/`{1,2}[^`](.*?)`{1,2}/g, '')              //内联代码块
+                        .replace(/```([\s\S]*?)```[\s]*/g, '')              //代码块
+                        .replace(/\~\~(.*?)\~\~/g, '')                      //删除线
+                        .replace(/[\s]*[-\*\+]+(.*)/g, '')                  //无序列表
+                        .replace(/[\s]*[0-9]+\.(.*)/g, '')                  //有序列表
+                        .replace(/(#+)(.*)/g, '')                           //标题
+                        .replace(/(>+)(.*)/g, '')                           //摘要
+                        .replace(/\r\n/g, '')                               //换行
+                        .replace(/\n/g, '')                                 //换行
+                        .replace(/\s/g, '')
+                        .slice(0, 150)
+            }
+
+
+        </script>
+    </body>
+
+</html>

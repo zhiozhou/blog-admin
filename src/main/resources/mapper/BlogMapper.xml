@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.blog.domain.dao.BlogDAO">
+
+    <insert id="save" parameterType="BlogPO">
+        INSERT INTO blog_blog(
+             title , 
+             content , 
+             preview , 
+             state , 
+             remark , 
+             abs ,
+             pv ,
+             create_id ,
+             gmt_create , 
+             gmt_modified 
+        )
+        VALUES(
+            #{title} , 
+            #{content} , 
+            #{preview} , 
+            #{state} , 
+            #{remark} , 
+            #{abs} ,
+            #{pv} ,
+            #{createId} ,
+            NOW() ,
+            NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="BlogPO">
+        UPDATE blog_blog
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="preview != null and preview != ''">preview = #{preview},</if>
+            <if test="state != null and state != ''">state = #{state},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="abs != null and abs != ''">abs = #{abs},</if>
+            <if test="pv != null and pv != ''">pv = #{pv},</if>
+            <if test="createId != null and createId != ''">create_id = #{createId},</if>
+            <if test="gmtCreate != null and gmtCreate != ''">gmt_create = #{gmtCreate},</if>
+            <if test="gmtModified != null and gmtModified != ''">gmt_modified = #{gmtModified},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="get" parameterType="BlogDTO" resultType="BlogPO">
+        SELECT
+            id ,
+            title ,
+            content ,
+            preview ,
+            state ,
+            remark ,
+            abs,
+            pv ,
+            create_id ,
+            gmt_create ,
+            gmt_modified
+        FROM blog_blog
+        WHERE id = #{id}
+    </select>
+
+
+    <select id="list" parameterType="BlogDTO" resultType="BlogPO">
+        SELECT
+            id ,
+            title ,
+            state ,
+            remark ,
+            pv
+        FROM blog_blog
+        <where>
+            <if test="titleLike != null and titleLike != ''">and title LIKE CONCAT('%',#{titleLike},'%')</if>
+            <if test="state != null  "> and state = #{state}</if>
+            <if test="remarkLike != null  and remarkLike != '' "> and remark LIKE CONCAT('%',#{remarkLike},'%')</if>
+        </where>
+        ORDER BY id DESC
+    </select>
+
+
+    <select id="count" parameterType="BlogDTO" resultType="Integer">
+        SELECT
+            count(0)
+        FROM
+        blog_blog
+        <where>
+            <if test="noid != null  "> and id != #{noid}</if>
+            <if test="title != null  and title != '' "> and title = #{title}</if>
+        </where>
+    </select>
+</mapper>

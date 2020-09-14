@@ -5,16 +5,19 @@
         <div class="layout-iframe" th:with="isAdd='/rest/save'==${_action}">
             <form class="layui-form " th:attr="action=${_action}">
                 <input type="hidden" name="id" th:value="${_vo.id}">
-#set($left="${")
-#foreach ($column in $table.columnList)
+                #set($left="${")
+                #foreach ($column in $table.columnList)
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">${column.comment}：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="${column.attrName}" lay-verify="required" th:value="$left _vo.${column.attrName} }" class="layui-input" placeholder="请输入${column.comment}" autocomplete="off"  >
+                        <input type="text" class="layui-input" autocomplete="off"
+                               lay-verify="required"
+                               name="${column.attrName}" placeholder="请输入${column.comment}"
+                               th:value="$left _vo.${column.attrName} }">
                     </div>
                 </div>
-#end
+                #end
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
@@ -29,13 +32,13 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="none">
-            const prefix =  `${_gate}${app.module}/${table.objectName}`
+            const prefix = `${_gate}${app.module}/${table.objectName}`
 
-            layui.use(['form', 'jquery'],  ()=> {
+            layui.use(['form', 'jquery'], () => {
                 const {form, jquery: $} = layui
 
                 //监听提交
-                form.on('submit(submit)',  iframeSubmit)
+                form.on('submit(submit)', iframeSubmit)
             })
 
         </script>

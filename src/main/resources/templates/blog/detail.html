@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="layout-iframe">
+            <form class="layui-form-pane  ">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.id }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.title }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内容：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.content }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">预览：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.preview }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.state }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.remark }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">摘要：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.abs }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">页面访问量：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.pv }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.createId }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.gmtCreate }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.gmtModified }" >
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+
+        </script>
+    </body>
+
+</html>
