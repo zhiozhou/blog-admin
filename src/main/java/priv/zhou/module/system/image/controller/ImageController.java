@@ -32,7 +32,7 @@ public class ImageController extends BaseController {
     public String list(Model model, HttpServletRequest request) {
         super.upload(model);
         super.list(model);
-        RedisUtil.addSet(FILE_SERVICE_IP_SET_KEY, HttpUtil.getIpAddress(request));
+//        RedisUtil.addSet(FILE_SERVICE_IP_SET_KEY, HttpUtil.getIpAddress(request));
         return "system/image/list";
     }
 }
