@@ -14,6 +14,7 @@ layui.use(['jquery', 'util'], function () {
 })
 
 
+
 /**
  * 返回格式化后的字符串
  * @param date 时间

@@ -40,7 +40,7 @@
                         </div>
                         <div class="layui-inline">
                             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal rove"
-                                    id="images-upload" lay-submit
+                                    id="image-upload" lay-submit
                                     lay-filter="submit">
                                 开始上传
                             </button>
@@ -99,14 +99,13 @@
 
                     const uploader = uploadRender(upload, {
                         elem: '.add-image',
-                        data: {keepName: false},
+                        data: {prefix:_upload.prefix, keepName: false},
                         auto: false,
                         size: 16384,
                         multiple: true,
                         bindAction: '#image-upload',
                         acceptMime: 'image/*',
                         choose: function (obj) {
-                            console.log(obj)
                             let files = this.files = obj.pushFile()
                             obj.preview((index, file, result) => {
                                 let $quote = $('#image-upload-quote')
@@ -131,13 +130,18 @@
                             urlList.push(data[0].origin)
                         },
                         allDone: () => {
+
+                            if (0 === urlList.length) {
+                                loaded()
+                                return warn('上传失败')
+                            }
+
                             let remark = $('.image-remark').val()
                             httpPost({
-                                url: prefix + '/rest/save',
+                                url: `${prefix}/rest/save`,
                                 data: {urlList, remark},
-                                cb: ({code, info, data = 0}) => {
+                                cb: (data) => {
                                     loaded()
-                                    if (fail(code)) return warn(info)
                                     urlList = []
                                     failCount = 0
                                     done(() => {
