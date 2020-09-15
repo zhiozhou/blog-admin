@@ -6,6 +6,9 @@ import priv.zhou.common.param.NULL;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
+import priv.zhou.module.blog.domain.dto.TagDTO;
+
+import java.util.List;
 
 /**
  * 博客 服务层定义
@@ -26,4 +29,6 @@ public interface IBlogService {
     OutVO<BlogDTO> get(BlogDTO blogDTO);
 
     OutVO<ListVO<BlogDTO>> list(BlogDTO blogDTO, Page page);
+
+    OutVO<List<TagDTO>> tagList(TagDTO tagDTO);
 }

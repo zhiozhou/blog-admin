@@ -1,12 +1,13 @@
 package priv.zhou.module.blog.domain.po;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 博客 数据持久化模型
@@ -17,66 +18,69 @@ import java.util.Date;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class BlogPO implements Serializable{
+public class BlogPO implements Serializable {
 
 
-
-	private Integer id;
-
+    private Integer id;
 
 
-	/**
-	 * 标题
-	 */
-	private String title;
+    /**
+     * 标题
+     */
+    private String title;
 
-	/**
-	 * 内容
-	 */
-	private String content;
+    /**
+     * 内容
+     */
+    private String content;
 
-	/**
-	 * 预览
-	 */
-	private String preview;
+    /**
+     * 预览
+     */
+    private String preview;
 
-	/**
-	 * 状态
-	 */
-	private Integer state;
+    /**
+     * 状态
+     */
+    private Integer state;
 
-	/**
-	 * 备注
-	 */
-	private String remark;
+    /**
+     * 标签列表
+     */
+    private List<TagPO> tags;
 
-	/**
-	 * 摘要
-	 */
-	private String abs;
+    /**
+     * 备注
+     */
+    private String remark;
 
-	/**
-	 * 页面访问量
-	 */
-	private Long pv;
+    /**
+     * 摘要
+     */
+    private String abs;
 
-	/**
-	 * 创建人
-	 */
-	private Integer createId;
+    /**
+     * 页面访问量
+     */
+    private Long pv;
 
-	/**
-	 * 创建时间
-	 */
-	private Date gmtCreate;
+    /**
+     * 创建人
+     */
+    private Integer createId;
 
-	/**
-	 * 修改时间
-	 */
-	private Date gmtModified;
+    /**
+     * 创建时间
+     */
+    private Date gmtCreate;
 
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this);
-	}
+    /**
+     * 修改时间
+     */
+    private Date gmtModified;
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
+    }
 }

@@ -3,16 +3,15 @@ package priv.zhou.module.blog.domain.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.beans.BeanUtils;
-import priv.zhou.module.blog.domain.po.BlogPO;
 import priv.zhou.common.domain.dto.DTO;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+import priv.zhou.module.blog.domain.po.BlogPO;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,7 @@ public class BlogDTO extends DTO<BlogPO> {
 
 
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -44,6 +43,8 @@ public class BlogDTO extends DTO<BlogPO> {
      */
     @NotBlank(message = "标题不可为空")
     private String title;
+
+    private String titleLike;
 
     /**
      * 内容
@@ -62,9 +63,17 @@ public class BlogDTO extends DTO<BlogPO> {
     private Integer state;
 
     /**
+     * 标签列表
+     */
+    @NotEmpty(message = "至少添加一种标签")
+    private List<TagDTO> tags;
+
+    /**
      * 备注
      */
     private String remark;
+
+    private String remarkLike;
 
     /**
      * 摘要
@@ -96,6 +105,12 @@ public class BlogDTO extends DTO<BlogPO> {
 
     public BlogDTO(BlogPO blogPO) {
         super(blogPO);
+        this.tags = DTO.ofPO(blogPO.getTags(), TagDTO::new);
     }
 
+    @Override
+    public BlogPO toPO() {
+        return super.toPO()
+                .setTags(tags.stream().map(TagDTO::toPO).collect(Collectors.toList()));
+    }
 }

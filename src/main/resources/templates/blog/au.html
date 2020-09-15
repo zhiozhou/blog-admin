@@ -1,6 +1,99 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
+    <style>
+        input[name='title'] {
+            background: var(--popover-background);
+        }
+
+        .tags-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            padding-top: 4px;
+            min-height: 38px;
+        }
+
+        .tags-wrap > .tag {
+            margin: 0 0 8px 8px;
+            padding: 0 4px 0 8px;
+            border-radius: 2px;
+            line-height: 28px;
+            color: var(--layui-blue);
+            background: rgba(38, 125, 204, .05);
+            border: 1px solid var(--layui-blue);
+        }
+
+        .tags-wrap > .tag > .remove {
+            cursor: pointer;
+            display: inline-block;
+            height: 100%;
+            width: 19px;
+            text-align: center;
+        }
+
+
+        .add-tag-wrap {
+            position: relative;
+            margin-left: 8px;
+            width: 100%;
+            max-width: 200px;
+        }
+
+
+        #add-tag-input-wrap {
+            display: none;
+            position: relative;
+        }
+
+        #add-tag-input {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        #add-tag-check {
+            display: none;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 7px 0;
+            margin: 0 5px;
+            width: 20px;
+            text-align: center;
+            color: var(--layui-blue);
+        }
+
+        #tag-list {
+            display: none;
+            z-index: 899;
+            position: absolute;
+            left: 0;
+            top: 42px;
+            padding: 5px 0;
+            min-width: 100%;
+            overflow-y: auto;
+            max-height: 300px;
+            border-radius: 2px;
+            background: var(--component-background);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+        }
+
+        #tag-list > div {
+            cursor: pointer;
+            padding: 0 10px;
+            line-height: 36px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        #tag-list > div:hover {
+            background-color: var(--popover-background);
+            transition: .2s background-color;
+        }
+    </style>
     <body>
         <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
             <form class="layui-form" th:attr="action=${_action}">
@@ -13,32 +106,53 @@
                     <div class="layui-tab-content">
 
                         <div class="layui-form-item">
-                            <label class="layui-form-label">标题：</label>
-                            <div class="layui-input-block">
-                                <input type="text" class="layui-input" autocomplete="off"
-                                       lay-verify="required" maxlength="256"
-                                       name="title" placeholder="请输入标题"
-                                       th:value="${ _vo.title }">
-                            </div>
+                            <input type="text" class="layui-input" autocomplete="off"
+                                   lay-verify="required" maxlength="256"
+                                   name="title" placeholder="请输入标题"
+                                   th:value="${ _vo.title }">
                         </div>
 
                         <div class="layui-form-item">
-                            <label class="layui-form-label">内容：</label>
-                            <div class="layui-input-block">
                           <textarea class="layui-textarea"
                                     lay-verify="required"
+                                    rows="20"
                                     name="content" placeholder="请输入内容"
-                                    th:text="${ _vo.content }"
-                          ></textarea>
+                                    th:text="${ _vo.content }">
+                          </textarea>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">标签：</label>
+                            <div class="layui-input-block tags-wrap">
+                                <div class="tag"
+                                     th:each="tag : ${_vo.tags}"
+                                >
+                                    <span th:text="${tag.name}"></span>
+                                    <span class="remove">
+                                         <i class="fa fa-remove"></i>
+                                    </span>
+                                </div>
+                                <div class="add-tag-wrap">
+                                    <a class="layui-btn layui-btn-sm layui-btn-primary" id="add-tag">
+                                        <i class="fa fa-plus"></i> 添加标签
+                                    </a>
+                                    <div id="add-tag-input-wrap">
+                                        <input type="text" class="layui-input" autocomplete="off"
+                                               id="add-tag-input" placeholder="注册 / 搜索标签"/>
+                                        <div id="add-tag-check"><i class="fa fa-check"></i></div>
+                                        <div id="tag-list"></div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
-                            <label class="layui-form-label">预览：</label>
+                            <label class="layui-form-label">预览图：</label>
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input" autocomplete="off"
-                                       lay-verify="required" maxlength="512"
-                                       name="preview" placeholder="请输入预览"
+                                       maxlength="512"
+                                       name="preview" placeholder="请输入预览图地址"
                                        th:value="${ _vo.preview }">
                             </div>
                         </div>
@@ -47,7 +161,7 @@
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input" autocomplete="off"
-                                       lay-verify="required" maxlength="64"
+                                       maxlength="64"
                                        name="remark" placeholder="请输入备注"
                                        th:value="${ _vo.remark }">
                             </div>
@@ -62,6 +176,8 @@
                                 </button>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </form>
@@ -72,13 +188,79 @@
 
             layui.use(['form', 'jquery'], () => {
                 const {form, jquery: $} = layui
+                const tagDemo = '<div class="tag"><span>NAME</span><span class="remove"><i class="fa fa-remove"></i></span></div>'
+                let postSeq = 0
 
                 //监听提交
                 form.on('submit(submit)', ({form, field}) => {
+                        let domArr = $('.tags-wrap>.tag')
+                        if (0 === domArr.length) {
+                            return warn('至少添加一种标签')
+                        }
+                        domArr.each((i, d) => {
+                            field[`tags[${i}].name`] = $(d).html()
+                        })
                         field.abs = getAbs(field.content)
-                        pageSubmit({form, field})
+                        return pageSubmit({form, field})
                     }
                 )
+
+                $('#add-tag').click(() => {
+                    $('#add-tag').hide()
+                    $('#add-tag-input-wrap').show()
+                    $('#add-tag-input').focus()
+                })
+
+                $('#add-tag-input').bind("input propertychange", function () {
+                    let seq = ++postSeq,
+                        value = $(this).val()
+                    if (value) {
+                        $('#add-tag-check').show()
+                        $.post(`${prefix}/rest/tag/list`, {nameLike: value}, ({code, data}) => {
+                            if (fail(code) || seq !== postSeq) return
+
+                            const $tagList = $('#tag-list')
+                            $tagList.empty()
+                            if (0 === data.length) {
+                                $tagList.append('<div>无匹配标签</div>')
+                            } else {
+                                for (let tag of data) {
+                                    $tagList.append(`<div class="tag">${tag.name}</div>`)
+                                }
+                            }
+                            $('#tag-list').show()
+                        })
+                    } else {
+                        $('#tag-list').hide()
+                        $('#add-tag-check').hide()
+                    }
+                }).blur(function () {
+                    !$(this).val() && resetAddTag()
+                    $('#tag-list').hide()
+                })
+
+                $('#tag-list').on('mousedown', '.tag', function (e) {
+                    e.preventDefault() // 阻止 tag-input的blur
+                    $('.add-tag-wrap').before(tagDemo.replace('NAME', $(this).html()))
+                    resetAddTag()
+                })
+
+                $('.tags-wrap').on('click', '.tag>.remove', function (e) {
+                    $(this).parent().remove()
+                })
+
+                $('#add-tag-check').click(() => {
+                    $('.add-tag-wrap').before(tagDemo.replace('NAME', $('#add-tag-input').val()))
+                    resetAddTag()
+                })
+
+                function resetAddTag() {
+                    $('#add-tag').show()
+                    $('#add-tag-input-wrap').hide()
+                    $('#add-tag-input').val('')
+                    $('#add-tag-check').hide()
+                }
+
             })
 
             function getAbs(content) {
@@ -100,7 +282,6 @@
                         .replace(/\s/g, '')
                         .slice(0, 150)
             }
-
 
         </script>
     </body>

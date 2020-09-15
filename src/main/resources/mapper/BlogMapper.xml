@@ -4,7 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.blog.domain.dao.BlogDAO">
 
-    <insert id="save" parameterType="BlogPO">
+    <resultMap id="blogMap" type="BlogPO">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="preview" property="preview"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="abs" property="abs"/>
+        <result column="pv" property="pv"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <collection property="tags"  ofType="TagPO">
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+
+
+    <insert id="save" parameterType="BlogPO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO blog_blog(
              title , 
              content , 
@@ -49,36 +65,40 @@
     </update>
 
 
-    <select id="get" parameterType="BlogDTO" resultType="BlogPO">
+    <select id="get" parameterType="BlogDTO" resultMap="blogMap">
         SELECT
-            id ,
-            title ,
-            content ,
-            preview ,
-            state ,
-            remark ,
+            blog_blog.id,
+            title,
+            content,
+            preview,
+            state,
+            remark,
             abs,
-            pv ,
-            create_id ,
-            gmt_create ,
-            gmt_modified
-        FROM blog_blog
-        WHERE id = #{id}
+            pv,
+            blog_blog.gmt_create,
+            blog_tag.name
+        FROM
+            blog_blog
+            LEFT JOIN blog_tag_map ON blog_blog.id = blog_tag_map.blog_id
+            LEFT JOIN blog_tag ON blog_tag_map.tag_id = blog_tag.id
+        WHERE
+            blog_blog.id = #{id}
     </select>
 
 
     <select id="list" parameterType="BlogDTO" resultType="BlogPO">
         SELECT
-            id ,
-            title ,
-            state ,
-            remark ,
-            pv
+        id ,
+        title ,
+        state ,
+        remark ,
+        pv,
+        gmt_create
         FROM blog_blog
         <where>
             <if test="titleLike != null and titleLike != ''">and title LIKE CONCAT('%',#{titleLike},'%')</if>
-            <if test="state != null  "> and state = #{state}</if>
-            <if test="remarkLike != null  and remarkLike != '' "> and remark LIKE CONCAT('%',#{remarkLike},'%')</if>
+            <if test="state != null  ">and state = #{state}</if>
+            <if test="remarkLike != null  and remarkLike != '' ">and remark LIKE CONCAT('%',#{remarkLike},'%')</if>
         </where>
         ORDER BY id DESC
     </select>
@@ -86,12 +106,12 @@
 
     <select id="count" parameterType="BlogDTO" resultType="Integer">
         SELECT
-            count(0)
+        count(0)
         FROM
         blog_blog
         <where>
-            <if test="noid != null  "> and id != #{noid}</if>
-            <if test="title != null  and title != '' "> and title = #{title}</if>
+            <if test="noid != null  ">and id != #{noid}</if>
+            <if test="title != null  and title != '' ">and title = #{title}</if>
         </where>
     </select>
 </mapper>
