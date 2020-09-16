@@ -183,6 +183,9 @@
             </form>
         </div>
         <div th:include="include :: au-footer"></div>
+        <script th:inline="javascript">
+            const tags = [[${_vo.tags}]]
+        </script>
         <script th:inline="none">
             const prefix = `${_gate}blog`
 
@@ -193,13 +196,13 @@
 
                 //监听提交
                 form.on('submit(submit)', ({form, field}) => {
-                        let domArr = $('.tags-wrap>.tag')
-                        if (0 === domArr.length) {
+                        if (0 === tags.length) {
                             return warn('至少添加一种标签')
                         }
-                        domArr.each((i, d) => {
-                            field[`tags[${i}].name`] = $(d).html()
-                        })
+                        // for(let i in tags){
+                        //     field[`tags[].name`] = tags[i]['name']
+                        // }
+                        field.tags = tags
                         field.abs = getAbs(field.content)
                         return pageSubmit({form, field})
                     }
@@ -239,20 +242,30 @@
                     $('#tag-list').hide()
                 })
 
-                $('#tag-list').on('mousedown', '.tag', function (e) {
-                    e.preventDefault() // 阻止 tag-input的blur
-                    $('.add-tag-wrap').before(tagDemo.replace('NAME', $(this).html()))
-                    resetAddTag()
-                })
 
-                $('.tags-wrap').on('click', '.tag>.remove', function (e) {
+                $('.tags-wrap').on('click', '.tag>.remove', function () {
+                    let rmTag = $(this).prev().html()
+
+                    tags.splice(tags.findIndex(({name}) => rmTag === name), 1)
+                    console.log(tags)
                     $(this).parent().remove()
                 })
 
-                $('#add-tag-check').click(() => {
-                    $('.add-tag-wrap').before(tagDemo.replace('NAME', $('#add-tag-input').val()))
+                $('#tag-list').on('mousedown', '.tag', function (e) {
+                    e.preventDefault() // 阻止 tag-input的blur
+                    addTag($(this).html())
                     resetAddTag()
                 })
+
+                $('#add-tag-check').click(() => {
+                    addTag($('#add-tag-input').val())
+                    resetAddTag()
+                })
+
+                function addTag(name) {
+                    $('.add-tag-wrap').before(tagDemo.replace('NAME', name))
+                    tags.push({name})
+                }
 
                 function resetAddTag() {
                     $('#add-tag').show()

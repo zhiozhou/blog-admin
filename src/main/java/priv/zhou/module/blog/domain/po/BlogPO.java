@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 博客 数据持久化模型
@@ -47,7 +48,7 @@ public class BlogPO implements Serializable {
     /**
      * 标签列表
      */
-    private List<TagPO> tags;
+    private Set<TagPO> tags;
 
     /**
      * 备注

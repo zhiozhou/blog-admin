@@ -12,7 +12,7 @@ import priv.zhou.module.blog.domain.po.BlogPO;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -65,8 +65,7 @@ public class BlogDTO extends DTO<BlogPO> {
     /**
      * 标签列表
      */
-    @NotEmpty(message = "至少添加一种标签")
-    private List<TagDTO> tags;
+    private Set<TagDTO> tags;
 
     /**
      * 备注
@@ -105,12 +104,14 @@ public class BlogDTO extends DTO<BlogPO> {
 
     public BlogDTO(BlogPO blogPO) {
         super(blogPO);
-        this.tags = DTO.ofPO(blogPO.getTags(), TagDTO::new);
+        if(null != blogPO.getTags()){
+            this.tags = blogPO.getTags().stream().map(TagDTO::new).collect(Collectors.toSet());
+        }
     }
 
     @Override
     public BlogPO toPO() {
         return super.toPO()
-                .setTags(tags.stream().map(TagDTO::toPO).collect(Collectors.toList()));
+                .setTags(tags.stream().map(TagDTO::toPO).collect(Collectors.toSet()));
     }
 }

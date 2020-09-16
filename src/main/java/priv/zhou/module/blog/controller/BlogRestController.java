@@ -2,10 +2,11 @@ package priv.zhou.module.blog.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.domain.dto.TagDTO;
@@ -13,6 +14,7 @@ import priv.zhou.module.blog.service.IBlogService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 博客 控制层
@@ -30,6 +32,7 @@ public class BlogRestController {
         this.blogService = blogService;
     }
 
+
     @RequestMapping("/save")
     public OutVO<NULL> save(@Valid BlogDTO blogDTO) {
         return blogService.save(blogDTO);
@@ -41,7 +44,7 @@ public class BlogRestController {
     }
 
     @RequestMapping("/update")
-    public OutVO<NULL> update(@Valid BlogDTO blogDTO) {
+    public OutVO<NULL> update(@Valid BlogDTO blogDTO,@RequestParam(value = "tags") Set<TagDTO> tags) {
         return blogService.update(blogDTO);
     }
 

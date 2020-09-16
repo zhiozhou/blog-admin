@@ -15,7 +15,9 @@
         <result column="pv" property="pv"/>
         <result column="gmt_create" property="gmtCreate"/>
         <collection property="tags"  ofType="TagPO">
-            <result column="name" property="name"/>
+            <result column="tag_id" property="id"/>
+            <result column="tag_name" property="name"/>
+            <result column="tag_count" property="count"/>
         </collection>
     </resultMap>
 
@@ -57,9 +59,7 @@
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="abs != null and abs != ''">abs = #{abs},</if>
             <if test="pv != null and pv != ''">pv = #{pv},</if>
-            <if test="createId != null and createId != ''">create_id = #{createId},</if>
-            <if test="gmtCreate != null and gmtCreate != ''">gmt_create = #{gmtCreate},</if>
-            <if test="gmtModified != null and gmtModified != ''">gmt_modified = #{gmtModified},</if>
+            gmt_modified = NOW()
         </set>
         WHERE id = #{id}
     </update>
@@ -76,7 +76,9 @@
             abs,
             pv,
             blog_blog.gmt_create,
-            blog_tag.name
+            blog_tag.id tag_id,
+            blog_tag.name tag_name,
+            blog_tag.count tag_count
         FROM
             blog_blog
             LEFT JOIN blog_tag_map ON blog_blog.id = blog_tag_map.blog_id

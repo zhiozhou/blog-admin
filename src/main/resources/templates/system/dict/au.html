@@ -73,7 +73,7 @@
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove">移除</a>
         </script>
         <script th:inline="javascript">
-            const dictData = [[${_vo.dataList}]]
+            const dataList = [[${_vo.dataList}]]
         </script>
         <script th:inline="none">
             const prefix = `${_gate}system/dict`,
@@ -89,7 +89,7 @@
                 table.render({
                     id: 'data-table',
                     elem: '#data-table',
-                    data: dictData,
+                    data: dataList,
                     cellMinWidth: '80',
                     cols: [[
                         {field: 'code', title: '编码值',  edit: true},
@@ -123,8 +123,8 @@
                 form.on('submit(submit)', function ({form, field}) {
                     // 数据项加入提交数据
                     let codeSet = []
-                    for (let i in dictData) {
-                        let temp = dictData[i],
+                    for (let i in dataList) {
+                        let temp = dataList[i],
                             {code, label} = temp
                         if (code && label) {
                             if (codeSet.includes(code)) {
@@ -153,21 +153,21 @@
                     let index = tr.data('index')
                     switch (action) {
                         case 'insert':
-                            dictData.splice(1 + index, 0, {type: 0, top: 0})
+                            dataList.splice(1 + index, 0, {type: 0, top: 0})
                             break
                         case 'remove':
-                            if (1 === dictData.length) {
+                            if (1 === dataList.length) {
                                 return warn('数据项至少存在一个')
                             }
-                            dictData.splice(index, 1)
+                            dataList.splice(index, 1)
                             break
                     }
-                    table.reload('data-table', {data: dictData})
+                    table.reload('data-table', {data: dataList})
                 }
 
                 // 数据编辑
                 table.on('edit(data-table)', ({tr, field, value}) => {
-                    dictData[tr.data('index')][field] = value
+                    dataList[tr.data('index')][field] = value
                 })
 
                 // 修改状态
@@ -188,7 +188,7 @@
                     }
                     let {css, info} = typeMap[type]
                     $(this).addClass(css).html(info).data('type', type)
-                    dictData[index].type = type
+                    dataList[index].type = type
                 })
 
 
@@ -197,10 +197,10 @@
                     let index = $(this).parents('tr').data('index')
                     if (tindex !== index) {
                         if (0 == tindex || tindex) {
-                            dictData[tindex].top = 0
+                            dataList[tindex].top = 0
                         }
-                        dictData[index].top = 1
-                        table.reload('data-table', {data: dictData})
+                        dataList[index].top = 1
+                        table.reload('data-table', {data: dataList})
                     }
                 })
             })

@@ -1,5 +1,7 @@
 package priv.zhou.module.blog.controller;
 
+import org.assertj.core.util.Lists;
+import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +36,7 @@ public class BlogController extends BaseController {
 
     @RequestMapping("/add")
     public String add(Model model) {
-        super.add(model, new BlogDTO());
+        super.add(model, new BlogDTO().setTags(Sets.newHashSet()));
 
         return "blog/au";
     }

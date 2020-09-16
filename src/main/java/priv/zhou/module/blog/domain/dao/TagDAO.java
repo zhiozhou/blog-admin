@@ -7,7 +7,7 @@ import priv.zhou.common.domain.dao.BaseDAO;
 import priv.zhou.module.blog.domain.dto.TagDTO;
 import priv.zhou.module.blog.domain.po.TagPO;
 
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 public interface TagDAO extends BaseDAO<TagDTO, TagPO> {
 
-    void saveMap(@Param("tagList") List<TagPO> tagList, @Param("blogId") Integer blogId);
+    void saveMap(@Param("tags") Set<TagPO> tags, @Param("blogId") Integer blogId);
 
-    void removeMap(@Param("tagList") List<TagPO> tagList, @Param("blogId") Integer blogId);
+    void removeMap(@Param("tags") Set<TagPO> tags, @Param("blogId") Integer blogId);
 }

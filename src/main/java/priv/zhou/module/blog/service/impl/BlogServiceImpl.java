@@ -2,8 +2,9 @@ package priv.zhou.module.blog.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.assertj.core.util.Lists;
+import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
@@ -20,9 +21,10 @@ import priv.zhou.module.blog.domain.po.TagPO;
 import priv.zhou.module.blog.service.IBlogService;
 
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 
 /**
@@ -44,6 +46,7 @@ public class BlogServiceImpl implements IBlogService {
     }
 
     @Override
+    @Transactional
     public OutVO<NULL> save(BlogDTO blogDTO) {
 
         if (blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle())) > 0) {
@@ -118,31 +121,33 @@ public class BlogServiceImpl implements IBlogService {
         return OutVO.success(DTO.ofPO(tagDAO.list(tagDTO), TagDTO::new));
     }
 
-    private synchronized void saveTags(Integer blogId, List<TagPO> formTags, boolean isUpdate) {
+    @Transactional
+    synchronized void saveTags(Integer blogId, Set<TagPO> formTags, boolean isUpdate) {
 
-        List<TagPO> saveTags = formTags, removeTags = null;
+        Set<TagPO> saveTags = formTags, removeTags = null;
         if (isUpdate) {
-            List<TagPO> dbTags = blogDAO.get(new BlogDTO().setId(blogId)).getTags();
-            saveTags = formTags.stream().filter(tag -> !dbTags.contains(tag)).collect(toList());
-            removeTags = dbTags.stream().filter(tag -> !formTags.contains(tag)).collect(toList());
+            Set<TagPO> dbTags = blogDAO.get(new BlogDTO().setId(blogId)).getTags();
+            saveTags = formTags.stream().filter(tag -> !dbTags.contains(tag)).collect(toSet());
+            removeTags = dbTags.stream().filter(tag -> !formTags.contains(tag)).collect(toSet());
         }
 
-
-        List<TagPO> tagList = Lists.newArrayList();
-        for (TagPO tag : saveTags) {
-            TagPO tagPO = tagDAO.get(new TagDTO().setName(tag.getName()));
-            if (null == tagPO) {
-                tagDAO.save(tagPO = new TagPO()
-                        .setCount(1)
-                        .setName(tag.getName())
-                        .setCreateId(ShiroUtil.getUserId())
-                );
-            } else {
-                tagDAO.update(tagPO.setCount(tagPO.getCount() + 1));
+        if (!saveTags.isEmpty()) {
+            Set<TagPO> tagSet = Sets.newHashSet();
+            for (TagPO tag : saveTags) {
+                TagPO tagPO = tagDAO.get(new TagDTO().setName(tag.getName()));
+                if (null == tagPO) {
+                    tagDAO.save(tagPO = new TagPO()
+                            .setCount(1)
+                            .setName(tag.getName())
+                            .setCreateId(ShiroUtil.getUserId())
+                    );
+                } else {
+                    tagDAO.update(tagPO.setCount(tagPO.getCount() + 1));
+                }
+                tagSet.add(tagPO);
             }
-            tagList.add(tagPO);
+            tagDAO.saveMap(tagSet, blogId);
         }
-        tagDAO.saveMap(tagList, blogId);
 
         if (!isUpdate || removeTags.isEmpty()) {
             return;

@@ -7,7 +7,7 @@
     <insert id="saveMap">
         INSERT INTO blog_tag_map ( tag_id, blog_id )
         VALUES
-        <foreach collection="tagList" index="index" item="item" separator=",">
+        <foreach collection="tags" index="index" item="item" separator=",">
             ( #{item.id},#{blogId} )
         </foreach>
     </insert>
@@ -16,7 +16,7 @@
         DELETE FROM blog_tag_map
         WHERE
         blog_id = #{blogId} and tag_id IN
-        <foreach collection="tagList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="tags" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </insert>
@@ -39,7 +39,7 @@
     <update id="update" parameterType="TagPO">
         UPDATE blog_tag
         <set>
-            <if test="count != null and count != ''">count = #{count},</if>
+            <if test="count != null">count = #{count},</if>
         </set>
         WHERE id = #{id}
     </update>
