@@ -1,20 +1,17 @@
 package priv.zhou.module.blog.controller;
 
 import org.assertj.core.util.Lists;
-import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.controller.BaseController;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.service.IBlogService;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 
-import static priv.zhou.common.param.CONSTANT.SYSTEM_USER_STATE;
 import static priv.zhou.module.blog.service.IBlogService.STATE_KEY;
 
 /**
@@ -30,13 +27,13 @@ public class BlogController extends BaseController {
     private final IBlogService blogService;
 
     public BlogController(IBlogService blogService) {
-        super(new Module("博客","blog"));
+        super(new Module("博客", "blog"));
         this.blogService = blogService;
     }
 
     @RequestMapping("/add")
     public String add(Model model) {
-        super.add(model, new BlogDTO().setTags(Sets.newHashSet()));
+        super.add(model, new BlogDTO().setTags(Lists.newArrayList()));
 
         return "blog/au";
     }

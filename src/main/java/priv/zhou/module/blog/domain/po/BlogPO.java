@@ -48,7 +48,7 @@ public class BlogPO implements Serializable {
     /**
      * 标签列表
      */
-    private Set<TagPO> tags;
+    private List<TagPO> tags;
 
     /**
      * 备注

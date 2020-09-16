@@ -199,10 +199,9 @@
                         if (0 === tags.length) {
                             return warn('至少添加一种标签')
                         }
-                        // for(let i in tags){
-                        //     field[`tags[].name`] = tags[i]['name']
-                        // }
-                        field.tags = tags
+                        for(let i in tags){
+                            field[`tags[${i}].name`] = tags[i]['name']
+                        }
                         field.abs = getAbs(field.content)
                         return pageSubmit({form, field})
                     }
@@ -231,7 +230,7 @@
                                     $tagList.append(`<div class="tag">${tag.name}</div>`)
                                 }
                             }
-                            $('#tag-list').show()
+                            $tagList.show()
                         })
                     } else {
                         $('#tag-list').hide()
@@ -247,7 +246,6 @@
                     let rmTag = $(this).prev().html()
 
                     tags.splice(tags.findIndex(({name}) => rmTag === name), 1)
-                    console.log(tags)
                     $(this).parent().remove()
                 })
 

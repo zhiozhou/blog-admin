@@ -122,13 +122,16 @@ public class BlogServiceImpl implements IBlogService {
     }
 
     @Transactional
-    synchronized void saveTags(Integer blogId, Set<TagPO> formTags, boolean isUpdate) {
+    synchronized void saveTags(Integer blogId, List<TagPO> formTags, boolean isUpdate) {
 
-        Set<TagPO> saveTags = formTags, removeTags = null;
+        Set<TagPO> saveTags, removeTags;
         if (isUpdate) {
-            Set<TagPO> dbTags = blogDAO.get(new BlogDTO().setId(blogId)).getTags();
+            List<TagPO> dbTags = blogDAO.get(new BlogDTO().setId(blogId)).getTags();
             saveTags = formTags.stream().filter(tag -> !dbTags.contains(tag)).collect(toSet());
             removeTags = dbTags.stream().filter(tag -> !formTags.contains(tag)).collect(toSet());
+        } else {
+            removeTags = null;
+            saveTags = Sets.newHashSet(formTags);
         }
 
         if (!saveTags.isEmpty()) {
@@ -149,13 +152,13 @@ public class BlogServiceImpl implements IBlogService {
             tagDAO.saveMap(tagSet, blogId);
         }
 
-        if (!isUpdate || removeTags.isEmpty()) {
-            return;
+        if (isUpdate && !removeTags.isEmpty()) {
+
+            for (TagPO tag : removeTags) {
+                tagDAO.update(tag.setCount(tag.getCount() - 1));
+            }
+            tagDAO.removeMap(removeTags, blogId);
         }
 
-        for (TagPO tag : removeTags) {
-            tagDAO.update(tag.setCount(tag.getCount() - 1));
-        }
-        tagDAO.removeMap(removeTags, blogId);
     }
 }
