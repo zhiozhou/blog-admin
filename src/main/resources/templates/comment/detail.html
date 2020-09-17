@@ -5,7 +5,7 @@
         <div class="layout-iframe">
             <form class="layui-form-pane">
 
-                <input type="hidden" th:value="${ _vo.id }">
+                <input type="hidden" id="id" th:value="${ _vo.id }">
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">昵称：</label>
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">创建时间：</label>
+                    <label class="layui-form-label">评论时间：</label>
                     <div class="layui-input-block">
                         <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field"
                                disabled>
@@ -74,7 +74,6 @@
                 </div>
 
 
-
                 <div class="layui-form-item" th:if="${ _vo.state == 0 }"
                      shiro:hasPermission=${_module.permissionPrefix+':check'}>
                     <div class="layui-input-block">
@@ -85,6 +84,7 @@
             </form>
         </div>
         <div th:include="include :: footer"></div>
+        <script th:src="@{/js/au.js}"></script>
         <script th:inline="javascript">
             const prefix = `${_gate}comment`
 
@@ -92,13 +92,13 @@
                 const {jquery: $} = layui
 
                 $('#pass').click(() => httpPost({
-                        url: `${prefix}/rest/pass/${data.id}`,
+                        url: `${prefix}/rest/pass/${$('#id').val()}`,
                         cb: () => iframeDone()
                     })
                 )
 
                 $('#no-pass').click(() => httpPost({
-                        url: `${prefix}/rest/pass/no/${data.id}`,
+                        url: `${prefix}/rest/pass/no/${$('#id').val()}`,
                         cb: () => iframeDone()
                     })
                 )

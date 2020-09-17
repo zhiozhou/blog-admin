@@ -2,17 +2,17 @@ layui.config({
     base: _gate + 'plugin/layui/extend/'
 })
 
+
 /**
  * 全局初始化方法
  */
-layui.use(['jquery', 'util'], function () {
+layui.use(['jquery', 'util', 'layer'], function () {
     const {jquery: $} = layui
 
     // 初始化时间
     $('.date-field').each((index, field) => $(field).val(formatDate($(field).val(), $(field).data('format'))))
 
 })
-
 
 
 /**
@@ -99,14 +99,14 @@ function copy(text) {
 let loaderIndex
 
 function loading() {
-    loaderIndex = layer.load(2)
+    loaderIndex = layui.layer.load(2)
 }
 
 /**
  * 关闭加载蒙层
  */
 function loaded() {
-    layer.close(loaderIndex)
+    layui.layer.close(loaderIndex)
 }
 
 /**
@@ -114,7 +114,7 @@ function loaded() {
  * @param msg 警告内容
  */
 function warn(msg) {
-    layer.msg(msg, {icon: 7})
+    layui.layer.msg(msg, {icon: 7})
     return false
 }
 
@@ -126,7 +126,7 @@ function warn(msg) {
  * @param msg 通知的消息
  */
 function msg(cb, msg = '操作成功') {
-    layer.msg(msg, {icon: 1, time: 500}, cb)
+    layui.layer.msg(msg, {icon: 1, time: 500}, cb)
 }
 
 
@@ -146,7 +146,7 @@ function outMsg(cb, msg = '操作成功') {
  * @param msg 提示信息
  */
 function tips(id, msg) {
-    layer.tips(msg, `#${id}`, {
+    parent.layer.tips(msg, `#${id}`, {
         tips: [2, "#1E9FFF"],
         time: 1500
     })

@@ -20,6 +20,10 @@ public class HttpUtil {
 
     private final static String[] PHONE_AGENTS = new String[]{"iphone", "ios", "android", "windows phone"};
 
+    public static String getUserAgent(HttpServletRequest request) {
+        return request.getHeader("User-Agent");
+    }
+
     /**
      * 获取Ip地址
      */

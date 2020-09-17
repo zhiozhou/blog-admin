@@ -51,10 +51,6 @@ public class CommentDTO extends DTO<CommentPO> {
      */
     private Integer toVid;
 
-    /**
-     * 访客id
-     */
-    private Integer fromVid;
 
     /**
      * 内容
@@ -81,7 +77,6 @@ public class CommentDTO extends DTO<CommentPO> {
      * 用户代理
      */
     private String ua;
-
 
 
     /**

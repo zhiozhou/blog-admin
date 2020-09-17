@@ -37,18 +37,6 @@ public class CommentController extends BaseController {
         return "comment/au";
     }
 
-    @RequestMapping("/update/{id}")
-    public String update(Model model, @PathVariable Integer id) {
-
-        OutVO<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return NOT_FOUNT;
-        }
-        super.update(model, dtoVO.getData());
-
-        return "comment/au";
-    }
-
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         OutVO<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
@@ -71,9 +59,21 @@ public class CommentController extends BaseController {
 
     @RequestMapping("/reply/{repliedId}")
     public String reply(Model model, @PathVariable Integer repliedId) {
-        super.detail(model, new CommentDTO().setId(repliedId));
+        super.detail(model, new CommentDTO().setRepliedId(repliedId));
         model.addAttribute(ACTION_KEY, "/rest/reply");
         return "comment/au";
     }
+
+    @RequestMapping("/reply/update/{id}")
+    public String update(Model model, @PathVariable Integer id) {
+        OutVO<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
+        if (dtoVO.isFail()) {
+            return NOT_FOUNT;
+        }
+        super.detail(model, dtoVO.getData());
+        model.addAttribute(ACTION_KEY, "/rest/reply/update");
+        return "comment/au";
+    }
+
 }
 

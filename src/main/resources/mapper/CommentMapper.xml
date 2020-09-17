@@ -33,6 +33,8 @@
              from_vid ,
              content ,
              state ,
+             ip,
+             ua,
              gmt_create ,
              gmt_modified
         )
@@ -40,10 +42,12 @@
             #{blog.id} ,
             #{topicId} ,
             #{repliedId} ,
-            #{toVisitor.id} ,
+            #{toVid} ,
             #{fromVisitor.id} ,
             #{content} ,
             #{state} ,
+            #{ip} ,
+            #{ua} ,
             NOW(),
             NOW()
         )
@@ -90,13 +94,12 @@
 
     <select id="list" resultMap="commentMap">
         SELECT
-        blog_comment.id AS comment_id,
-        blog_comment.content AS comment_content,
-        blog_comment.state AS comment_state,
-        blog_comment.ip AS comment_ip,
-        blog_comment.gmt_create AS comment_gmt_create,
-        from_visitor.id AS from_visitor_id,
-        from_visitor.nickname AS from_visitor_nickname
+            blog_comment.id AS comment_id,
+            blog_comment.content AS comment_content,
+            blog_comment.state AS comment_state,
+            blog_comment.gmt_create AS comment_gmt_create,
+            from_visitor.id AS from_visitor_id,
+            from_visitor.nickname AS from_visitor_nickname
         FROM
         blog_comment
         LEFT JOIN blog_visitor AS from_visitor ON from_vid = from_visitor.id

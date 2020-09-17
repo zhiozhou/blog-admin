@@ -2,110 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-iframe" th:with="isAdd='/rest/save'==${_action}">
+        <div class="layout-iframe">
             <form class="layui-form " th:attr="action=${_action}">
                 <input type="hidden" name="id" th:value="${_vo.id}">
-                                
+                <input type="hidden" name="repliedId" th:value="${_vo.repliedId}">
+
                 <div class="layui-form-item">
-                    <label class="layui-form-label">：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="id" placeholder="请输入"
-                               th:value="${ _vo.id }">
-                    </div>
+                    <textarea class="layui-textarea" autocomplete="off"
+                              rows="6" maxlength="256"
+                              name="content" placeholder="请输入回复内容"
+                              th:text="${_vo.content}">
+                    </textarea>
                 </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">博客id：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="blogId" placeholder="请输入博客id"
-                               th:value="${ _vo.blogId }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">主题id：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="topicId" placeholder="请输入主题id"
-                               th:value="${ _vo.topicId }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">回复评论id：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="repliedId" placeholder="请输入回复评论id"
-                               th:value="${ _vo.repliedId }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">目标访客id：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="toVid" placeholder="请输入目标访客id"
-                               th:value="${ _vo.toVid }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">访客id：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="fromVid" placeholder="请输入访客id"
-                               th:value="${ _vo.fromVid }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">内容：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="content" placeholder="请输入内容"
-                               th:value="${ _vo.content }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="state" placeholder="请输入状态"
-                               th:value="${ _vo.state }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">创建时间：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="gmtCreate" placeholder="请输入创建时间"
-                               th:value="${ _vo.gmtCreate }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">修改时间：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="gmtModified" placeholder="请输入修改时间"
-                               th:value="${ _vo.gmtModified }">
-                    </div>
-                </div>
-                
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
@@ -119,10 +28,10 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="none">
-            const prefix = `${_gate}blog/comment`
+            const prefix = `${_gate}comment`
 
             layui.use(['form', 'jquery'], () => {
-                const {form, jquery: $} = layui
+                const {form} = layui
 
                 //监听提交
                 form.on('submit(submit)', iframeSubmit)

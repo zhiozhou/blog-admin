@@ -42,10 +42,6 @@ public class CommentPO implements Serializable {
      */
     private Integer toVid;
 
-    /**
-     * 访客id
-     */
-    private Integer fromVid;
 
     /**
      * 内容

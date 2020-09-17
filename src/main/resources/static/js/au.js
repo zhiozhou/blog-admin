@@ -135,7 +135,7 @@ function iframeSubmit({form, field: data}) {
     return httpPost({
         url: prefix + form.getAttribute('action'),
         data,
-        cb: () => iframeDone
+        cb: iframeDone
     })
 }
 

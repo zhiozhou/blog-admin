@@ -49,6 +49,9 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public OutVO<NULL> update(CommentDTO commentDTO) {
+        if (null == commentDTO.getId()) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        }
 
         CommentPO commentPO = commentDTO.toPO();
         return commentDAO.update(commentPO) > 0 ?
@@ -60,7 +63,6 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public OutVO<CommentDTO> get(CommentDTO commentDTO) {
-
         CommentPO commentPO = commentDAO.get(commentDTO);
         return OutVO.success(new CommentDTO(commentPO));
     }
@@ -68,7 +70,7 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     public OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
         PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
-        List<CommentPO> poList = commentDAO.list(commentDTO,order);
+        List<CommentPO> poList = commentDAO.list(commentDTO, order);
         PageInfo<CommentPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, CommentDTO::new), pageInfo.getTotal());
     }
@@ -81,11 +83,11 @@ public class CommentServiceImpl implements ICommentService {
         }
 
         CommentPO commentPO = commentDTO.toPO()
+                .setState(1)
                 .setBlog(targetPO.getBlog())
-                .setTopicId(targetPO.getTopicId())
                 .setToVid(targetPO.getFromVisitor().getId())
                 .setFromVisitor(new VisitorPO().setId(ZHOU_VISITOR_ID))
-                .setState(1);
+                .setTopicId(targetPO.getTopicId().equals(0) ? targetPO.getId() : targetPO.getTopicId());
         return commentDAO.save(commentPO) > 0 ?
                 OutVO.success() :
                 OutVO.fail(OutVOEnum.FAIL_OPERATION);

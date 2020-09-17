@@ -29,7 +29,7 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
-        <script type="text/html" id="comment">
+        <script type="text/html" id="comment-tool">
             <a class="layui-btn layui-btn-sm" lay-event="detail"
                shiro:hasPermi=ssion=${_module.permissionPrefix+':detail'}>查看</a>
             {{#  if(d.state == 1 ){ }}
@@ -37,7 +37,7 @@
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="reply"
                shiro:hasPermission=${_module.permissionPrefix+':reply'}>回复</a>
             {{#  } else { }}
-            <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="update"
+            <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="updateReply"
                shiro:hasPermission=${_module.permissionPrefix+':reply'}>修改回复</a>
             {{#  } }}
             {{#  } else if( d.state == 0) { }}
@@ -47,7 +47,7 @@
                shiro:hasPermission=${_module.permissionPrefix+':check'}>No Pass</a>
             {{#  } }}
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
-               shiro:hasPermission=${_module.permissionPrefix+':remove'}>Remove</a>
+               shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
         </script>
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]
@@ -72,7 +72,7 @@
                             field: 'state', title: '状态',
                             templet: ({state}) => dictRender(state, stateMap)
                         },
-                        {title: '操作', toolbar: '#comment'}
+                        {title: '操作', toolbar: '#comment-tool'}
                     ]]
 
                 tableRender(table, {cols})
@@ -81,7 +81,11 @@
                 function toolHandle({data, event}) {
                     switch (event) {
                         case 'reply':
-                            newFrame(`${_module.name}详情`, `${prefix}/reply/${data.id}`)
+                            newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`)
+                            break
+
+                        case 'updateReply':
+                            newFrame('修改回复', `${prefix}/reply/update/${data.id}`)
                             break
                         case 'pass':
                             httpPost({

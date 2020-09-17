@@ -1,104 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
+    <style>
+        input[name='title'] {
+            background: var(--popover-background);
+        }
+
+        .tags-wrap {
+            display: flex;
+            min-height: 38px;
+        }
+
+        .tags-wrap:after {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+
+
+        .tags-wrap > .tag {
+            margin: auto 0 auto 8px;
+            padding: 0 4px 0 8px;
+            line-height: 28px;
+            border-radius: 2px;
+            color: var(--layui-blue);
+            background: rgba(38, 125, 204, .05);
+            border: 1px solid var(--layui-blue);
+        }
+
+
+        #tag-list > div {
+            cursor: pointer;
+            padding: 0 10px;
+            line-height: 36px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        #tag-list > div:hover {
+            background-color: var(--popover-background);
+            transition: .2s background-color;
+        }
+    </style>
     <body>
-        <div class="layout-iframe">
-            <form class="layui-form-pane  ">
+        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_action}">
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li><a th:href="@{/blog/list}" th:text="${_module.name}+列表"></a></li>
+                        <li class="layui-this" th:text="${_module.name}+详情"></li>
+                    </ul>
+                    <div class="layui-tab-content">
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.id }" >
+                        <div class="layui-form-item">
+                            <input type="text" class="layui-input" th:value="${ _vo.title }" disabled>
+                        </div>
+
+                        <div class="layui-form-item">
+                          <textarea class="layui-textarea" rows="20" th:text="${ _vo.content }" disabled></textarea>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">标签：</label>
+                            <div class="layui-input-block tags-wrap">
+                                <div class="tag"
+                                     th:each="tag : ${_vo.tags}"
+                                >
+                                    <span th:text="${tag.name}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">预览图：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" th:value="${ _vo.preview }" disabled>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" th:value="${ _vo.remark }" disabled>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">标题：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.title }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">内容：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.content }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">预览：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.preview }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.state }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.remark }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">摘要：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.abs }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">页面访问量：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.pv }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">创建人：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.createId }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">创建时间：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.gmtCreate }" >
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">修改时间：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.gmtModified }" >
-                    </div>
-                </div>
-
             </form>
         </div>
-        <div th:include="include :: footer"></div>
-        <script th:inline="javascript">
-
-        </script>
+        <div th:include="include :: au-footer"></div>
     </body>
 
 </html>

@@ -51,6 +51,16 @@ public class VisitorPO implements Serializable {
     private Integer state;
 
     /**
+     * IP
+     */
+    private String ip;
+
+    /**
+     * 用户代理
+     */
+    private String ua;
+
+    /**
      * 通知
      */
     private Integer notify;
