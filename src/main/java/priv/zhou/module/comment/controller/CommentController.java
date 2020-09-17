@@ -70,8 +70,8 @@ public class CommentController extends BaseController {
     }
 
     @RequestMapping("/reply/{repliedId}")
-    public String add(Model model, @PathVariable Integer repliedId) {
-        super.detail(model, new CommentDTO());
+    public String reply(Model model, @PathVariable Integer repliedId) {
+        super.detail(model, new CommentDTO().setId(repliedId));
         model.addAttribute(ACTION_KEY, "/rest/reply");
         return "comment/au";
     }

@@ -25,12 +25,6 @@
                 </div>
             </form>
             <div>
-                <div class="layout-table-tool">
-                    <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn"
-                       shiro:hasPermission=${_module.permissionPrefix+':add'}>
-                        <i class="fa fa-plus"></i> 添加
-                    </a>
-                </div>
                 <table id="table" lay-filter="table"></table>
             </div>
         </div>
@@ -87,7 +81,7 @@
                 function toolHandle({data, event}) {
                     switch (event) {
                         case 'reply':
-                            newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`, ['700px', '300px'])
+                            window.location.href = `${prefix}/reply/${data.id}`
                             break
                         case 'pass':
                             httpPost({
@@ -97,7 +91,7 @@
                             })
                             break
                     }
-                    iframeAction({data, event})
+                    pageAction({data, event})
                 }
             })
         </script>

@@ -10,6 +10,8 @@
         <result column="comment_replied_id" property="repliedId"/>
         <result column="comment_content" property="content"/>
         <result column="comment_state" property="state"/>
+        <result column="comment_ip" property="ip"/>
+        <result column="comment_ua" property="ua"/>
         <result column="comment_gmt_create" property="gmtCreate"/>
         <association property="blog" javaType="BlogPO">
             <id column="blog_id" property="id"/>
@@ -69,11 +71,15 @@
             blog_comment.replied_id AS comment_replied_id,
             blog_comment.content AS comment_content,
             blog_comment.state AS comment_state,
+            blog_comment.ip AS comment_ip,
+            blog_comment.ua AS comment_ua,
             blog_comment.gmt_create AS comment_gmt_create,
             blog_blog.id AS blog_id,
             blog_blog.title AS blog_title,
             from_visitor.id AS from_visitor_id,
-            from_visitor.nickname AS from_visitor_nickname
+            from_visitor.nickname AS from_visitor_nickname,
+            from_visitor.email AS from_visitor_email,
+            from_visitor.website AS from_visitor_website
         FROM
             blog_comment
             LEFT JOIN blog_blog ON blog_comment.blog_id = blog_blog.id
@@ -87,6 +93,7 @@
         blog_comment.id AS comment_id,
         blog_comment.content AS comment_content,
         blog_comment.state AS comment_state,
+        blog_comment.ip AS comment_ip,
         blog_comment.gmt_create AS comment_gmt_create,
         from_visitor.id AS from_visitor_id,
         from_visitor.nickname AS from_visitor_nickname

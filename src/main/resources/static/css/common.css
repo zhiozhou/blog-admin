@@ -35,6 +35,8 @@ html, body {
 
 .layout-page .layui-tab-content {
     max-width: 1500px;
+    padding-top: 15px;
+
 }
 
 .layout-iframe {

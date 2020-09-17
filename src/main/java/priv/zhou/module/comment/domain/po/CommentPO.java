@@ -22,7 +22,6 @@ import java.util.Date;
 @Accessors(chain = true)
 public class CommentPO implements Serializable {
 
-
     /**
      *
      */
@@ -57,6 +56,16 @@ public class CommentPO implements Serializable {
      * 状态
      */
     private Integer state;
+
+    /**
+     * IP
+     */
+    private String ip;
+
+    /**
+     * 用户代理
+     */
+    private String ua;
 
     /**
      * 博客

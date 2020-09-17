@@ -29,7 +29,6 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentDTO extends DTO<CommentPO> {
 
-
     /**
      *
      */
@@ -71,6 +70,16 @@ public class CommentDTO extends DTO<CommentPO> {
      * 状态字符
      */
     private String stateStr;
+
+    /**
+     * IP
+     */
+    private String ip;
+
+    /**
+     * 用户代理
+     */
+    private String ua;
 
     /**
      * 博客
