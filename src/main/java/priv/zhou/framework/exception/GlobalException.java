@@ -1,6 +1,7 @@
 package priv.zhou.framework.exception;
 
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import priv.zhou.common.domain.vo.OutVO;
 import lombok.Getter;
 
@@ -10,7 +11,8 @@ import lombok.Getter;
  */
 @Getter
 @Setter
-public class GlobalException extends Exception {
+@Accessors(chain = true)
+public class GlobalException extends RuntimeException {
 
 	/**
 	 * 包含错误信息的vo对象

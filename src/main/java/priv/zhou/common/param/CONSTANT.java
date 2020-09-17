@@ -31,8 +31,6 @@ public interface CONSTANT {
 
     String BLOG_SERVICE_BLOG_KEY = BLOG_SERVICE_PREFIX + "BLOG_KEY_";
 
-    String BLOG_SERVICE_BLOG_TYPE_KEY = BLOG_SERVICE_PREFIX + "BLOG_TYPE_KEY_";
-
     String BLOG_SERVICE_MENU_KEY = BLOG_SERVICE_PREFIX + "MENU_KEY";
 
     String BLOG_SERVICE_MENU_MODIFIED_KEY = BLOG_SERVICE_MENU_KEY + "MODIFIED_KEY";
@@ -53,13 +51,13 @@ public interface CONSTANT {
     /**
      * 密码迭代次数
      */
-    Integer SHIRO_ITERATIONS = 1;
+    int SHIRO_ITERATIONS = 1;
 
 
     /**
      * 登录尝试限制
      */
-    Integer LOGIN_ATTEMPT_LIMIT = 5;
+    int LOGIN_ATTEMPT_LIMIT = 5;
 
     /**
      * 用户realm名称

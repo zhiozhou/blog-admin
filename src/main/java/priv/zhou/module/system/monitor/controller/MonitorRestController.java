@@ -1,6 +1,7 @@
 package priv.zhou.module.system.monitor.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.vo.OutVO;
@@ -33,9 +34,9 @@ public class MonitorRestController {
         return onlineService.list(onlineDTO);
     }
 
-    @RequiresPermissions("system:monitor:forceOff")
-    @RequestMapping("/force/off")
-    public OutVO<NULL> forceOff(OnlineDTO onlineDTO) {
-        return onlineService.forceOff(onlineDTO);
+    @RequiresPermissions("system:monitor:offline")
+    @RequestMapping("/offline/{id}")
+    public OutVO<NULL> offline(@PathVariable String id) {
+        return onlineService.offline(id);
     }
 }

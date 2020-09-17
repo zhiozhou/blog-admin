@@ -7,8 +7,7 @@ import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
-import org.assertj.core.util.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
@@ -19,61 +18,59 @@ import priv.zhou.module.system.monitor.domain.dto.OnlineDTO;
 import priv.zhou.module.system.monitor.service.IOnlineService;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class OnlineServiceImpl implements IOnlineService {
 
-    @Autowired
-    private SessionDAO sessionDAO;
+    private final SessionDAO sessionDAO;
 
-    @Autowired
-    private LoginLimitFilter loginLimitFilter;
+    private final SessionManager sessionManager;
 
-    @Autowired
-    private SessionManager sessionManager;
+    private final LoginLimitFilter loginLimitFilter;
 
-    @Override
-    public OutVO<List<OnlineDTO>> list(OnlineDTO onlineDTO) {
-        List<OnlineDTO> list = Lists.newArrayList();
-        Collection<Session> sessions = sessionDAO.getActiveSessions();
-        for (Session session : sessions) {
 
-            String username = (String) session.getAttribute("username");
-            RoleDTO role = (RoleDTO) session.getAttribute("role");
-            if (Strings.isNotBlank(onlineDTO.getUsername()) && !username.contains(onlineDTO.getUsername())
-                    || null != onlineDTO.getRole() && null != onlineDTO.getRole().getId() && !role.getId().equals(onlineDTO.getRole().getId())) {
-                continue;
-            }
-
-            list.add(new OnlineDTO()
-                    .setId((String) session.getId())
-                    .setHost(session.getHost())
-                    .setLastAccessTime(session.getLastAccessTime())
-                    .setOs((String) session.getAttribute("os"))
-                    .setLoginTime(session.getStartTimestamp())
-                    .setBrowser((String) session.getAttribute("browser"))
-                    .setRole(role)
-                    .setUsername(username));
-        }
-        return OutVO.success(list);
+    public OnlineServiceImpl(SessionDAO sessionDAO, SessionManager sessionManager, LoginLimitFilter loginLimitFilter) {
+        this.sessionDAO = sessionDAO;
+        this.sessionManager = sessionManager;
+        this.loginLimitFilter = loginLimitFilter;
     }
 
     @Override
-    public OutVO<NULL> forceOff(OnlineDTO onlineDTO) {
+    public OutVO<List<OnlineDTO>> list(OnlineDTO onlineDTO) {
+        return OutVO.success(sessionDAO.getActiveSessions().stream()
+                .filter(s -> !(
+                        null == s.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY) || // 强制退出，令牌为空
+                                Strings.isNotBlank(onlineDTO.getUsername()) && !((String) s.getAttribute("username")).contains(onlineDTO.getUsername()) ||
+                                null != onlineDTO.getRole() && null != onlineDTO.getRole().getId() && !((RoleDTO) s.getAttribute("role")).getId().equals(onlineDTO.getRole().getId())))
+                .map(s -> new OnlineDTO()
+                        .setHost(s.getHost())
+                        .setId((String) s.getId())
+                        .setLoginTime(s.getStartTimestamp())
+                        .setLastAccessTime(s.getLastAccessTime())
+                        .setOs((String) s.getAttribute("os"))
+                        .setRole((RoleDTO) s.getAttribute("role"))
+                        .setBrowser((String) s.getAttribute("browser"))
+                        .setUsername((String) s.getAttribute("username")))
+                .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public OutVO<NULL> offline(String id) {
+        if (id.equals(ShiroUtil.getSession().getId())) {
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+        }
         try {
-            if (onlineDTO.getId().equals(ShiroUtil.getSession().getId())) {
-                return OutVO.fail(OutVOEnum.FAIL_PARAM);
-            }
-            Session session = sessionManager.getSession(new DefaultSessionKey(onlineDTO.getId()));
+            Session session = sessionManager.getSession(new DefaultSessionKey(id));
             loginLimitFilter.remove(session);
             sessionDAO.delete(session);
+            return OutVO.success();
         } catch (UnknownSessionException e) {
-            log.info(e.getMessage());
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION, e.getMessage());
         }
-        return OutVO.success();
     }
 
 }

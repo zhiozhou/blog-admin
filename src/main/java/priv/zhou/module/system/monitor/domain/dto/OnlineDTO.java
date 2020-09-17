@@ -4,15 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.beans.BeanUtils;
-import priv.zhou.module.system.menu.domain.po.MenuPO;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +15,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OnlineDTO {
 
-    @NotNull(message = "id不可为空")
+    @NotEmpty(message = "id不可为空")
     private String id;
 
     /**

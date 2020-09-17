@@ -6,22 +6,23 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <input type="text" name="username" class="layui-input" placeholder="请输入用户名" autocomplete="off">
+                        <input type="text" name="username" class="layui-input" placeholder="Input Username"
+                               autocomplete="off">
                     </div>
                     <div class="layui-inline">
                         <select name="role.id" lay-search="">
-                            <option value="">请选择一个角色</option>
+                            <option value="">Select a Role</option>
                             <option th:each="role:${roleList}" th:value="${role.id}" th:text="${role.name}"></option>
                         </select>
                     </div>
                     <div class="layui-inline">
                         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search-all">
                             <i class="fa fa-search"></i>
-                            搜索
+                            Search
                         </button>
                         <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary search-reset-all">
                             <i class="fa fa-repeat"></i>
-                            重置
+                            Reset
                         </button>
                     </div>
                 </div>
@@ -36,10 +37,10 @@
         </script>
         <script type="text/html" id="monitor-tool">
             {{# if(d.id == id){ }}
-            <a class="layui-btn layui-btn-sm layui-btn-disabled">当前账号</a>
+            <a class="layui-btn layui-btn-sm layui-btn-disabled">Current</a>
             {{# } else { }}
-            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="forceOff"
-               shiro:hasPermission=${_module.permissionPrefix+':forceOff'}>强退</a>
+            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="offline"
+               shiro:hasPermission=${_module.permissionPrefix+':offline'}>Offline</a>
             {{# } }}
         </script>
         <script th:inline="none">
@@ -48,53 +49,41 @@
             layui.use(['table', 'jquery', 'util'], () => {
                 const {table, jquery: $} = layui,
                     cols = [[
-                        {field: 'username', title: '用户名', minWidth: '100'},
-                        {field: 'role', title: '角色', minWidth: '120',  templet: ({role}) => role.name},
-                        {field: 'host', title: '主机地址', minWidth: '120'},
-                        {field: 'os', title: '操作系统', minWidth: '150'},
-                        {field: 'browser', title: '浏览器', minWidth: '120'},
+                        {field: 'username', title: 'Username', minWidth: '100'},
+                        {field: 'role', title: 'Role', minWidth: '120', templet: ({role}) => role.name},
+                        {field: 'host', title: 'IP', minWidth: '120'},
+                        {field: 'os', title: 'OS', minWidth: '150'},
+                        {field: 'browser', title: 'Browser', minWidth: '120'},
                         {
-                            field: 'stateTime', title: '开始时间', minWidth: '120',
-                            templet: ({startTime}) => {
-                                return formatDate(startTime)
-                            }
+                            field: 'loginTime', title: 'Login Time', sminWidth: '120',
+                            templet: ({loginTime}) => formatDate(loginTime)
                         },
                         {
-                            field: 'lastAccessTime', title: '最后访问时间', minWidth: '120',
-                            templet: ({lastAccessTime}) => {
-                                return formatDate(lastAccessTime)
-                            }
+                            field: 'lastAccessTime', title: 'Last Access', minWidth: '120',
+                            templet: ({lastAccessTime}) => formatDate(lastAccessTime)
                         },
-                        {title: '操作',  toolbar: '#monitor-tool'}
+                        {title: 'Operation', toolbar: '#monitor-tool'}
                     ]]
 
                 tableRender(table, {
                     cols,
                     page: false,
                     parseData: ({code, info: msg, data}) => {
-                        return {
-                            code,
-                            msg,
-                            data
-                        }
+                        return {code, msg, data}
                     }
                 })
 
-                // 工具交给通用操作
                 table.on('tool(table)', ({data, event: action}) => {
                     switch (action) {
-                        case 'forceOff':
-                            layer.confirm(`确认强退该用户吗`, {
-                                btn: ['确定', '取消'],
-                                shade: [0.1, '#fff']
-                            }, () => {
-                                httpPost({
-                                    url: `${prefix}/rest/force/off`,
-                                    data: {id: data.id},
+                        case 'offline':
+                            return layer.confirm(`确认强退该用户吗`, {
+                                    btn: ['确定', '取消'],
+                                    shade: [0.1, '#fff']
+                                }, () => httpPost({
+                                    url: `${prefix}/rest/offline/${data.id}`,
                                     cb: () => done(reloadTable)
                                 })
-                            })
-                            break
+                            )
                     }
                 })
             })

@@ -10,5 +10,5 @@ public interface IOnlineService {
 
     OutVO<List<OnlineDTO>> list(OnlineDTO onlineDTO);
 
-    OutVO<NULL> forceOff(OnlineDTO onlineDTO);
+    OutVO<NULL> offline(String id);
 }

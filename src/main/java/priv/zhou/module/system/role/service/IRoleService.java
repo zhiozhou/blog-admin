@@ -24,8 +24,6 @@ public interface IRoleService {
 
     OutVO<ListVO<RoleDTO>> list(RoleDTO roleDTO, Page page);
 
-    OutVO<Integer> count(RoleDTO roleDTO);
-
     /**
      * 获取用户的权限字符set
      */

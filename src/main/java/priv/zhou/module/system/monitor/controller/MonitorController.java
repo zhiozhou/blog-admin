@@ -30,7 +30,7 @@ public class MonitorController extends BaseController {
 
     @RequiresPermissions("system:monitor:list")
     @RequestMapping("/list")
-    public String login(Model model) {
+    public String list(Model model) {
         super.list(model);
 
         model.addAttribute("id", ShiroUtil.getSession().getId());

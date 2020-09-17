@@ -12,11 +12,11 @@ import java.util.Set;
 @Component
 public interface RoleDAO extends BaseDAO<RoleDTO, RolePO> {
 
-    Integer clearMenu(RoleDTO roleDTO);
+    int clearMenu(RoleDTO roleDTO);
 
-    Integer saveMenu(RolePO rolePO);
+    int saveMenu(RolePO rolePO);
 
-    Integer countUser(RoleDTO roleDTO);
+    int countUser(RoleDTO roleDTO);
 
     Set<String> keySet(Integer userId);
 }

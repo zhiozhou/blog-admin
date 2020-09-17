@@ -129,11 +129,6 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public OutVO<Integer> count(RoleDTO roleDTO) {
-        return OutVO.success(roleDAO.count(roleDTO));
-    }
-
-    @Override
     public Set<String> keySet(Integer userId) {
         return roleDAO.keySet(userId);
     }

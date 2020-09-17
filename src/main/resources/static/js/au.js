@@ -74,22 +74,17 @@ function uploadRender(upload, options) {
 const m2 = 2 * 1024 * 1024;
 
 function compress(data, cb) {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    var img = new Image();
-    img.src = data;
+    let canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d'),
+        img = new Image()
+    img.src = data
     img.onload = function () {
-        var width = img.width;
-        var height = img.height;
-        var ration = Math.sqrt(width * height / m2);
-        width /= ration;
-        height /= ration;
-        canvas.width = width;
-        canvas.height = height;
+        let {width, height} = img
+        let ration = Math.sqrt(width * height / m2)
+        canvas.width = img.width / ration
+        canvas.height = img.height / ration
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         // 将canvas中的图片转化为base64格式
-
-        console.log('aaa')
         cb && cb(canvas.toDataURL('image/jpeg', 0.92));
     }
 }
@@ -99,7 +94,7 @@ function dataURLtoFile(dataURL) {
 }
 
 function dataURLtoBlob(dataURL) {
-    var arr = dataURL.split(','),
+    let arr = dataURL.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]),
         n = bstr.length,
@@ -123,24 +118,21 @@ function blobToFile(theBlob, fileName) {
  * 页面形式的表单提交，成功后跳转前一级标签
  */
 function pageSubmit({form, field: data}) {
-    httpPost({
+    return httpPost({
         url: prefix + form.getAttribute('action'),
         data,
         cb: () => done(() => {
             window.location.href = layui.jquery('.layui-form>.layui-tab .layui-this').prev().children('a').attr('href')
         })
     })
-
-    return false
 }
-
 
 
 /**
  * 内联页面通用提交，成功后刷新父级表格
  */
 function iframeSubmit({form, field: data}) {
-    httpPost({
+    return httpPost({
         url: prefix + form.getAttribute('action'),
         data,
         cb: () => outDone(() => {
@@ -148,6 +140,5 @@ function iframeSubmit({form, field: data}) {
             parent.layui.table.reload('table')
         })
     })
-    return false
 }
 

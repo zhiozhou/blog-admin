@@ -20,9 +20,9 @@ import java.util.List;
 @Component
 public interface DictDAO extends BaseDAO<DictDTO, DictPO> {
 
-    void saveData(DictPO dictPO);
+    int saveData(DictPO dictPO);
 
-    void removeData(DictDTO dictDTO);
+    int removeData(DictDTO dictDTO);
 
     List<DictDataPO> listData(DictDTO dictDTO);
 

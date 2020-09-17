@@ -143,9 +143,4 @@ public class UserServiceImpl implements IUserService {
         PageInfo<UserPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, UserDTO::new), pageInfo.getTotal());
     }
-
-    @Override
-    public OutVO<Integer> count(UserDTO userDTO) {
-        return OutVO.success(userDAO.count(userDTO));
-    }
 }

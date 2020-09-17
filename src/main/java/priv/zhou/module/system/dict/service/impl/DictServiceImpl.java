@@ -2,9 +2,9 @@ package priv.zhou.module.system.dict.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
@@ -13,15 +13,16 @@ import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.dict.domain.dao.DictDAO;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
-import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.po.DictPO;
 import priv.zhou.module.system.dict.service.IDictService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_DICT_DATA_KEY;
@@ -39,22 +40,21 @@ public class DictServiceImpl implements IDictService {
 
     private final DictDAO dictDAO;
 
-    private final Integer NORMAL_TYPE = 0;
-
-    private final String DICT_SNS_KEY = "zhou_sns";
-
     public DictServiceImpl(DictDAO dictDAO) {
         this.dictDAO = dictDAO;
     }
 
     @Override
+    @Transactional
     public OutVO<NULL> save(DictDTO dictDTO) {
 
         // 1.转换类型
         DictPO dictPO = dictDTO.toPO();
 
         // 2.验证参数
-        if (dictDAO.count(new DictDTO().setName(dictPO.getName())) > 0) {
+        if (null == dictPO.getDataList() || dictPO.getDataList().isEmpty()) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        } else if (dictDAO.count(new DictDTO().setName(dictPO.getName())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
         } else if (dictDAO.count(new DictDTO().setKey(dictPO.getKey())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
@@ -62,11 +62,12 @@ public class DictServiceImpl implements IDictService {
 
         // 3.补充参数
         dictPO.setCreateId(ShiroUtil.getUserId());
+
+        // 4.保存字典
         if (dictDAO.save(dictPO) < 1) {
-            OutVO.fail(OutVOEnum.FAIL_OPERATION);
-        }
-        if (null != dictPO.getDataList() && !dictPO.getDataList().isEmpty()) {
-            dictDAO.saveData(dictPO);
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        } else if (dictDAO.saveData(dictPO) < 1) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
         return OutVO.success();
 
@@ -74,12 +75,15 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
+    @Transactional
     public OutVO<NULL> remove(DictDTO dictDTO) {
         if (StringUtils.isBlank(dictDTO.getKey())) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        } else if (dictDAO.remove(dictDTO) < 0) {
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        } else if (dictDAO.removeData(dictDTO) < 0) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
-        dictDAO.remove(dictDTO);
-        dictDAO.removeData(dictDTO);
         return OutVO.success();
     }
 
@@ -91,7 +95,9 @@ public class DictServiceImpl implements IDictService {
         DictPO dictPO = dictDTO.toPO();
 
         // 2.验证参数
-        if (dictDAO.count(new DictDTO().setName(dictPO.getName()).setNoid(dictPO.getId())) > 0) {
+        if (null == dictPO.getDataList() || dictPO.getDataList().isEmpty()) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        } else if (dictDAO.count(new DictDTO().setName(dictPO.getName()).setNoid(dictPO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
         } else if (dictDAO.count(new DictDTO().setKey(dictPO.getKey()).setNoid(dictPO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
@@ -101,23 +107,18 @@ public class DictServiceImpl implements IDictService {
         dictPO.setModifiedId(ShiroUtil.getUserId());
 
         // 4.修改key值后，将数据也删除
-        DictPO db = dictDAO.get(new DictDTO().setId(dictPO.getId()));
-        if (!db.getKey().equals(dictPO.getKey())) {
-            dictDAO.removeData(new DictDTO().setKey(db.getKey()));
+        DictPO dbPO = dictDAO.get(new DictDTO().setId(dictPO.getId()));
+        if (!dbPO.getKey().equals(dictPO.getKey()) && dictDAO.removeData(new DictDTO().setKey(dbPO.getKey())) < 1) {
+
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
 
         // 5.修改字典
         if (dictDAO.update(dictPO) < 1) {
-            OutVO.fail(OutVOEnum.FAIL_OPERATION);
-        }
-        // 6,保存字典数据
-        dictDAO.removeData(dictDTO);
-        if (null != dictPO.getDataList() && !dictPO.getDataList().isEmpty()) {
-            dictDAO.saveData(dictPO);
-        }
-
-
-        if (DICT_SNS_KEY.equals(dictDTO.getKey())) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+        } else if (dictDAO.removeData(dictDTO) < 1 || dictDAO.saveData(dictPO) < 1) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+        } else if (DICT_SNS_KEY.equals(dictDTO.getKey())) {
             RedisUtil.delete(BLOG_SERVICE_DICT_DATA_KEY + dictDTO.getKey());
             RedisUtil.delete(BLOG_SERVICE_DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
         }
@@ -150,23 +151,14 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public OutVO<Map<String, DictDataDTO>> dataMap(DictDTO dictDTO, boolean noSystem) {
+
         // 1.只获取非系统字典
         if (noSystem) {
             dictDTO.setDataType(NORMAL_TYPE);
         }
-
-        // 2.获取数据
-        List<DictDataPO> poList = dictDAO.listData(dictDTO);
-        if (isNull(poList) || poList.isEmpty()) {
-            return OutVO.success(Maps.newHashMap());
-        }
-
-        // 3.以code映射kv形式
-        Map<String, DictDataDTO> map = Maps.newLinkedHashMap();
-        for (DictDataPO po : poList) {
-            map.put(po.getCode(), new DictDataDTO(po));
-        }
-        return OutVO.success(map);
+        return OutVO.success(dictDAO.listData(dictDTO).stream()
+                .map(DictDataDTO::new)
+                .collect(Collectors.toMap(DictDataDTO::getCode, dto -> dto)));
     }
 
     @Override
@@ -175,12 +167,7 @@ public class DictServiceImpl implements IDictService {
         if (noSystem) {
             dictDTO.setDataType(NORMAL_TYPE);
         }
-        List<DictDataPO> poList = dictDAO.listData(dictDTO);
-        return OutVO.success(DTO.ofPO(poList, DictDataDTO::new));
+        return OutVO.success(DTO.ofPO(dictDAO.listData(dictDTO), DictDataDTO::new));
     }
 
-    @Override
-    public OutVO<Integer> count(DictDTO dictDTO) {
-        return OutVO.success(dictDAO.count(dictDTO));
-    }
 }

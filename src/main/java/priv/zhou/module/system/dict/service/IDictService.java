@@ -1,10 +1,9 @@
 package priv.zhou.module.system.dict.service;
 
-import com.alibaba.fastjson.JSONObject;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
-import priv.zhou.common.param.NULL;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.NULL;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 
@@ -18,6 +17,10 @@ import java.util.Map;
  * @since 2020.04.17
  */
 public interface IDictService {
+
+    Integer NORMAL_TYPE = 0;
+
+    String DICT_SNS_KEY = "zhou_sns";
 
     OutVO<NULL> save(DictDTO dictDTO);
 
@@ -42,5 +45,4 @@ public interface IDictService {
     default OutVO<List<DictDataDTO>> dataList(DictDTO dictDTO) {
         return dataList(dictDTO, true);
     }
-    OutVO<Integer> count(DictDTO dictDTO);
 }

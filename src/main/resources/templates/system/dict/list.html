@@ -44,6 +44,16 @@
         <div th:include="include :: list-footer"></div>
         <script th:inline="none">
             const prefix = `${_gate}system/dict`
+            const stateMap = {
+                0: {
+                    label: '正常',
+                    css: 'layui-bg-blue'
+                },
+                11: {
+                    label: '停用',
+                    css: 'layui-bg-orange'
+                },
+            }
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui,
@@ -51,22 +61,8 @@
                         {field: 'name', title: '名称', minWidth: '120'},
                         {field: 'key', title: '字典标识', minWidth: '150'},
                         {
-                            field: 'state',
-                            title: '状态',
-                            templet: ({state}) => {
-                                let css, info
-                                switch (state) {
-                                    case 0:
-                                        css = 'layui-bg-blue'
-                                        info = '正常'
-                                        break
-                                    case 11:
-                                        css = 'layui-bg-orange'
-                                        info = '停用'
-                                        break
-                                }
-                                return `<a class="layui-btn layui-btn-xs ${css}" >${info}</a>`
-                            }
+                            field: 'state', title: '状态',
+                            templet: ({state}) => dictRender(state, stateMap)
                         },
                         {field: 'remark', title: '备注', minWidth: '150'},
                         {title: '操作', toolbar: '#rud'}
@@ -79,7 +75,7 @@
 
                 function wrapHandle(tool) {
                     if ('remove' === tool.event) {
-                        layer.confirm(`确认移除该${_module.name}吗`, {
+                        return layer.confirm(`确认移除该${_module.name}吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
                             }, () => httpPost({
@@ -88,7 +84,7 @@
                                 cb: () => done(reloadTable)
                             })
                         )
-                        return
+
                     }
                     pageAction(tool)
                 }

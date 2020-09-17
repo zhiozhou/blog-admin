@@ -94,8 +94,8 @@ public class LoginLimitFilter extends AccessControlFilter {
             UserAgent userAgent = UserAgent.parseUserAgentString(((ShiroHttpServletRequest) request).getHeader("User-Agent"));
             session.setAttribute("username", userDTO.getUsername());
             session.setAttribute("role", userDTO.getRole());
-            session.setAttribute("os", userAgent.getOperatingSystem().getName());
             session.setAttribute("browser", userAgent.getBrowser().getName());
+            session.setAttribute("os", userAgent.getOperatingSystem().getName());
             deque.push(session.getId());
         }
 

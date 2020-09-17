@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.comment.domain.dao.CommentDAO">
+
+    <resultMap id="commentMap" type="CommentPO">
+        <id column="comment_id" property="id"/>
+        <result column="comment_topic_id" property="topicId"/>
+        <result column="comment_replied_id" property="repliedId"/>
+        <result column="comment_content" property="content"/>
+        <result column="comment_state" property="state"/>
+        <result column="comment_gmt_create" property="gmtCreate"/>
+        <association property="blog" javaType="BlogPO">
+            <id column="blog_id" property="id"/>
+            <result column="blog_title" property="title"/>
+        </association>
+        <association property="fromVisitor" javaType="VisitorPO">
+            <id column="from_visitor_id" property="id"/>
+            <result column="from_visitor_nickname" property="nickname"/>
+            <result column="from_visitor_remark" property="remark"/>
+        </association>
+    </resultMap>
+
+    <insert id="save" parameterType="CommentPO">
+        INSERT INTO blog_comment(
+             blog_id ,
+             topic_id ,
+             replied_id ,
+             to_vid ,
+             from_vid ,
+             content ,
+             state ,
+             gmt_create ,
+             gmt_modified
+        )
+        VALUES(
+            #{blog.id} ,
+            #{topicId} ,
+            #{repliedId} ,
+            #{toVisitor.id} ,
+            #{fromVisitor.id} ,
+            #{content} ,
+            #{state} ,
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="CommentPO">
+        UPDATE blog_comment
+        <set>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="state != null">state = #{state},</if>
+            gmt_modified = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="remove" parameterType="CommentDTO">
+        delete from blog_comment where id = #{id}
+    </delete>
+
+
+    <select id="get" parameterType="CommentDTO" resultMap="commentMap">
+        SELECT
+            blog_comment.id AS comment_id,
+            blog_comment.topic_id AS comment_topic_id,
+            blog_comment.replied_id AS comment_replied_id,
+            blog_comment.content AS comment_content,
+            blog_comment.state AS comment_state,
+            blog_comment.gmt_create AS comment_gmt_create,
+            blog_blog.id AS blog_id,
+            blog_blog.title AS blog_title,
+            from_visitor.id AS from_visitor_id,
+            from_visitor.nickname AS from_visitor_nickname
+        FROM
+            blog_comment
+            LEFT JOIN blog_blog ON blog_comment.blog_id = blog_blog.id
+            LEFT JOIN blog_visitor AS from_visitor ON blog_comment.from_vid = from_visitor.id
+        WHERE blog_comment.id = #{id}
+    </select>
+
+
+    <select id="list" resultMap="commentMap">
+        SELECT
+        blog_comment.id AS comment_id,
+        blog_comment.content AS comment_content,
+        blog_comment.state AS comment_state,
+        blog_comment.gmt_create AS comment_gmt_create,
+        from_visitor.id AS from_visitor_id,
+        from_visitor.nickname AS from_visitor_nickname
+        FROM
+        blog_comment
+        LEFT JOIN blog_visitor AS from_visitor ON from_vid = from_visitor.id
+        <where>
+            <if test="dto.blog != null and dto.blog.id != null ">and blog_id = #{dto.blog.id}</if>
+            <if test="dto.repliedId != null ">and replied_id = #{dto.repliedId}</if>
+            <if test="dto.state != null  ">and blog_comment.state = #{dto.state}</if>
+            <if test="dto.fromVisitor != null and dto.fromVisitor.id != null">and from_vid = #{dto.fromVisitor.id}</if>
+        </where>
+        ORDER BY
+        <if test="order != null and order.by != null">
+            blog_comment.${order.by} ${order.type}
+        </if>
+        <if test="order == null or order.by == null">
+            blog_comment.state ASC,
+            blog_comment.id DESC
+        </if>
+    </select>
+
+</mapper>

@@ -28,21 +28,23 @@
                 <div class="layout-table-tool">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <button type="button" class="layui-btn layui-btn-sm layui-bg-blue add-image">原图添加</button>
-                        </div>
-                        <div class="layui-inline">
-                            <button type="button" class="layui-btn layui-btn-sm add-image" data-type="compress">压缩添加
+                            <button type="button" class="layui-btn layui-btn-sm layui-bg-blue add-image">Full Upload
                             </button>
                         </div>
                         <div class="layui-inline">
-                            <input type="text" name="remark" class="layui-input image-remark rove" placeholder="请输入备注"
-                                   autocomplete="off">
+                            <button type="button" class="layui-btn layui-btn-sm add-image" data-type="compress">
+                                Compression Upload
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <input type="text" class="layui-input image-remark rove" autocomplete="off"
+                                   name="remark" placeholder="Input Remark">
                         </div>
                         <div class="layui-inline">
                             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal rove"
-                                    id="image-upload" lay-submit
-                                    lay-filter="submit">
-                                开始上传
+                                    lay-submit lay-filter="submit"
+                                    id="image-upload">
+                                Start Uploading
                             </button>
                         </div>
                         <blockquote class="layui-elem-quote layui-quote-nm rove" id="image-upload-quote"></blockquote>
@@ -66,11 +68,11 @@
                     const {table, jquery: $, upload} = layui,
                         cols = [[
                             {
-                                field: 'url', title: '图片', minWidth: '120',
+                                field: 'url', title: 'Image', minWidth: '120',
                                 templet: ({url}) => `<img src="${url}" class="image-view"/>`
                             },
-                            {field: 'remark', title: '备注', minWidth: '120'},
-                            {title: '操作', toolbar: '#image-tool'}
+                            {field: 'remark', title: 'Remark', minWidth: '120'},
+                            {title: 'Operation', toolbar: '#image-tool'}
                         ]]
 
                     tableRender(table, {cols})
@@ -99,7 +101,7 @@
 
                     const uploader = uploadRender(upload, {
                         elem: '.add-image',
-                        data: {prefix:_upload.prefix, keepName: false},
+                        data: {prefix: _upload.prefix, keepName: false},
                         auto: false,
                         size: 16384,
                         multiple: true,

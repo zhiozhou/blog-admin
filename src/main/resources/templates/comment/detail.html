@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="layout-iframe">
+            <form class="layui-form-pane  ">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.id }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">博客id：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.blogId }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主题id：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.topicId }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">回复评论id：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.repliedId }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">目标访客id：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.toVid }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">访客id：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.fromVid }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内容：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.content }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.state }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.gmtCreate }" >
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.gmtModified }" >
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+
+        </script>
+    </body>
+
+</html>

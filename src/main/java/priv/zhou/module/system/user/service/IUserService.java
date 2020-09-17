@@ -27,6 +27,4 @@ public interface IUserService {
     OutVO<UserDTO> get(UserDTO userDTO);
 
     OutVO<ListVO<UserDTO>> list(UserDTO userDTO, Page page);
-
-    OutVO<Integer> count(UserDTO userDTO);
 }

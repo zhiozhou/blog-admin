@@ -10,7 +10,7 @@ import priv.zhou.module.system.user.domain.po.UserPO;
 @Component
 public interface UserDAO extends BaseDAO<UserDTO,UserPO> {
 
-    Integer saveRole(UserPO userPO);
+    int saveRole(UserPO userPO);
 
-    Integer removeRole(UserPO userPO);
+    int removeRole(UserPO userPO);
 }
