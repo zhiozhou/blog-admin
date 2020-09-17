@@ -2,79 +2,109 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <body>
-
-        <div class="layout-page">
+        <div class="layout-iframe">
             <form class="layui-form-pane">
 
-                <div class="layui-tab">
+                <input type="hidden" th:value="${ _vo.id }">
 
-                    <ul class="layui-tab-title">
-                        <li><a th:href="@{/comment/list}">评论管理</a></li>
-                        <li class="layui-this" th:text="${_module.name}+详情"></li>
-                    </ul>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">昵称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.fromVisitor.nickname  }">
+                    </div>
+                </div>
 
-                    <div class="layui-tab-content">
+                <div class="layui-form-item" th:if="${ _vo.fromVisitor.email }">
+                    <label class="layui-form-label">邮箱：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.fromVisitor.email  }">
+                    </div>
+                </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">昵称：</label>
-                            <div class="layui-input-block">
-                                <input type="text" class="layui-input" disabled
-                                       th:value="${ _vo.fromVisitor.nickname  }">
-                            </div>
-                        </div>
+                <div class="layui-form-item" th:if="${ _vo.fromVisitor.website }">>
+                    <label class="layui-form-label">网站：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.fromVisitor.website  }">
+                    </div>
+                </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">邮箱：</label>
-                            <div class="layui-input-block">
-                                <input type="text" class="layui-input" disabled
-                                       th:value="${ _vo.fromVisitor.email  }">
-                            </div>
-                        </div>
-
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">网站：</label>
-                            <div class="layui-input-block">
-                                <input type="text" class="layui-input" disabled
-                                       th:value="${ _vo.fromVisitor.website  }">
-                            </div>
-                        </div>
-
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">内容：</label>
-                            <div class="layui-input-block">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内容：</label>
+                    <div class="layui-input-block">
                         <textarea class="layui-textarea" disabled
                                   th:text="${_vo.content }" rows="5">
                         </textarea>
-                            </div>
-                        </div>
+                    </div>
+                </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">状态：</label>
-                            <div class="layui-input-block">
-                                <input type="text" th:value="${ _vo.stateStr }" class="layui-input" disabled>
-                            </div>
-                        </div>
 
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">创建时间：</label>
-                            <div class="layui-input-block">
-                                <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field"
-                                       disabled>
-                            </div>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.stateStr  }"></a>
+                    </div>
+                </div>
 
-                        <div class="layui-form-item" shiro:hasPermission=${_module.permissionPrefix+':check'}>
-                            <div class="layui-input-block">
-                                <a class="layui-btn layui-btn-sm layui-btn-normal" id="pass">Pass</a>
-                                <a class="layui-btn layui-btn-sm layui-btn-danger" id="no-pass">No Pass</a>
-                            </div>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field"
+                               disabled>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">IP：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.ip  }">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户代理：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" disabled
+                               th:value="${ _vo.ua  }">
+                    </div>
+                </div>
+
+
+
+                <div class="layui-form-item" th:if="${ _vo.state == 0 }"
+                     shiro:hasPermission=${_module.permissionPrefix+':check'}>
+                    <div class="layui-input-block">
+                        <a class="layui-btn layui-btn-sm layui-btn-normal" id="pass">Pass</a>
+                        <a class="layui-btn layui-btn-sm layui-btn-danger" id="no-pass">No Pass</a>
                     </div>
                 </div>
             </form>
         </div>
         <div th:include="include :: footer"></div>
-        <script th:inline="javascript"></script>
+        <script th:inline="javascript">
+            const prefix = `${_gate}comment`
+
+            layui.use(['jquery'], () => {
+                const {jquery: $} = layui
+
+                $('#pass').click(() => httpPost({
+                        url: `${prefix}/rest/pass/${data.id}`,
+                        cb: () => iframeDone()
+                    })
+                )
+
+                $('#no-pass').click(() => httpPost({
+                        url: `${prefix}/rest/pass/no/${data.id}`,
+                        cb: () => iframeDone()
+                    })
+                )
+
+            })
+        </script>
     </body>
 
 </html>

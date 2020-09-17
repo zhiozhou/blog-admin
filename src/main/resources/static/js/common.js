@@ -83,7 +83,7 @@ function copy(text) {
         input.select()
     }
     try {
-        document.execCommand("Copy", false, null) ? done(null, '复制成功') : warn('复制失败')
+        document.execCommand("Copy", false, null) ? msg(null, '复制成功') : warn('复制失败')
     } catch (e) {
         warn('复制失败')
     }
@@ -125,7 +125,7 @@ function warn(msg) {
  * @param cb 回调函数 默认刷新当前表单
  * @param msg 通知的消息
  */
-function done(cb, msg = '操作成功') {
+function msg(cb, msg = '操作成功') {
     layer.msg(msg, {icon: 1, time: 500}, cb)
 }
 
@@ -136,7 +136,7 @@ function done(cb, msg = '操作成功') {
  * @param cb 回调函数 默认刷新当前表单
  * @param msg 通知的消息
  */
-function outDone(cb, msg = '操作成功') {
+function outMsg(cb, msg = '操作成功') {
     parent.layer.msg('操作成功', {icon: 1, time: 500}, cb);
 }
 
@@ -151,16 +151,3 @@ function tips(id, msg) {
         time: 1500
     })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

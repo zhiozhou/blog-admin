@@ -81,7 +81,7 @@
                                     shade: [0.1, '#fff']
                                 }, () => httpPost({
                                     url: `${prefix}/rest/offline/${data.id}`,
-                                    cb: () => done(reloadTable)
+                                    cb: () => msg(reloadTable)
                                 })
                             )
                     }

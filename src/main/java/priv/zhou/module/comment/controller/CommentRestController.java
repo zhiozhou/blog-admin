@@ -34,14 +34,20 @@ public class CommentRestController {
         return commentService.remove(new CommentDTO().setId(id));
     }
 
-    @RequestMapping("/update")
-    public OutVO<NULL> update(@Valid CommentDTO commentDTO) {
-        return commentService.update(commentDTO);
-    }
-
     @RequestMapping("/list")
     public OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
         return commentService.list(commentDTO, page, order);
+    }
+
+
+    @RequestMapping("/pass/{id}")
+    public OutVO<NULL> pass(@PathVariable Integer id) {
+        return commentService.update(new CommentDTO().setId(id).setState(1));
+    }
+
+    @RequestMapping("/pass/no/{id}")
+    public OutVO<NULL> noPass(@PathVariable Integer id) {
+        return commentService.update(new CommentDTO().setId(id).setState(10));
     }
 
     @RequestMapping("/reply")

@@ -1075,7 +1075,7 @@
                         url:prefix + form.getAttribute('action'),
                         data,
                         cb:() => {
-                            outDone(()=>{
+                            outMsg(()=>{
                                 parent.openId = data.parentId
                                 parent.layer.close(parent.layer.getFrameIndex(window.name))
                                 parent.layui.table.reload('table', {

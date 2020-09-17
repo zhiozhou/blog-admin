@@ -81,7 +81,7 @@
                             }, () => httpPost({
                                 url: `${prefix}/rest/remove`,
                                 data: {key: tool.data.key},
-                                cb: () => done(reloadTable)
+                                cb: () => msg(reloadTable)
                             })
                         )
 

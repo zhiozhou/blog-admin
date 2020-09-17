@@ -81,17 +81,22 @@
                 function toolHandle({data, event}) {
                     switch (event) {
                         case 'reply':
-                            window.location.href = `${prefix}/reply/${data.id}`
+                            newFrame(`${_module.name}详情`, `${prefix}/reply/${data.id}`)
                             break
                         case 'pass':
                             httpPost({
-                                url: `${prefix}/rest/update`,
-                                data: {id: data.id, state: 1},
-                                cb: () => done(reloadTable)
+                                url: `${prefix}/rest/pass/${data.id}`,
+                                cb: () => msg(reloadTable)
+                            })
+                            break
+                        case 'noPass':
+                            httpPost({
+                                url: `${prefix}/rest/pass/no/${data.id}`,
+                                cb: () => msg(reloadTable)
                             })
                             break
                     }
-                    pageAction({data, event})
+                    iframeAction({data, event})
                 }
             })
         </script>

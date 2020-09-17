@@ -103,7 +103,7 @@ html, body {
 }
 
 
-.layui-table-header tr > th:last-child.layui-table-col-special .layui-table-cell{
+.layui-table-header tr > th:last-child.layui-table-col-special .layui-table-cell {
     width: 600px;
 }
 

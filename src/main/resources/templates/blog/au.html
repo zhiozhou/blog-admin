@@ -8,17 +8,25 @@
 
         .tags-wrap {
             display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            padding-top: 4px;
             min-height: 38px;
         }
 
+        .tags-wrap:after, .add-tag-wrap:after {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+
+        .add-tag-wrap {
+            margin-left: 8px;
+        }
+
         .tags-wrap > .tag {
-            margin: 0 0 8px 8px;
+            margin: auto 0 auto 8px;
             padding: 0 4px 0 8px;
-            border-radius: 2px;
             line-height: 28px;
+            border-radius: 2px;
             color: var(--layui-blue);
             background: rgba(38, 125, 204, .05);
             border: 1px solid var(--layui-blue);
@@ -28,18 +36,16 @@
             cursor: pointer;
             display: inline-block;
             height: 100%;
-            width: 19px;
+            width: 20px;
             text-align: center;
         }
 
 
         .add-tag-wrap {
             position: relative;
-            margin-left: 8px;
             width: 100%;
             max-width: 200px;
         }
-
 
         #add-tag-input-wrap {
             display: none;
@@ -199,7 +205,7 @@
                         if (0 === tags.length) {
                             return warn('至少添加一种标签')
                         }
-                        for(let i in tags){
+                        for (let i in tags) {
                             field[`tags[${i}].name`] = tags[i]['name']
                         }
                         field.abs = getAbs(field.content)
@@ -209,7 +215,7 @@
 
                 $('#add-tag').click(() => {
                     $('#add-tag').hide()
-                    $('#add-tag-input-wrap').show()
+                    $('#add-tag-input-wrap').css('display', 'inline-block')
                     $('#add-tag-input').focus()
                 })
 

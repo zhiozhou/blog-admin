@@ -102,9 +102,9 @@
                         case 'resetPwd':
                             return newFrame(`修改密码`, `${_gate}/system/user/resetPwd/${data.id}`)
                         case 'freeze':
-                            return httpPost({url: `${prefix}/rest/freeze/${data.id}`, cb: () => done(reloadTable())})
+                            return httpPost({url: `${prefix}/rest/freeze/${data.id}`, cb: () => msg(reloadTable())})
                         case 'unfreeze':
-                            return httpPost({url: `${prefix}/rest/unfreeze/${data.id}`, cb: () => done(reloadTable())})
+                            return httpPost({url: `${prefix}/rest/unfreeze/${data.id}`, cb: () => msg(reloadTable())})
                     }
                     iframeAction({data, event})
                 })

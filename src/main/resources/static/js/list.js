@@ -90,7 +90,7 @@ function tableRender(table, options) {
  */
 function dictRender(code, dictMap) {
     let {label, css} = dictMap[code]
-    return `<a  class="layui-btn layui-btn-xs ${css}">${label}</a>`
+    return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
 }
 
 
@@ -136,7 +136,7 @@ function removeAction(data) {
     }, (index) => {
         httpPost({
             url: `${prefix}/rest/remove/${data.id}`,
-            cb: () => done(reloadTable)
+            cb: () => msg(reloadTable)
         })
     })
 }

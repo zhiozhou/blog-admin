@@ -120,7 +120,7 @@
                 $('.refresh-btn').click(() => {
                     httpPost({
                         url: `${prefix}/rest/refresh`,
-                        cb: () => done()
+                        cb: () => msg()
                     })
                 })
 

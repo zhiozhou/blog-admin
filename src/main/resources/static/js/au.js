@@ -58,7 +58,7 @@ function uploadRender(upload, options) {
             done: ({code, info, data}) => {
                 loaded()
                 if (fail(code)) return warn(info)
-                done(null, '上传成功')
+                msg(null, '上传成功')
                 let url = data[0].origin
                 layui.jquery(options.elem).siblings('.view').attr('href', url).next().val(url)
             }
@@ -121,7 +121,7 @@ function pageSubmit({form, field: data}) {
     return httpPost({
         url: prefix + form.getAttribute('action'),
         data,
-        cb: () => done(() => {
+        cb: () => msg(() => {
             window.location.href = layui.jquery('.layui-form>.layui-tab .layui-this').prev().children('a').attr('href')
         })
     })
@@ -135,10 +135,17 @@ function iframeSubmit({form, field: data}) {
     return httpPost({
         url: prefix + form.getAttribute('action'),
         data,
-        cb: () => outDone(() => {
-            parent.layer.close(parent.layer.getFrameIndex(window.name))
-            parent.layui.table.reload('table')
-        })
+        cb: () => iframeDone
     })
 }
 
+
+/**
+ * 内联页面消息提示，成功后关闭并刷新父级表格
+ */
+function iframeDone(){
+    outMsg(()=>{
+        parent.layer.close(parent.layer.getFrameIndex(window.name))
+        parent.layui.table.reload('table')
+    })
+}
