@@ -1,4 +1,4 @@
-package ${app.packet}.module.${app.module}.${table.className}.controller;
+package ${app.packet}.module.$!{app.moduleRef}${table.className}.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,8 +8,8 @@ import ${app.packet}.common.domain.dto.Page;
 import ${app.packet}.common.domain.vo.OutVO;
 import ${app.packet}.common.domain.vo.ListVO;
 import ${app.packet}.common.param.NULL;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.dto.${table.className}DTO;
-import ${app.packet}.module.${app.module}.${table.objectName}.service.I${table.className}Service;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.I${table.className}Service;
 
 import javax.validation.Valid;
 
@@ -20,7 +20,7 @@ import javax.validation.Valid;
  * @since ${app.since}
  */
 @RestController
-@RequestMapping("/${app.module}/${table.objectName}/rest")
+@RequestMapping("/$!{app.modulePath}${table.objectName}/rest")
 public class ${table.className}RestController {
 
     private final I${table.className}Service ${table.objectName}Service;

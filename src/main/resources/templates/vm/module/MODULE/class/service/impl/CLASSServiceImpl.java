@@ -1,4 +1,4 @@
-package ${app.packet}.module.${app.module}.${table.objectName}.service.impl;
+package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -10,10 +10,10 @@ import ${app.packet}.common.param.NULL;
 import ${app.packet}.common.domain.vo.ListVO;
 import ${app.packet}.common.param.OutVOEnum;
 import ${app.packet}.common.domain.dto.DTO;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.dao.${table.className}DAO;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.dto.${table.className}DTO;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.po.${table.className}PO;
-import ${app.packet}.module.${app.module}.${table.objectName}.service.I${table.className}Service;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dao.${table.className}DAO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po.${table.className}PO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.I${table.className}Service;
 import static java.util.Objects.isNull;
 import java.util.List;
 

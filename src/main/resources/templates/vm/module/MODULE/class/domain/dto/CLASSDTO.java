@@ -1,4 +1,4 @@
-package ${app.packet}.module.${app.module}.${table.objectName}.domain.dto;
+package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.po.${table.className}PO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po.${table.className}PO;
 import ${app.packet}.common.domain.dto.DTO;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

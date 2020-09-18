@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <div class="layout-page">
+            <div>
+                <table id="table" lay-filter="table"></table>
+            </div>
+        </div>
+        <div th:include="include :: list-footer"></div>
+        <script th:inline="javascript">
+            const typeMap = [[${typeMap}]]
+        </script>
+        <script th:inline="none">
+            const prefix = `${_gate}block`
+
+
+            layui.use(['table', 'jquery'], () => {
+                const {table} = layui,
+                    cols = [[
+                        {
+                            field: 'type', title: '类型',
+                            templet: ({type}) => dictRender(type, typeMap)
+                        },
+                        {field: 'reason', title: '原因'},
+                        {field: 'createId', title: '操作人'},
+                        {
+                            field: 'gmtCreate', title: '创建时间',
+                            templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
+                        },
+                        {title: '操作', toolbar: '#rud'}
+                    ]]
+
+                tableRender(table, {cols})
+                table.on('tool(table)', iframeAction)
+            })
+        </script>
+    </body>
+
+</html>

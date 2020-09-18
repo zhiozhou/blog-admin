@@ -5,7 +5,7 @@
         <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
             <form class="layui-form" th:attr="action=${_action}">
 
-                <div class="layui-tab" >
+                <div class="layui-tab">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/dict/list}" th:text="${_module.name}+列表"></a></li>
                         <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
@@ -92,16 +92,18 @@
                     data: dataList,
                     cellMinWidth: '80',
                     cols: [[
-                        {field: 'code', title: '编码值',  edit: true},
-                        {field: 'label', title: '标签',  edit: true},
-                        {field: 'css', title: 'class标签',  edit: true},
-                        {field: 'type',title: '状态',
+                        {field: 'code', title: '编码值', edit: true},
+                        {field: 'label', title: '标签', edit: true},
+                        {field: 'css', title: 'class标签', edit: true},
+                        {
+                            field: 'type', title: '状态',
                             templet: ({type}) => {
                                 let {css, info} = typeMap[type]
                                 return `<a data-type="${type}" class="type-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {field: 'top',title: '默认使用',
+                        {
+                            field: 'top', title: '默认使用',
                             templet: ({top}) => {
                                 let css = 'layui-bg-blue', info = '正常'
                                 if (1 === top) {
@@ -111,7 +113,7 @@
                                 return `<a class="top-btn layui-btn layui-btn-xs ${css}">${info}</a>`
                             }
                         },
-                        {title: '操作',    toolbar: '#dict-tool'}
+                        {title: '操作', toolbar: '#dict-tool'}
                     ]],
                     done: () => {
                         tindex = $('.t').parents('tr').data('index')
@@ -124,9 +126,8 @@
                     // 数据项加入提交数据
                     let codeSet = []
                     for (let i in dataList) {
-                        let temp = dataList[i],
-                            {code, label} = temp
-                        if (code && label) {
+                        let {code} = temp = dataList[i]
+                        if (code) {
                             if (codeSet.includes(code)) {
                                 return warn('数据项编码值不可重复')
                             }

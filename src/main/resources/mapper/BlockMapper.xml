@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.block.domain.dao.BlockDAO">
+
+    <insert id="save" parameterType="BlockPO">
+        INSERT INTO blog_block(
+             ip , 
+             type , 
+             reason , 
+             create_id , 
+             gmt_create 
+        )
+        VALUES(
+            #{ip} , 
+            #{type} , 
+            #{reason} , 
+            #{createId} ,
+            NOW()
+        )
+    </insert>
+
+
+    <sql id="selectSQL">
+        SELECT
+            id ,
+            ip ,
+            type ,
+            reason ,
+            create_id ,
+            gmt_create 
+        FROM blog_block
+    </sql>
+
+    <select id="get" parameterType="BlockDTO" resultType="BlockPO">
+        <include refid="selectSQL"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="list" parameterType="BlockDTO" resultType="BlockPO">
+        <include refid="selectSQL"/>
+        <where>
+            <if test="type != null  "> and type = #{type}</if>
+            <if test="ipLike != null and ipLike != ''">and ip LIKE CONCAT('%',#{ipLike},'%')</if>
+            <if test="reasonLike != null and reasonLike != ''">and reason LIKE CONCAT('%',#{reasonLike},'%')</if>
+        </where>
+        ORDER BY id DESC
+    </select>
+
+</mapper>

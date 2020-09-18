@@ -1,4 +1,4 @@
-package ${app.packet}.module.${app.module}.${table.objectName}.domain.po;
+package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po;
 
 import lombok.Getter;
 import lombok.Setter;

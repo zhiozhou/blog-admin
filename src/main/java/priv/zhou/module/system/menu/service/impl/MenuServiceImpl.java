@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
-import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_MENU_KEY;
-import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_MENU_MODIFIED_KEY;
+import static priv.zhou.common.param.CONSTANT.BS_MENU_KEY;
+import static priv.zhou.common.param.CONSTANT.BS_MENU_MODIFIED_KEY;
 
 @Service
 public class MenuServiceImpl implements IMenuService {
@@ -63,8 +63,8 @@ public class MenuServiceImpl implements IMenuService {
 
         // 5.移除服务端缓存
         if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
-            RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
-            RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
+            RedisUtil.delete(BS_MENU_KEY);
+            RedisUtil.delete(BS_MENU_MODIFIED_KEY);
         }
 
         return OutVO.success();
@@ -81,8 +81,8 @@ public class MenuServiceImpl implements IMenuService {
         if (null == menuPO) {
             return OutVO.fail(OutVOEnum.FAIL_PARAM);
         } else if (SERVICE_FLAG.equals(menuPO.getFlag())) {
-            RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
-            RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
+            RedisUtil.delete(BS_MENU_KEY);
+            RedisUtil.delete(BS_MENU_MODIFIED_KEY);
         } else if (menuDAO.remove(menuDTO) < 1 || roleDAO.clearMenu(new RoleDTO()) < 1) {
             throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
@@ -126,8 +126,8 @@ public class MenuServiceImpl implements IMenuService {
 
         // 5.移除服务端缓存
         if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
-            RedisUtil.delete(BLOG_SERVICE_MENU_KEY);
-            RedisUtil.delete(BLOG_SERVICE_MENU_MODIFIED_KEY);
+            RedisUtil.delete(BS_MENU_KEY);
+            RedisUtil.delete(BS_MENU_MODIFIED_KEY);
         }
 
         return OutVO.success();

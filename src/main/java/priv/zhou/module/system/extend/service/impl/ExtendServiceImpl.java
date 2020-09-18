@@ -29,13 +29,13 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static java.util.Objects.isNull;
 import static priv.zhou.common.param.AppProperties.ENC;
-import static priv.zhou.common.param.CONSTANT.*;
+import static priv.zhou.common.param.CONSTANT.DEMO_PATH;
+import static priv.zhou.common.param.CONSTANT.SEPARATOR;
 
 @Slf4j
 @Service
@@ -56,12 +56,13 @@ public class ExtendServiceImpl implements IExtendService {
     @Override
     public OutVO<byte[]> module(List<String> tableNames) throws Exception {
 
-        if (isNull(tableNames) || tableNames.isEmpty()) {
+        if (null == tableNames || tableNames.isEmpty()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
-        Map<String, DictDataDTO> configMap = dictService.dataMap(new DictDTO().setKey("extend_config")).getData();
-        AppConfig appConfig = new AppConfig(configMap.get("packet").getLabel())
+        Map<String, DictDataDTO> configMap = dictService.dataMap(new DictDTO().setKey("extend_config"), false).getData();
+        AppConfig appConfig = new AppConfig()
+                .setPacket(configMap.get("packet").getLabel())
                 .setAuthor(configMap.get("author").getLabel())
                 .setModule(configMap.get("module").getLabel())
                 .setKeepPrefix(configMap.get("keepPrefix").getLabel().startsWith("t"));

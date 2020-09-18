@@ -8,7 +8,8 @@
                     <div class="layui-inline">
                         <select name="state">
                             <option value="">请选择一个状态</option>
-                            <option th:each="state:${stateMap.values()}" th:value="${state.code}"
+                            <option th:each="state:${stateMap.values()}"
+                                    th:value="${state.code}"
                                     th:text="${state.label}"></option>
                         </select>
                     </div>
@@ -42,12 +43,14 @@
             {{#  } }}
             {{#  } else if( d.state == 0) { }}
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass"
-               shiro:hasPermission=${_module.permissionPrefix+':check'}>Pass</a>
-            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="noPass"
-               shiro:hasPermission=${_module.permissionPrefix+':check'}>No Pass</a>
+               shiro:hasPermission=${_module.permissionPrefix+':check'}>通过</a>
+            <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="noPass"
+               shiro:hasPermission=${_module.permissionPrefix+':check'}>屏蔽</a>
             {{#  } }}
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
                shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
+            <a class="layui-btn layui-bg-black layui-btn-sm" lay-event="block"
+               shiro:hasPermission=${'block:comment'}>禁言</a>
         </script>
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]

@@ -3,12 +3,13 @@ package priv.zhou.module.system.extend.domain.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.StringUtils;
 import priv.zhou.common.tools.DateUtil;
 import priv.zhou.module.system.extend.domain.Demo;
 
 import java.util.List;
 
-import static priv.zhou.common.param.CONSTANT.*;
+import static priv.zhou.common.param.CONSTANT.SEPARATOR;
 
 
 @Getter
@@ -37,6 +38,16 @@ public class AppConfig {
     private String module;
 
     /**
+     * 模块路径
+     */
+    private String moduleRef;
+
+    /**
+     * 模块路径
+     */
+    private String modulePath;
+
+    /**
      * 包路径
      */
     private String packetPath;
@@ -52,10 +63,26 @@ public class AppConfig {
     private Boolean keepPrefix;
 
 
-    public AppConfig(String packet) {
+    public AppConfig() {
         this.since = DateUtil.format("yyyy.MM.dd");
-        this.packet = packet;
-        this.packetPath = packet.replace(".", SEPARATOR);
     }
 
+    public AppConfig setPacket(String packet) {
+        this.packet = packet;
+        this.packetPath = packet.replace(".", SEPARATOR);
+        return this;
+    }
+
+    public AppConfig setModule(String module) {
+        if (StringUtils.isBlank(module)) {
+            this.module = "";
+            this.moduleRef = "";
+            this.modulePath = "";
+        } else {
+            this.module = module;
+            this.moduleRef += ".";
+            this.modulePath += SEPARATOR;
+        }
+        return this;
+    }
 }

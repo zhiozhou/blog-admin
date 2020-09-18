@@ -1,10 +1,10 @@
-package ${app.packet}.module.${app.module}.${table.objectName}.domain.dao;
+package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dao;
 
 import ${app.packet}.common.domain.dao.BaseDAO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.dto.${table.className}DTO;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.po.${table.className}PO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po.${table.className}PO;
 
 import java.util.List;
 

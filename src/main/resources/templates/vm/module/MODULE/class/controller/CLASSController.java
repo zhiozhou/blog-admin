@@ -1,4 +1,4 @@
-package ${app.packet}.module.${app.module}.${table.objectName}.controller;
+package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.controller;
 
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ${app.packet}.common.domain.Module;
 import ${app.packet}.common.domain.vo.OutVO;
 import ${app.packet}.common.controller.BaseController;
-import ${app.packet}.module.${app.module}.${table.objectName}.domain.dto.${table.className}DTO;
-import ${app.packet}.module.${app.module}.${table.objectName}.service.I${table.className}Service;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.I${table.className}Service;
 
 /**
  * ${table.comment} 视图控制层
@@ -17,14 +17,19 @@ import ${app.packet}.module.${app.module}.${table.objectName}.service.I${table.c
  * @author ${app.author}
  * @since ${app.since}
  */
+
 @Component
-@RequestMapping("/${app.module}/${table.objectName}")
+@RequestMapping("/$!{app.modulePath}${table.objectName}")
 public class ${table.className}Controller extends BaseController {
 
     private final I${table.className}Service ${table.objectName}Service;
 
+    #if($app.module != "")
+        #set($modulePrefix=$app.module+":")
+    #end
+
     public ${table.className}Controller(I${table.className}Service ${table.objectName}Service) {
-        super(new Module("${table.comment}","${app.module}:${table.objectName}"));
+        super(new Module("${table.comment}","$!{modulePrefix}${table.objectName}"));
         this.${table.objectName}Service = ${table.objectName}Service;
     }
 
@@ -32,7 +37,7 @@ public class ${table.className}Controller extends BaseController {
     public String add(Model model) {
         super.add(model, new ${table.className}DTO());
 
-        return "${app.module}/${table.objectName}/au";
+        return "$!{app.modulePath}${table.objectName}/au";
     }
 
     @RequestMapping("/update/{id}")
@@ -44,7 +49,7 @@ public class ${table.className}Controller extends BaseController {
         }
         super.update(model, dtoVO.getData());
 
-        return "${app.module}/${table.objectName}/au";
+        return "$!{app.modulePath}${table.objectName}/au";
     }
 
     @RequestMapping("/detail/{id}")
@@ -55,13 +60,13 @@ public class ${table.className}Controller extends BaseController {
         }
         super.detail(model, dtoVO.getData());
 
-        return "${app.module}/${table.objectName}/detail";
+        return "$!{app.modulePath}${table.objectName}/detail";
     }
 
     @RequestMapping("/list")
     public String list(Model model) {
         super.list(model);
 
-        return "${app.module}/${table.objectName}/list";
+        return "$!{app.modulePath}${table.objectName}/list";
     }
 }

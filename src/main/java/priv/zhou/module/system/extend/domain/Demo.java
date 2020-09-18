@@ -21,6 +21,8 @@ public class Demo {
     }
 
     public String getOutPath(String moduleName, String className, String objectName) {
-        return path.replace("MODULE", moduleName).replace("CLASS", className).replace("class", objectName);
+        return path.replace("CLASS", className)
+                .replace("class", objectName)
+                .replace("MODULE/", moduleName.replaceAll("\\.","/")); // 包符号替换为路径符
     }
 }

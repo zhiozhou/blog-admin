@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_DICT_DATA_KEY;
-import static priv.zhou.common.param.CONSTANT.BLOG_SERVICE_DICT_DATA_MODIFIED_KEY;
+import static priv.zhou.common.param.CONSTANT.BS_DICT_DATA_KEY;
+import static priv.zhou.common.param.CONSTANT.BS_DICT_DATA_MODIFIED_KEY;
 
 
 /**
@@ -119,8 +119,8 @@ public class DictServiceImpl implements IDictService {
         } else if (dictDAO.removeData(dictDTO) < 1 || dictDAO.saveData(dictPO) < 1) {
             throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         } else if (DICT_SNS_KEY.equals(dictDTO.getKey())) {
-            RedisUtil.delete(BLOG_SERVICE_DICT_DATA_KEY + dictDTO.getKey());
-            RedisUtil.delete(BLOG_SERVICE_DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
+            RedisUtil.delete(BS_DICT_DATA_KEY + dictDTO.getKey());
+            RedisUtil.delete(BS_DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
         }
         return OutVO.success();
     }

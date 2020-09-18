@@ -59,15 +59,13 @@
                         </div>
 
                         <div class="layui-form-item">
-                          <textarea class="layui-textarea" rows="20" th:text="${ _vo.content }" disabled></textarea>
+                            <textarea class="layui-textarea" rows="20" th:text="${ _vo.content }" disabled></textarea>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">标签：</label>
                             <div class="layui-input-block tags-wrap">
-                                <div class="tag"
-                                     th:each="tag : ${_vo.tags}"
-                                >
+                                <div class="tag" th:each="tag : ${_vo.tags}">
                                     <span th:text="${tag.name}"></span>
                                 </div>
                             </div>
