@@ -51,7 +51,7 @@ public class CommentRestController {
 
     @RequestMapping("/pass/no/{id}")
     public OutVO<NULL> noPass(@PathVariable Integer id) {
-        return commentService.update(new CommentDTO().setId(id).setState(10));
+        return commentService.update(new CommentDTO().setId(id).setState(9));
     }
 
     @RequestMapping("/reply/update")
@@ -68,6 +68,11 @@ public class CommentRestController {
         return commentService.reply(commentDTO
                 .setIp(HttpUtil.getIpAddress(request))
                 .setUa(HttpUtil.getUserAgent(request)));
+    }
+
+    @RequestMapping("/block/{id}")
+    public OutVO<NULL> reply(@PathVariable Integer id, String reason) {
+        return commentService.block(id, reason);
     }
 
 }

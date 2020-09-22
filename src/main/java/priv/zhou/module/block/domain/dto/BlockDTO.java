@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.module.block.domain.po.BlockPO;
+import priv.zhou.module.system.user.domain.dto.UserDTO;
 
 import java.util.Date;
 
@@ -36,6 +37,8 @@ public class BlockDTO extends DTO<BlockPO> {
      */
     private String ip;
 
+    private String ipLike;
+
     /**
      * 类型
      */
@@ -45,6 +48,18 @@ public class BlockDTO extends DTO<BlockPO> {
      * 原因
      */
     private String reason;
+
+    private String reasonLike;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 创建人
+     */
+    private UserDTO creator;
 
     /**
      * 创建人
@@ -60,6 +75,7 @@ public class BlockDTO extends DTO<BlockPO> {
 
     public BlockDTO(BlockPO blockPO) {
         super(blockPO);
+        this.creator = ofPO(blockPO.getCreator(), UserDTO::new);
     }
 
 }

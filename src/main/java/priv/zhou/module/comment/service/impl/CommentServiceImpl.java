@@ -3,6 +3,7 @@ package priv.zhou.module.comment.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
@@ -10,6 +11,9 @@ import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.module.block.domain.dto.BlockDTO;
+import priv.zhou.module.block.service.IBlockService;
 import priv.zhou.module.comment.domain.dao.CommentDAO;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 import priv.zhou.module.comment.domain.po.CommentPO;
@@ -33,8 +37,11 @@ public class CommentServiceImpl implements ICommentService {
 
     private final CommentDAO commentDAO;
 
-    public CommentServiceImpl(CommentDAO commentDAO) {
+    private final IBlockService blockService;
+
+    public CommentServiceImpl(CommentDAO commentDAO, IBlockService blockService) {
         this.commentDAO = commentDAO;
+        this.blockService = blockService;
     }
 
     @Override
@@ -91,5 +98,24 @@ public class CommentServiceImpl implements ICommentService {
         return commentDAO.save(commentPO) > 0 ?
                 OutVO.success() :
                 OutVO.fail(OutVOEnum.FAIL_OPERATION);
+    }
+
+    @Override
+    @Transactional
+    public OutVO<NULL> block(Integer id, String reason) {
+        CommentPO commentPO = commentDAO.get(new CommentDTO().setId(id));
+        if (null == commentPO) {
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+        } else if (commentDAO.update(commentPO.setState(10)) < 0) {
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        } else if (commentDAO.blockIP(commentPO.getIp()) < 1 ||
+                blockService.save(new BlockDTO()
+                        .setType(0)
+                        .setIp(commentPO.getIp())
+                        .setReason(reason)
+                        .setRemark(commentPO.getId().toString())).isFail()) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+        }
+        return OutVO.success();
     }
 }

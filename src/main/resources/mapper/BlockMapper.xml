@@ -4,44 +4,69 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.block.domain.dao.BlockDAO">
 
+    <resultMap id="blockMap" type="BlockPO">
+        <id column="id" property="id"/>
+        <result column="ip" property="ip"/>
+        <result column="type" property="type"/>
+        <result column="reason" property="reason"/>
+        <result column="remark" property="remark"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <association property="creator" javaType="UserPO">
+            <id column="creator_id" property="id"/>
+            <result column="creator_name" property="name"/>
+        </association>
+    </resultMap>
+
     <insert id="save" parameterType="BlockPO">
         INSERT INTO blog_block(
              ip , 
              type , 
-             reason , 
-             create_id , 
+             reason ,
+             remark ,
+             create_id ,
              gmt_create 
         )
         VALUES(
             #{ip} , 
             #{type} , 
             #{reason} , 
-            #{createId} ,
+            #{remark} ,
+            #{creator.id} ,
             NOW()
         )
     </insert>
 
+    <update id="update" parameterType="RolePO">
+        update blog_block
+        SET gmt_freed = #{gmtFreed}
+        where id = #{id}
+    </update>
 
     <sql id="selectSQL">
         SELECT
-            id ,
-            ip ,
-            type ,
-            reason ,
-            create_id ,
-            gmt_create 
-        FROM blog_block
+            blog_block.id,
+            ip,
+            blog_block.`type`,
+            reason,
+            blog_block.remark,
+            blog_block.gmt_create ,
+            system_user.id creator_id,
+            system_user.name creator_name
+        FROM
+            blog_block
+        LEFT JOIN system_user ON blog_block.create_id = system_user.id
     </sql>
 
-    <select id="get" parameterType="BlockDTO" resultType="BlockPO">
+    <select id="get" parameterType="BlockDTO" resultMap="blockMap">
         <include refid="selectSQL"/>
-        WHERE id = #{id}
+        WHERE blog_block.id = #{id} and gmt_freed IS NULL
     </select>
 
-    <select id="list" parameterType="BlockDTO" resultType="BlockPO">
+    <select id="list" parameterType="BlockDTO" resultMap="blockMap">
         <include refid="selectSQL"/>
         <where>
-            <if test="type != null  "> and type = #{type}</if>
+            gmt_freed IS NULL
+            <if test="type != null  ">and blog_block.type = #{type}</if>
             <if test="ipLike != null and ipLike != ''">and ip LIKE CONCAT('%',#{ipLike},'%')</if>
             <if test="reasonLike != null and reasonLike != ''">and reason LIKE CONCAT('%',#{reasonLike},'%')</if>
         </where>

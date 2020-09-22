@@ -18,4 +18,6 @@ import java.util.List;
 @Mapper
 @Component
 public interface CommentDAO extends BaseDAO<CommentDTO,CommentPO>{
+
+    Integer blockIP(String ip);
 }

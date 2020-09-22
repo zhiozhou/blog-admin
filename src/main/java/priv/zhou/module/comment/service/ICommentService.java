@@ -18,6 +18,8 @@ public interface ICommentService {
 
     String STATE_KEY = "comment_state";
 
+    String BLOCK_TYPE_KEY = "comment_block_type";
+
     OutVO<NULL> remove(CommentDTO commentDTO);
 
     OutVO<NULL> update(CommentDTO commentDTO);
@@ -27,4 +29,6 @@ public interface ICommentService {
     OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order);
 
     OutVO<NULL> reply(CommentDTO commentDTO);
+
+    OutVO<NULL> block(Integer id, String reason);
 }

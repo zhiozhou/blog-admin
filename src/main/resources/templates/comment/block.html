@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <style>
+        textarea[name='temp'] {
+            display: none;
+            margin-top: 5px;
+        }
+
+        .layui-elem-quote {
+            display: block;
+        }
+    </style>
+    <body>
+        <div class="layout-iframe">
+            <form class="layui-form" th:attr="action=${_action}">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型：</label>
+                    <div class="layui-input-block">
+                        <select name="reason" lay-verify="required" lay-search="" lay-filter="reason">
+                            <option th:each="type:${typeList}"
+                                    th:value="${type.label}"
+                                    th:text="${type.label}">
+                            </option>
+                            <option value="other">其他</option>
+                        </select>
+                        <textarea class="layui-textarea" autocomplete="off"
+                                  rows="6" maxlength="256"
+                                  name="temp" placeholder="请输入禁言原因"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        <p class="layui-word-aux"> - 该IP将无法进行评论</p>
+                        <p class="layui-word-aux"> - 系统将自动屏蔽该IP待审核的评论</p>
+                    </blockquote>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">
+                            <i class="fa fa-repeat"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div th:include="include :: au-footer"></div>
+        <script th:inline="none">
+            const prefix = `${_gate}comment`
+
+            layui.use(['form', 'jquery'], () => {
+                const {form, jquery: $} = layui
+
+                form.on('submit(submit)', ({form, field}) => {
+                    if ('other' === field.reason) {
+                        let {temp} = field
+                        if (!temp) {
+                            return warn('禁言原因不可为空')
+                        }
+                        field.reason = temp
+                    }
+                    return iframeSubmit({form, field})
+                })
+
+                form.on('select(reason)', (data) => {
+                    $('textarea[name=temp]')['other' === data.value ? 'show' : 'hide']()
+                })
+            })
+
+        </script>
+    </body>
+
+</html>

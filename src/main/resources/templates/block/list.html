@@ -18,12 +18,14 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
+
+                        {field: 'ip', title: 'IP'},
                         {
                             field: 'type', title: '类型',
                             templet: ({type}) => dictRender(type, typeMap)
                         },
                         {field: 'reason', title: '原因'},
-                        {field: 'createId', title: '操作人'},
+                        {field: 'creator', title: '操作人',templet:({creator})=>creator.name},
                         {
                             field: 'gmtCreate', title: '创建时间',
                             templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')

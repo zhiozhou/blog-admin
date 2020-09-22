@@ -11,6 +11,7 @@ import priv.zhou.module.comment.domain.dto.CommentDTO;
 import priv.zhou.module.comment.service.ICommentService;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 
+import static priv.zhou.module.comment.service.ICommentService.BLOCK_TYPE_KEY;
 import static priv.zhou.module.comment.service.ICommentService.STATE_KEY;
 
 /**
@@ -73,6 +74,14 @@ public class CommentController extends BaseController {
         super.detail(model, dtoVO.getData());
         model.addAttribute(ACTION_KEY, "/rest/reply/update");
         return "comment/au";
+    }
+
+    @RequestMapping("/block/{id}")
+    public String block(Model model, @PathVariable Integer id) {
+
+        model.addAttribute("typeList", dictService.dataList(new DictDTO().setKey(BLOCK_TYPE_KEY)).getData());
+        model.addAttribute(ACTION_KEY, "/rest/block/" + id);
+        return "comment/block";
     }
 
 }

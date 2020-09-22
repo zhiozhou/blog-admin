@@ -1,10 +1,11 @@
 package priv.zhou.module.block.domain.po;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import priv.zhou.module.system.user.domain.po.UserPO;
 
-import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,45 +18,55 @@ import java.util.Date;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class BlockPO implements Serializable{
+public class BlockPO implements Serializable {
 
 
-	/**
-	 * 
-	 */
-	private Integer id;
+    /**
+     *
+     */
+    private Integer id;
 
-	/**
-	 * IP
-	 */
-	private String ip;
+    /**
+     * IP
+     */
+    private String ip;
 
-	private String ipLike;
+    private String ipLike;
 
-	/**
-	 * 类型
-	 */
-	private Integer type;
+    /**
+     * 类型
+     */
+    private Integer type;
 
-	/**
-	 * 原因
-	 */
-	private String reason;
+    /**
+     * 原因
+     */
+    private String reason;
 
-	private String reasonLike;
+    private String reasonLike;
 
-	/**
-	 * 创建人
-	 */
-	private Integer createId;
+    /**
+     * 备注
+     */
+    private String remark;
 
-	/**
-	 * 创建时间
-	 */
-	private Date gmtCreate;
+    /**
+     * 创建人
+     */
+    private UserPO creator;
 
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this);
-	}
+    /**
+     * 创建时间
+     */
+    private Date gmtCreate;
+
+    /**
+     * 释放时间
+     */
+    private Date gmtFreed;
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
+    }
 }

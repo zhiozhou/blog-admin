@@ -30,7 +30,7 @@ mybatis:
   type-aliases-package: priv.zhou.module.*.*.domain,priv.zhou.module.*.domain
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   path: logs/
 app:

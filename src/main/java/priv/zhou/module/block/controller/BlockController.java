@@ -2,17 +2,11 @@ package priv.zhou.module.block.controller;
 
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.controller.BaseController;
-import priv.zhou.module.block.domain.dto.BlockDTO;
-import priv.zhou.module.block.service.IBlockService;
+import priv.zhou.common.domain.Module;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 
-import static priv.zhou.common.param.CONSTANT.SYSTEM_MENU_TYPE;
 import static priv.zhou.module.block.service.IBlockService.TYPE_KEY;
 
 /**
@@ -25,9 +19,9 @@ import static priv.zhou.module.block.service.IBlockService.TYPE_KEY;
 @Component
 @RequestMapping("/block")
 public class BlockController extends BaseController {
-    
+
     public BlockController() {
-        super(new Module("阻塞","block"));
+        super(new Module("阻塞", "block"));
     }
 
     @RequestMapping("/list")

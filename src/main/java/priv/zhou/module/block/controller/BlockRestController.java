@@ -5,11 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.NULL;
 import priv.zhou.module.block.domain.dto.BlockDTO;
 import priv.zhou.module.block.service.IBlockService;
-
-import javax.validation.Valid;
 
 /**
  * 阻塞 控制层
@@ -25,11 +22,6 @@ public class BlockRestController {
 
     public BlockRestController(IBlockService blockService) {
         this.blockService = blockService;
-    }
-
-    @RequestMapping("/save")
-    public OutVO<NULL> save(@Valid BlockDTO blockDTO) {
-        return blockService.save(blockDTO);
     }
 
     @RequestMapping("/list")

@@ -63,6 +63,12 @@
         WHERE id = #{id}
     </update>
 
+    <update id="blockIP" parameterType="CommentPO">
+        UPDATE blog_comment
+        SET state =11
+        WHERE ip = #{ip} AND state = 0
+    </update>
+
     <delete id="remove" parameterType="CommentDTO">
         delete from blog_comment where id = #{id}
     </delete>

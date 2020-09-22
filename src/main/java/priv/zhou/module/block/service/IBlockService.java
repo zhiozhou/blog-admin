@@ -18,7 +18,11 @@ public interface IBlockService {
 
     OutVO<NULL> save(BlockDTO blockDTO);
 
+    OutVO<NULL> remove(BlockDTO blockDTO);
+
     OutVO<BlockDTO> get(BlockDTO blockDTO);
 
     OutVO<ListVO<BlockDTO>> list(BlockDTO blockDTO, Page page);
+
+
 }
