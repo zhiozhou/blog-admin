@@ -9,6 +9,7 @@ import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 字典 服务层定义
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public interface IDictService {
 
-    Integer NORMAL_TYPE = 0;
+    Integer PUBLIC_TYPE = 0;
 
     String DICT_SNS_KEY = "zhou_sns";
 
@@ -34,15 +35,17 @@ public interface IDictService {
 
     OutVO<ListVO<DictDTO>> list(DictDTO dictDTO, Page page);
 
-    OutVO<Map<String, DictDataDTO>> dataMap(DictDTO dictDTO, boolean noSystem);
+    List<DictDataDTO> listData(String dictKey, boolean all);
 
-    default OutVO<Map<String, DictDataDTO>> dataMap(DictDTO dictDTO) {
-        return dataMap(dictDTO, true);
+    default List<DictDataDTO> listData(String dictKey) {
+        return listData(dictKey, false);
     }
 
-    OutVO<List<DictDataDTO>> dataList(DictDTO dictDTO, boolean noSystem);
+    default Map<String, DictDataDTO> mapData(String dictKey, boolean all) {
+        return listData(dictKey, all).stream().collect(Collectors.toMap(DictDataDTO::getCode, dto -> dto));
+    }
 
-    default OutVO<List<DictDataDTO>> dataList(DictDTO dictDTO) {
-        return dataList(dictDTO, true);
+    default Map<String, DictDataDTO> mapData(String dictKey) {
+        return mapData(dictKey, false);
     }
 }

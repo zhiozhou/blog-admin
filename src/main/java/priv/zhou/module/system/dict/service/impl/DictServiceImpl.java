@@ -21,8 +21,6 @@ import priv.zhou.module.system.dict.domain.po.DictPO;
 import priv.zhou.module.system.dict.service.IDictService;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static priv.zhou.common.param.CONSTANT.BS_DICT_DATA_KEY;
@@ -142,25 +140,14 @@ public class DictServiceImpl implements IDictService {
         return OutVO.list(DTO.ofPO(poList, DictDTO::new), pageInfo.getTotal());
     }
 
-    @Override
-    public OutVO<Map<String, DictDataDTO>> dataMap(DictDTO dictDTO, boolean noSystem) {
-
-        // 1.只获取非系统字典
-        if (noSystem) {
-            dictDTO.setDataType(NORMAL_TYPE);
-        }
-        return OutVO.success(dictDAO.listData(dictDTO).stream()
-                .map(DictDataDTO::new)
-                .collect(Collectors.toMap(DictDataDTO::getCode, dto -> dto)));
-    }
 
     @Override
-    public OutVO<List<DictDataDTO>> dataList(DictDTO dictDTO, boolean noSystem) {
-        // 1.只获取非系统字典
-        if (noSystem) {
-            dictDTO.setDataType(NORMAL_TYPE);
+    public List<DictDataDTO> listData(String dictKey, boolean all) {
+        DictDataDTO dto = new DictDataDTO().setDictKey(dictKey);
+        if(!all){
+            dto.setType(PUBLIC_TYPE);
         }
-        return OutVO.success(DTO.ofPO(dictDAO.listData(dictDTO), DictDataDTO::new));
+        return DTO.ofPO(dictDAO.listData(dto), DictDataDTO::new);
     }
 
 }

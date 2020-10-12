@@ -134,8 +134,8 @@
         FROM
             system_dict_data
         WHERE
-            system_dict_data.dict_key = #{key}
-        <if test="dataType != null"> and type = #{dataType}</if>
+            system_dict_data.dict_key = #{dictKey}
+        <if test="type != null"> and type = #{type}</if>
     </select>
 
 

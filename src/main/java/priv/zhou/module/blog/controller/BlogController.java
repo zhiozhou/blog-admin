@@ -64,7 +64,7 @@ public class BlogController extends BaseController {
     @RequestMapping("/list")
     public String list(Model model) {
         super.list(model);
-        model.addAttribute("stateMap", dictService.dataMap(new DictDTO().setKey(STATE_KEY)).getData());
+        model.addAttribute("stateMap", dictService.mapData(STATE_KEY));
         return "blog/list";
     }
 }

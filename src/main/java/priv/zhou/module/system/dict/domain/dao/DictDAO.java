@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 import priv.zhou.common.domain.dao.BaseDAO;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
+import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.po.DictPO;
 
@@ -24,7 +25,7 @@ public interface DictDAO extends BaseDAO<DictDTO, DictPO> {
 
     int removeData(DictDTO dictDTO);
 
-    List<DictDataPO> listData(DictDTO dictDTO);
+    List<DictDataPO> listData(DictDataDTO dictDataDTO);
 
     DictDataPO getData(DictDTO dictDTO);
 
