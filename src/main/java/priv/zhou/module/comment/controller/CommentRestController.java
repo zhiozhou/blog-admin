@@ -71,7 +71,7 @@ public class CommentRestController {
     }
 
     @RequestMapping("/block/{id}")
-    public OutVO<NULL> reply(@PathVariable Integer id, String reason) {
+    public OutVO<NULL> block(@PathVariable Integer id, String reason) {
         return commentService.block(id, reason);
     }
 

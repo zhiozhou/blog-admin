@@ -52,19 +52,13 @@ public class BlockServiceImpl implements IBlockService {
     }
 
     @Override
-    @Transactional
     public OutVO<NULL> remove(BlockDTO blockDTO) {
-        if (null == blockDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
-        }
-
         BlockPO blockPO = blockDAO.get(blockDTO);
         if (null == blockPO) {
             return OutVO.fail(OutVOEnum.EMPTY_DATA);
         } else if (blockDAO.update(blockPO.setGmtFreed(new Date())) < 1) {
             throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
-        // todo 没完事呢
         return OutVO.success();
     }
 

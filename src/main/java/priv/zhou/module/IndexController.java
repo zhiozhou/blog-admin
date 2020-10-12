@@ -19,7 +19,7 @@ import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 
 /**
- * 索引 controller
+ * 基础controller
  *
  * @author zhou
  * @since 2020.03.20

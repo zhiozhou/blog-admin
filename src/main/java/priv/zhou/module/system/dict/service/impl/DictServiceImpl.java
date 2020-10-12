@@ -88,37 +88,30 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
+    @Transactional
     public OutVO<NULL> update(DictDTO dictDTO) {
 
 
-        // 1.转换类型
-        DictPO dictPO = dictDTO.toPO();
-
-        // 2.验证参数
-        if (null == dictPO.getDataList() || dictPO.getDataList().isEmpty()) {
+        // 1.验证参数
+        if (null == dictDTO.getDataList() || dictDTO.getDataList().isEmpty()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
-        } else if (dictDAO.count(new DictDTO().setName(dictPO.getName()).setNoid(dictPO.getId())) > 0) {
+        } else if (dictDAO.count(new DictDTO().setName(dictDTO.getName()).setNoid(dictDTO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
-        } else if (dictDAO.count(new DictDTO().setKey(dictPO.getKey()).setNoid(dictPO.getId())) > 0) {
+        } else if (dictDAO.count(new DictDTO().setKey(dictDTO.getKey()).setNoid(dictDTO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         }
 
         // 3.补充参数
-        dictPO.setModifiedId(ShiroUtil.getUserId());
+        DictPO dictPO = dictDTO.toPO().setModifiedId(ShiroUtil.getUserId());
 
-        // 4.修改key值后，将数据也删除
+
+        // 4.修改字典
         DictPO dbPO = dictDAO.get(new DictDTO().setId(dictPO.getId()));
-        if (!dbPO.getKey().equals(dictPO.getKey()) && dictDAO.removeData(new DictDTO().setKey(dbPO.getKey())) < 1) {
-
-            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
-        }
-
-        // 5.修改字典
         if (dictDAO.update(dictPO) < 1) {
             throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
-        } else if (dictDAO.removeData(dictDTO) < 1 || dictDAO.saveData(dictPO) < 1) {
+        } else if (dictDAO.removeData(new DictDTO().setKey(dbPO.getKey())) < 1 || dictDAO.saveData(dictPO) < 1) {
             throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
-        } else if (DICT_SNS_KEY.equals(dictDTO.getKey())) {
+        } else if (DICT_SNS_KEY.equals(dbPO.getKey())) {
             RedisUtil.delete(BS_DICT_DATA_KEY + dictDTO.getKey());
             RedisUtil.delete(BS_DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
         }

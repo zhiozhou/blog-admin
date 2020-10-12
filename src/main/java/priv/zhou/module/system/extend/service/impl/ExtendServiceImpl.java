@@ -60,7 +60,7 @@ public class ExtendServiceImpl implements IExtendService {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
-        Map<String, DictDataDTO> configMap = dictService.dataMap(new DictDTO().setKey("extend_config"), false).getData();
+        Map<String, DictDataDTO> configMap = dictService.dataMap(new DictDTO().setKey(CONFIG_KEY), false).getData();
         AppConfig appConfig = new AppConfig()
                 .setPacket(configMap.get("packet").getLabel())
                 .setAuthor(configMap.get("author").getLabel())

@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface IExtendService {
 
+    String CONFIG_KEY = "system_extend_config";
+
     OutVO<byte[]> module(List<String> tableNames) throws Exception;
 }

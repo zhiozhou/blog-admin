@@ -8,12 +8,16 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
+        <script type="text/html" id="block-tool" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+            <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
+               shiro:hasPermission=${_module.permissionPrefix+':remove'}>解除</a>
+        </script>
         <script th:inline="javascript">
             const typeMap = [[${typeMap}]]
         </script>
+
         <script th:inline="none">
             const prefix = `${_gate}block`
-
 
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
@@ -25,7 +29,10 @@
                             templet: ({type}) => dictRender(type, typeMap)
                         },
                         {field: 'reason', title: '原因'},
-                        {field: 'creator', title: '操作人',templet:({creator})=>creator.name},
+                        {
+                            field: 'creator', title: '操作人',
+                            templet: ({creator}) => creator.name
+                        },
                         {
                             field: 'gmtCreate', title: '创建时间',
                             templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
@@ -34,7 +41,20 @@
                     ]]
 
                 tableRender(table, {cols})
-                table.on('tool(table)', iframeAction)
+                table.on('tool(table)', ({data, event}) => {
+                    switch (event) {
+                        case 'remove':
+                            layer.confirm(`确认移除对此IP的阻塞吗`, {
+                                btn: ['确定', '取消'],
+                                shade: [0.1, '#fff']
+                            }, () => {
+                                httpPost({
+                                    url: `${prefix}/rest/remove/${data.id}`,
+                                    cb: () => msg(reloadTable)
+                                })
+                            })
+                    }
+                })
             })
         </script>
     </body>
