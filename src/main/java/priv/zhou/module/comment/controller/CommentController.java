@@ -9,7 +9,6 @@ import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 import priv.zhou.module.comment.service.ICommentService;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
 
 import static priv.zhou.module.comment.service.ICommentService.BLOCK_TYPE_KEY;
 import static priv.zhou.module.comment.service.ICommentService.STATE_KEY;
@@ -45,7 +44,7 @@ public class CommentController extends BaseController {
             return NOT_FOUNT;
         }
         CommentDTO commentDTO = dtoVO.getData();
-        commentDTO.setStateStr(dictService.getData(new DictDTO().setKey(STATE_KEY).setCode(commentDTO.getState())).getData().getLabel());
+        commentDTO.setStateStr(dictService.getLabel(STATE_KEY, commentDTO.getState()));
         super.detail(model, dtoVO.getData());
 
         return "comment/detail";

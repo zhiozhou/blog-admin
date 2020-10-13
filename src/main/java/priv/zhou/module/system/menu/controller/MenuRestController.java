@@ -59,8 +59,7 @@ public class MenuRestController {
     @RequiresPermissions("system:menu:list")
     @RequestMapping("/tree")
     public OutVO<List<MenuDTO>> trimList(MenuDTO menuDTO) {
-        OutVO<List<MenuDTO>> outVO = menuService.list(menuDTO.setFlag(ADMIN_FLAG));
-        return outVO.setData(IMenuService.toTree(outVO.getData()));
+        return OutVO.success(menuService.tree(menuDTO.setFlag(ADMIN_FLAG)));
     }
 
     @RequiresPermissions("system:menu:refresh")

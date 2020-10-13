@@ -127,8 +127,8 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public OutVO<DictDataDTO> getData(DictDTO dictDTO) {
-        return OutVO.success(new DictDataDTO(dictDAO.getData(dictDTO)));
+    public OutVO<DictDataDTO> getData(DictDataDTO dictDataDTO) {
+        return OutVO.success(new DictDataDTO(dictDAO.getData(dictDataDTO)));
     }
 
 

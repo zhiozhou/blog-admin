@@ -52,9 +52,9 @@ public class DictDataPO implements Serializable{
 
 
 	/**
-	 * css 名称
+	 * 备用
 	 */
-	private String css;
+	private String spare;
 
 
 	@Override

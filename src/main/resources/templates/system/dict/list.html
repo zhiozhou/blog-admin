@@ -47,11 +47,11 @@
             const stateMap = {
                 0: {
                     label: '正常',
-                    css: 'layui-bg-blue'
+                    spare: 'layui-bg-blue'
                 },
                 11: {
                     label: '停用',
-                    css: 'layui-bg-orange'
+                    spare: 'layui-bg-orange'
                 },
             }
 
@@ -67,7 +67,6 @@
                         {field: 'remark', title: '备注', minWidth: '150'},
                         {title: '操作', toolbar: '#rud'}
                     ]]
-
 
                 tableRender(table, {cols})
 

@@ -17,6 +17,8 @@ public enum OutVOEnum {
 
 	EMPTY_DATA("0004","数据不存在"),
 
+	FAIL_DATA("0005","数据异常"),
+
 
 	EXIST_NAME("0101", "名称已存在"),
 

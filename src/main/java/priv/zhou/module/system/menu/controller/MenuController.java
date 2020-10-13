@@ -38,9 +38,9 @@ public class MenuController extends BaseController {
     public String add(Model model) {
 
         super.add(model, new MenuDTO().setParentId(0).setType(0).setState(0));
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("typeList", dictService.listData(SYSTEM_MENU_TYPE));
         model.addAttribute("stateList", dictService.listData(SYSTEM_MENU_STATE));
+        model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/menu/au";
     }
 
@@ -53,9 +53,9 @@ public class MenuController extends BaseController {
         }
         super.update(model, dtoVO.getData());
 
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("typeList", dictService.listData(SYSTEM_MENU_TYPE));
         model.addAttribute("stateList", dictService.listData(SYSTEM_MENU_STATE));
+        model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/menu/au";
     }
 

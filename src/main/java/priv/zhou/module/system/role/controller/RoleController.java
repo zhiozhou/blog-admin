@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
@@ -41,8 +40,8 @@ public class RoleController extends BaseController {
     @RequestMapping("/add")
     public String add(Model model) {
         super.add(model, new RoleDTO().setState(0));
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("stateList", dictService.listData(SYSTEM_ROLE_STATE));
+        model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/role/au";
     }
 
@@ -55,8 +54,8 @@ public class RoleController extends BaseController {
         }
         super.update(model, dtoVO.getData());
 
-        model.addAttribute("menuTree", IMenuService.toTree(menuService.list(new MenuDTO().setFlag(ADMIN_FLAG)).getData()));
         model.addAttribute("stateList", dictService.listData(SYSTEM_ROLE_STATE));
+        model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/role/au";
     }
 
@@ -69,7 +68,7 @@ public class RoleController extends BaseController {
         }
         RoleDTO roleDTO = dtoVO.getData();
         roleDTO.setMenuList(IMenuService.toTree(roleDTO.getMenuList()))
-                .setStateStr(dictService.getData(new DictDTO().setKey(SYSTEM_ROLE_STATE).setCode(roleDTO.getState())).getData().getLabel());
+                .setStateStr(dictService.getLabel(SYSTEM_ROLE_STATE, roleDTO.getState()));
         super.detail(model, roleDTO);
         return "system/role/detail";
     }

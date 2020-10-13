@@ -1,7 +1,6 @@
 package priv.zhou.module.system.extend.service;
 
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.module.system.extend.domain.dto.AppConfig;
 
 import java.util.List;
 

@@ -78,9 +78,9 @@
         <script th:inline="none">
             const prefix = `${_gate}system/dict`,
                 typeMap = {
-                    0: {css: 'layui-bg-blue', info: '正常'},
-                    1: {css: 'layui-btn-primary', info: '预留'},
-                    11: {css: '', info: '系统'},
+                    0: {spare: 'layui-bg-blue', info: '正常'},
+                    1: {spare: 'layui-btn-primary', info: '预留'},
+                    11: {spare: '', info: '系统'},
                 }
             let tindex  // 默认数据索引
 
@@ -94,12 +94,12 @@
                     cols: [[
                         {field: 'code', title: '编码值', edit: true},
                         {field: 'label', title: '标签', edit: true},
-                        {field: 'css', title: 'class标签', edit: true},
+                        {field: 'spare', title: '备用', edit: true},
                         {
                             field: 'type', title: '状态',
                             templet: ({type}) => {
-                                let {css, info} = typeMap[type]
-                                return `<a data-type="${type}" class="type-btn layui-btn layui-btn-xs ${css}">${info}</a>`
+                                let {spare, info} = typeMap[type]
+                                return `<a data-type="${type}" class="type-btn layui-btn layui-btn-xs ${spare}">${info}</a>`
                             }
                         },
                         {
@@ -175,7 +175,7 @@
                 $('body').on('click', '.type-btn', function () {
                     let index = $(this).parents('tr').data('index')
                     let type = $(this).data('type')
-                    $(this).removeClass(typeMap[type].css)
+                    $(this).removeClass(typeMap[type].spare)
                     switch (type) {
                         case 0:
                             type = 1
@@ -187,8 +187,8 @@
                             type = 0
                             break
                     }
-                    let {css, info} = typeMap[type]
-                    $(this).addClass(css).html(info).data('type', type)
+                    let {spare, info} = typeMap[type]
+                    $(this).addClass(spare).html(info).data('type', type)
                     dataList[index].type = type
                 })
 

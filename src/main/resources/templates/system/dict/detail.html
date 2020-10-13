@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <style>
-        .layui-table, .layui-table-view{
+        .layui-table, .layui-table-view {
             margin: 0;
         }
     </style>
@@ -10,7 +10,7 @@
         <div class="layout-page">
             <form class="layui-form-pane">
 
-                <div class="layui-tab" >
+                <div class="layui-tab">
 
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/dict/list}" th:text="${_module.name}+列表"></a></li>
@@ -43,7 +43,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea  th:text="${_vo.remark}" class="layui-textarea" disabled></textarea>
+                                <textarea th:text="${_vo.remark}" class="layui-textarea" disabled></textarea>
                             </div>
                         </div>
 
@@ -58,17 +58,18 @@
             </form>
         </div>
         <div th:include="include :: footer"></div>
+        <script th:src="@{/js/list.js}"></script>
         <script th:inline="javascript">
             const dictData = [[${_vo.dataList}]]
         </script>
         <script th:inline="none">
             const typeMap = {
-                    0:{css:'layui-bg-blue', info:'正常'},
-                    1:{css:'layui-btn-primary', info:'预留'},
-                    11:{css:'', info:'系统'},
-                }
+                0: {spare: 'layui-bg-blue', label: '正常'},
+                1: {spare: 'layui-btn-primary', label: '预留'},
+                11: {spare: '', label: '系统'},
+            }
 
-            layui.use(['table', 'form','jquery'], () => {
+            layui.use(['table', 'form', 'jquery'], () => {
                 const {table} = layui
                 table.render({
                     id: 'data-table',
@@ -78,18 +79,17 @@
                     cols: [[
                         {field: 'code', title: '编码值'},
                         {field: 'label', title: '标签'},
-                        {field: 'css', title: 'class标签',},
-                        {field: 'type',title: '类型',
-                            templet : ({type})=>{
-                                let {css,info} = typeMap[type]
-                                return `<a class="layui-btn layui-btn-xs ${css}">${info}</a>`
-                            }
+                        {field: 'spare', title: '备用',},
+                        {
+                            field: 'type', title: '类型',
+                            templet: ({type}) => dictRender(type, typeMap)
                         },
-                        {field: 'top' ,title: '默认使用',
-                            templet:({top})=>{
-                                let css = 'layui-bg-blue', info='正常'
-                                if(1 === top){
-                                    css ='t'
+                        {
+                            field: 'top', title: '默认使用',
+                            templet: ({top}) => {
+                                let css = 'layui-bg-blue', info = '正常'
+                                if (1 === top) {
+                                    css = 't'
                                     info = '默认'
                                 }
                                 return `<a class="layui-btn layui-btn-xs ${css}">${info}</a>`

@@ -9,7 +9,6 @@ import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
@@ -89,7 +88,7 @@ public class UserController extends BaseController {
             return NOT_FOUNT;
         }
         UserDTO userDTO = dtoVO.getData();
-        userDTO.setStateStr(dictService.getData(new DictDTO().setKey(SYSTEM_USER_STATE).setCode(userDTO.getState())).getData().getLabel());
+        userDTO.setStateStr(dictService.getLabel(SYSTEM_USER_STATE, userDTO.getState()));
         super.detail(model, userDTO);
         return "system/user/detail";
     }

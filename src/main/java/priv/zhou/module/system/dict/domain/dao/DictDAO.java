@@ -25,8 +25,7 @@ public interface DictDAO extends BaseDAO<DictDTO, DictPO> {
 
     int removeData(DictDTO dictDTO);
 
+    DictDataPO getData(DictDataDTO dictDataDTO);
+
     List<DictDataPO> listData(DictDataDTO dictDataDTO);
-
-    DictDataPO getData(DictDTO dictDTO);
-
 }

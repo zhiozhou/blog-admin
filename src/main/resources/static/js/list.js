@@ -89,8 +89,8 @@ function tableRender(table, options) {
  * @returns {string} html标签
  */
 function dictRender(code, dictMap) {
-    let {label, css} = dictMap[code]
-    return `<a class="layui-btn layui-btn-xs ${css}">${label}</a>`
+    let {label, spare} = dictMap[code]
+    return `<a class="layui-btn layui-btn-xs ${spare}">${label}</a>`
 }
 
 

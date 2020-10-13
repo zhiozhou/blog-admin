@@ -5,6 +5,8 @@ import lombok.experimental.Accessors;
 import priv.zhou.common.domain.vo.OutVO;
 import lombok.Getter;
 
+import java.util.function.Supplier;
+
 /**
  * 活动错误异常
  * 用于活动实体解析时进行抛出

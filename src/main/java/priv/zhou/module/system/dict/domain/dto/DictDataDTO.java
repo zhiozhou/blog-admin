@@ -45,9 +45,9 @@ public class DictDataDTO extends DTO<DictDataPO> {
     private Integer top;
 
     /**
-     * css 名称
+     * 备用
      */
-    private String css;
+    private String spare;
 
     public DictDataDTO(DictDataPO dictDataPO) {
         super(dictDataPO);

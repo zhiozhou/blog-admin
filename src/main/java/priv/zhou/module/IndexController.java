@@ -6,14 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.module.system.menu.controller.MenuController;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
-
-import java.util.List;
 
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
@@ -38,16 +34,12 @@ public class IndexController extends BaseController {
     public String index(Model model) {
 
         UserDTO userDTO = ShiroUtil.getUser();
-        OutVO<List<MenuDTO>> listRes = menuService.list(
-                new MenuDTO()
-                        .setUserId(userDTO.getId())
-                        .setFlag(ADMIN_FLAG)
-                        .setState(0)
-                        .setTypes(Lists.newArrayList(0, 1))
-        );
-
         model.addAttribute("user", userDTO);
-        model.addAttribute("menuList", IMenuService.toTree(listRes.getData()));
+        model.addAttribute("menuList", menuService.tree(new MenuDTO()
+                .setUserId(userDTO.getId())
+                .setFlag(ADMIN_FLAG)
+                .setState(0)
+                .setTypes(Lists.newArrayList(0, 1))));
         return "index";
     }
 

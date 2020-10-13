@@ -31,9 +31,18 @@ public interface IDictService {
 
     OutVO<DictDTO> get(DictDTO dictDTO);
 
-    OutVO<DictDataDTO> getData(DictDTO dictDTO);
-
     OutVO<ListVO<DictDTO>> list(DictDTO dictDTO, Page page);
+
+    OutVO<DictDataDTO> getData(DictDataDTO dictDataDTO);
+
+    default String getLabel(String key, Integer code) {
+        return getLabel(key, String.valueOf(code));
+    }
+
+    default String getLabel(String key, String code) {
+        OutVO<DictDataDTO> getRes = getData(new DictDataDTO().setDictKey(key).setCode(code));
+        return getRes.isFail() ? "" : getRes.getData().getLabel();
+    }
 
     List<DictDataDTO> listData(String dictKey, boolean all);
 

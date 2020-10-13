@@ -15,15 +15,15 @@
             <result column="label" property="label" />
             <result column="data_type" property="type" />
             <result column="top" property="top" />
-            <result column="css" property="css" />
+            <result column="spare" property="spare" />
         </collection>
     </resultMap>
 
     <insert id="saveData" parameterType="DictDTO">
-        INSERT system_dict_data ( code, label, dict_key, type, top, css )
+        INSERT system_dict_data ( code, label, dict_key, type, top, spare )
         VALUES
         <foreach collection="dataList" index="index" item="item" separator=",">
-            ( #{item.code},#{item.label},#{key},#{item.type},#{item.top},#{item.css} )
+            ( #{item.code},#{item.label},#{key},#{item.type},#{item.top},#{item.spare} )
         </foreach>
     </insert>
 
@@ -86,7 +86,7 @@
             dict_key,
             system_dict_data.type data_type,
             top,
-            css
+            spare
         FROM
             system_dict
             LEFT JOIN system_dict_data ON system_dict.key = system_dict_data.dict_key
@@ -98,13 +98,12 @@
             code,
             label,
             dict_key,
-            type,
+            type,d
             top,
-            css
+            spare
         FROM
             system_dict_data
-        WHERE dict_key = #{key}
-        AND code = #{code}
+        WHERE dict_key = #{dictKey} AND code = #{code}
     </select>
 
     <select id="list" parameterType="DictDTO" resultType="DictPO">
@@ -130,7 +129,7 @@
             dict_key,
             type,
             top,
-            css
+            spare
         FROM
             system_dict_data
         WHERE
