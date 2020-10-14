@@ -1,9 +1,14 @@
 package priv.zhou.common.tools;
 
+import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.framework.exception.GlobalException;
+
 import javax.crypto.Cipher;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -26,7 +31,7 @@ public class RsaUtil {
      * @param plainText    明文
      * @param publicKeyB64 公钥的Base64字符串
      */
-    public static String encode(String plainText, String publicKeyB64) throws Exception {
+    public static String encode(String plainText, String publicKeyB64) {
         return encode(plainText, getPublicKey(publicKeyB64));
     }
 
@@ -37,10 +42,14 @@ public class RsaUtil {
      * @param plainText 明文
      * @param publicKey 公钥
      */
-    public static String encode(String plainText, PublicKey publicKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(CIPHER);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        return Base64Util.encode(cipher.doFinal(plainText.getBytes(UTF_8)));
+    public static String encode(String plainText, PublicKey publicKey) {
+        try {
+            Cipher cipher = Cipher.getInstance(CIPHER);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            return Base64Util.encode(cipher.doFinal(plainText.getBytes(UTF_8)));
+        } catch (Exception e) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.LATER_RETRY));
+        }
     }
 
     /**
@@ -100,9 +109,13 @@ public class RsaUtil {
     /**
      * 获取公钥
      */
-    public static PublicKey getPublicKey(String keyB64) throws Exception {
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64Util.decode(keyB64));
-        return KeyFactory.getInstance(CIPHER).generatePublic(keySpec);
+    public static PublicKey getPublicKey(String keyB64) {
+        try {
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64Util.decode(keyB64));
+            return KeyFactory.getInstance(CIPHER).generatePublic(keySpec);
+        } catch (Exception e) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.LATER_RETRY));
+        }
 
     }
 
@@ -120,18 +133,19 @@ public class RsaUtil {
     /**
      * 生成公私钥对
      */
-    public static KeyPair generateKeyPair() throws Exception {
-        KeyPairGenerator generator = KeyPairGenerator.getInstance(CIPHER);
-        generator.initialize(2048, new SecureRandom());
-        KeyPair keyPair = generator.generateKeyPair();
+    public static KeyPair generateKeyPair() {
+        try {
+            KeyPairGenerator generator = KeyPairGenerator.getInstance(CIPHER);
+            generator.initialize(2048, new SecureRandom());
+            KeyPair keyPair = generator.generateKeyPair();
 
-        System.out.println("公钥：" + Base64Util.encode(keyPair.getPublic().getEncoded()).replace("\r\n",""));
-        System.out.println("私钥：" + Base64Util.encode(keyPair.getPrivate().getEncoded()).replace("\r\n",""));
-        return generator.generateKeyPair();
+            System.out.println("公钥：" + Base64Util.encode(keyPair.getPublic().getEncoded()).replace("\r\n", ""));
+            System.out.println("私钥：" + Base64Util.encode(keyPair.getPrivate().getEncoded()).replace("\r\n", ""));
+            return generator.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.LATER_RETRY));
+        }
     }
 
-    public static void main(String[] args) throws Exception{
-        generateKeyPair();
-    }
 
 }

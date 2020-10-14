@@ -50,19 +50,14 @@ public class MenuServiceImpl implements IMenuService {
 
 
         // 2.转换类型
-        MenuPO menuPO = menuDTO.toPO();
+        MenuPO menuPO = menuDTO.toPO()
+                .setCreateId(ShiroUtil.getUserId());
 
-
-        // 3.补充参数
-        menuPO.setCreateId(ShiroUtil.getUserId());
-
-        // 4.保存
+        // 3.保存
         if (menuDAO.save(menuPO) < 1) {
             return OutVO.fail(OutVOEnum.FAIL_OPERATION);
-        }
-
-        // 5.移除服务端缓存
-        if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
+        } else if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
+            // 4.移除服务端缓存
             RedisUtil.delete(BS_MENU_KEY);
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);
         }
@@ -79,12 +74,12 @@ public class MenuServiceImpl implements IMenuService {
 
         MenuPO menuPO = menuDAO.get(menuDTO);
         if (null == menuPO) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+        } else if (menuDAO.remove(menuDTO) < 1 || roleDAO.clearMenu(new RoleDTO()) < 1) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         } else if (SERVICE_FLAG.equals(menuPO.getFlag())) {
             RedisUtil.delete(BS_MENU_KEY);
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);
-        } else if (menuDAO.remove(menuDTO) < 1 || roleDAO.clearMenu(new RoleDTO()) < 1) {
-            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
 
         // 刷新权限
@@ -95,36 +90,41 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public OutVO<NULL> update(MenuDTO menuDTO) {
 
-        // 1.转换类型
-        MenuPO menuPO = menuDTO.toPO();
 
-        // 2.验证参数
-        if (menuDAO.count(new MenuDTO()
-                .setName(menuPO.getName())
-                .setNoid(menuPO.getId())
+        // 1.验证参数
+        MenuPO menuDB = menuDAO.get(new MenuDTO()
+                .setId(menuDTO.getId())
+                .setFlag(menuDTO.getFlag()));
+        if (null == menuDB) {
+            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+        } else if (menuDAO.count(new MenuDTO()
+                .setName(menuDTO.getName())
+                .setNoid(menuDTO.getId())
                 .setFlag(menuDTO.getFlag())
-                .setParentId(menuPO.getParentId())) > 0
+                .setParentId(menuDTO.getParentId())) > 0
         ) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
-        } else if (0 != menuPO.getType()
+        } else if (0 != menuDTO.getType()
                 && menuDAO.count(new MenuDTO()
-                .setKey(menuPO.getKey())
-                .setNoid(menuPO.getId())
+                .setNoid(menuDTO.getId())
+                .setKey(menuDTO.getKey())
                 .setFlag(menuDTO.getFlag())
-                .setParentId(menuPO.getParentId())) > 0) {
+                .setParentId(menuDTO.getParentId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         }
 
-        // 3.补充参数
-        menuPO.setModifiedId(ShiroUtil.getUserId());
+        // 2.补充参数
+        MenuPO menuPO = menuDTO.toPO()
+                .setModifiedId(ShiroUtil.getUserId());
 
-
-        // 4.修改菜单
+        // 3.修改菜单
         if (menuDAO.update(menuPO) < 1) {
             return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        } else if (!menuDB.getKey().equals(menuPO.getKey())) {
+            ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
         }
 
-        // 5.移除服务端缓存
+        // 4.移除服务端缓存
         if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
             RedisUtil.delete(BS_MENU_KEY);
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);

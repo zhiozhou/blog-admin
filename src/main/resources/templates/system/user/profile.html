@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:include="include :: header"></head>
+    <body>
+        <body>
+            <div class="layout-page">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户名：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ _vo.username }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">姓名：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ _vo.name }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ _vo.role.name }" class="layui-input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态：</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" th:value="${_vo.stateStr}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field"
+                                   disabled>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn layui-btn-normal" type="button" id="resetPwd">修改密码</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </body>
+        <div th:include="include :: au-footer"></div>
+        <script th:inline="javascript">
+            const prefix = `${_gate}system/user`
+
+            layui.use(['jquery'], () => {
+                let {jquery:$} = layui
+                $('#resetPwd').click(()=>{
+                    return newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/own`)
+                })
+            })
+        </script>
+    </body>
+
+</html>

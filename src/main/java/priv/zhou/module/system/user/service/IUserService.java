@@ -22,7 +22,7 @@ public interface IUserService {
 
     OutVO<NULL> updateState(UserDTO userDTO);
 
-    OutVO<NULL> resetPassword(UserDTO userDTO);
+    OutVO<NULL> resetPwd(UserDTO userDTO);
 
     OutVO<UserDTO> get(UserDTO userDTO);
 

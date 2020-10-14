@@ -110,7 +110,7 @@ public class UserServiceImpl implements IUserService {
 
 
     @Override
-    public OutVO<NULL> resetPassword(UserDTO userDTO) {
+    public OutVO<NULL> resetPwd(UserDTO userDTO) {
 
         if (null == userDTO.getId() || StringUtils.isBlank(userDTO.getPassword())) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);

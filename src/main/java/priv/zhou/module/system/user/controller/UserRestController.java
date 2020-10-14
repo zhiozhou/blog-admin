@@ -16,6 +16,7 @@ import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.common.tools.ParseUtil;
 import priv.zhou.common.tools.RsaUtil;
+import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.service.IUserService;
 
@@ -79,10 +80,15 @@ public class UserRestController {
     }
 
 
-    @RequiresPermissions("system:user:resetPwd")
-    @RequestMapping("/resetPwd")
-    public OutVO<NULL> resetPassword(UserDTO userDTO) {
-        return userService.resetPassword(userDTO);
+    @RequiresPermissions("system:user:reset:pwd")
+    @RequestMapping("/reset/pwd/{id}")
+    public OutVO<NULL> resetPwd(@PathVariable Integer id, UserDTO userDTO) {
+        return userService.resetPwd(userDTO.setId(id));
+    }
+
+    @RequestMapping("/reset/pwd/own")
+    public OutVO<NULL> resetPwd(UserDTO userDTO) {
+        return userService.resetPwd(userDTO.setId(ShiroUtil.getUserId()));
     }
 
 

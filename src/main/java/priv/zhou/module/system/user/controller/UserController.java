@@ -9,6 +9,7 @@ import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
@@ -67,22 +68,37 @@ public class UserController extends BaseController {
         return "system/user/au";
     }
 
-    @RequiresPermissions("system:user:resetPwd")
-    @RequestMapping("/resetPwd/{id}")
+    @RequestMapping("/reset/pwd/own")
+    public String resetPwd(Model model) {
+        resetPwd(model, ShiroUtil.getUserId());
+        model.addAttribute(ACTION_KEY, "/rest/reset/pwd/own");
+        return "system/user/resetPwd";
+    }
+
+
+    @RequiresPermissions("system:user:reset:pwd")
+    @RequestMapping("/reset/pwd/{id}")
     public String resetPwd(Model model, @PathVariable Integer id) {
         OutVO<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
-        super.update(model, dtoVO.getData());
-        model.addAttribute(ACTION_KEY, "/rest/resetPwd");
+        UserDTO userDTO = dtoVO.getData();
+        super.update(model, userDTO);
+        model.addAttribute(ACTION_KEY, "/rest/reset/pwd/" + userDTO.getId());
         return "system/user/resetPwd";
     }
 
 
+    @RequestMapping("/profile")
+    public String self(Model model) {
+        detail(model, ShiroUtil.getUserId());
+        return "system/user/profile";
+    }
+
     @RequiresPermissions("system:user:detail")
     @RequestMapping("/detail/{id}")
-    public String read(Model model, @PathVariable Integer id) {
+    public String detail(Model model, @PathVariable Integer id) {
         OutVO<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;

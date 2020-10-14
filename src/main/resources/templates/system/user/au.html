@@ -12,7 +12,7 @@
                         <input type="text" class="layui-input" autocomplete="off"
                                name="username" placeholder="请输入用户名"
                                th:value="${ _vo.username }"
-                               th:classappend="${isAdd}&&'layui-disabled'"
+                               th:classappend="${isAdd&&'layui-disabled'}"
                                th:disabled="${!isAdd}">
                     </div>
                 </div>

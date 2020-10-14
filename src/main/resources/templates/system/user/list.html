@@ -100,7 +100,7 @@
                 table.on('tool(table)', ({data, event}) => {
                     switch (event) {
                         case 'resetPwd':
-                            return newFrame(`修改密码`, `${_gate}/system/user/resetPwd/${data.id}`)
+                            return newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/${data.id}`)
                         case 'freeze':
                             return httpPost({url: `${prefix}/rest/freeze/${data.id}`, cb: () => msg(reloadTable())})
                         case 'unfreeze':

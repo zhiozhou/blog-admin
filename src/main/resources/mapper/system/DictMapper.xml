@@ -98,7 +98,7 @@
             code,
             label,
             dict_key,
-            type,d
+            type,
             top,
             spare
         FROM

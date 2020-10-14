@@ -30,7 +30,6 @@ public interface IMenuService {
 
     OutVO<List<MenuDTO>> list(MenuDTO menuDTO);
 
-
     default List<MenuDTO> tree(MenuDTO menuDTO) {
         OutVO<List<MenuDTO>> listRes = list(menuDTO);
         return listRes.isFail() ? null : toTree(listRes.getData());
