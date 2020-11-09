@@ -64,7 +64,7 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public OutVO<NULL> remove(RoleDTO roleDTO) {
-        if (isNull(roleDTO.getId())) {
+        if (null == roleDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         } else if (roleDAO.countUser(roleDTO) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
@@ -113,7 +113,7 @@ public class RoleServiceImpl implements IRoleService {
     public OutVO<RoleDTO> get(RoleDTO roleDTO) {
 
         RolePO rolePO = roleDAO.get(roleDTO);
-        if (isNull(rolePO)) {
+        if (null == rolePO) {
             return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new RoleDTO(rolePO));

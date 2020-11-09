@@ -73,7 +73,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public OutVO<NULL> remove(UserDTO userDTO) {
-        if (isNull(userDTO.getId())) {
+        if (null == userDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
@@ -130,7 +130,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public OutVO<UserDTO> get(UserDTO userDTO) {
         UserPO userPO = userDAO.get(userDTO);
-        if (isNull(userPO)) {
+        if (null == userPO) {
             return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new UserDTO(userPO));

@@ -38,6 +38,7 @@ public abstract class DTO<PO> {
         }
     }
 
+
     /**
      * DTO转换为PO
      * 当属性名与类型相同时会自动赋值
@@ -86,7 +87,7 @@ public abstract class DTO<PO> {
      */
     public static <DT extends DTO<P>, P> List<DT> ofPO(List<P> poList, Function<P, DT> constructor) {
         List<DT> DTList = Lists.newArrayList();
-        if (isNull(poList) || poList.isEmpty()) {
+        if (null == poList || poList.isEmpty()) {
             return DTList;
         }
         return poList.stream().map(constructor).collect(Collectors.toList());
@@ -95,6 +96,7 @@ public abstract class DTO<PO> {
 //    public void setId(Integer id)  {
 //        this.id = RsaUtil.encode(String.valueOf(id), RSA_PUBLIC_KEY);
 //    }
+
 }
 
 

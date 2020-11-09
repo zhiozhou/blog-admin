@@ -136,7 +136,7 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public OutVO<MenuDTO> get(MenuDTO menuDTO) {
         MenuPO menuPO = menuDAO.get(menuDTO);
-        if (isNull(menuPO)) {
+        if (null == menuPO) {
             return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new MenuDTO(menuPO));

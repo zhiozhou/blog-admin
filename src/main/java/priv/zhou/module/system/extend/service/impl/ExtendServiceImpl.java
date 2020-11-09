@@ -142,7 +142,7 @@ public class ExtendServiceImpl implements IExtendService {
      * 缺省空数组
      */
     private File[] nullFill(File[] files) {
-        return isNull(files) ? new File[]{} : files;
+        return null == files ? new File[]{} : files;
     }
 
 

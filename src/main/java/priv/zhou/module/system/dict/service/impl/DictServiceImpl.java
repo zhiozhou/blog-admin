@@ -120,7 +120,7 @@ public class DictServiceImpl implements IDictService {
     @Override
     public OutVO<DictDTO> get(DictDTO dictDTO) {
         DictPO dictPO = dictDAO.get(dictDTO);
-        if (isNull(dictPO)) {
+        if (null == dictPO) {
             return OutVO.fail(OutVOEnum.EMPTY_DATA);
         }
         return OutVO.success(new DictDTO(dictPO));

@@ -56,7 +56,7 @@ public class WebAspect {
     private HttpServletRequest getRequest() throws Exception {
         // 1.获取请求
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes == null) {
+        if (null == attributes) {
             throw new Exception("attributes 为空");
         }
         return attributes.getRequest();

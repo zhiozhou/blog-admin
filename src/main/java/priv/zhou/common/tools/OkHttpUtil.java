@@ -135,7 +135,7 @@ public class OkHttpUtil {
      */
     @SuppressWarnings("all")
     private static void putList(FormBody.Builder builder, Map.Entry<String, Object> entry) {
-        if (isNull(entry.getValue())) {
+        if (null == entry.getValue()) {
             return;
         }
         String key = entry.getKey() + "[%s]";

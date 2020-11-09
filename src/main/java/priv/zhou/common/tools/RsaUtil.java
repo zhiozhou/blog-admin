@@ -58,7 +58,7 @@ public class RsaUtil {
      * @param cipherText    RSA密文
      * @param privateKeyB64 私钥的Base64字符串
      */
-    public static String decode(String cipherText, String privateKeyB64) throws Exception {
+    public static String decode(String cipherText, String privateKeyB64) {
         return decode(cipherText, getPrivateKey(privateKeyB64));
     }
 
@@ -69,11 +69,15 @@ public class RsaUtil {
      * @param cipherText RSA密文
      * @param privateKey 私钥
      */
-    public static String decode(String cipherText, PrivateKey privateKey) throws Exception {
-        byte[] bytes = Base64Util.decode(cipherText);
-        Cipher cipher = Cipher.getInstance(CIPHER);
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        return new String(cipher.doFinal(bytes), UTF_8);
+    public static String decode(String cipherText, PrivateKey privateKey) {
+        try{
+            byte[] bytes = Base64Util.decode(cipherText);
+            Cipher cipher = Cipher.getInstance(CIPHER);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            return new String(cipher.doFinal(bytes), UTF_8);
+        } catch (Exception e) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.LATER_RETRY));
+        }
     }
 
 
@@ -123,9 +127,13 @@ public class RsaUtil {
     /**
      * 获取私钥
      */
-    public static PrivateKey getPrivateKey(String keyB64) throws Exception {
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64Util.decode(keyB64));
-        return KeyFactory.getInstance(CIPHER).generatePrivate(keySpec);
+    public static PrivateKey getPrivateKey(String keyB64) {
+        try {
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64Util.decode(keyB64));
+            return KeyFactory.getInstance(CIPHER).generatePrivate(keySpec);
+        } catch (Exception e) {
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.LATER_RETRY));
+        }
 
     }
 

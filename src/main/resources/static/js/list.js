@@ -90,7 +90,7 @@ function tableRender(table, options) {
  */
 function dictRender(code, dictMap) {
     let {label, spare} = dictMap[code]
-    return `<a class="layui-btn layui-btn-xs ${spare}">${label}</a>`
+    return `<a class="layui-btn layui-btn-xs ${spare}">${label}</a>d`
 }
 
 
@@ -100,11 +100,9 @@ function dictRender(code, dictMap) {
 function iframeAction({data, event}) {
     switch (event) {
         case 'detail':
-            newFrame(`${_module.name}详情`, `${prefix}/detail/${data.id}`)
-            break
+            return newFrame(`${_module.name}详情`, `${prefix}/detail/${data.id}`)
         case 'update':
-            newFrame(`修改${_module.name}`, `${prefix}/update/${data.id}`)
-            break
+            return newFrame(`修改${_module.name}`, `${prefix}/update/${data.id}`)
         case 'remove':
             return removeAction(data)
     }
@@ -117,10 +115,10 @@ function pageAction({data, event}) {
     switch (event) {
         case 'detail':
             window.location.href = `${prefix}/detail/${data.id}`
-            break
+            return
         case 'update':
             window.location.href = `${prefix}/update/${data.id}`
-            break
+            return
         case 'remove':
             return removeAction(data)
     }

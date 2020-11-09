@@ -69,7 +69,7 @@ public class BlogServiceImpl implements IBlogService {
 
     @Override
     public OutVO<NULL> remove(BlogDTO blogDTO) {
-        if (isNull(blogDTO.getId())) {
+        if (null == blogDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 

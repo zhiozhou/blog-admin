@@ -36,7 +36,7 @@ function newFrame(title, url, area) {
         type: 2,
         title: title,
         area: area ? area : ['700px', '620px'],
-        fixed: false, //不固定
+        fixed: false,
         content: url
     })
     window.innerWidth < 768 && layer.full(index)

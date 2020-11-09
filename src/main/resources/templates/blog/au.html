@@ -221,26 +221,24 @@
 
                 $('#add-tag-input').bind("input propertychange", function () {
                     let seq = ++postSeq,
-                        value = $(this).val()
+                        value = $(this).val(),
+                        tagList = $('#tag-list'),
+                        tagCheck = $('#add-tag-check')
                     if (value) {
-                        $('#add-tag-check').show()
+                        tagCheck.show()
                         $.post(`${prefix}/rest/tag/list`, {nameLike: value}, ({code, data}) => {
                             if (fail(code) || seq !== postSeq) return
 
-                            const $tagList = $('#tag-list')
-                            $tagList.empty()
-                            if (0 === data.length) {
-                                $tagList.append('<div>无匹配标签</div>')
-                            } else {
-                                for (let tag of data) {
-                                    $tagList.append(`<div class="tag">${tag.name}</div>`)
-                                }
-                            }
-                            $tagList.show()
+                            tagList.empty()
+                            0 === data.length ?
+                                tagList.append('<div>无匹配标签</div>') :
+                                data.foreach(({name}) => tagList.append(`<div class="tag">${name}</div>`))
+
+                            tagList.show()
                         })
                     } else {
-                        $('#tag-list').hide()
-                        $('#add-tag-check').hide()
+                        tagList.hide()
+                        tagCheck.hide()
                     }
                 }).blur(function () {
                     !$(this).val() && resetAddTag()

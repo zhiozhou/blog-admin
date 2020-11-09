@@ -46,7 +46,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public OutVO<NULL> remove(CommentDTO commentDTO) {
-        if (isNull(commentDTO.getId())) {
+        if (null == commentDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 

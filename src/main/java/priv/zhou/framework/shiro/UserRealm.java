@@ -47,7 +47,7 @@ public class UserRealm extends AuthorizingRealm {
         // 获取账户信息
         String username = (String) token.getPrincipal();
         UserPO userPO = userDAO.get(new UserDTO().setUsername(username).setState(0));
-        if (isNull(userPO)) {
+        if (null == userPO) {
             return null;
         }
         return new SimpleAuthenticationInfo(new UserDTO(userPO), userPO.getPassword(), ByteSource.Util.bytes(userPO.getSalt()), getName());

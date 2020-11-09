@@ -84,12 +84,12 @@ public class LoginLimitFilter extends AccessControlFilter {
         Session session = subject.getSession();
         UserDTO userDTO = (UserDTO) subject.getPrincipal();
         Deque<Serializable> deque = cache.get(userDTO.getUsername());
-        if (isNull(deque)) {
+        if (null ==deque) {
             cache.put(userDTO.getUsername(), deque = Lists.newLinkedList());
         }
 
         // 3.放入登陆队列
-        if (isNull(session.getAttribute(SESSION_KICK_OUT_KEY)) && !deque.contains(session.getId())) {
+        if (null == session.getAttribute(SESSION_KICK_OUT_KEY) && !deque.contains(session.getId())) {
 
             UserAgent userAgent = UserAgent.parseUserAgentString(((ShiroHttpServletRequest) request).getHeader("User-Agent"));
             session.setAttribute("username", userDTO.getUsername());
@@ -113,7 +113,7 @@ public class LoginLimitFilter extends AccessControlFilter {
         }
 
         // 5.当前没被标识
-        if (isNull(session.getAttribute(SESSION_KICK_OUT_KEY))) {
+        if (null == session.getAttribute(SESSION_KICK_OUT_KEY)) {
             return true;
         }
 

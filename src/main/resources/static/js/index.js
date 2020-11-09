@@ -1,7 +1,7 @@
 const tabKey = 'layout-tab'
 layui.use(['layer', 'element', 'jquery'], () => {
         const {element, jquery: $} = layui
-        const $root = $('#root')
+        const root = $('#root')
         const loseSider = 'lose-sider'
         let currentTabId
         let tabSpreadTimer
@@ -18,17 +18,16 @@ layui.use(['layer', 'element', 'jquery'], () => {
         })
 
         function navHandle({context}) {
-            let $nav = $(context),
-                url = $nav.data('url')
-            if (url) {
-                changeTab({
-                    url,
-                    id: currentTabId = $nav.data('id'),
-                    name: `tab-${$nav.data('title')}`,
-                    title: $nav.data('title'),
-                })
-                $root.removeClass(loseSider)
-            }
+            let nav = $(context),
+                url = nav.data('url')
+            if (!url) return
+            changeTab({
+                url,
+                id: currentTabId = nav.data('id'),
+                name: `tab-${nav.data('title')}`,
+                title: nav.data('title'),
+            })
+            root.removeClass(loseSider)
         }
 
         // logo 跳首页
@@ -38,12 +37,12 @@ layui.use(['layer', 'element', 'jquery'], () => {
 
 
         $('#sider-trigger').click(() => {
-            $root.hasClass(loseSider) ? $root.removeClass(loseSider) : $root.addClass(loseSider);
+            root.hasClass(loseSider) ? root.removeClass(loseSider) : root.addClass(loseSider);
         })
 
         // 手机端关闭菜单
         $('#layout-sider-mask').click(() => {
-            $root.removeClass(loseSider)
+            root.removeClass(loseSider)
         })
 
         // 刷新页面
@@ -60,12 +59,12 @@ layui.use(['layer', 'element', 'jquery'], () => {
                         document.webkitFullscreenEnabled ? 'webkit' : false
         $('#full-screen').click(function () {
             if (!fullScreenPrefix) return warn('当前浏览器不支持全屏')
-            let $icon = $(this).children('.fa')
-            $icon.hasClass('fa-expand') ?
-                $icon.removeClass('fa-expand').addClass('fa-compress') &&
+            let icon = $(this).children('.fa')
+            icon.hasClass('fa-expand') ?
+                icon.removeClass('fa-expand').addClass('fa-compress') &&
                 document.body[true === fullScreenPrefix ? 'requestFullscreen' : `${fullScreenPrefix}RequestFullScreen`]()
                 :
-                $icon.removeClass('fa-compress').addClass('fa-expand') &&
+                icon.removeClass('fa-compress').addClass('fa-expand') &&
                 document[true === fullScreenPrefix ? 'exitFullscreen' : `${fullScreenPrefix}ExitFullscreen`]()
         })
 

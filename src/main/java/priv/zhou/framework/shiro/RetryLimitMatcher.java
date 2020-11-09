@@ -27,7 +27,7 @@ public class RetryLimitMatcher extends HashedCredentialsMatcher {
 
         // 1.验证登录次数
         AtomicInteger retryCount = retryCache.get(username);
-        if (isNull(retryCount)) {
+        if (null == retryCount) {
             retryCount = new AtomicInteger(1);
             retryCache.put(username, retryCount);
         } else if (retryCount.incrementAndGet() > LOGIN_ATTEMPT_LIMIT) {

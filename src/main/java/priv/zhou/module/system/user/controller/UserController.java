@@ -1,10 +1,11 @@
 package priv.zhou.module.system.user.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import priv.zhou.common.annotation.CipherId;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.dto.Page;
@@ -24,7 +25,7 @@ import static priv.zhou.common.param.CONSTANT.SYSTEM_USER_STATE;
  * @author zhou
  * @since 2020.03.20
  */
-@Component
+@Controller
 @RequestMapping("/system/user")
 public class UserController extends BaseController {
 
@@ -98,7 +99,7 @@ public class UserController extends BaseController {
 
     @RequiresPermissions("system:user:detail")
     @RequestMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable Integer id) {
+    public String detail(Model model, @PathVariable @CipherId Integer id) {
         OutVO<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;

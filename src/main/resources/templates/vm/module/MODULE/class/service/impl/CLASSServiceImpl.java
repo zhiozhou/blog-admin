@@ -45,7 +45,7 @@ public class ${table.className}ServiceImpl implements I${table.className}Service
 
     @Override
     public OutVO<NULL> remove(${table.className}DTO ${table.objectName}DTO) {
-        if (isNull(${table.objectName}DTO.getId())) {
+        if (null == ${table.objectName}DTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
