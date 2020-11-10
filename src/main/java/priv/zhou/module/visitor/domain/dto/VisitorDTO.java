@@ -23,7 +23,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class VisitorDTO extends DTO<priv.zhou.module.visitor.domain.po.VisitorPO> {
+public class VisitorDTO extends DTO<VisitorPO> {
 
     /**
      *

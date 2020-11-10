@@ -90,7 +90,7 @@ function tableRender(table, options) {
  */
 function dictRender(code, dictMap) {
     let {label, spare} = dictMap[code]
-    return `<a class="layui-btn layui-btn-xs ${spare}">${label}</a>d`
+    return `<a class="layui-btn layui-btn-xs ${spare}">${label}</a>`
 }
 
 

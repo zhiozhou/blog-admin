@@ -50,7 +50,7 @@ public class UserRealm extends AuthorizingRealm {
         if (null == userPO) {
             return null;
         }
-        return new SimpleAuthenticationInfo(new UserDTO(userPO), userPO.getPassword(), ByteSource.Util.bytes(userPO.getSalt()), getName());
+        return new SimpleAuthenticationInfo(new UserDTO(userPO), userPO.getPassword(), new CacheByteSource(userPO.getSalt()), getName());
     }
 
 

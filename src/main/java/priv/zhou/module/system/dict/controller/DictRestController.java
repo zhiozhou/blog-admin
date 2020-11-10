@@ -38,7 +38,7 @@ public class DictRestController {
     @RequiresPermissions("system:dict:remove")
     @RequestMapping("/remove")
     public OutVO<NULL> remove(DictDTO dictDTO) {
-        return dictService.remove(dictDTO)
+        return dictService.remove(dictDTO);
     }
 
     @RequiresPermissions("system:dict:update")

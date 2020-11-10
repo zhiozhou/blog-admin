@@ -2,7 +2,7 @@ package priv.zhou.framework.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.google.common.collect.Maps;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -18,6 +18,9 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.assertj.core.util.Lists;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,24 +40,31 @@ import static priv.zhou.common.param.CONSTANT.*;
 @Configuration
 public class ShiroConfigurer {
 
+    @Value("${spring.redis.host}")
+    private String RedisHost;
+    @Value("${spring.redis.database}")
+    private int RedisDB;
+    @Value("${spring.redis.port}")
+    private int RedisPort;
+    @Value("${spring.redis.password}")
+    private String RedisPwd;
 
     /**
      * 配置过滤器
      */
     @Bean
-    public ShiroFilterFactoryBean ShiroFilterFactoryBean(SecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
 
         // 自定过滤器
-        LoginLimitFilter loginLimitFilter = loginLimitFilter();
-
         LinkedHashMap<String, Filter> filters = Maps.newLinkedHashMap();
+
+        LoginLimitFilter loginLimitFilter = loginLimitFilter();
         filters.put(loginLimitFilter.getName(), loginLimitFilter);
 
         // 访问过滤
         Map<String, String> filterMap = Maps.newLinkedHashMap();
-
-        // 无需授权路径
         String anon = DefaultFilter.anon.name();
+        // 无需授权
         filterMap.put("/static/**", anon);
         filterMap.put("/js/**", anon);
         filterMap.put("/css/**", anon);
@@ -97,8 +107,8 @@ public class ShiroConfigurer {
 
         // 配置认证匹配器
         UserRealm userRealm = realm();
-        EhCacheManager ehCacheManager = ehCacheManager();
-        RetryLimitMatcher matcher = new RetryLimitMatcher(ehCacheManager);
+        RedisCacheManager cacheManager = cacheManager();
+        RetryLimitMatcher matcher = new RetryLimitMatcher(cacheManager);
         matcher.setHashAlgorithmName(SHIRO_ALGORITHM);
         matcher.setHashIterations(SHIRO_ITERATIONS);
         userRealm.setCredentialsMatcher(matcher);
@@ -106,7 +116,7 @@ public class ShiroConfigurer {
         // 配置安全管理器
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(userRealm);
-        securityManager.setCacheManager(ehCacheManager);
+        securityManager.setCacheManager(cacheManager);
         securityManager.setSessionManager(sessionManager());
         securityManager.setRememberMeManager(rememberMeManager());
         return securityManager;
@@ -132,23 +142,12 @@ public class ShiroConfigurer {
     }
 
     /**
-     * 配置缓存管理
-     * 一次授权多次使用
-     */
-    @Bean
-    public EhCacheManager ehCacheManager() {
-        EhCacheManager cacheManager = new EhCacheManager();
-        cacheManager.setCacheManagerConfigFile("classpath:ehcache-shiro.xml");
-        return cacheManager;
-    }
-
-    /**
      * 账号登录限制
      */
     @Bean
     public LoginLimitFilter loginLimitFilter() {
         LoginLimitFilter loginLimitFilter = new LoginLimitFilter()
-                .setCacheManager(ehCacheManager())
+                .setCacheManager(cacheManager())
                 .setSessionManager(sessionManager());
         loginLimitFilter.setOutUrl(LOGIN_PATH + "?" + loginLimitFilter.getName());
         return loginLimitFilter;
@@ -166,6 +165,33 @@ public class ShiroConfigurer {
         return cookieRememberMeManager;
     }
 
+    /**
+     * 缓存管理
+     */
+    @Bean
+    public RedisCacheManager cacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        //redis中针对不同用户缓存
+        redisCacheManager.setPrincipalIdFieldName("username");
+        //用户权限信息缓存时间
+        redisCacheManager.setExpire(200000);
+        return redisCacheManager;
+    }
+
+
+    @Bean
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(RedisHost);
+        redisManager.setPort(RedisPort);
+        if (StringUtils.isNotBlank(RedisPwd)) {
+            redisManager.setPassword(RedisPwd);
+        }
+        redisManager.setDatabase(RedisDB);
+        return redisManager;
+    }
+
 
     /**
      * 配置session管理器
@@ -177,7 +203,7 @@ public class ShiroConfigurer {
         sessionManager.setSessionListeners(listeners);
         sessionManager.setSessionIdCookie(sessionIdCookie());
         sessionManager.setSessionDAO(sessionDAO());
-        sessionManager.setCacheManager(ehCacheManager());
+        sessionManager.setCacheManager(cacheManager());
 
 
         sessionManager.setGlobalSessionTimeout(1800000);        // session 无响应过期时间 30分钟
@@ -202,7 +228,7 @@ public class ShiroConfigurer {
     @Bean
     public SessionDAO sessionDAO() {
         EnterpriseCacheSessionDAO enterpriseCacheSessionDAO = new EnterpriseCacheSessionDAO();
-        enterpriseCacheSessionDAO.setCacheManager(ehCacheManager());
+        enterpriseCacheSessionDAO.setCacheManager(cacheManager());
         enterpriseCacheSessionDAO.setActiveSessionsCacheName(SESSION_CACHE_NAME);
         enterpriseCacheSessionDAO.setSessionIdGenerator(sessionIdGenerator());
         return enterpriseCacheSessionDAO;
@@ -242,6 +268,26 @@ public class ShiroConfigurer {
         return simpleCookie;
     }
 
+
+//    /**
+//     * 解决spring-boot Whitelabel Error Page
+//     * @return
+//     */
+//    @Bean
+//    public EmbeddedServletContainerCustomizer containerCustomizer() {
+//
+//        return new EmbeddedServletContainerCustomizer() {
+//            @Override
+//            public void customize(ConfigurableEmbeddedServletContainer container) {
+//
+//                ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/unauthorized.html");
+//                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
+//                ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+//
+//                container.addErrorPages(error401Page, error404Page, error500Page);
+//            }
+//        };
+//    }
 
     /**
      * thymeleaf 中使用shiro标签
