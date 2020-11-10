@@ -7,6 +7,7 @@ import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.param.NULL;
+import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.service.IDictService;
 
@@ -37,7 +38,7 @@ public class DictRestController {
     @RequiresPermissions("system:dict:remove")
     @RequestMapping("/remove")
     public OutVO<NULL> remove(DictDTO dictDTO) {
-        return dictService.remove(dictDTO);
+        return dictService.remove(dictDTO)
     }
 
     @RequiresPermissions("system:dict:update")

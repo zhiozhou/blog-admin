@@ -48,9 +48,9 @@ public class ${table.className}ServiceImpl implements I${table.className}Service
         if (null == ${table.objectName}DTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
-
-        ${table.objectName}DAO.remove(${table.objectName}DTO);
-        return OutVO.success();
+        return  ${table.objectName}DAO.remove(${table.objectName}DTO) > 0 ?
+            OutVO.success():
+            OutVO.fail(OutVOEnum.FAIL_OPERATION);
     }
 
     @Override

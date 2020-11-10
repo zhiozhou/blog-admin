@@ -50,8 +50,9 @@ public class CommentServiceImpl implements ICommentService {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
-        commentDAO.remove(commentDTO);
-        return OutVO.success();
+        return commentDAO.remove(commentDTO)<1?
+                OutVO.fail(OutVOEnum.FAIL_OPERATION):
+                OutVO.success();
     }
 
     @Override

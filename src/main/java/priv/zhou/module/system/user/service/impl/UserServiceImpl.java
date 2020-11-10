@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
@@ -14,6 +15,7 @@ import priv.zhou.common.param.NULL;
 import priv.zhou.common.param.OutVOEnum;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.po.UserPO;
@@ -21,7 +23,6 @@ import priv.zhou.module.system.user.service.IUserService;
 
 import java.util.List;
 
-import static java.util.Objects.isNull;
 import static priv.zhou.common.param.CONSTANT.SHIRO_ALGORITHM;
 import static priv.zhou.common.param.CONSTANT.SHIRO_ITERATIONS;
 
@@ -82,6 +83,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
     public OutVO<NULL> update(UserDTO userDTO) {
 
         UserPO userPO = userDTO.toPO();
@@ -90,10 +92,9 @@ public class UserServiceImpl implements IUserService {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         } else if (userDAO.update(userPO) < 1) {
             return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        }else if ( userDAO.removeRole(userPO)<1 || userDAO.saveRole(userPO)<1){
+            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
-
-        userDAO.removeRole(userPO);
-        userDAO.saveRole(userPO);
         return OutVO.success();
     }
 

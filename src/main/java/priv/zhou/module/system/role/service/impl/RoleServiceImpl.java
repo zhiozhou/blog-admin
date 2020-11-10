@@ -68,9 +68,9 @@ public class RoleServiceImpl implements IRoleService {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         } else if (roleDAO.countUser(roleDTO) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
+        }else if (roleDAO.remove(roleDTO)<1){
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
         }
-
-        roleDAO.remove(roleDTO);
         roleDAO.clearMenu(roleDTO);
         return OutVO.success();
     }

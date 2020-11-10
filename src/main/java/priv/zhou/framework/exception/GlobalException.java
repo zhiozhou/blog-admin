@@ -20,4 +20,5 @@ public class GlobalException extends RuntimeException {
 	 * 包含错误信息的vo对象
 	 */
 	private OutVO<?> outVO;
+
 }
