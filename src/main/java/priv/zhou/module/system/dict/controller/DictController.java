@@ -40,7 +40,7 @@ public class DictController extends BaseController {
 
     @RequiresPermissions("system:dict:update")
     @RequestMapping("/update/{id}")
-    public String add(Model model, @PathVariable Integer id) {
+    public String update(Model model, @PathVariable Integer id) {
         OutVO<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
@@ -51,7 +51,7 @@ public class DictController extends BaseController {
 
     @RequiresPermissions("system:dict:detail")
     @RequestMapping("/detail/{id}")
-    public String read(Model model, @PathVariable Integer id) {
+    public String detail(Model model, @PathVariable Integer id) {
         OutVO<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
+        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}" th:object="${_vo}">
             <form class="layui-form" th:attr="action=${_action}">
 
                 <div class="layui-tab">
@@ -10,12 +10,12 @@
                         <li><a th:href="@{/system/dict/list}" th:text="${_module.name}+列表"></a></li>
                         <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
                     </ul>
-                    <input type="hidden" name="id" th:value="${_vo.id}">
+                    <input type="hidden" th:field="*{id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="name" lay-verify="required" th:value="${ _vo.name }"
+                                <input type="text" lay-verify="required" th:field="*{name}"
                                        class="layui-input" placeholder="请输入名称" autocomplete="off">
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">字典标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="key" lay-verify="required" th:value="${ _vo.key }"
+                                <input type="text" lay-verify="required" th:field="*{key}"
                                        class="layui-input" placeholder="请输入字典标识" autocomplete="off">
                             </div>
                         </div>
@@ -31,16 +31,15 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="state" value="0" th:field="${_vo.state}" title="正常">
-                                <input type="radio" name="state" value="11" th:field="${_vo.state}" title="冻结">
+                                <input type="radio" value="0" th:field="*{state}" title="正常">
+                                <input type="radio" value="11" th:field="*{state}" title="冻结">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea name="remark" th:text="${_vo.remark}" placeholder="请输入备注"
-                                          class="layui-textarea"></textarea>
+                                <textarea th:field="*{remark}" placeholder="请输入备注" class="layui-textarea"></textarea>
                             </div>
                         </div>
 
@@ -76,12 +75,12 @@
             const dataList = [[${_vo.dataList}]]
         </script>
         <script th:inline="none">
-            const prefix = `${_gate}system/dict`,
-                typeMap = {
-                    0: {spare: 'layui-bg-blue', info: '正常'},
-                    1: {spare: 'layui-btn-primary', info: '预留'},
-                    11: {spare: '', info: '系统'},
-                }
+            const prefix = `${_gate}system/dict`
+            const typeMap = {
+                0: {spare: 'layui-bg-blue', info: '正常'},
+                1: {spare: 'layui-btn-primary', info: '预留'},
+                11: {spare: '', info: '系统'},
+            }
             let tindex  // 默认数据索引
 
             layui.use(['table', 'form', 'jquery'], () => {
@@ -122,7 +121,7 @@
 
 
                 //监听提交
-                form.on('submit(submit)', function ({form, field}) {
+                form.on('submit(submit)', ({form, field}) => {
                     // 数据项加入提交数据
                     let codeSet = []
                     for (let i in dataList) {

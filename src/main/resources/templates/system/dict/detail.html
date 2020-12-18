@@ -7,7 +7,7 @@
         }
     </style>
     <body>
-        <div class="layout-page">
+        <div class="layout-page" th:object="${_vo}">
             <form class="layui-form-pane">
 
                 <div class="layui-tab">
@@ -22,28 +22,28 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ _vo.name }" class="layui-input" disabled>
+                                <input type="text" th:value="*{name}" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">字典标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${ _vo.key }" class="layui-input" disabled>
+                                <input type="text" th:value="*{key}" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${0 ==_vo.state?'正常':'冻结'}" class="layui-input" disabled>
+                                <input type="text" th:value="*{0 ==state?'正常':'冻结'}" class="layui-input" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea th:text="${_vo.remark}" class="layui-textarea" disabled></textarea>
+                                <textarea th:text="*{remark}" class="layui-textarea" disabled></textarea>
                             </div>
                         </div>
 
