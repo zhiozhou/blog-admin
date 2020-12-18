@@ -1,4 +1,4 @@
-package priv.zhou.common.param;
+package priv.zhou.common.misc;
 
 /**
  * 全局返回Code枚举类

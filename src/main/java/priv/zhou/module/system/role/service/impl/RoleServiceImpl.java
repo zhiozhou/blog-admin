@@ -8,8 +8,8 @@ import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.NULL;
+import priv.zhou.common.misc.OutVOEnum;
 import priv.zhou.common.tools.PinyinUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.dao.RoleDAO;
@@ -19,8 +19,6 @@ import priv.zhou.module.system.role.service.IRoleService;
 
 import java.util.List;
 import java.util.Set;
-
-import static java.util.Objects.isNull;
 
 @Service
 public class RoleServiceImpl implements IRoleService {

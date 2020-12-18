@@ -1,8 +1,8 @@
 package priv.zhou.module.system.menu.service;
 
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.NULL;
+import priv.zhou.common.misc.OutVOEnum;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 

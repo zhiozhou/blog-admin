@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 
-import static priv.zhou.common.param.CONSTANT.SYSTEM_MENU_STATE;
-import static priv.zhou.common.param.CONSTANT.SYSTEM_MENU_TYPE;
+import static priv.zhou.common.misc.Const.SYSTEM_MENU_STATE;
+import static priv.zhou.common.misc.Const.SYSTEM_MENU_TYPE;
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 /**

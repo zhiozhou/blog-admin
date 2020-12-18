@@ -1,7 +1,7 @@
 package priv.zhou.common.tools;
 
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.OutVOEnum;
 import priv.zhou.framework.exception.GlobalException;
 
 import javax.crypto.Cipher;

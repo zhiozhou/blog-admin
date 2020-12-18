@@ -9,14 +9,13 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.OutVOEnum;
 
 import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Slf4j

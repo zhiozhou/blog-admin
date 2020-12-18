@@ -11,8 +11,8 @@ import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.NULL;
+import priv.zhou.common.misc.OutVOEnum;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -23,8 +23,8 @@ import priv.zhou.module.system.user.service.IUserService;
 
 import java.util.List;
 
-import static priv.zhou.common.param.CONSTANT.SHIRO_ALGORITHM;
-import static priv.zhou.common.param.CONSTANT.SHIRO_ITERATIONS;
+import static priv.zhou.common.misc.Const.SHIRO_ALGORITHM;
+import static priv.zhou.common.misc.Const.SHIRO_ITERATIONS;
 
 
 /**

@@ -9,7 +9,7 @@ import priv.zhou.module.system.extend.domain.Demo;
 
 import java.util.List;
 
-import static priv.zhou.common.param.CONSTANT.SEPARATOR;
+import static priv.zhou.common.misc.Const.SEPARATOR;
 
 
 @Getter

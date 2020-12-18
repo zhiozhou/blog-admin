@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.NULL;
+import priv.zhou.common.misc.OutVOEnum;
 
 import java.util.List;
 

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.NULL;
+import priv.zhou.common.misc.OutVOEnum;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -20,8 +20,8 @@ import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import java.util.List;
 import java.util.Set;
 
-import static priv.zhou.common.param.CONSTANT.BS_MENU_KEY;
-import static priv.zhou.common.param.CONSTANT.BS_MENU_MODIFIED_KEY;
+import static priv.zhou.common.misc.Const.BS_MENU_KEY;
+import static priv.zhou.common.misc.Const.BS_MENU_MODIFIED_KEY;
 
 @Service
 public class MenuServiceImpl implements IMenuService {

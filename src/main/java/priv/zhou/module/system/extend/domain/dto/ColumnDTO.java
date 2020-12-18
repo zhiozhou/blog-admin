@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.module.system.extend.domain.po.ColumnPO;
 
-import static priv.zhou.common.param.CONSTANT.TYPE_MAP;
+import static priv.zhou.common.misc.Const.TYPE_MAP;
 
 /**
  * 列信息

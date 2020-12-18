@@ -3,7 +3,7 @@ package priv.zhou.common.tools;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.AppProperties;
+import priv.zhou.common.misc.AppProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

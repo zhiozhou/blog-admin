@@ -14,7 +14,7 @@ import priv.zhou.module.system.extend.service.ITableService;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
-import static priv.zhou.common.param.AppProperties.ENC;
+import static priv.zhou.common.misc.AppProperties.ENC;
 
 /**
  * 模块生成 接口控制层

@@ -13,7 +13,7 @@ import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.service.IRoleService;
 
-import static priv.zhou.common.param.CONSTANT.SYSTEM_ROLE_STATE;
+import static priv.zhou.common.misc.Const.SYSTEM_ROLE_STATE;
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 /**

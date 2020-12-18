@@ -9,8 +9,7 @@ import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.OutVOEnum;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
+import priv.zhou.common.misc.OutVOEnum;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.service.IDictService;
 import priv.zhou.module.system.extend.domain.Demo;
@@ -32,10 +31,9 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static java.util.Objects.isNull;
-import static priv.zhou.common.param.AppProperties.ENC;
-import static priv.zhou.common.param.CONSTANT.DEMO_PATH;
-import static priv.zhou.common.param.CONSTANT.SEPARATOR;
+import static priv.zhou.common.misc.AppProperties.ENC;
+import static priv.zhou.common.misc.Const.DEMO_PATH;
+import static priv.zhou.common.misc.Const.SEPARATOR;
 
 @Slf4j
 @Service

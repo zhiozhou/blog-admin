@@ -8,9 +8,9 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.AppProperties;
-import priv.zhou.common.param.NULL;
-import priv.zhou.common.param.OutVOEnum;
+import priv.zhou.common.misc.AppProperties;
+import priv.zhou.common.misc.NULL;
+import priv.zhou.common.misc.OutVOEnum;
 import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.HttpUtil;
 

@@ -3,7 +3,7 @@ package priv.zhou.module.block.service;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.param.NULL;
+import priv.zhou.common.misc.NULL;
 import priv.zhou.module.block.domain.dto.BlockDTO;
 
 /**

@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static priv.zhou.common.param.CONSTANT.*;
+import static priv.zhou.common.misc.Const.*;
 
 @Configuration
 public class ShiroConfigurer {

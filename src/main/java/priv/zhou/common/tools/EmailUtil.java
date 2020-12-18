@@ -3,7 +3,7 @@ package priv.zhou.common.tools;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import priv.zhou.common.param.AppProperties;
+import priv.zhou.common.misc.AppProperties;
 
 /**
  *

@@ -1,10 +1,10 @@
-package priv.zhou.common.param;
+package priv.zhou.common.misc;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
-public interface CONSTANT {
+public interface Const {
 
     String DEFAULT_FILL = "0";
 
@@ -97,7 +97,7 @@ public interface CONSTANT {
     //----------------------------------------------------------------------    代码生成    ----------------------------------------------------------------------
 
     Map<String, String> TYPE_MAP = new HashMap<String, String>() {{
-        put("tinyint", "Integer");
+        put("tinyint", "boolean");
         put("smallint", "Integer");
         put("mediumint", "Integer");
         put("int", "Integer");
@@ -114,6 +114,7 @@ public interface CONSTANT {
         put("mediumtext", "String");
         put("longtext", "String");
         put("date", "Date");
+        put("time", "Time");
         put("datetime", "Date");
         put("timestamp", "Date");
     }};

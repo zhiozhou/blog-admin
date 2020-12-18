@@ -6,12 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.tools.HttpUtil;
-import priv.zhou.common.tools.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
-
-import static priv.zhou.common.param.CONSTANT.FILE_SERVICE_IP_SET_KEY;
 
 /**
  * 图片 视图控制层
