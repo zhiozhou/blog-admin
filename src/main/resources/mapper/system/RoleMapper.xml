@@ -116,7 +116,7 @@
         FROM
         system_role
         <where>
-            <if test="noid != null ">and id != #{noid}</if>
+            <if test="exclId != null ">and id != #{exclId}</if>
             <if test="name != null and name != ''">and name = #{name}</if>
             <if test="key != null and key != ''">and `key` = #{key}</if>
         </where>

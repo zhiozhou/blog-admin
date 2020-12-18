@@ -81,7 +81,7 @@ public class BlogServiceImpl implements IBlogService {
     public OutVO<NULL> update(BlogDTO blogDTO) {
         if (null == blogDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
-        } else if (blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle()).setNoid(blogDTO.getId())) > 0) {
+        } else if ( blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle()).setExclId(blogDTO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME, "标题已存在");
         }
         BlogPO dbPO = blogDAO.get(new BlogDTO().setId(blogDTO.getId()));

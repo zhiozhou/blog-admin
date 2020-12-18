@@ -93,9 +93,9 @@ public class DictServiceImpl implements IDictService {
         // 1.验证参数
         if (null == dictDTO.getDataList() || dictDTO.getDataList().isEmpty()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
-        } else if (dictDAO.count(new DictDTO().setName(dictDTO.getName()).setNoid(dictDTO.getId())) > 0) {
+        } else if (dictDAO.count(new DictDTO().setName(dictDTO.getName()).setExclId(dictDTO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
-        } else if (dictDAO.count(new DictDTO().setKey(dictDTO.getKey()).setNoid(dictDTO.getId())) > 0) {
+        } else if (dictDAO.count(new DictDTO().setKey(dictDTO.getKey()).setExclId(dictDTO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         }
 

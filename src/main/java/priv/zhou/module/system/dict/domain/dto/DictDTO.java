@@ -39,7 +39,7 @@ public class DictDTO extends DTO<DictPO> {
     /**
      * 非id
      */
-    private Integer noid;
+    private Integer exclId;
 
     /**
      * 名称

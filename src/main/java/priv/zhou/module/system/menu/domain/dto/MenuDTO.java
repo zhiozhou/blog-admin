@@ -27,7 +27,7 @@ public class MenuDTO extends DTO<MenuPO> {
     /**
      * 去除id
      */
-    private Integer noid;
+    private Integer exclId;
 
     /**
      * 父级id

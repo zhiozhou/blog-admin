@@ -112,7 +112,7 @@
         FROM
         blog_blog
         <where>
-            <if test="noid != null  ">and id != #{noid}</if>
+            <if test="exclId != null  ">and id != #{exclId}</if>
             <if test="title != null  and title != '' ">and title = #{title}</if>
         </where>
     </select>

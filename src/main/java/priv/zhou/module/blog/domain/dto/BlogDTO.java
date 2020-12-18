@@ -36,8 +36,7 @@ public class BlogDTO extends DTO<BlogPO> {
      */
     private Integer id;
 
-
-    private Integer noid;
+    private Integer exclId;
 
     /**
      * 标题

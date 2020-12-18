@@ -20,7 +20,6 @@ import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import java.util.List;
 import java.util.Set;
 
-import static java.util.Objects.isNull;
 import static priv.zhou.common.param.CONSTANT.BS_MENU_KEY;
 import static priv.zhou.common.param.CONSTANT.BS_MENU_MODIFIED_KEY;
 
@@ -99,14 +98,14 @@ public class MenuServiceImpl implements IMenuService {
             return OutVO.fail(OutVOEnum.EMPTY_DATA);
         } else if (menuDAO.count(new MenuDTO()
                 .setName(menuDTO.getName())
-                .setNoid(menuDTO.getId())
+                .setExclId(menuDTO.getId())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0
         ) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType()
                 && menuDAO.count(new MenuDTO()
-                .setNoid(menuDTO.getId())
+                .setExclId(menuDTO.getId())
                 .setKey(menuDTO.getKey())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0) {

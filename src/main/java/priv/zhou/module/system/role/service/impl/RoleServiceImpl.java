@@ -82,9 +82,9 @@ public class RoleServiceImpl implements IRoleService {
         RolePO rolePO = roleDTO.toPO();
 
         // 2.验证参数
-        if (roleDAO.count(new RoleDTO().setName(rolePO.getName()).setNoid(rolePO.getId())) > 0) {
+        if (roleDAO.count(new RoleDTO().setName(rolePO.getName()).setExclId(rolePO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME);
-        } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey()).setNoid(roleDTO.getId())) > 0) {
+        } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey()).setExclId(roleDTO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         }
 

@@ -88,7 +88,7 @@ public class UserServiceImpl implements IUserService {
 
         UserPO userPO = userDTO.toPO();
 
-        if (userDAO.count(new UserDTO().setUsername(userPO.getUsername()).setNoid(userPO.getId())) > 0) {
+        if (userDAO.count(new UserDTO().setUsername(userPO.getUsername()).setExclId(userPO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         } else if (userDAO.update(userPO) < 1) {
             return OutVO.fail(OutVOEnum.FAIL_OPERATION);

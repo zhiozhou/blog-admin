@@ -138,7 +138,7 @@
         system_menu
         <where>
             flag = #{flag}
-            <if test="noid != null ">and id != #{noid}</if>
+            <if test="exclId != null ">and id != #{exclId}</if>
             <if test="parentId != null ">and parent_id = #{parentId}</if>
             <if test="name != null and name != ''">and name = #{name}</if>
             <if test="key != null and key != ''">and `key` = #{key}</if>

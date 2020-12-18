@@ -27,7 +27,7 @@ public class RoleDTO extends DTO<RolePO> implements Serializable {
     /**
      * id
      */
-    private Integer noid;
+    private Integer exclId;
 
     /**
      * id

@@ -95,7 +95,7 @@
     <select id="list" parameterType="UserDTO" resultMap="userMap">
         <include refid="selectSQL"/>
         <where>
-            <if test="noid != null ">and system_user.id != #{noid}</if>
+            <if test="exclId != null ">and system_user.id != #{exclId}</if>
             <if test="name != null  and name != '' "> and system_user.name = #{name}</if>
             <if test="nameLike != null and nameLike != ''">and system_user.name LIKE CONCAT('%',#{nameLike},'%')</if>
             <if test="username != null  and username != '' "> and system_user.username = #{username}</if>
@@ -114,7 +114,7 @@
         system_user
         LEFT JOIN system_user_role ON system_user.id = system_user_role.user_id
         <where>
-            <if test="noid != null ">and system_user.id != #{noid}</if>
+            <if test="exclId != null ">and system_user.id != #{exclId}</if>
             <if test="name != null  and name != '' "> and system_user.name = #{name}</if>
             <if test="nameLike != null and nameLike != ''">and system_user.name LIKE CONCAT('%',#{nameLike},'%')</if>
             <if test="username != null  and username != '' "> and system_user.username = #{username}</if>

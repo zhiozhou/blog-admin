@@ -38,7 +38,7 @@ public class UserDTO extends DTO<UserPO> implements Serializable {
     /**
      * 非id
      */
-    private Integer noid;
+    private Integer exclId;
 
 
     /**
