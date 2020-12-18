@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}" th:object="${_vo}">
-            <form class="layui-form" th:attr="action=${_action}">
+        <div class="layout-page"  >
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}" th:with="isAdd='/rest/save'==${_action}" >
 
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
@@ -32,7 +32,7 @@
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
                                 <input type="radio" value="0" th:field="*{state}" title="正常">
-                                <input type="radio" value="11" th:field="*{state}" title="冻结">
+                                <input type="radio" value="11" th:field="*{state}" title="停用">
                             </div>
                         </div>
 

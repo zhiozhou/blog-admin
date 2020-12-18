@@ -7,8 +7,8 @@
         }
     </style>
     <body>
-        <div class="layout-page" th:object="${_vo}">
-            <form class="layui-form-pane">
+        <div class="layout-page">
+            <form class="layui-form-pane" th:object="${_vo}">
 
                 <div class="layui-tab">
 
@@ -36,7 +36,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="*{0 ==state?'正常':'冻结'}" class="layui-input" disabled>
+                                <input type="text" th:value="*{0 ==state?'正常':'停用'}" class="layui-input" disabled>
                             </div>
                         </div>
 

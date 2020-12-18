@@ -2,19 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-iframe" th:with="isAdd='/rest/save'==${_action}">
-            <form class="layui-form " th:attr="action=${_action}">
-                <input type="hidden" name="id" th:value="${_vo.id}">
-                #set($left="${")
+        <div class="layout-iframe">
+            <form class="layui-form " th:attr="action=${_action}" th:object="${_vo}" th:with="isAdd='/rest/save'==${_action}">
+                <input type="hidden" th:field="*{id}">
                 #foreach ($column in $table.columnList)
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">${column.comment}：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="${column.attrName}" placeholder="请输入${column.comment}"
-                               th:value="$left _vo.${column.attrName} }">
+                        <input type="text" class="layui-input"
+                               th:field="*{${column.attrName}}" lay-verify="required"
+                               placeholder="请输入${column.comment}" autocomplete="off">
                     </div>
                 </div>
                 #end

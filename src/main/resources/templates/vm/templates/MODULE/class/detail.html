@@ -3,15 +3,13 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form-pane  ">
-#set($left="${")
+            <form class="layui-form-pane" th:object="${_vo}">
 #foreach ($column in $table.columnList)
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">${column.comment}：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="$left _vo.${column.attrName} }" >
+                        <input type="text" class="layui-input" th:value="*{${column.attrName}}" disabled>
                     </div>
                 </div>
 #end

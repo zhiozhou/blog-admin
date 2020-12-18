@@ -2,18 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-iframe" th:with="isAdd='/rest/save'==${_action}">
-            <form class="layui-form" th:attr="action=${_action}">
-                <input type="hidden" name="id" th:value="${_vo.id}">
+        <div class="layout-iframe">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
+                  th:with="isAdd='/rest/save'==${_action}">
+                <input type="hidden" th:field="*{id}">
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
                         <input type="text" class="layui-input" autocomplete="off"
-                               name="username" placeholder="请输入用户名"
-                               th:value="${ _vo.username }"
-                               th:classappend="${isAdd&&'layui-disabled'}"
-                               th:disabled="${!isAdd}">
+                               placeholder="请输入用户名"
+                               th:field="*{username}"
+                               th:disabled="${!isAdd}"
+                               th:classappend="${isAdd&&'layui-disabled'}">
                     </div>
                 </div>
 
@@ -28,19 +29,19 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">姓名：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off" lay-verify="required"
-                               name="name" placeholder="请输入姓名"
-                               th:value="${ _vo.name }">
+                        <input type="text" class="layui-input"
+                               th:field="*{name }" lay-verify="required"
+                               placeholder="请输入姓名" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
-                        <select name="role.id" lay-verify="required" lay-search="">
+                        <select lay-verify="required" lay-search="">
                             <option th:each="role:${roleList}"
                                     th:value="${role.id}"
-                                    th:field="${_vo.role.id}"
+                                    th:field="*{role.id}"
                                     th:text="${role.name}"></option>
                         </select>
                     </div>

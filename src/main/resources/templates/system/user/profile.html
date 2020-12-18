@@ -4,46 +4,46 @@
     <body>
         <body>
             <div class="layout-page">
-                <form class="layui-form">
+                <form class="layui-form" th:object="${_vo}">
                     <div class="layui-form-item">
                         <label class="layui-form-label">用户名：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ _vo.username }" class="layui-input" disabled>
+                            <input type="text" class="layui-input" th:value="*{username}" disabled>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">姓名：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ _vo.name }" class="layui-input" disabled>
+                            <input type="text" class="layui-input" th:value="*{name}" disabled>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">角色：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ _vo.role.name }" class="layui-input" disabled>
+                            <input type="text" class="layui-input" th:value="*{role.name}" disabled>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">状态：</label>
                         <div class="layui-input-block">
-                            <input type="text" class="layui-input" th:value="${_vo.stateStr}" disabled>
+                            <input type="text" class="layui-input" th:value="*{stateStr}" disabled>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">创建时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field"
+                            <input type="text" class="layui-input date-field" th:value="*{gmtCreate }"
                                    disabled>
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <div class="layui-input-block">
-                            <button class="layui-btn layui-btn-normal" type="button" id="resetPwd">修改密码</button>
+                            <button class="layui-btn layui-btn-normal" type="button" id="reset-pwd">修改密码</button>
                         </div>
                     </div>
                 </form>
@@ -55,7 +55,7 @@
 
             layui.use(['jquery'], () => {
                 let {jquery:$} = layui
-                $('#resetPwd').click(()=>{
+                $('#reset-pwd').click(()=>{
                     return newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/own`)
                 })
             })

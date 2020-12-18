@@ -3,7 +3,7 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form-pane">
+            <form class="layui-form-pane" th:object="${_vo}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
@@ -13,14 +13,14 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${_vo.name}" class="layui-input" disabled>
+                                <input type="text" class="layui-input" th:value="*{name}" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">角色标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" th:value="${_vo.key}" class="layui-input" disabled>
+                                <input type="text" class="layui-input" th:value="*{key}"  disabled>
                             </div>
                         </div>
 
@@ -34,7 +34,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
-                                <input type="text" class="layui-input" th:value="${_vo.stateStr}" disabled>
+                                <input type="text" class="layui-input" th:value="*{stateStr}" disabled>
                             </div>
 
                         </div>
@@ -42,7 +42,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea th:text="${_vo.remark}" class="layui-textarea" disabled></textarea>
+                                <textarea class="layui-textarea" th:value="*{remark}"  disabled></textarea>
                             </div>
                         </div>
                     </div>

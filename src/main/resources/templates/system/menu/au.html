@@ -40,31 +40,32 @@
     </style>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form" th:attr="action=${_action}">
-                <input type="hidden" name="id" id="id" th:value="${_vo.id}">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}">
+                <input type="hidden" th:field="*{id}">
                 <div class="layui-form-item">
                     <label class="layui-form-label">父级：</label>
                     <div class="layui-input-block">
-                        <input type="hidden" name="parentId" id="parentId" th:value="${_vo.parentId}">
-                        <input type="text" id="parentName" lay-verify="required"
-                               th:value="${0 == _vo.parentId ? '根目录': _vo.parentName}" class="layui-input"
-                               placeholder="请选择选择父级" readonly autocomplete="off">
+                        <input type="hidden" th:field="*{parentId}">
+                        <input type="text" class="layui-input" id="parentName"
+                               th:value="${0 == _vo.parentId ? '根目录': _vo.parentName}"
+                               placeholder="请选择选择父级"  autocomplete="off" lay-verify="required" readonly>
                         <div id="menuTree"></div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型：</label>
                     <div class="layui-input-block">
-                        <input type="radio" class="type" name="type" lay-filter="type"
+                        <input type="radio" class="type" lay-filter="type"
                                th:each="type,iterStat:${typeList}"
                                th:value="${type.code}" th:title="${type.label}" th:id="${'type'+ type.code}"
-                               th:field="${_vo.type}">
+                               th:field="*{type}">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" th:value="${_vo.name}" class="layui-input"
+                        <input type="text"  class="layui-input"
+                               th:field="*{name}" lay-verify="required"
                                placeholder="请输入名称" autocomplete="off">
                     </div>
 
@@ -73,7 +74,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">图标：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="icon" id="icon" th:value="${_vo.icon}" class="layui-input"
+                        <input type="text" th:field="*{icon}" class="layui-input"
                                placeholder="请输入图标" readonly autocomplete="off">
                         <div id="iconList">
                             <i class="fa fa-address-book" aria-hidden="true"></i>
@@ -985,7 +986,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">权限标识：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="key" id="key" th:value="${_vo.key}" class="layui-input"
+                        <input type="text" class="layui-input"
+                               th:field="*{key}"
                                placeholder="请输入权限标识" autocomplete="off">
                     </div>
 
@@ -993,7 +995,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">请求地址：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="path" id="path" th:value="${_vo.path}" class="layui-input"
+                        <input type="text" class="layui-input"
+                               th:field="*{path}"
                                placeholder="请输入请求地址" autocomplete="off">
                     </div>
 
@@ -1002,7 +1005,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">显示顺序：</label>
                     <div class="layui-input-block">
-                        <input type="number" name="sort" id="sort" th:value="${_vo.sort}" class="layui-input"
+                        <input type="number" class="layui-input"
+                               th:filed="*{sort}"
                                placeholder="请输入显示顺序" autocomplete="off">
                     </div>
 
@@ -1010,8 +1014,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="state" th:each="state:${stateList}"
-                               th:value="${state.code}" th:title="${state.label}" th:field="${_vo.state}">
+                        <input type="radio" th:each="state:${stateList}"
+                               th:value="${state.code}" th:title="${state.label}" th:field="*{state}">
                     </div>
 
                 </div>
@@ -1072,10 +1076,10 @@
                 form.on('submit(submit)', ({form, field: data}) => {
                     data.type = $('input[name=type]:checked ').val()
                     httpPost({
-                        url:prefix + form.getAttribute('action'),
+                        url: prefix + form.getAttribute('action'),
                         data,
-                        cb:() => {
-                            outMsg(()=>{
+                        cb: () => {
+                            outMsg(() => {
                                 parent.openId = data.parentId
                                 parent.layer.close(parent.layer.getFrameIndex(window.name))
                                 parent.layui.table.reload('table', {
