@@ -101,29 +101,27 @@
         }
     </style>
     <body>
-        <div class="layout-page" th:with="isAdd='/rest/save'==${_action}">
-            <form class="layui-form" th:attr="action=${_action}">
+        <div class="layout-page">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
+                  th:with="isAdd='/rest/save'==${_action}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/blog/list}" th:text="${_module.name}+列表"></a></li>
                         <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
                     </ul>
-                    <input type="hidden" name="id" th:value="${_vo.id}">
+                    <input type="hidden" th:field="*{id}">
                     <div class="layui-tab-content">
 
                         <div class="layui-form-item">
-                            <input type="text" class="layui-input" autocomplete="off"
-                                   lay-verify="required" maxlength="256"
-                                   name="title" placeholder="请输入标题"
-                                   th:value="${ _vo.title }">
+                            <input type="text" class="layui-input"
+                                   th:field="*{title}" lay-verify="required" maxlength="256"
+                                   placeholder="请输入标题" autocomplete="off">
                         </div>
 
                         <div class="layui-form-item">
                           <textarea class="layui-textarea"
-                                    lay-verify="required"
-                                    rows="20"
-                                    name="content" placeholder="请输入内容"
-                                    th:text="${ _vo.content }">
+                                    th:field="*{content}" lay-verify="required"
+                                    placeholder="请输入内容" rows="20">
                           </textarea>
                         </div>
 
@@ -148,7 +146,6 @@
                                         <div id="add-tag-check"><i class="fa fa-check"></i></div>
                                         <div id="tag-list"></div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -156,20 +153,18 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">预览图：</label>
                             <div class="layui-input-block">
-                                <input type="text" class="layui-input" autocomplete="off"
-                                       maxlength="512"
-                                       name="preview" placeholder="请输入预览图地址"
-                                       th:value="${ _vo.preview }">
+                                <input type="text" class="layui-input"
+                                       th:value="*{preview}" maxlength="512"
+                                       placeholder="请输入预览图地址" autocomplete="off">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <input type="text" class="layui-input" autocomplete="off"
-                                       maxlength="64"
-                                       name="remark" placeholder="请输入备注"
-                                       th:value="${ _vo.remark }">
+                                <input type="text" class="layui-input"
+                                       th:value="*{remark}" maxlength="64"
+                                       placeholder="请输入备注" autocomplete="off">
                             </div>
                         </div>
 
@@ -194,13 +189,14 @@
         </script>
         <script th:inline="none">
             const prefix = `${_gate}blog`
+            const maxTagSize = 5
 
             layui.use(['form', 'jquery'], () => {
                 const {form, jquery: $} = layui
                 const tagDemo = '<div class="tag"><span>NAME</span><span class="remove"><i class="fa fa-remove"></i></span></div>'
                 let postSeq = 0
 
-                //监听提交
+                // 监听提交
                 form.on('submit(submit)', ({form, field}) => {
                         if (0 === tags.length) {
                             return warn('至少添加一种标签')
@@ -213,8 +209,10 @@
                     }
                 )
 
-                $('#add-tag').click(() => {
-                    $('#add-tag').hide()
+                $('#add-tag').click(function () {
+                    if (tags.length >= maxTagSize) return
+
+                    $(this).hide()
                     $('#add-tag-input-wrap').css('display', 'inline-block')
                     $('#add-tag-input').focus()
                 })
@@ -248,7 +246,7 @@
 
                 $('.tags-wrap').on('click', '.tag>.remove', function () {
                     let rmTag = $(this).prev().html()
-
+                    tags.length === 5 && $('#add-tag').removeClass('layui-btn-disabled')
                     tags.splice(tags.findIndex(({name}) => rmTag === name), 1)
                     $(this).parent().remove()
                 })
@@ -267,6 +265,8 @@
                 function addTag(name) {
                     $('.add-tag-wrap').before(tagDemo.replace('NAME', name))
                     tags.push({name})
+                    tags.length >= maxTagSize && $('#add-tag').addClass('layui-btn-disabled')
+
                 }
 
                 function resetAddTag() {

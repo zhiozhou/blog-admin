@@ -3,15 +3,15 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form " th:attr="action=${_action}">
-                <input type="hidden" name="id" th:value="${_vo.id}">
-                <input type="hidden" name="repliedId" th:value="${_vo.repliedId}">
+            <form class="layui-form " th:attr="action=${_action}" th:object="${_vo}">
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{repliedId}">
 
                 <div class="layui-form-item">
-                    <textarea class="layui-textarea" autocomplete="off"
+                    <textarea class="layui-textarea"
+                              th:field="${content}"
                               rows="6" maxlength="256"
-                              name="content" placeholder="请输入回复内容"
-                              th:text="${_vo.content}">
+                              placeholder="请输入回复内容" autocomplete="off">
                     </textarea>
                 </div>
 

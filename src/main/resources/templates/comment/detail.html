@@ -3,39 +3,33 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form-pane">
-
-                <input type="hidden" id="id" th:value="${ _vo.id }">
+            <form class="layui-form-pane" th:object="${_vo}">
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">昵称：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.fromVisitor.nickname  }">
+                        <input type="text" class="layui-input" th:value="*{fromVisitor.nickname}" disabled>
                     </div>
                 </div>
 
-                <div class="layui-form-item" th:if="${ _vo.fromVisitor.email }">
+                <div class="layui-form-item" th:if="*{fromVisitor.email}">
                     <label class="layui-form-label">邮箱：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.fromVisitor.email  }">
+                        <input type="text" class="layui-input" th:value="*{fromVisitor.email}" disabled>
                     </div>
                 </div>
 
-                <div class="layui-form-item" th:if="${ _vo.fromVisitor.website }">>
+                <div class="layui-form-item" th:if="*{fromVisitor.website}">>
                     <label class="layui-form-label">网站：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.fromVisitor.website  }">
+                        <input type="text" class="layui-input" th:value="*{fromVisitor.website}" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">内容：</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea" disabled
-                                  th:text="${_vo.content }" rows="5">
+                        <textarea class="layui-textarea" th:text="*{content}" disabled rows="5">
                         </textarea>
                     </div>
                 </div>
@@ -44,32 +38,28 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.stateStr  }"></a>
+                        <input type="text" class="layui-input" th:value="*{stateStr}" disabled></a>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">评论时间：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="${ _vo.gmtCreate }" class="layui-input date-field"
-                               disabled>
+                        <input type="text" class="layui-input" th:value="*{gmtCreate}" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">IP：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.ip  }">
+                        <input type="text" class="layui-input" th:value="*{ip}" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户代理：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" disabled
-                               th:value="${ _vo.ua  }">
+                        <input type="text" class="layui-input" th:value="*{ua}" disabled>
                     </div>
                 </div>
 

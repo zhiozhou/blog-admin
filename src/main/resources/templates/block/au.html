@@ -2,70 +2,47 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-iframe" th:with="isAdd='/rest/save'==${_action}">
-            <form class="layui-form " th:attr="action=${_action}">
-                <input type="hidden" name="id" th:value="${_vo.id}">
-                                
+        <div class="layout-iframe">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
+                  th:with="isAdd='/rest/save'==${_action}">
+                <input type="hidden" th:field="${_vo.id}">
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="id" placeholder="请输入"
-                               th:value="${ _vo.id }">
+                        <input type="text" class="layui-input"
+                               th:field="*{id}" lay-verify="required"
+                               placeholder="请输入" autocomplete="off">
                     </div>
                 </div>
-                
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">IP：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="ip" placeholder="请输入IP"
-                               th:value="${ _vo.ip }">
+                        <input type="text" class="layui-input"
+                               lay-verify="required" th:field="*{.ip }"
+                               placeholder="请输入IP" autocomplete="off">
                     </div>
                 </div>
-                
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="type" placeholder="请输入类型"
-                               th:value="${ _vo.type }">
+                        <input type="text" class="layui-input"
+                               th:field="*{type}" lay-verify="required"
+                               placeholder="请输入类型" autocomplete="off">
                     </div>
                 </div>
-                
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">原因：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="reason" placeholder="请输入原因"
-                               th:value="${ _vo.reason }">
+                        <input type="text" class="layui-input"
+                               th:field="*{reason}" lay-verify="required"
+                               placeholder="请输入原因" autocomplete="off">
                     </div>
                 </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">创建人：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="createId" placeholder="请输入创建人"
-                               th:value="${ _vo.createId }">
-                    </div>
-                </div>
-                
-                <div class="layui-form-item">
-                    <label class="layui-form-label">创建时间：</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
-                               lay-verify="required"
-                               name="gmtCreate" placeholder="请输入创建时间"
-                               th:value="${ _vo.gmtCreate }">
-                    </div>
-                </div>
-                
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
