@@ -228,6 +228,7 @@
     top: 40px;
     left: -10px;
     right: -10px;
+    z-index: 11;
     line-height: 25px;
     padding: 10px 15px;
     white-space: normal;
@@ -285,14 +286,14 @@
 
 /* 标签页工具 */
 
-.layout-main > .body > .layui-tab > .tab-tool {
+#layout-tab > .tab-tool {
     position: absolute;
     width: 100%;
     height: 40px;
 }
 
 
-.layout-main > .body > .layui-tab > .tab-tool > .layui-btn {
+#layout-tab > .tab-tool > .layui-btn {
     position: absolute;
     z-index: 6;
     margin-left: 0;
@@ -302,43 +303,43 @@
     border-color: #f6f6f6;
 }
 
-.layout-main > .body > .layui-tab > .tab-tool > .layui-btn:hover {
+#layout-tab > .tab-tool > .layui-btn:hover {
     opacity: 1;
 }
 
-.layout-main > .body > .layui-tab > .tab-tool > #prev-page {
+#layout-tab > .tab-tool > #prev-page {
     left: 0;
     font-size: 20px;
     border-width: 0 1px 0 0;
 }
 
-.layout-main > .body > .layui-tab > .tab-tool > #next-page {
+#layout-tab > .tab-tool > #next-page {
     right: 50px;
     font-size: 20px;
     border-width: 0 0 0 1px;
 }
 
-.layout-main > .body > .layui-tab > .tab-tool > #tool-more {
+#layout-tab > .tab-tool > #tool-more {
     right: 0;
     border-width: 0 0 0 1px;
 }
 
 /* 标签内容 */
 
-.layout-main > .body > .layui-tab > .layui-tab-content {
+#layout-tab > .layui-tab-content {
     flex-grow: 1;
     padding: 0;
     height: 100%;
-    z-index: 97;
+    z-index: 0;
     box-sizing: border-box;
     background: var(--popover-background);
 }
 
-.layout-main > .body > .layui-tab > .layui-tab-content > .layui-tab-item {
+#layout-tab > .layui-tab-content > .layui-tab-item {
     height: 100%;
 }
 
-.layout-main > .body > .layui-tab > .layui-tab-content > .layui-tab-item > iframe {
+#layout-tab > .layui-tab-content > .layui-tab-item > iframe {
     border: 0;
     width: 100%;
     height: 100%;

@@ -1,4 +1,3 @@
-const tabKey = 'layout-tab'
 layui.use(['layer', 'element', 'jquery'], () => {
         const {element, jquery: $} = layui
         const root = $('#root')
@@ -8,7 +7,7 @@ layui.use(['layer', 'element', 'jquery'], () => {
 
         element.on('nav(layout-sider)', navHandle)
         element.on('nav(user-aux-group)', navHandle)
-        element.on(`tab(${tabKey})`, ({elem}) => {
+        element.on(`tab(layout-tab)`, ({elem}) => {
             let id = $(elem.context).attr('lay-id')
             if (!id || currentTabId === id) return
 
@@ -17,18 +16,6 @@ layui.use(['layer', 'element', 'jquery'], () => {
             element.tabChange('nav', id)
         })
 
-        function navHandle({context}) {
-            let nav = $(context),
-                url = nav.data('url')
-            if (!url) return
-            changeTab({
-                url,
-                id: currentTabId = nav.data('id'),
-                name: `tab-${nav.data('title')}`,
-                title: nav.data('title'),
-            })
-            root.removeClass(loseSider)
-        }
 
         $('.tab-tool #next-page').click(() => {
             let leftCount = 0,
@@ -58,23 +45,17 @@ layui.use(['layer', 'element', 'jquery'], () => {
         })
 
         // logo 跳首页
-        $('.logo').click(() => {
-            element.tabChange(tabKey, 'home')
-        })
+        $('.logo').click(() => element.tabChange('layout-tab', 'home'))
 
 
-        $('#sider-trigger').click(() => {
-            root.hasClass(loseSider) ? root.removeClass(loseSider) : root.addClass(loseSider);
-        })
+        $('#sider-trigger').click(() => root.hasClass(loseSider) ? root.removeClass(loseSider) : root.addClass(loseSider))
 
         // 手机端关闭菜单
-        $('#layout-sider-mask').click(() => {
-            root.removeClass(loseSider)
-        })
+        $('#layout-sider-mask').click(() => root.removeClass(loseSider))
 
         // 刷新页面
         $('#refresh-content').click(() => {
-            let frame = $('.layui-tab-item.layui-show>iframe')
+            let frame = $('.layout-main > .body > .layui-tab > .layui-tab-content > .layui-show>iframe')
             frame.attr('src', frame.attr('src'))
         })
 
@@ -96,16 +77,31 @@ layui.use(['layer', 'element', 'jquery'], () => {
         })
 
 
-        $(document.body).on('mouseenter', `#${tabKey} .layui-tab-title li`, function () {
+        $(document.body).on('mouseleave', `#layout-tab>.layui-tab-title>li`, function () {
+            tabSpreadTimer ? clearTimeout(tabSpreadTimer) : $(this).find('.text-spread').fadeOut()
+        }).on('mouseenter', `#layout-tab>.layui-tab-title>li`, function () {
             tabSpreadTimer = setTimeout(() => {
+                console.log('aaa')
+                console.log($(this).find('.text-spread'))
                 $(this).find('.text-spread').fadeIn()
                 tabSpreadTimer = false
             }, 600)
         })
 
-        $(document.body).on('mouseleave', `#${tabKey} .layui-tab-title li`, function () {
-            tabSpreadTimer ? clearTimeout(tabSpreadTimer) : $(this).find('.text-spread').fadeOut()
-        })
+
+        function navHandle({context}) {
+            let nav = $(context),
+                url = nav.data('url')
+            if (!url) return
+            changeTab({
+                url,
+                id: currentTabId = nav.data('id'),
+                name: `tab-${nav.data('title')}`,
+                title: nav.data('title'),
+            })
+            root.removeClass(loseSider)
+        }
+
 
         //示范一个公告层
         //	layer.open({
@@ -139,13 +135,14 @@ layui.use(['layer', 'element', 'jquery'], () => {
  * @param name iframe的name
  */
 function changeTab({id, url, title, name}) {
-    let opened = layui.jquery(`#${tabKey} .layui-tab-title li[lay-id=${id}]`)
-    if (0 === opened.length) {
-        layui.element.tabAdd(tabKey, {
+    let opened = layui.jquery(`#layout-tab>.layui-tab-title>li[lay-id=${id}]`)
+    if (!opened.length) {
+        console.log('aaa')
+        layui.element.tabAdd('layout-tab', {
             id,
             title: `<div class="text">${title}<div><div class="text-spread">${title}</div>`,
             content: `<iframe src="${url}" name="${name}" class="iframe" data-id="${id}"></iframe>`
         })
     }
-    layui.element.tabChange(tabKey, id)
+    layui.element.tabChange('layout-tab', id)
 }
