@@ -32,18 +32,16 @@ layui.use(['layer', 'element', 'jquery'], () => {
 
         $('.tab-tool #next-page').click(() => {
             let title = $('.layout-main>.body>.layui-tab .layui-tab-title'),
-                width = title.width(),
-                left = parseFloat(title.css('left'))
+                left = parseFloat(title.css('left')),
+                nextMaxLeft = left - title.width(),
+                leftCount = left
 
-            let r = 0
-
+            console.log(left, nextMaxLeft, leftCount)
             for (let li of title.children('li')) {
-                let tabWidth = $(li).outerWidth()
-                if (r + tabWidth > width) {
-                    title.css('left', -r)
-                    return
-                } else {
-                    r += tabWidth
+                let width = $(li).outerWidth()
+                leftCount -= width
+                if (leftCount < nextMaxLeft) {
+                    return title.css('left', leftCount + width)
                 }
             }
 

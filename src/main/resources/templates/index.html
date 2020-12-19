@@ -5,28 +5,26 @@
     <body>
         <div id="root">
             <div class="layout-sider">
-                <div>
-                    <div class="logo">ZHOU</div>
-                    <ul class="layui-nav layui-nav-tree" lay-filter="layout-sider">
-                        <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
-                            <div>暂无菜单</div>
-                        </li>
-                        <li class="layui-nav-item" th:each="menu : ${menuList}">
-                            <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-title=${menu.name}">
-                                <i class="fa" th:classappend="${menu.icon}"></i>
-                                [[${menu.name}]]
-                            </a>
-                            <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.childList)}">
-                                <dd th:each="child : ${menu.childList}">
-                                    <a href="#"
-                                       th:attr="data-id=${child.id} , data-url=${child.path} , data-title=${child.name}">
-                                        [[${child.name}]]
-                                    </a>
-                                </dd>
-                            </dl>
-                        </li>
-                    </ul>
-                </div>
+                <div class="logo">ZHOU</div>
+                <ul class="layui-nav layui-nav-tree" lay-filter="layout-sider">
+                    <li class="layui-nav-item" th:if="${#lists.isEmpty(menuList)}">
+                        <div>暂无菜单</div>
+                    </li>
+                    <li class="layui-nav-item" th:each="menu : ${menuList}">
+                        <a href="#" th:attr="data-id=${menu.id} , data-url=${menu.path} , data-title=${menu.name}">
+                            <i class="fa" th:classappend="${menu.icon}"></i>
+                            [[${menu.name}]]
+                        </a>
+                        <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.childList)}">
+                            <dd th:each="child : ${menu.childList}">
+                                <a href="#"
+                                   th:attr="data-id=${child.id} , data-url=${child.path} , data-title=${child.name}">
+                                    [[${child.name}]]
+                                </a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
             </div>
             <div class="layout-main">
                 <div class="header">
@@ -58,7 +56,7 @@
                 </div>
                 <div class="body">
                     <div class="layui-tab layui-tab-brief" lay-unauto lay-filter="layout-tab" lay-allowClose="true">
-                        <ul class="layui-tab-title" data-left="0">
+                        <ul class="layui-tab-title" data-index="0">
                             <li class="layui-this home" lay-id="home">
                                 <i class="layui-icon layui-icon-home"></i>
                             </li>
