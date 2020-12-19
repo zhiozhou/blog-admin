@@ -31,50 +31,30 @@ layui.use(['layer', 'element', 'jquery'], () => {
         }
 
         $('.tab-tool #next-page').click(() => {
-            let title = $('.layout-main>.body>.layui-tab .layui-tab-title'),
-                left = parseFloat(title.css('left')),
-                nextMaxLeft = left - title.width(),
-                leftCount = left
+            let leftCount = 0,
+                title = $('.layout-main>.body>.layui-tab .layui-tab-title'),
+                nextMaxLeft = parseFloat(title.css('left')) - title.width()
 
-            console.log(left, nextMaxLeft, leftCount)
             for (let li of title.children('li')) {
                 let width = $(li).outerWidth()
-                leftCount -= width
-                if (leftCount < nextMaxLeft) {
+                if (leftCount -= width, leftCount < nextMaxLeft) {
                     return title.css('left', leftCount + width)
                 }
             }
+        })
 
-            // .each((_,li)=>{
-            //
-            //  })
+        $('.tab-tool #prev-page').click(() => {
+            let leftCount = 0,
+                title = $('.layout-main>.body>.layui-tab .layui-tab-title'),
+                nextMaxLeft = parseFloat(title.css('left')) + title.width()
 
-
-            // var i = a("#LAY_app_tabsheader"), n = i.children("li"), l = (i.prop("scrollWidth"), i.outerWidth()),
-            //     s = parseFloat(i.css("left"));
-            // if ("left" === e) {
-            //     if (!s && s <= 0) return;
-            //     var r = -s - l;
-            //     n.each(function (e, t) {
-            //         var n = a(t), l = n.position().left;
-            //         if (l >= r) return i.css("left", -l), !1
-            //     })
-            // } else "auto" === e ? !function () {
-            //     var e, r = n.eq(t);
-            //     if (r[0]) {
-            //         if (e = r.position().left, e < -s) return i.css("left", -e);
-            //         if (e + r.outerWidth() >= l - s) {
-            //             var o = e + r.outerWidth() - (l - s);
-            //             n.each(function (e, t) {
-            //                 var n = a(t), l = n.position().left;
-            //                 if (l + s > 0 && l - s > o) return i.css("left", -l), !1
-            //             })
-            //         }
+            // console.log(nextMaxLeft)
+            // for (let li of title.children('li')) {
+            //     let width = $(li).outerWidth()
+            //     if (leftCount += width, leftCount < nextMaxLeft) {
+            //         return title.css('left', leftCount - width)
             //     }
-            // }() : n.each(function (e, t) {
-            //     var n = a(t), r = n.position().left;
-            //     if (r + n.outerWidth() >= l - s) return i.css("left", -r), !1
-            // })
+            // }
         })
 
         // logo 跳首页

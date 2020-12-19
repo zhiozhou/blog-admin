@@ -82,7 +82,6 @@
     left: 200px;
     z-index: 2;
     transition: left .3s cubic-bezier(0.7, 0.3, 0.1, 1);
-    background: var(--primary-color);
 }
 
 
@@ -115,21 +114,14 @@
 }
 
 /* 侧栏控制 */
-
-#sider-trigger:hover .sider-trigger-icon,
-#sider-trigger:hover .sider-trigger-icon:before,
-#sider-trigger:hover .sider-trigger-icon:after {
-    background: var(--text-color-hover);
-}
-
-
-.sider-trigger-holder {
+#sider-trigger > .icon-holder {
     margin: auto;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
 }
+
 
 .sider-trigger-icon {
     position: relative;
@@ -138,7 +130,6 @@
     background: var(--text-color);
     transition: width, background-color .3s cubic-bezier(.78, .14, .15, .86);
 }
-
 
 .sider-trigger-icon:before, .sider-trigger-icon:after {
     content: '';
@@ -159,8 +150,10 @@
     top: 5px;
 }
 
-#root.lose-sider .sider-trigger-icon {
-    width: 10px;
+#sider-trigger:hover .sider-trigger-icon,
+#sider-trigger:hover .sider-trigger-icon:before,
+#sider-trigger:hover .sider-trigger-icon:after {
+    background: var(--text-color-hover);
 }
 
 
@@ -195,10 +188,9 @@
 }
 
 
-/* 标签 */
+/* 标签页 */
 
 .layout-main > .body {
-    flex-grow: 1;
     height: 100%;
     overflow: hidden;
 }
@@ -210,59 +202,27 @@
     background: var(--component-background);
 }
 
-.layout-main > .body > .layui-tab > .tab-tool {
-    position: absolute;
-    width: 100%;
-    height: 40px;
-}
 
-
-.layout-main > .body > .layui-tab > .tab-tool > .layui-btn {
-    position: absolute;
-    margin-left: 0;
-    width: 50px;
-    z-index: 6;
-    border-color: #f6f6f6;
-    height: 100%;
-}
-
-.layout-main > .body > .layui-tab > .tab-tool > #prev-page {
-    left: 0;
-    font-size: 20px;
-    border-width: 0 1px 0 0;
-}
-
-.layout-main > .body > .layui-tab > .tab-tool > #next-page {
-    right: 50px;
-    font-size: 20px;
-    border-width: 0 0 0 1px;
-}
-
-.layout-main > .body > .layui-tab > .tab-tool > #tool-more {
-    right: 0;
-    border-width: 0 0 0 1px;
-}
-
-.layout-main > .body > .layui-tab .layui-tab-title {
+.layout-main > .body > .layui-tab > .layui-tab-title {
     padding: 0 100px 0 50px;
     z-index: 5;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .06);
 }
 
-.layout-main > .body > .layui-tab .layui-tab-title li {
+.layout-main > .body > .layui-tab > .layui-tab-title > li {
     height: 100%;
     padding-right: 25px;
     text-align: left;
 }
 
-.layout-main > .body > .layui-tab .layui-tab-title li .text {
+.layout-main > .body > .layui-tab > .layui-tab-title > li .text {
     max-width: 130px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.layout-main > .body > .layui-tab .layui-tab-title li .text-spread {
+.layout-main > .body > .layui-tab > .layui-tab-title > li .text-spread {
     display: none;
     position: absolute;
     top: 40px;
@@ -277,13 +237,13 @@
 }
 
 
-.layout-main > .body > .layui-tab .layui-tab-title li .layui-tab-close {
+.layout-main > .body > .layui-tab > .layui-tab-title > li .layui-tab-close {
     position: absolute;
     right: 0;
     top: 11px;
 }
 
-.layout-main > .body > .layui-tab .layui-tab-title li:after {
+.layout-main > .body > .layui-tab .layui-tab-title > li:after {
     content: '';
     position: absolute;
     top: 0;
@@ -323,8 +283,49 @@
     border: none;
 }
 
+/* 标签页工具 */
 
-.layout-main > .body > .layui-tab .layui-tab-content {
+.layout-main > .body > .layui-tab > .tab-tool {
+    position: absolute;
+    width: 100%;
+    height: 40px;
+}
+
+
+.layout-main > .body > .layui-tab > .tab-tool > .layui-btn {
+    position: absolute;
+    z-index: 6;
+    margin-left: 0;
+    width: 50px;
+    height: 100%;
+    border-radius: 0;
+    border-color: #f6f6f6;
+}
+
+.layout-main > .body > .layui-tab > .tab-tool > .layui-btn:hover {
+    opacity: 1;
+}
+
+.layout-main > .body > .layui-tab > .tab-tool > #prev-page {
+    left: 0;
+    font-size: 20px;
+    border-width: 0 1px 0 0;
+}
+
+.layout-main > .body > .layui-tab > .tab-tool > #next-page {
+    right: 50px;
+    font-size: 20px;
+    border-width: 0 0 0 1px;
+}
+
+.layout-main > .body > .layui-tab > .tab-tool > #tool-more {
+    right: 0;
+    border-width: 0 0 0 1px;
+}
+
+/* 标签内容 */
+
+.layout-main > .body > .layui-tab > .layui-tab-content {
     flex-grow: 1;
     padding: 0;
     height: 100%;
@@ -333,11 +334,11 @@
     background: var(--popover-background);
 }
 
-.layout-main > .body > .layui-tab .layui-tab-content .layui-tab-item {
+.layout-main > .body > .layui-tab > .layui-tab-content > .layui-tab-item {
     height: 100%;
 }
 
-.layui-tab-item > iframe {
+.layout-main > .body > .layui-tab > .layui-tab-content > .layui-tab-item > iframe {
     border: 0;
     width: 100%;
     height: 100%;
@@ -352,7 +353,7 @@
 
     .layout-main {
         left: 0;
-        transition: transform .3s cubic-bezier(0.7, 0.3, 0.1, 1);;
+        transition: transform .3s cubic-bezier(0.7, 0.3, 0.1, 1);
     }
 
     #root.lose-sider > .layout-sider {
@@ -367,7 +368,9 @@
         display: block;
     }
 
+    /*侧栏关闭打开*/
     #root.lose-sider .sider-trigger-icon {
+        width: 10px;
         background: transparent;
     }
 
@@ -379,6 +382,8 @@
         transform: translateY(-5px) rotate(-45deg);
     }
 
+
+    /*全屏按钮*/
     #full-screen {
         display: none;
     }
