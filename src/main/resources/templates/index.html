@@ -4,7 +4,7 @@
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <body>
         <div id="root">
-            <div id="layout-sider">
+            <div class="layout-sider">
                 <div>
                     <div class="logo">ZHOU</div>
                     <ul class="layui-nav layui-nav-tree" lay-filter="layout-sider">
@@ -28,9 +28,9 @@
                     </ul>
                 </div>
             </div>
-            <div id="layout-container">
-                <div id="layout-header">
-                    <ul class="layout-aux-group">
+            <div class="layout-main">
+                <div class="header">
+                    <ul class="aux-group">
                         <li id="sider-trigger">
                             <div class="sider-trigger-holder">
                                 <i class="sider-trigger-icon"></i>
@@ -56,14 +56,24 @@
                         </li>
                     </ul>
                 </div>
-                <div id="layout-body">
-                    <div id="layout-tab" class="layui-tab layui-tab-brief" lay-filter="layout-tab"
-                         lay-allowClose="true">
-                        <ul class="layui-tab-title">
+                <div class="body">
+                    <div class="layui-tab layui-tab-brief" lay-unauto lay-filter="layout-tab" lay-allowClose="true">
+                        <ul class="layui-tab-title" data-left="0">
                             <li class="layui-this home" lay-id="home">
                                 <i class="layui-icon layui-icon-home"></i>
                             </li>
                         </ul>
+                        <div class="tab-tool">
+                            <button type="button" class="layui-btn layui-btn-primary" id="prev-page">
+                                <i class="fa fa-angle-left"></i>
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-primary" id="next-page">
+                                <i class="fa fa-angle-right"></i>
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-primary" id="tool-more">
+                                <i class="fa fa-cog"></i>
+                            </button>
+                        </div>
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <iframe src="home" name="home"></iframe>

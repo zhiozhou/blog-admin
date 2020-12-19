@@ -12,7 +12,7 @@ layui.use(['layer', 'element', 'jquery'], () => {
             let id = $(elem.context).attr('lay-id')
             if (!id || currentTabId === id) return
 
-            $('#layout-sider .layui-this,#layout-header .layui-this').removeClass('layui-this')
+            $('.layout-sider .layui-this,.layout-main .header .layui-this').removeClass('layui-this')
             $(`[data-id=${id}]`).parent().addClass('layui-this')
             element.tabChange('nav', id)
         })
@@ -29,6 +29,55 @@ layui.use(['layer', 'element', 'jquery'], () => {
             })
             root.removeClass(loseSider)
         }
+
+        $('.tab-tool #next-page').click(() => {
+            let title = $('.layout-main>.body>.layui-tab .layui-tab-title'),
+                width = title.width(),
+                left = parseFloat(title.css('left'))
+
+            let r = 0
+
+            for (let li of title.children('li')) {
+                let tabWidth = $(li).outerWidth()
+                if (r + tabWidth > width) {
+                    title.css('left', -r)
+                    return
+                } else {
+                    r += tabWidth
+                }
+            }
+
+            // .each((_,li)=>{
+            //
+            //  })
+
+
+            // var i = a("#LAY_app_tabsheader"), n = i.children("li"), l = (i.prop("scrollWidth"), i.outerWidth()),
+            //     s = parseFloat(i.css("left"));
+            // if ("left" === e) {
+            //     if (!s && s <= 0) return;
+            //     var r = -s - l;
+            //     n.each(function (e, t) {
+            //         var n = a(t), l = n.position().left;
+            //         if (l >= r) return i.css("left", -l), !1
+            //     })
+            // } else "auto" === e ? !function () {
+            //     var e, r = n.eq(t);
+            //     if (r[0]) {
+            //         if (e = r.position().left, e < -s) return i.css("left", -e);
+            //         if (e + r.outerWidth() >= l - s) {
+            //             var o = e + r.outerWidth() - (l - s);
+            //             n.each(function (e, t) {
+            //                 var n = a(t), l = n.position().left;
+            //                 if (l + s > 0 && l - s > o) return i.css("left", -l), !1
+            //             })
+            //         }
+            //     }
+            // }() : n.each(function (e, t) {
+            //     var n = a(t), r = n.position().left;
+            //     if (r + n.outerWidth() >= l - s) return i.css("left", -r), !1
+            // })
+        })
 
         // logo 跳首页
         $('.logo').click(() => {

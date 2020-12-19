@@ -5,16 +5,16 @@
     height: 100%;
 }
 
-#root.lose-sider #layout-sider {
+#root.lose-sider .layout-sider {
     left: -200px;
 }
 
-#root.lose-sider #layout-container {
+#root.lose-sider .layout-main{
     left: 0;
 }
 
 /* 侧栏 */
-#layout-sider {
+.layout-sider {
     position: absolute;
     left: 0;
     top: 0;
@@ -25,45 +25,45 @@
     transition: left 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
 }
 
-#layout-sider > div {
+.layout-sider > div {
     width: 120%;
     height: 100%;
     overflow: auto;
 }
 
 
-#layout-sider .layui-nav {
+.layout-sider .layui-nav {
     background: var(--sider-background);
 }
 
-#layout-sider .layui-nav-bar {
+.layout-sider .layui-nav-bar {
     width: 4px;
     background: var(--sider-background-active);
 }
 
-#layout-sider .layui-nav-tree .layui-this > a,
-#layout-sider .layui-nav-tree .layui-nav-child dd.layui-this a,
-#layout-sider .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a {
+.layout-sider .layui-nav-tree .layui-this > a,
+.layout-sider .layui-nav-tree .layui-nav-child dd.layui-this a,
+.layout-sider .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a {
     background-color: var(--sider-background-active);
 }
 
 
-#layout-sider .layui-nav-itemed > a,
-#layout-sider .layui-nav-tree .layui-nav-item a:hover {
+.layout-sider .layui-nav-itemed > a,
+.layout-sider .layui-nav-tree .layui-nav-item a:hover {
     background: rgba(255, 255, 255, .08);
 }
 
 
-#layout-sider dd > a {
+.layout-sider dd > a {
     padding-left: 42px;
 }
 
-#layout-sider a > .fa {
+.layout-sider a > .fa {
     width: 14px;
     margin-right: 4px;
 }
 
-#layout-sider .logo {
+.layout-sider .logo {
     cursor: pointer;
     width: 200px;
     font-size: 1.7rem;
@@ -87,7 +87,7 @@
 
 
 /* 主容器 */
-#layout-container {
+.layout-main{
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -102,7 +102,7 @@
 
 
 /* 头部 */
-#layout-header {
+.layout-main>.header {
     display: flex;
     justify-content: space-between;
     height: 60px;
@@ -111,7 +111,7 @@
 }
 
 /* 辅助按钮组 */
-.layout-aux-group > li {
+.layout-main>.header>.aux-group > li {
     display: inline-block;
     width: 50px;
     height: 100%;
@@ -123,7 +123,7 @@
     transition: color, background-color .3s;
 }
 
-.layout-aux-group > li:hover {
+.layout-main>.header>.aux-group > li:hover {
     color: var(--text-color-hover);
     background: var(--component-background-hover);
 
@@ -180,73 +180,104 @@
 
 
 /* 用户组按钮 */
-#layout-header .layui-nav {
+.layout-main .header .layui-nav {
     padding: 0;
     background: transparent;
 }
 
-#layout-header .layui-nav-item {
-    border-left: 1px solid var(--border-color);
-}
-
-#layout-header .layui-nav-item.layui-this > a {
+.layout-main .header .layui-nav-item.layui-this > a {
     color: var(--text-color-hover);
     background-color: var(--component-background-hover);
 }
 
 
-#layout-header .layui-nav-item > a {
+.layout-main .header .layui-nav-item > a {
     color: var(--text-color);
     transition: color, background-color .3s;
 }
 
-#layout-header .layui-nav-item > a:hover {
+.layout-main .header .layui-nav-item > a:hover {
     color: var(--text-color-hover);
     background: var(--component-background-hover);
 }
 
-#layout-header .layui-nav-bar {
+.layout-main .header .layui-nav-bar {
     display: none;
 }
 
-#layout-header .layui-this:after {
+.layout-main .header .layui-this:after {
     height: 0;
 }
 
 
 /* 标签 */
 
-#layout-body {
+.layout-main>.body {
     flex-grow: 1;
     height: 100%;
     overflow: hidden;
 }
 
-#layout-tab {
+.layout-main>.body>.layui-tab {
     display: flex;
     flex-direction: column;
     height: 100%;
     background: var(--component-background);
 }
 
-#layout-tab .layui-tab-title {
-    z-index: 98;
+.layout-main>.body>.layui-tab > .tab-tool {
+    position: absolute;
+    width: 100%;
+    height: 40px;
+}
+
+
+.layout-main>.body>.layui-tab > .tab-tool > .layui-btn {
+    position: absolute;
+    margin-left: 0;
+    width: 50px;
+    z-index: 6;
+    border-color: #f6f6f6;
+    height: 100%;
+}
+
+.layout-main>.body>.layui-tab > .tab-tool > #prev-page {
+    left: 0;
+    font-size: 20px;
+    border-width: 0 1px 0 0;
+}
+
+.layout-main>.body>.layui-tab > .tab-tool > #next-page {
+    right: 50px;
+    font-size: 20px;
+    border-width: 0 0 0 1px;
+}
+
+.layout-main>.body>.layui-tab > .tab-tool > #tool-more {
+    right: 0;
+    border-width: 0 0 0 1px;
+}
+
+.layout-main>.body>.layui-tab .layui-tab-title {
+    padding: 0 100px 0 50px;
+    z-index: 5;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .06);
 }
 
-#layout-tab .layui-tab-title li {
+.layout-main>.body>.layui-tab .layui-tab-title li {
+    height: 100%;
     padding-right: 25px;
     text-align: left;
 }
 
-#layout-tab .layui-tab-title li .text {
+.layout-main>.body>.layui-tab .layui-tab-title li .text {
     max-width: 130px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-#layout-tab .layui-tab-title li .text-spread {
+.layout-main>.body>.layui-tab .layui-tab-title li .text-spread {
     display: none;
     position: absolute;
     top: 40px;
@@ -261,13 +292,13 @@
 }
 
 
-#layout-tab .layui-tab-title li .layui-tab-close {
+.layout-main>.body>.layui-tab .layui-tab-title li .layui-tab-close {
     position: absolute;
     right: 0;
     top: 11px;
 }
 
-#layout-tab .layui-tab-title li:after {
+.layout-main>.body>.layui-tab .layui-tab-title li:after {
     content: '';
     position: absolute;
     top: 0;
@@ -279,37 +310,36 @@
     background: var(--sider-background-active);
 }
 
-#layout-tab .layui-tab-title li:hover {
+.layout-main>.body>.layui-tab .layui-tab-title li:hover {
     background: var(--component-background-hover);
 }
 
-#layout-tab .layui-tab-title li:hover:after {
+.layout-main>.body>.layui-tab .layui-tab-title li:hover:after {
     width: 100%;
 }
 
-
-#layout-tab .layui-tab-title li.home {
+.layout-main>.body>.layui-tab .layui-tab-title li.home {
     text-align: center;
     padding-right: 15px;
 }
 
-#layout-tab .home .layui-tab-close {
+.layout-main>.body>.layui-tab .home .layui-tab-close {
     display: none;
 }
 
-#layout-tab.layui-tab-brief > .layui-tab-title .layui-this {
+.layout-main>.body>.layui-tab.layui-tab-brief > .layui-tab-title .layui-this {
     color: var(--text-color-hover);
     background: var(--component-background-hover);
 }
 
-#layout-tab.layui-tab-brief > .layui-tab-more li.layui-this:after,
-#layout-tab.layui-tab-brief > .layui-tab-title .layui-this:after {
+.layout-main>.body>.layui-tab.layui-tab-brief > .layui-tab-more li.layui-this:after,
+.layout-main>.body>.layui-tab.layui-tab-brief > .layui-tab-title .layui-this:after {
     width: 100%;
     border: none;
 }
 
 
-#layout-tab .layui-tab-content {
+.layout-main>.body>.layui-tab .layui-tab-content {
     flex-grow: 1;
     padding: 0;
     height: 100%;
@@ -318,7 +348,7 @@
     background: var(--popover-background);
 }
 
-#layout-tab .layui-tab-content .layui-tab-item {
+.layout-main>.body>.layui-tab .layui-tab-content .layui-tab-item {
     height: 100%;
 }
 
@@ -329,22 +359,22 @@
 }
 
 @media (max-width: 768px) {
-    #layout-sider {
+    .layout-sider {
         left: -200px;
         z-index: 100;
     }
 
 
-    #layout-container {
+    .layout-main{
         left: 0;
         transition: transform .3s cubic-bezier(0.7, 0.3, 0.1, 1);;
     }
 
-    #root.lose-sider #layout-sider {
+    #root.lose-sider .layout-sider {
         left: 0;
     }
 
-    #root.lose-sider #layout-container {
+    #root.lose-sider .layout-main{
         transform: translateX(200px);
     }
 
