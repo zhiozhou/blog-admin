@@ -3,9 +3,9 @@ package priv.zhou.module.blog.controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.domain.dto.TagDTO;
@@ -32,29 +32,29 @@ public class BlogRestController {
 
 
     @RequestMapping("/save")
-    public OutVO<NULL> save(@Valid BlogDTO blogDTO) {
+    public Result<NULL> save(@Valid BlogDTO blogDTO) {
         return blogService.save(blogDTO);
     }
 
     @RequestMapping("/remove/{id}")
-    public OutVO<NULL> remove(@PathVariable Integer id) {
+    public Result<NULL> remove(@PathVariable Integer id) {
         return blogService.remove(new BlogDTO().setId(id));
     }
 
     @RequestMapping("/update")
-    public OutVO<NULL> update(@Valid BlogDTO blogDTO) {
+    public Result<NULL> update(@Valid BlogDTO blogDTO) {
         return blogService.update(blogDTO);
     }
 
 
     @RequestMapping("/list")
-    public OutVO<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
-        return blogService.list(blogDTO, page);
+    public Result<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
+        return Result.table(blogService.list(blogDTO, page));
     }
 
 
     @RequestMapping("/tag/list")
-    public OutVO<List<TagDTO>> list(TagDTO tagDTO) {
+    public Result<List<TagDTO>> list(TagDTO tagDTO) {
         return blogService.tagList(tagDTO);
     }
 

@@ -1,8 +1,8 @@
 package priv.zhou.module.system.menu.service;
 
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 
@@ -20,18 +20,18 @@ public interface IMenuService {
 
     Integer SERVICE_FLAG = 2;
 
-    OutVO<NULL> save(MenuDTO menuDTO);
+    Result<NULL> save(MenuDTO menuDTO);
 
-    OutVO<NULL> remove(MenuDTO menuDTO);
+    Result<NULL> remove(MenuDTO menuDTO);
 
-    OutVO<NULL> update(MenuDTO menuDTO);
+    Result<NULL> update(MenuDTO menuDTO);
 
-    OutVO<MenuDTO> get(MenuDTO menuDTO);
+    Result<MenuDTO> get(MenuDTO menuDTO);
 
-    OutVO<List<MenuDTO>> list(MenuDTO menuDTO);
+    Result<List<MenuDTO>> list(MenuDTO menuDTO);
 
     default List<MenuDTO> tree(MenuDTO menuDTO) {
-        OutVO<List<MenuDTO>> listRes = list(menuDTO);
+        Result<List<MenuDTO>> listRes = list(menuDTO);
         return listRes.isFail() ? null : toTree(listRes.getData());
     }
 
@@ -46,7 +46,7 @@ public interface IMenuService {
                         .filter(po -> entry.getKey().equals(po.getId()))
                         .findFirst()
                         .orElseThrow(() -> new GlobalException()
-                                .setOutVO(OutVO.fail(OutVOEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey())))
+                                .setResult(Result.fail(OutEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey())))
                         .setChildList(entry.getValue());
             }
         }

@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.annotation.CipherId;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.service.IRoleService;
@@ -51,21 +50,21 @@ public class UserController extends BaseController {
 
         super.add(model, new UserDTO().setState(0));
         model.addAttribute("stateList", dictService.listData(SYSTEM_USER_STATE));
-        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";
     }
 
     @RequiresPermissions("system:user:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        OutVO<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
+        Result<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
         super.update(model, dtoVO.getData());
 
         model.addAttribute("stateList", dictService.listData(SYSTEM_USER_STATE));
-        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";
     }
 
@@ -80,7 +79,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:reset:pwd")
     @RequestMapping("/reset/pwd/{id}")
     public String resetPwd(Model model, @PathVariable Integer id) {
-        OutVO<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
+        Result<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
@@ -100,7 +99,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:detail")
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable @CipherId Integer id) {
-        OutVO<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
+        Result<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
@@ -115,7 +114,7 @@ public class UserController extends BaseController {
     public String list(Model model) {
         super.list(model);
 
-        model.addAttribute("roleList", roleService.list(new RoleDTO()).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO()).getData());
         model.addAttribute("stateMap", dictService.mapData(SYSTEM_USER_STATE, true));
         return "system/user/list";
     }

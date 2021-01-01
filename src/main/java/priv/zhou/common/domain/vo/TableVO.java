@@ -1,5 +1,6 @@
 package priv.zhou.common.domain.vo;
 
+import com.github.pagehelper.PageInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -8,14 +9,28 @@ import java.util.List;
 
 /**
  * 列表分页 通用返回模型
+ *
  * @author zhou
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-public class TableVO<DTO> {
+public class TableVO<VO> {
 
-	private List<DTO> list;
+    private List<VO> list;
 
-	private Long count;
+    private Long count;
+
+    private TableVO(List<VO> list) {
+
+        // todo: 封装了dto所以count是错的
+        PageInfo<VO> pageInfo = new PageInfo<>(list);
+        this.list = list;
+        this.count = pageInfo.getTotal();
+    }
+
+    public static <T> TableVO<T> build(List<T> list) {
+        return new TableVO<>(list);
+    }
+
 }

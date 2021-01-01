@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.service.IBlogService;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
 
 import static priv.zhou.module.blog.service.IBlogService.STATE_KEY;
 
@@ -41,7 +40,7 @@ public class BlogController extends BaseController {
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
 
-        OutVO<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
+        Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
@@ -52,7 +51,7 @@ public class BlogController extends BaseController {
 
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        OutVO<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
+        Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }

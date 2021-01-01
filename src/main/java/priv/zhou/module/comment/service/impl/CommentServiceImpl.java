@@ -1,16 +1,13 @@
 package priv.zhou.module.comment.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.block.domain.dto.BlockDTO;
@@ -45,49 +42,47 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
     }
 
     @Override
-    public OutVO<NULL> remove(CommentDTO commentDTO) {
+    public Result<NULL> remove(CommentDTO commentDTO) {
         if (null == commentDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
-        return commentDAO.remove(commentDTO)<1?
-                OutVO.fail(OutVOEnum.FAIL_OPERATION):
-                OutVO.success();
+        return commentDAO.remove(commentDTO) < 1 ?
+                Result.fail(OutEnum.FAIL_OPERATION) :
+                Result.success();
     }
 
     @Override
-    public OutVO<NULL> update(CommentDTO commentDTO) {
+    public Result<NULL> update(CommentDTO commentDTO) {
         if (null == commentDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
         CommentPO commentPO = commentDTO.toPO();
         return commentDAO.update(commentPO) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+                Result.success() :
+                Result.fail(OutEnum.FAIL_OPERATION);
 
     }
 
 
     @Override
-    public OutVO<CommentDTO> get(CommentDTO commentDTO) {
+    public Result<CommentDTO> get(CommentDTO commentDTO) {
         CommentPO commentPO = commentDAO.get(commentDTO);
-        return OutVO.success(new CommentDTO(commentPO));
+        return Result.success(new CommentDTO(commentPO));
     }
 
     @Override
-    public OutVO<TableVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
+    public Result<List<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
         startPage(page);
-        List<CommentPO> poList = commentDAO.list(commentDTO, order);
-        PageInfo<CommentPO> pageInfo = new PageInfo<>(poList);
-        return OutVO.list(DTO.ofPO(poList, CommentDTO::new), pageInfo.getTotal());
+        return Result.success(DTO.ofPO(commentDAO.list(commentDTO, order), CommentDTO::new));
     }
 
     @Override
-    public OutVO<NULL> reply(CommentDTO commentDTO) {
+    public Result<NULL> reply(CommentDTO commentDTO) {
         CommentPO targetPO = commentDAO.get(new CommentDTO().setId(commentDTO.getRepliedId()));
         if (null == targetPO || targetPO.getState().equals(0)) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+            return Result.fail(OutEnum.FAIL_PARAM);
         }
 
         CommentPO commentPO = commentDTO.toPO()
@@ -97,26 +92,26 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
                 .setFromVisitor(new VisitorPO().setId(ZHOU_VISITOR_ID))
                 .setTopicId(targetPO.getTopicId().equals(0) ? targetPO.getId() : targetPO.getTopicId());
         return commentDAO.save(commentPO) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+                Result.success() :
+                Result.fail(OutEnum.FAIL_OPERATION);
     }
 
     @Override
     @Transactional
-    public OutVO<NULL> block(Integer id, String reason) {
+    public Result<NULL> block(Integer id, String reason) {
         CommentPO commentPO = commentDAO.get(new CommentDTO().setId(id));
         if (null == commentPO) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+            return Result.fail(OutEnum.FAIL_PARAM);
         } else if (commentDAO.update(commentPO.setState(10)) < 0) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         } else if (commentDAO.blockIP(commentPO.getIp()) < 1 ||
                 blockService.save(new BlockDTO()
                         .setType(0)
                         .setIp(commentPO.getIp())
                         .setReason(reason)
                         .setRemark(commentPO.getId().toString())).isFail()) {
-            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
         }
-        return OutVO.success();
+        return Result.success();
     }
 }

@@ -2,7 +2,7 @@ package priv.zhou.common.tools;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.misc.AppProperties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,11 +61,11 @@ public class HttpUtil {
     /**
      * 返回错误信息
      */
-    public static void out(HttpServletResponse response, OutVO<?> outVO) throws IOException {
+    public static void out(HttpServletResponse response, Result<?> result) throws IOException {
         response.setCharacterEncoding(AppProperties.ENC);
         response.setContentType("application/json; charset=utf-8");
         try (PrintWriter out = response.getWriter()) {
-            out.print(outVO);
+            out.print(result);
             out.flush();
         }
     }

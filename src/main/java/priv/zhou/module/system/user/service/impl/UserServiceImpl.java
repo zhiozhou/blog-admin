@@ -1,17 +1,15 @@
 package priv.zhou.module.system.user.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -43,13 +41,13 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public OutVO<NULL> save(UserDTO userDTO) {
+    public Result<NULL> save(UserDTO userDTO) {
 
         // 1.验证参数
         if (StringUtils.isBlank(userDTO.getPassword())) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         } else if (userDAO.count(new UserDTO().setUsername(userDTO.getUsername())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_KEY);
+            return Result.fail(OutEnum.EXIST_KEY);
         }
 
 
@@ -63,82 +61,80 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         // 4.保存用户
         if (userDAO.save(userPO) < 1) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         }
 
         // 5.保存角色
         userDAO.saveRole(userPO);
-        return OutVO.success();
+        return Result.success();
 
     }
 
     @Override
-    public OutVO<NULL> remove(UserDTO userDTO) {
+    public Result<NULL> remove(UserDTO userDTO) {
         if (null == userDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
         userDAO.update(new UserPO().setId(userDTO.getId()).setState(12));
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
     @Transactional
-    public OutVO<NULL> update(UserDTO userDTO) {
+    public Result<NULL> update(UserDTO userDTO) {
 
         UserPO userPO = userDTO.toPO();
 
         if (userDAO.count(new UserDTO().setUsername(userPO.getUsername()).setExclId(userPO.getId())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_KEY);
+            return Result.fail(OutEnum.EXIST_KEY);
         } else if (userDAO.update(userPO) < 1) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         } else if (userDAO.removeRole(userPO) < 1 || userDAO.saveRole(userPO) < 1) {
-            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
         }
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
-    public OutVO<NULL> updateState(UserDTO userDTO) {
+    public Result<NULL> updateState(UserDTO userDTO) {
         if (null == userDTO.getId() || null == userDTO.getState()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
-        return userDAO.update(userDTO.toPO()) > 0 ? OutVO.success() : OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        return userDAO.update(userDTO.toPO()) > 0 ? Result.success() : Result.fail(OutEnum.FAIL_OPERATION);
     }
 
 
     @Override
-    public OutVO<NULL> resetPwd(UserDTO userDTO) {
+    public Result<NULL> resetPwd(UserDTO userDTO) {
 
         if (null == userDTO.getId() || StringUtils.isBlank(userDTO.getPassword())) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
         UserPO userPO = userDTO.toPO(),
                 db = userDAO.get(new UserDTO().setId(userPO.getId()));
         if (null == db) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+            return Result.fail(OutEnum.FAIL_PARAM);
         }
         userPO.setPassword(new SimpleHash(SHIRO_ALGORITHM, userPO.getPassword(), ByteSource.Util.bytes(db.getSalt()), SHIRO_ITERATIONS).toString());
         ShiroUtil.getUserRealm().clearAllCachedAuthenticationInfo();
-        return userDAO.update(userPO) > 0 ? OutVO.success() : OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        return userDAO.update(userPO) > 0 ? Result.success() : Result.fail(OutEnum.FAIL_OPERATION);
     }
 
 
     @Override
-    public OutVO<UserDTO> get(UserDTO userDTO) {
+    public Result<UserDTO> get(UserDTO userDTO) {
         UserPO userPO = userDAO.get(userDTO);
         if (null == userPO) {
-            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+            return Result.fail(OutEnum.EMPTY_DATA);
         }
-        return OutVO.success(new UserDTO(userPO));
+        return Result.success(new UserDTO(userPO));
     }
 
     @Override
-    public OutVO<TableVO<UserDTO>> list(UserDTO userDTO, Page page) {
+    public Result<List<UserDTO>> list(UserDTO userDTO, Page page) {
         startPage(page);
-        List<UserPO> poList = userDAO.list(userDTO);
-        PageInfo<UserPO> pageInfo = new PageInfo<>(poList);
-        return OutVO.list(DTO.ofPO(poList, UserDTO::new), pageInfo.getTotal());
+        return Result.success(DTO.ofPO(userDAO.list(userDTO), UserDTO::new));
     }
 }

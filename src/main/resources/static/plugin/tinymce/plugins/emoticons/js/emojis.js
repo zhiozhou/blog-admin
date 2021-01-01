@@ -5538,7 +5538,7 @@ window.tinymce.Resource.add("tinymce.plugins.emoticons", {
     fitzpatrick_scale: false,
     category: "objects"
   },
-  outbox_tray: {
+  OutVOx_tray: {
     keywords: [ "inbox", "email" ],
     "char": "\ud83d\udce4",
     fitzpatrick_scale: false,

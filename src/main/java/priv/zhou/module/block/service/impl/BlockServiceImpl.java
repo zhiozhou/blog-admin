@@ -1,15 +1,12 @@
 package priv.zhou.module.block.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -39,41 +36,39 @@ public class BlockServiceImpl extends BaseService implements IBlockService {
     }
 
     @Override
-    public OutVO<NULL> save(BlockDTO blockDTO) {
+    public Result<NULL> save(BlockDTO blockDTO) {
         if (StringUtils.isBlank(blockDTO.getIp()) || null == blockDTO.getType()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
         return blockDAO.save(blockDTO.toPO()
                 .setCreator(new UserPO().setId(ShiroUtil.getUserId()))) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+                Result.success() :
+                Result.fail(OutEnum.FAIL_OPERATION);
 
     }
 
     @Override
-    public OutVO<NULL> remove(BlockDTO blockDTO) {
+    public Result<NULL> remove(BlockDTO blockDTO) {
         BlockPO blockPO = blockDAO.get(blockDTO);
         if (null == blockPO) {
-            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+            return Result.fail(OutEnum.EMPTY_DATA);
         } else if (blockDAO.update(blockPO.setGmtFreed(new Date())) < 1) {
-            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
         }
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
-    public OutVO<BlockDTO> get(BlockDTO blockDTO) {
+    public Result<BlockDTO> get(BlockDTO blockDTO) {
 
         BlockPO blockPO = blockDAO.get(blockDTO);
-        return OutVO.success(new BlockDTO(blockPO));
+        return Result.success(new BlockDTO(blockPO));
     }
 
     @Override
-    public OutVO<TableVO<BlockDTO>> list(BlockDTO blockDTO, Page page) {
+    public Result<List<BlockDTO>> list(BlockDTO blockDTO, Page page) {
         startPage(page);
-        List<BlockPO> poList = blockDAO.list(blockDTO);
-        PageInfo<BlockPO> pageInfo = new PageInfo<>(poList);
-        return OutVO.list(DTO.ofPO(poList, BlockDTO::new), pageInfo.getTotal());
+        return Result.success(DTO.ofPO(blockDAO.list(blockDTO), BlockDTO::new));
     }
 }

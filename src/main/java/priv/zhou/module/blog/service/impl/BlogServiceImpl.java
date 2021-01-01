@@ -1,15 +1,13 @@
 package priv.zhou.module.blog.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.blog.domain.dao.BlogDAO;
@@ -46,10 +44,10 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
 
     @Override
     @Transactional
-    public OutVO<NULL> save(BlogDTO blogDTO) {
+    public Result<NULL> save(BlogDTO blogDTO) {
 
         if (blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_NAME, "标题已存在");
+            return Result.fail(OutEnum.EXIST_NAME, "标题已存在");
         }
 
         BlogPO blogPO = blogDTO.toPO()
@@ -57,67 +55,65 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
                 .setPv(0L)
                 .setCreateId(ShiroUtil.getUserId());
         if (blogDAO.save(blogPO) < 0) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         }
 
         saveTags(blogPO.getId(), blogPO.getTags(), false);
 
-        return OutVO.success();
+        return Result.success();
     }
 
 
     @Override
-    public OutVO<NULL> remove(BlogDTO blogDTO) {
+    public Result<NULL> remove(BlogDTO blogDTO) {
         if (null == blogDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
-        return blogDAO.update(blogDTO.toPO().setState(11)) > 0 ? OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        return blogDAO.update(blogDTO.toPO().setState(11)) > 0 ? Result.success() :
+                Result.fail(OutEnum.FAIL_OPERATION);
     }
 
     @Override
-    public OutVO<NULL> update(BlogDTO blogDTO) {
+    public Result<NULL> update(BlogDTO blogDTO) {
         if (null == blogDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         } else if (blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle()).setExclId(blogDTO.getId())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_NAME, "标题已存在");
+            return Result.fail(OutEnum.EXIST_NAME, "标题已存在");
         }
         BlogPO dbPO = blogDAO.get(new BlogDTO().setId(blogDTO.getId()));
         if (null == dbPO) {
-            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+            return Result.fail(OutEnum.EMPTY_DATA);
         }
 
         BlogPO blogPO = blogDTO.toPO();
         if (blogDAO.update(blogPO) < 0) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         }
 
         saveTags(blogPO.getId(), blogPO.getTags(), true);
 
-        return OutVO.success();
+        return Result.success();
 
     }
 
 
     @Override
-    public OutVO<BlogDTO> get(BlogDTO blogDTO) {
+    public Result<BlogDTO> get(BlogDTO blogDTO) {
 
         BlogPO blogPO = blogDAO.get(blogDTO);
-        return OutVO.success(new BlogDTO(blogPO));
+        return Result.success(new BlogDTO(blogPO));
     }
 
     @Override
-    public OutVO<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
+    public Result<List<BlogDTO>> list(BlogDTO blogDTO, Page page) {
         startPage(page);
-        List<BlogPO> poList = blogDAO.list(blogDTO);
-        PageInfo<BlogPO> pageInfo = new PageInfo<>(poList);
-        return OutVO.list(DTO.ofPO(poList, BlogDTO::new), pageInfo.getTotal());
+        return Result.success(DTO.ofPO(blogDAO.list(blogDTO), BlogDTO::new));
     }
 
     @Override
-    public OutVO<List<TagDTO>> tagList(TagDTO tagDTO) {
-        return OutVO.success(DTO.ofPO(tagDAO.list(tagDTO), TagDTO::new));
+    public Result<List<TagDTO>> tagList(TagDTO tagDTO) {
+        return Result.success(DTO.ofPO(tagDAO.list(tagDTO), TagDTO::new));
     }
 
     @Transactional

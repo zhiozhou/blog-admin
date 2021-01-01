@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.service.IDictService;
@@ -41,7 +41,7 @@ public class DictController extends BaseController {
     @RequiresPermissions("system:dict:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        OutVO<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
+        Result<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
@@ -52,7 +52,7 @@ public class DictController extends BaseController {
     @RequiresPermissions("system:dict:detail")
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        OutVO<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
+        Result<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }

@@ -1,8 +1,7 @@
 package priv.zhou.module.blog.service;
 
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.domain.dto.TagDTO;
@@ -19,19 +18,19 @@ public interface IBlogService {
 
     String STATE_KEY = "blog_state";
 
-    OutVO<NULL> save(BlogDTO blogDTO);
+    Result<NULL> save(BlogDTO blogDTO);
 
-    OutVO<NULL> remove(BlogDTO blogDTO);
+    Result<NULL> remove(BlogDTO blogDTO);
 
-    OutVO<NULL> update(BlogDTO blogDTO);
+    Result<NULL> update(BlogDTO blogDTO);
 
-    OutVO<BlogDTO> get(BlogDTO blogDTO);
+    Result<BlogDTO> get(BlogDTO blogDTO);
 
-    default OutVO<TableVO<BlogDTO>> list(BlogDTO blogDTO) {
+    default Result<List<BlogDTO>> list(BlogDTO blogDTO) {
         return list(blogDTO, null);
     }
 
-    OutVO<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page);
+    Result<List<BlogDTO>> list(BlogDTO blogDTO, Page page);
 
-    OutVO<List<TagDTO>> tagList(TagDTO tagDTO);
+    Result<List<TagDTO>> tagList(TagDTO tagDTO);
 }

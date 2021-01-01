@@ -1,7 +1,7 @@
 package priv.zhou.module.system.image.service;
 
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
@@ -16,13 +16,13 @@ import java.util.List;
  */
 public interface IImageService {
 
-    OutVO<Integer> save(List<String> urlList, String remark);
+    Result<Integer> save(List<String> urlList, String remark);
 
-    OutVO<NULL> remove(Integer id);
+    Result<NULL> remove(Integer id);
 
-    default OutVO<TableVO<ImageDTO>> list(ImageDTO imageDTO) {
+    default Result<List<ImageDTO>> list(ImageDTO imageDTO) {
         return list(imageDTO, null);
     }
 
-    OutVO<TableVO<ImageDTO>> list(ImageDTO imageDTO, Page page);
+    Result<List<ImageDTO>> list(ImageDTO imageDTO, Page page);
 }

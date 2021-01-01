@@ -1,11 +1,12 @@
 package priv.zhou.module.comment.service;
 
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
+
+import java.util.List;
 
 /**
  * 评论 服务层定义
@@ -20,19 +21,19 @@ public interface ICommentService {
 
     String BLOCK_TYPE_KEY = "comment_block_type";
 
-    OutVO<NULL> remove(CommentDTO commentDTO);
+    Result<NULL> remove(CommentDTO commentDTO);
 
-    OutVO<NULL> update(CommentDTO commentDTO);
+    Result<NULL> update(CommentDTO commentDTO);
 
-    OutVO<CommentDTO> get(CommentDTO commentDTO);
+    Result<CommentDTO> get(CommentDTO commentDTO);
 
-    default OutVO<TableVO<CommentDTO>> list(CommentDTO commentDTO, Order order) {
+    default Result<List<CommentDTO>> list(CommentDTO commentDTO, Order order) {
         return list(commentDTO, null, order);
     }
 
-    OutVO<TableVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order);
+    Result<List<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order);
 
-    OutVO<NULL> reply(CommentDTO commentDTO);
+    Result<NULL> reply(CommentDTO commentDTO);
 
-    OutVO<NULL> block(Integer id, String reason);
+    Result<NULL> block(Integer id, String reason);
 }

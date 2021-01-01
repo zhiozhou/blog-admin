@@ -5,7 +5,7 @@ package priv.zhou.common.misc;
  * @author  zhou
  * @since 2019.03.11
  */
-public enum OutVOEnum {
+public enum OutEnum {
 
 	SUCCESS("0000", "请求成功"),
 
@@ -45,7 +45,7 @@ public enum OutVOEnum {
 	ERROR_SYSTEM("9999", "系统异常");
 
 
-	OutVOEnum(String code, String info) {
+	OutEnum(String code, String info) {
 		this.code = code;
 		this.info = info;
 	}

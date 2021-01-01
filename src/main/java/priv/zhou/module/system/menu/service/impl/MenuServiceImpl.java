@@ -3,10 +3,10 @@ package priv.zhou.module.system.menu.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -36,15 +36,15 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
-    public OutVO<NULL> save(MenuDTO menuDTO) {
+    public Result<NULL> save(MenuDTO menuDTO) {
 
 
         // 1.验证参数
         if (menuDAO.count(new MenuDTO().setName(menuDTO.getName()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_NAME);
+            return Result.fail(OutEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType() && StringUtils.isNotBlank(menuDTO.getKey()) &&
                 menuDAO.count(new MenuDTO().setKey(menuDTO.getKey()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_KEY);
+            return Result.fail(OutEnum.EXIST_KEY);
         }
 
 
@@ -54,28 +54,28 @@ public class MenuServiceImpl implements IMenuService {
 
         // 3.保存
         if (menuDAO.save(menuPO) < 1) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         } else if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
             // 4.移除服务端缓存
             RedisUtil.delete(BS_MENU_KEY);
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);
         }
 
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
     @Transactional
-    public OutVO<NULL> remove(MenuDTO menuDTO) {
+    public Result<NULL> remove(MenuDTO menuDTO) {
         if (null == menuDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
         MenuPO menuPO = menuDAO.get(menuDTO);
         if (null == menuPO) {
-            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+            return Result.fail(OutEnum.EMPTY_DATA);
         } else if (menuDAO.remove(menuDTO) < 1 || roleDAO.clearMenu(new RoleDTO()) < 1) {
-            throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
         } else if (SERVICE_FLAG.equals(menuPO.getFlag())) {
             RedisUtil.delete(BS_MENU_KEY);
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);
@@ -83,11 +83,11 @@ public class MenuServiceImpl implements IMenuService {
 
         // 刷新权限
         ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
-    public OutVO<NULL> update(MenuDTO menuDTO) {
+    public Result<NULL> update(MenuDTO menuDTO) {
 
 
         // 1.验证参数
@@ -95,21 +95,21 @@ public class MenuServiceImpl implements IMenuService {
                 .setId(menuDTO.getId())
                 .setFlag(menuDTO.getFlag()));
         if (null == menuDB) {
-            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+            return Result.fail(OutEnum.EMPTY_DATA);
         } else if (menuDAO.count(new MenuDTO()
                 .setName(menuDTO.getName())
                 .setExclId(menuDTO.getId())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0
         ) {
-            return OutVO.fail(OutVOEnum.EXIST_NAME);
+            return Result.fail(OutEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType()
                 && menuDAO.count(new MenuDTO()
                 .setExclId(menuDTO.getId())
                 .setKey(menuDTO.getKey())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_KEY);
+            return Result.fail(OutEnum.EXIST_KEY);
         }
 
         // 2.补充参数
@@ -118,7 +118,7 @@ public class MenuServiceImpl implements IMenuService {
 
         // 3.修改菜单
         if (menuDAO.update(menuPO) < 1) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         } else if (!menuDB.getKey().equals(menuPO.getKey())) {
             ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
         }
@@ -129,21 +129,21 @@ public class MenuServiceImpl implements IMenuService {
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);
         }
 
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
-    public OutVO<MenuDTO> get(MenuDTO menuDTO) {
+    public Result<MenuDTO> get(MenuDTO menuDTO) {
         MenuPO menuPO = menuDAO.get(menuDTO);
         if (null == menuPO) {
-            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+            return Result.fail(OutEnum.EMPTY_DATA);
         }
-        return OutVO.success(new MenuDTO(menuPO));
+        return Result.success(new MenuDTO(menuPO));
     }
 
     @Override
-    public OutVO<List<MenuDTO>> list(MenuDTO menuDTO) {
-        return OutVO.success(DTO.ofPO(menuDAO.list(menuDTO), MenuDTO::new));
+    public Result<List<MenuDTO>> list(MenuDTO menuDTO) {
+        return Result.success(DTO.ofPO(menuDAO.list(menuDTO), MenuDTO::new));
     }
 
     @Override

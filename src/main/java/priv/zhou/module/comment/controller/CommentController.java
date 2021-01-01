@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 import priv.zhou.module.comment.service.ICommentService;
 
@@ -39,7 +39,7 @@ public class CommentController extends BaseController {
 
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        OutVO<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
+        Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
@@ -66,7 +66,7 @@ public class CommentController extends BaseController {
 
     @RequestMapping("/reply/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        OutVO<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
+        Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }

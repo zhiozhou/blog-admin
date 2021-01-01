@@ -8,8 +8,8 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.domain.Result;
+import priv.zhou.common.misc.OutEnum;
 
 import java.net.SocketTimeoutException;
 import java.util.List;
@@ -31,14 +31,14 @@ public class OkHttpUtil {
 
     private final static OkHttpClient httpClient = AppContextUtil.getBean(OkHttpClient.class);
 
-    private final static Class<OutVO> DEFAULT_VO = OutVO.class;
+    private final static Class<Result> DEFAULT_VO = Result.class;
 
-    public static <E> OutVO<E> httpGet(String desc, String url) {
+    public static <E> Result<E> httpGet(String desc, String url) {
         return httpGet(desc, url, Maps.newHashMap());
     }
 
-    public static <E> OutVO<E> httpGet(String desc, String url, Map<String, String> params) {
-        return httpGet(desc, url, params, OutVO.class);
+    public static <E> Result<E> httpGet(String desc, String url, Map<String, String> params) {
+        return httpGet(desc, url, params, Result.class);
     }
 
     public static <T> T httpGet(String desc, String url, Class<T> clazz) {
@@ -56,12 +56,12 @@ public class OkHttpUtil {
         return call(desc, request, clazz);
     }
 
-    public static <E> OutVO<E> httpPost(String desc, String url) {
+    public static <E> Result<E> httpPost(String desc, String url) {
         return httpPost(desc, url, Maps.newHashMap());
     }
 
-    public static <E> OutVO<E> httpPost(String desc, String url, Map<String, Object> params) {
-        return httpPost(desc, url, params, OutVO.class);
+    public static <E> Result<E> httpPost(String desc, String url, Map<String, Object> params) {
+        return httpPost(desc, url, params, Result.class);
     }
 
     /**
@@ -88,7 +88,7 @@ public class OkHttpUtil {
     }
 
 
-    public static OutVO<Object> httpPost(String desc, String url, JSONObject json) {
+    public static Result<Object> httpPost(String desc, String url, JSONObject json) {
         return httpPost(desc, url, json, DEFAULT_VO);
     }
 
@@ -121,7 +121,7 @@ public class OkHttpUtil {
         } catch (SocketTimeoutException e) {
             log.info("断开 {} 接口响应超时, 耗时 {}ms", desc, stopWatch.elapsed(TimeUnit.MILLISECONDS));
             if (clazz.equals(DEFAULT_VO)) {
-                return (T) OutVO.fail(OutVOEnum.RESPONSE_TIMEOUT);
+                return (T) Result.fail(OutEnum.RESPONSE_TIMEOUT);
             }
         } catch (Exception e) {
             log.info("收到 " + desc + " 接口响应异常 e -->", e);

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 
@@ -46,7 +46,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("system:menu:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        OutVO<MenuDTO> dtoVO = menuService.get(new MenuDTO().setId(id).setFlag(ADMIN_FLAG));
+        Result<MenuDTO> dtoVO = menuService.get(new MenuDTO().setId(id).setFlag(ADMIN_FLAG));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }

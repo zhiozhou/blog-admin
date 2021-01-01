@@ -7,9 +7,9 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.service.IDictService;
 import priv.zhou.module.system.extend.domain.Demo;
@@ -52,10 +52,10 @@ public class ExtendServiceImpl implements IExtendService {
     }
 
     @Override
-    public OutVO<byte[]> module(List<String> tableNames) throws Exception {
+    public Result<byte[]> module(List<String> tableNames) throws Exception {
 
         if (null == tableNames || tableNames.isEmpty()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
 
         Map<String, DictDataDTO> configMap = dictService.mapData(CONFIG_KEY, true);
@@ -72,7 +72,7 @@ public class ExtendServiceImpl implements IExtendService {
     /**
      * 初始化模板，生成对应代码
      */
-    private OutVO<byte[]> coreGenerate(AppConfig appConfig, List<TableDTO> tableList) throws Exception {
+    private Result<byte[]> coreGenerate(AppConfig appConfig, List<TableDTO> tableList) throws Exception {
 
         // 初始化
         VelocityContext context = new VelocityContext();
@@ -107,7 +107,7 @@ public class ExtendServiceImpl implements IExtendService {
             }
         }
         zipStream.close();
-        return OutVO.success(outStream.toByteArray());
+        return Result.success(outStream.toByteArray());
     }
 
 

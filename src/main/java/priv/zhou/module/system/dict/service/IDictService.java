@@ -1,8 +1,7 @@
 package priv.zhou.module.system.dict.service;
 
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
@@ -23,28 +22,28 @@ public interface IDictService {
 
     String DICT_SNS_KEY = "zhou_sns";
 
-    OutVO<NULL> save(DictDTO dictDTO);
+    Result<NULL> save(DictDTO dictDTO);
 
-    OutVO<NULL> remove(DictDTO dictDTO);
+    Result<NULL> remove(DictDTO dictDTO);
 
-    OutVO<NULL> update(DictDTO dictDTO);
+    Result<NULL> update(DictDTO dictDTO);
 
-    OutVO<DictDTO> get(DictDTO dictDTO);
+    Result<DictDTO> get(DictDTO dictDTO);
 
-    default OutVO<TableVO<DictDTO>> list(DictDTO dictDTO) {
+    default Result<List<DictDTO>> list(DictDTO dictDTO) {
         return list(dictDTO, null);
     }
 
-    OutVO<TableVO<DictDTO>> list(DictDTO dictDTO, Page page);
+    Result<List<DictDTO>> list(DictDTO dictDTO, Page page);
 
-    OutVO<DictDataDTO> getData(DictDataDTO dictDataDTO);
+    Result<DictDataDTO> getData(DictDataDTO dictDataDTO);
 
     default String getLabel(String key, Integer code) {
         return getLabel(key, String.valueOf(code));
     }
 
     default String getLabel(String key, String code) {
-        OutVO<DictDataDTO> getRes = getData(new DictDataDTO().setDictKey(key).setCode(code));
+        Result<DictDataDTO> getRes = getData(new DictDataDTO().setDictKey(key).setCode(code));
         return getRes.isFail() ? "" : getRes.getData().getLabel();
     }
 

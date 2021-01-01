@@ -9,11 +9,11 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.tools.ParseUtil;
 import priv.zhou.common.tools.RsaUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -41,74 +41,74 @@ public class UserRestController {
     }
 
     @RequestMapping("/login")
-    public OutVO<NULL> login(UserDTO userDTO) {
+    public Result<NULL> login(UserDTO userDTO) {
         try {
             // 参数传入时需要将+号替换为%2B
             userDTO.setPassword(RsaUtil.decode(userDTO.getPassword(), RSA_PRIVATE_KEY));
         } catch (Exception e) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+            return Result.fail(OutEnum.FAIL_PARAM);
         }
 
         try {
             SecurityUtils.getSubject().login(new UsernamePasswordToken(userDTO.getUsername(), userDTO.getPassword(), ParseUtil.unBox(userDTO.getRememberMe())));
         } catch (UnknownAccountException e) {
-            return OutVO.fail(OutVOEnum.NONE_USERNAME);
+            return Result.fail(OutEnum.NONE_USERNAME);
         } catch (LockedAccountException e) {
-            return OutVO.fail(OutVOEnum.LOCKED_USERNAME);
+            return Result.fail(OutEnum.LOCKED_USERNAME);
         } catch (AuthenticationException e) {
-            return OutVO.fail(OutVOEnum.FAIL_LOGIN);
+            return Result.fail(OutEnum.FAIL_LOGIN);
         }
-        return OutVO.success();
+        return Result.success();
     }
 
     @RequiresPermissions("system:user:add")
     @RequestMapping("/save")
-    public OutVO<NULL> save(@Valid UserDTO userDTO) {
+    public Result<NULL> save(@Valid UserDTO userDTO) {
         return userService.save(userDTO);
     }
 
     @RequiresPermissions("system:user:remove")
     @RequestMapping("/remove/{id}")
-    public OutVO<NULL> remove(@PathVariable Integer id) {
+    public Result<NULL> remove(@PathVariable Integer id) {
         return userService.remove(new UserDTO().setId(id));
     }
 
     @RequiresPermissions("system:user:update")
     @RequestMapping("/update")
-    public OutVO<NULL> update(@Valid UserDTO userDTO) {
+    public Result<NULL> update(@Valid UserDTO userDTO) {
         return userService.update(userDTO);
     }
 
 
     @RequiresPermissions("system:user:reset:pwd")
     @RequestMapping("/reset/pwd/{id}")
-    public OutVO<NULL> resetPwd(@PathVariable Integer id, UserDTO userDTO) {
+    public Result<NULL> resetPwd(@PathVariable Integer id, UserDTO userDTO) {
         return userService.resetPwd(userDTO.setId(id));
     }
 
     @RequestMapping("/reset/pwd/own")
-    public OutVO<NULL> resetPwd(UserDTO userDTO) {
+    public Result<NULL> resetPwd(UserDTO userDTO) {
         return userService.resetPwd(userDTO.setId(ShiroUtil.getUserId()));
     }
 
 
     @RequiresPermissions("system:user:freeze")
     @RequestMapping("/freeze/{id}")
-    public OutVO<NULL> freeze(@PathVariable Integer id) {
+    public Result<NULL> freeze(@PathVariable Integer id) {
         return userService.updateState(new UserDTO().setId(id).setState(11));
     }
 
     @RequiresPermissions("system:user:freeze")
     @RequestMapping("/unfreeze/{id}")
-    public OutVO<NULL> unfreeze(@PathVariable Integer id) {
+    public Result<NULL> unfreeze(@PathVariable Integer id) {
         return userService.updateState(new UserDTO().setId(id).setState(0));
     }
 
 
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
-    public OutVO<TableVO<UserDTO>> list(UserDTO userDTO, Page page) {
-        return userService.list(userDTO, page);
+    public Result<TableVO<UserDTO>> list(UserDTO userDTO, Page page) {
+        return Result.table(userService.list(userDTO, page));
     }
 
 }

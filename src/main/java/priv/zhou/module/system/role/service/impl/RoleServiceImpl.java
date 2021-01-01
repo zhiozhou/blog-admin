@@ -1,15 +1,12 @@
 package priv.zhou.module.system.role.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.PinyinUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -31,7 +28,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
     }
 
     @Override
-    public OutVO<NULL> save(RoleDTO roleDTO) {
+    public Result<NULL> save(RoleDTO roleDTO) {
 
         // 1.转换类型
         RolePO rolePO = roleDTO.toPO();
@@ -44,54 +41,54 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
         // 3.验证参数
         if (roleDAO.count(new RoleDTO().setName(roleDTO.getName())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_NAME);
+            return Result.fail(OutEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_KEY);
+            return Result.fail(OutEnum.EXIST_KEY);
         }
 
         // 4.保存角色
         if (roleDAO.save(rolePO) < 1) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         }
 
         // 5.保存菜单
         if (null != rolePO.getMenuList()) {
             roleDAO.saveMenu(rolePO);
         }
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
-    public OutVO<NULL> remove(RoleDTO roleDTO) {
+    public Result<NULL> remove(RoleDTO roleDTO) {
         if (null == roleDTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         } else if (roleDAO.countUser(roleDTO) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
-        }else if (roleDAO.remove(roleDTO)<1){
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
+        } else if (roleDAO.remove(roleDTO) < 1) {
+            return Result.fail(OutEnum.FAIL_OPERATION);
         }
         roleDAO.clearMenu(roleDTO);
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
-    public OutVO<NULL> update(RoleDTO roleDTO) {
+    public Result<NULL> update(RoleDTO roleDTO) {
 
         // 1.转换类型
         RolePO rolePO = roleDTO.toPO();
 
         // 2.验证参数
         if (roleDAO.count(new RoleDTO().setName(rolePO.getName()).setExclId(rolePO.getId())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_NAME);
+            return Result.fail(OutEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey()).setExclId(roleDTO.getId())) > 0) {
-            return OutVO.fail(OutVOEnum.EXIST_KEY);
+            return Result.fail(OutEnum.EXIST_KEY);
         }
 
         // 3.补充参数
         rolePO.setModifiedId(ShiroUtil.getUserId());
 
         if (roleDAO.update(rolePO) < 1) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            return Result.fail(OutEnum.FAIL_OPERATION);
         }
 
         // 4.清除菜单
@@ -104,27 +101,25 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
         // 6.清除授权
         ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
-        return OutVO.success();
+        return Result.success();
 
     }
 
     @Override
-    public OutVO<RoleDTO> get(RoleDTO roleDTO) {
+    public Result<RoleDTO> get(RoleDTO roleDTO) {
 
         RolePO rolePO = roleDAO.get(roleDTO);
         if (null == rolePO) {
-            return OutVO.fail(OutVOEnum.EMPTY_DATA);
+            return Result.fail(OutEnum.EMPTY_DATA);
         }
-        return OutVO.success(new RoleDTO(rolePO));
+        return Result.success(new RoleDTO(rolePO));
     }
 
 
     @Override
-    public OutVO<TableVO<RoleDTO>> list(RoleDTO roleDTO, Page page) {
+    public Result<List<RoleDTO>> list(RoleDTO roleDTO, Page page) {
         startPage(page);
-        List<RolePO> poList = roleDAO.list(roleDTO);
-        PageInfo<RolePO> pageInfo = new PageInfo<>(poList);
-        return OutVO.list(DTO.ofPO(poList, RoleDTO::new), pageInfo.getTotal());
+        return Result.success(DTO.ofPO(roleDAO.list(roleDTO), RoleDTO::new));
     }
 
     @Override

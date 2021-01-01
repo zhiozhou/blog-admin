@@ -1,16 +1,14 @@
 package priv.zhou.module.system.image.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.OutVO;
-import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.AppProperties;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -44,9 +42,9 @@ public class ImageServiceImpl extends BaseService implements IImageService {
     }
 
     @Override
-    public OutVO<Integer> save(List<String> urlList, String remark) {
+    public Result<Integer> save(List<String> urlList, String remark) {
         if (null == urlList) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
         int failCount = 0;
         Integer userId = ShiroUtil.getUserId();
@@ -55,36 +53,34 @@ public class ImageServiceImpl extends BaseService implements IImageService {
                 failCount++;
             }
         }
-        return OutVO.success(failCount);
+        return Result.success(failCount);
     }
 
     @Override
     @Transactional
-    public OutVO<NULL> remove(Integer id) {
+    public Result<NULL> remove(Integer id) {
         if (null == id) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(OutEnum.EMPTY_PARAM);
         }
         ImageDTO queryDTO = new ImageDTO().setId(id);
         ImagePO imagePO = imageDAO.get(queryDTO);
         if (null != imagePO) {
             if (imageDAO.remove(queryDTO) < 1) {
-                return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+                return Result.fail(OutEnum.FAIL_OPERATION);
             }
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", imagePO.getUrl());
-            OutVO<NULL> removeRes = httpPost("移除图片", appProperties.getFileService() + "/remove", params);
+            Result<NULL> removeRes = httpPost("移除图片", appProperties.getFileService() + "/remove", params);
             if (removeRes.isFail()) {
-                throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
+                throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
             }
         }
-        return OutVO.success();
+        return Result.success();
     }
 
     @Override
-    public OutVO<TableVO<ImageDTO>> list(ImageDTO imageDTO, Page page) {
+    public Result<List<ImageDTO>> list(ImageDTO imageDTO, Page page) {
         startPage(page);
-        List<ImagePO> poList = imageDAO.list(imageDTO);
-        PageInfo<ImagePO> pageInfo = new PageInfo<>(poList);
-        return OutVO.list(DTO.ofPO(poList, ImageDTO::new), pageInfo.getTotal());
+        return Result.success(DTO.ofPO(imageDAO.list(imageDTO), ImageDTO::new));
     }
 }

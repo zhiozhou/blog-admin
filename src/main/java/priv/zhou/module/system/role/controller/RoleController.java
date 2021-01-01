@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
@@ -48,7 +48,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("system:role:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        OutVO<RoleDTO> dtoVO = roleService.get(new RoleDTO().setId(id));
+        Result<RoleDTO> dtoVO = roleService.get(new RoleDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }
@@ -62,7 +62,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("system:role:detail")
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        OutVO<RoleDTO> dtoVO = roleService.get(new RoleDTO().setId(id));
+        Result<RoleDTO> dtoVO = roleService.get(new RoleDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
         }

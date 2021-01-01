@@ -33,7 +33,7 @@ public class MonitorController extends BaseController {
         super.list(model);
 
         model.addAttribute("id", ShiroUtil.getSession().getId());
-        model.addAttribute("roleList", roleService.list(new RoleDTO()).getData().getList());
+        model.addAttribute("roleList", roleService.list(new RoleDTO()).getData());
         return "system/monitor/list";
     }
 }

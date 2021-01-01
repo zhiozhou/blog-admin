@@ -9,9 +9,9 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.stereotype.Service;
-import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.Result;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.misc.OutEnum;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.LoginLimitFilter;
 import priv.zhou.module.system.monitor.domain.dto.OnlineDTO;
@@ -39,8 +39,8 @@ public class OnlineServiceImpl implements IOnlineService {
     }
 
     @Override
-    public OutVO<List<OnlineDTO>> list(OnlineDTO onlineDTO) {
-        return OutVO.success(sessionDAO.getActiveSessions().stream()
+    public Result<List<OnlineDTO>> list(OnlineDTO onlineDTO) {
+        return Result.success(sessionDAO.getActiveSessions().stream()
                 .filter(s -> !(
                         null == s.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY) || // 强制退出，令牌为空
                                 Strings.isNotBlank(onlineDTO.getUsername()) && !((String) s.getAttribute("username")).contains(onlineDTO.getUsername()) ||
@@ -59,17 +59,17 @@ public class OnlineServiceImpl implements IOnlineService {
     }
 
     @Override
-    public OutVO<NULL> offline(String id) {
+    public Result<NULL> offline(String id) {
         if (id.equals(ShiroUtil.getSession().getId())) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+            return Result.fail(OutEnum.FAIL_PARAM);
         }
         try {
             Session session = sessionManager.getSession(new DefaultSessionKey(id));
             loginLimitFilter.remove(session);
             sessionDAO.delete(session);
-            return OutVO.success();
+            return Result.success();
         } catch (UnknownSessionException e) {
-            return OutVO.fail(OutVOEnum.FAIL_OPERATION, e.getMessage());
+            return Result.fail(OutEnum.FAIL_OPERATION, e.getMessage());
         }
     }
 
