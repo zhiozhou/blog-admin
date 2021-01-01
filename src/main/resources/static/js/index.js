@@ -135,14 +135,14 @@ layui.use(['layer', 'element', 'jquery'], () => {
  * @param name iframe的name
  */
 function changeTab({id, url, title, name}) {
-    let opened = layui.jquery(`#layout-tab>.layui-tab-title>li[lay-id=${id}]`)
+    const {jquery: $, element} = layui
+    let opened = $(`#layout-tab>.layui-tab-title>li[lay-id=${id}]`)
     if (!opened.length) {
-        console.log('aaa')
-        layui.element.tabAdd('layout-tab', {
+        element.tabAdd('layout-tab', {
             id,
             title: `<div class="text">${title}<div><div class="text-spread">${title}</div>`,
             content: `<iframe src="${url}" name="${name}" class="iframe" data-id="${id}"></iframe>`
         })
     }
-    layui.element.tabChange('layout-tab', id)
+    element.tabChange('layout-tab', id)
 }

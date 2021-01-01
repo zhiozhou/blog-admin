@@ -1,8 +1,8 @@
 package priv.zhou.module.system.image.service;
 
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
 
@@ -20,5 +20,9 @@ public interface IImageService {
 
     OutVO<NULL> remove(Integer id);
 
-    OutVO<ListVO<ImageDTO>> list(ImageDTO imageDTO, Page page);
+    default OutVO<TableVO<ImageDTO>> list(ImageDTO imageDTO) {
+        return list(imageDTO, null);
+    }
+
+    OutVO<TableVO<ImageDTO>> list(ImageDTO imageDTO, Page page);
 }

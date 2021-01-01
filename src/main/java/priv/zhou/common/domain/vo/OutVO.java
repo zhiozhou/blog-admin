@@ -94,8 +94,8 @@ public class OutVO<T> {
     }
 
 
-    public static <T> OutVO<ListVO<T>> list(List<T> list, Long count) {
-        return success(new ListVO<T>().setList(list).setCount(count));
+    public static <T> OutVO<TableVO<T>> list(List<T> list, Long count) {
+        return success(new TableVO<T>().setList(list).setCount(count));
     }
 
 

@@ -1,17 +1,17 @@
 package priv.zhou.module.system.image.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.AppProperties;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.image.domain.dao.ImageDAO;
@@ -32,7 +32,7 @@ import static priv.zhou.common.tools.OkHttpUtil.httpPost;
  * @since 2020.06.01
  */
 @Service
-public class ImageServiceImpl implements IImageService {
+public class ImageServiceImpl extends BaseService implements IImageService {
 
     private final ImageDAO imageDAO;
 
@@ -81,8 +81,8 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public OutVO<ListVO<ImageDTO>> list(ImageDTO imageDTO, Page page) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
+    public OutVO<TableVO<ImageDTO>> list(ImageDTO imageDTO, Page page) {
+        startPage(page);
         List<ImagePO> poList = imageDAO.list(imageDTO);
         PageInfo<ImagePO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, ImageDTO::new), pageInfo.getTotal());

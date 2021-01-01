@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ListVO<DTO> {
+public class TableVO<DTO> {
 
 	private List<DTO> list;
 

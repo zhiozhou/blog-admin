@@ -6,10 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.block.domain.dao.BlockDAO;
@@ -29,7 +30,7 @@ import java.util.List;
  * @since 2020.09.18
  */
 @Service
-public class BlockServiceImpl implements IBlockService {
+public class BlockServiceImpl extends BaseService implements IBlockService {
 
     private final BlockDAO blockDAO;
 
@@ -69,8 +70,8 @@ public class BlockServiceImpl implements IBlockService {
     }
 
     @Override
-    public OutVO<ListVO<BlockDTO>> list(BlockDTO blockDTO, Page page) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
+    public OutVO<TableVO<BlockDTO>> list(BlockDTO blockDTO, Page page) {
+        startPage(page);
         List<BlockPO> poList = blockDAO.list(blockDTO);
         PageInfo<BlockPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, BlockDTO::new), pageInfo.getTotal());

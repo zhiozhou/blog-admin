@@ -6,10 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.PinyinUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.dao.RoleDAO;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class RoleServiceImpl implements IRoleService {
+public class RoleServiceImpl extends BaseService implements IRoleService {
 
     private final RoleDAO roleDAO;
 
@@ -119,8 +120,8 @@ public class RoleServiceImpl implements IRoleService {
 
 
     @Override
-    public OutVO<ListVO<RoleDTO>> list(RoleDTO roleDTO, Page page) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
+    public OutVO<TableVO<RoleDTO>> list(RoleDTO roleDTO, Page page) {
+        startPage(page);
         List<RolePO> poList = roleDAO.list(roleDTO);
         PageInfo<RolePO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, RoleDTO::new), pageInfo.getTotal());

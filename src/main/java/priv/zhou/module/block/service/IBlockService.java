@@ -1,8 +1,8 @@
 package priv.zhou.module.block.service;
 
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.block.domain.dto.BlockDTO;
 
@@ -22,7 +22,11 @@ public interface IBlockService {
 
     OutVO<BlockDTO> get(BlockDTO blockDTO);
 
-    OutVO<ListVO<BlockDTO>> list(BlockDTO blockDTO, Page page);
+    default OutVO<TableVO<BlockDTO>> list(BlockDTO blockDTO) {
+        return list(blockDTO, null);
+    }
+
+    OutVO<TableVO<BlockDTO>> list(BlockDTO blockDTO, Page page);
 
 
 }

@@ -110,10 +110,7 @@ public class ExtendServiceImpl implements IExtendService {
         return OutVO.success(outStream.toByteArray());
     }
 
-    public static void main(String[] args) {
 
-        System.out.println(Double.parseDouble(null));
-    }
     /**
      * 初始化Demo
      */

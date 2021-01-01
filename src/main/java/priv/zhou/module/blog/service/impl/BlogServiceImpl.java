@@ -1,16 +1,16 @@
 package priv.zhou.module.blog.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.blog.domain.dao.BlogDAO;
 import priv.zhou.module.blog.domain.dao.TagDAO;
@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.toSet;
  * @since 2020.09.14
  */
 @Service
-public class BlogServiceImpl implements IBlogService {
+public class BlogServiceImpl extends BaseService implements IBlogService {
 
     private final TagDAO tagDAO;
 
@@ -80,7 +80,7 @@ public class BlogServiceImpl implements IBlogService {
     public OutVO<NULL> update(BlogDTO blogDTO) {
         if (null == blogDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
-        } else if ( blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle()).setExclId(blogDTO.getId())) > 0) {
+        } else if (blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle()).setExclId(blogDTO.getId())) > 0) {
             return OutVO.fail(OutVOEnum.EXIST_NAME, "标题已存在");
         }
         BlogPO dbPO = blogDAO.get(new BlogDTO().setId(blogDTO.getId()));
@@ -108,8 +108,8 @@ public class BlogServiceImpl implements IBlogService {
     }
 
     @Override
-    public OutVO<ListVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
+    public OutVO<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
+        startPage(page);
         List<BlogPO> poList = blogDAO.list(blogDTO);
         PageInfo<BlogPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, BlogDTO::new), pageInfo.getTotal());

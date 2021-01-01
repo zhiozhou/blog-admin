@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
@@ -46,7 +46,7 @@ public class ImageRestController {
 
     @RequiresPermissions("system:image:list")
     @RequestMapping("/list")
-    public OutVO<ListVO<ImageDTO>> list(ImageDTO imageDTO, Page page) {
+    public OutVO<TableVO<ImageDTO>> list(ImageDTO imageDTO, Page page) {
         return imageService.list(imageDTO, page);
     }
 

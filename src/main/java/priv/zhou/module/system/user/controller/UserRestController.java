@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
@@ -107,7 +107,7 @@ public class UserRestController {
 
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
-    public OutVO<ListVO<UserDTO>> list(UserDTO userDTO, Page page) {
+    public OutVO<TableVO<UserDTO>> list(UserDTO userDTO, Page page) {
         return userService.list(userDTO, page);
     }
 

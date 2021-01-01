@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.module.system.extend.domain.dto.TableDTO;
 import priv.zhou.module.system.extend.service.IExtendService;
@@ -37,7 +37,7 @@ public class ExtendRestController {
 
     @RequiresPermissions("system:extend:index")
     @RequestMapping("/table/list")
-    public OutVO<ListVO<TableDTO>> list(TableDTO tableDTO, Page page) {
+    public OutVO<TableVO<TableDTO>> list(TableDTO tableDTO, Page page) {
         return tableService.list(tableDTO, page);
     }
 

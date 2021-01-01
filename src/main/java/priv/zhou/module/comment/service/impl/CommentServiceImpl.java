@@ -7,10 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.service.BaseService;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.block.domain.dto.BlockDTO;
 import priv.zhou.module.block.service.IBlockService;
@@ -32,7 +33,7 @@ import static priv.zhou.common.misc.Const.ZHOU_VISITOR_ID;
  * @since 2020.09.17
  */
 @Service
-public class CommentServiceImpl implements ICommentService {
+public class CommentServiceImpl extends BaseService implements ICommentService {
 
     private final CommentDAO commentDAO;
 
@@ -75,8 +76,8 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
+    public OutVO<TableVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
+        startPage(page);
         List<CommentPO> poList = commentDAO.list(commentDTO, order);
         PageInfo<CommentPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, CommentDTO::new), pageInfo.getTotal());

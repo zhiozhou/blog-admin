@@ -1,16 +1,16 @@
 package priv.zhou.module.system.dict.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -33,7 +33,7 @@ import static priv.zhou.common.misc.Const.BS_DICT_DATA_MODIFIED_KEY;
  * @since 2020.04.17
  */
 @Service
-public class DictServiceImpl implements IDictService {
+public class DictServiceImpl extends BaseService implements IDictService {
 
     private final DictDAO dictDAO;
 
@@ -132,8 +132,8 @@ public class DictServiceImpl implements IDictService {
 
 
     @Override
-    public OutVO<ListVO<DictDTO>> list(DictDTO dictDTO, Page page) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
+    public OutVO<TableVO<DictDTO>> list(DictDTO dictDTO, Page page) {
+        startPage(page);
         List<DictPO> poList = dictDAO.list(dictDTO);
         PageInfo<DictPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, DictDTO::new), pageInfo.getTotal());
@@ -143,7 +143,7 @@ public class DictServiceImpl implements IDictService {
     @Override
     public List<DictDataDTO> listData(String dictKey, boolean all) {
         DictDataDTO dto = new DictDataDTO().setDictKey(dictKey);
-        if(!all){
+        if (!all) {
             dto.setType(PUBLIC_TYPE);
         }
         return DTO.ofPO(dictDAO.listData(dto), DictDataDTO::new);

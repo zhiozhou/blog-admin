@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
@@ -48,7 +48,7 @@ public class BlogRestController {
 
 
     @RequestMapping("/list")
-    public OutVO<ListVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
+    public OutVO<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
         return blogService.list(blogDTO, page);
     }
 

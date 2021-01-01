@@ -2,8 +2,8 @@ package priv.zhou.module.comment.service;
 
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 
@@ -26,7 +26,11 @@ public interface ICommentService {
 
     OutVO<CommentDTO> get(CommentDTO commentDTO);
 
-    OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order);
+    default OutVO<TableVO<CommentDTO>> list(CommentDTO commentDTO, Order order) {
+        return list(commentDTO, null, order);
+    }
+
+    OutVO<TableVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order);
 
     OutVO<NULL> reply(CommentDTO commentDTO);
 

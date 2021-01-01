@@ -34,20 +34,20 @@
             <a class="layui-btn layui-btn-sm" lay-event="detail"
                shiro:hasPermi=ssion=${_module.permissionPrefix+':detail'}>查看</a>
             {{# if( d.state == 0) { }}
-                <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass"
-                   shiro:hasPermission=${_module.permissionPrefix+':check'}>通过</a>
-                <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="noPass"
-                   shiro:hasPermission=${_module.permissionPrefix+':check'}>屏蔽</a>
-                <a class="layui-btn layui-bg-black layui-btn-sm" lay-event="block"
-                   shiro:hasPermission=${_module.permissionPrefix+':block'}>禁言</a>
+            <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass"
+               shiro:hasPermission=${_module.permissionPrefix+':check'}>通过</a>
+            <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="noPass"
+               shiro:hasPermission=${_module.permissionPrefix+':check'}>屏蔽</a>
+            <a class="layui-btn layui-bg-black layui-btn-sm" lay-event="block"
+               shiro:hasPermission=${_module.permissionPrefix+':block'}>禁言</a>
             {{#  } else if(d.state == 1 ){ }}
-                {{#  if(d.fromVisitor.id != 0 ){ }}
-                <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="reply"
-                   shiro:hasPermission=${_module.permissionPrefix+':reply'}>回复</a>
-                {{#  } else { }}
-                <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="updateReply"
-                   shiro:hasPermission=${_module.permissionPrefix+':reply'}>修改回复</a>
-                {{#  } }}
+            {{#  if(d.fromVisitor.id != 0 ){ }}
+            <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="reply"
+               shiro:hasPermission=${_module.permissionPrefix+':reply'}>回复</a>
+            {{#  } else { }}
+            <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="updateReply"
+               shiro:hasPermission=${_module.permissionPrefix+':reply'}>修改回复</a>
+            {{#  } }}
             {{#  } }}
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
                shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
@@ -79,9 +79,7 @@
                     ]]
 
                 tableRender(table, {cols})
-                table.on('tool(table)', toolHandle)
-
-                function toolHandle({data, event}) {
+                table.on('tool(table)', ({data, event}) => {
                     switch (event) {
                         case 'reply':
                             newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`)
@@ -106,8 +104,9 @@
                             break
                     }
                     iframeAction({data, event})
-                }
+                })
             })
+
         </script>
     </body>
 

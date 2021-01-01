@@ -1,8 +1,8 @@
 package priv.zhou.module.system.user.service;
 
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 
@@ -26,5 +26,9 @@ public interface IUserService {
 
     OutVO<UserDTO> get(UserDTO userDTO);
 
-    OutVO<ListVO<UserDTO>> list(UserDTO userDTO, Page page);
+    default OutVO<TableVO<UserDTO>> list(UserDTO userDTO) {
+        return list(userDTO, null);
+    }
+
+    OutVO<TableVO<UserDTO>> list(UserDTO userDTO, Page page);
 }

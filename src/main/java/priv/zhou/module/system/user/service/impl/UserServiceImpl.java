@@ -1,6 +1,5 @@
 package priv.zhou.module.system.user.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -9,10 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
 import priv.zhou.common.domain.vo.OutVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
+import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -34,7 +34,7 @@ import static priv.zhou.common.misc.Const.SHIRO_ITERATIONS;
  * @since 2020.04.20
  */
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl extends BaseService implements IUserService {
 
     private final UserDAO userDAO;
 
@@ -92,7 +92,7 @@ public class UserServiceImpl implements IUserService {
             return OutVO.fail(OutVOEnum.EXIST_KEY);
         } else if (userDAO.update(userPO) < 1) {
             return OutVO.fail(OutVOEnum.FAIL_OPERATION);
-        }else if ( userDAO.removeRole(userPO)<1 || userDAO.saveRole(userPO)<1){
+        } else if (userDAO.removeRole(userPO) < 1 || userDAO.saveRole(userPO) < 1) {
             throw new GlobalException().setOutVO(OutVO.fail(OutVOEnum.FAIL_OPERATION));
         }
         return OutVO.success();
@@ -105,9 +105,6 @@ public class UserServiceImpl implements IUserService {
         }
         return userDAO.update(userDTO.toPO()) > 0 ? OutVO.success() : OutVO.fail(OutVOEnum.FAIL_OPERATION);
     }
-
-
-
 
 
     @Override
@@ -138,8 +135,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public OutVO<ListVO<UserDTO>> list(UserDTO userDTO, Page page) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
+    public OutVO<TableVO<UserDTO>> list(UserDTO userDTO, Page page) {
+        startPage(page);
         List<UserPO> poList = userDAO.list(userDTO);
         PageInfo<UserPO> pageInfo = new PageInfo<>(poList);
         return OutVO.list(DTO.ofPO(poList, UserDTO::new), pageInfo.getTotal());

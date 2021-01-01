@@ -2,8 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-        <div class="layout-page"  >
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}" th:with="isAdd='/rest/save'==${_action}" >
+        <div class="layout-page">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
+                  th:with="isAdd='/rest/save'==${_action}">
 
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
@@ -72,7 +73,7 @@
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove">移除</a>
         </script>
         <script th:inline="javascript">
-            const dataList = [[${_vo.dataList}]]
+            const dictData = [[${_vo.dataList}]]
         </script>
         <script th:inline="none">
             const prefix = `${_gate}system/dict`
@@ -81,14 +82,14 @@
                 1: {spare: 'layui-btn-primary', info: '预留'},
                 11: {spare: '', info: '系统'},
             }
-            let tindex  // 默认数据索引
+            let topIndex  // 默认数据索引
 
             layui.use(['table', 'form', 'jquery'], () => {
                 const {table, form, jquery: $} = layui
                 table.render({
                     id: 'data-table',
                     elem: '#data-table',
-                    data: dataList,
+                    data: dictData,
                     cellMinWidth: '80',
                     cols: [[
                         {field: 'code', title: '编码值', edit: true},
@@ -114,31 +115,28 @@
                         },
                         {title: '操作', toolbar: '#dict-tool'}
                     ]],
-                    done: () => {
-                        tindex = $('.t').parents('tr').data('index')
-                    }
+                    done: () => topIndex = $('.t').parents('tr').data('index')
                 })
 
 
                 //监听提交
                 form.on('submit(submit)', ({form, field}) => {
-                    // 数据项加入提交数据
-                    let codeSet = []
-                    for (let i in dataList) {
-                        let {code} = temp = dataList[i]
-                        if (code) {
-                            if (codeSet.includes(code)) {
-                                return warn('数据项编码值不可重复')
-                            }
-                            codeSet.push(code)
-                            for (let key in temp) {
-                                field[`dataList[${i}].${key}`] = temp[key]
-                            }
-                        }
+
+                    let distList = dictData.filter(d => d.code)
+                    if (!dictList.length) {
+                        return warn('数据项不可为空')
                     }
-                    // 判空
-                    if (0 === codeSet.length) {
-                        return warn('数据项至少存在一个')
+
+                    let codeSet = new Set()
+                    for (let i in distList) {
+                        let {code} = temp = dictData[i]
+                        if (codeSet.has(code)) {
+                            return warn('数据项不可重复')
+                        }
+                        codeSet.push(code)
+                        for (let key in temp) {
+                            field[`dataList[${i}].${key}`] = temp[key]
+                        }
                     }
 
                     pageSubmit({form, field})
@@ -153,28 +151,29 @@
                     let index = tr.data('index')
                     switch (action) {
                         case 'insert':
-                            dataList.splice(1 + index, 0, {type: 0, top: 0})
+                            dictData.splice(1 + index, 0, {type: 0, top: 0})
                             break
                         case 'remove':
-                            if (1 === dataList.length) {
+                            if (1 === dictData.length) {
                                 return warn('数据项至少存在一个')
                             }
-                            dataList.splice(index, 1)
+                            dictData.splice(index, 1)
                             break
                     }
-                    table.reload('data-table', {data: dataList})
+                    table.reload('data-table', {data: dictData})
                 }
 
                 // 数据编辑
                 table.on('edit(data-table)', ({tr, field, value}) => {
-                    dataList[tr.data('index')][field] = value
+                    dictData[tr.data('index')][field] = value
                 })
 
                 // 修改状态
-                $('body').on('click', '.type-btn', function () {
-                    let index = $(this).parents('tr').data('index')
-                    let type = $(this).data('type')
-                    $(this).removeClass(typeMap[type].spare)
+                $('.layui-form').on('click', '.type-btn', function () {
+                    let btn = $(this),
+                        type = btn.data('type'),
+                        index = btn.parents('tr').data('index')
+                    btn.removeClass(typeMap[type].spare)
                     switch (type) {
                         case 0:
                             type = 1
@@ -187,20 +186,18 @@
                             break
                     }
                     let {spare, info} = typeMap[type]
-                    $(this).addClass(spare).html(info).data('type', type)
-                    dataList[index].type = type
-                })
-
-
-                // 修改默认
-                $('body').on('click', '.top-btn', function () {
+                    btn.data('type', type)
+                        .html(info)
+                        .addClass(spare)
+                    dictData[index].type = type
+                }).on('click', '.top-btn', function () {
                     let index = $(this).parents('tr').data('index')
-                    if (tindex !== index) {
-                        if (0 == tindex || tindex) {
-                            dataList[tindex].top = 0
+                    if (topIndex !== index) {
+                        if (0 === topIndex || topIndex) {
+                            dictData[topIndex].top = 0
                         }
-                        dataList[index].top = 1
-                        table.reload('data-table', {data: dataList})
+                        dictData[index].top = 1
+                        table.reload('data-table', {data: dictData})
                     }
                 })
             })

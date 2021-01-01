@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.vo.ListVO;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.domain.vo.OutVO;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.OutVOEnum;
@@ -39,7 +39,7 @@ public class CommentRestController {
     }
 
     @RequestMapping("/list")
-    public OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
+    public OutVO<TableVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
         return commentService.list(commentDTO, page, order);
     }
 
