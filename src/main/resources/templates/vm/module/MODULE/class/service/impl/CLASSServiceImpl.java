@@ -5,10 +5,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import ${app.packet}.common.domain.dto.Page;
-import ${app.packet}.common.domain.vo.OutVO;
+import ${app.packet}.common.domain.vo.Result;
 import ${app.packet}.common.param.NULL;
+import ${app.packet}.common.service.BaseService;
 import ${app.packet}.common.domain.vo.ListVO;
-import ${app.packet}.common.param.OutVOEnum;
+import ${app.packet}.common.param.ResultEnum;
 import ${app.packet}.common.domain.dto.DTO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dao.${table.className}DAO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
@@ -25,7 +26,7 @@ import java.util.List;
  * @since ${app.since}
  */
 @Service
-public class ${table.className}ServiceImpl implements I${table.className}Service {
+public class ${table.className}ServiceImpl extends BaseServic implements I${table.className}Service {
 
     private final ${table.className}DAO ${table.objectName}DAO;
 
@@ -34,48 +35,46 @@ public class ${table.className}ServiceImpl implements I${table.className}Service
     }
 
     @Override
-    public OutVO<NULL> save(${table.className}DTO ${table.objectName}DTO) {
+    public Result<NULL> save(${table.className}DTO ${table.objectName}DTO) {
 
         ${table.className}PO ${table.objectName}PO = ${table.objectName}DTO.toPO();
         return ${table.objectName}DAO.save(${table.objectName}PO) > 0 ?
-                OutVO.success():
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+                Result.success():
+                Result.fail(ResultEnum.FAIL_OPERATION);
 
     }
 
     @Override
-    public OutVO<NULL> remove(${table.className}DTO ${table.objectName}DTO) {
+    public Result<NULL> remove(${table.className}DTO ${table.objectName}DTO) {
         if (null == ${table.objectName}DTO.getId()) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
         return  ${table.objectName}DAO.remove(${table.objectName}DTO) > 0 ?
-            OutVO.success():
-            OutVO.fail(OutVOEnum.FAIL_OPERATION);
+            Result.success():
+            Result.fail(ResultEnum.FAIL_OPERATION);
     }
 
     @Override
-    public OutVO<NULL> update(${table.className}DTO ${table.objectName}DTO) {
+    public Result<NULL> update(${table.className}DTO ${table.objectName}DTO) {
 
         ${table.className}PO ${table.objectName}PO = ${table.objectName}DTO.toPO();
         return  ${table.objectName}DAO.update(${table.objectName}PO) > 0 ?
-                OutVO.success():
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+                Result.success():
+                Result.fail(ResultEnum.FAIL_OPERATION);
 
     }
 
 
     @Override
-    public OutVO<${table.className}DTO> get(${table.className}DTO ${table.objectName}DTO) {
+    public Result<${table.className}DTO> get(${table.className}DTO ${table.objectName}DTO) {
 
         ${table.className}PO ${table.objectName}PO = ${table.objectName}DAO.get(${table.objectName}DTO);
-        return OutVO.success(new ${table.className}DTO(${table.objectName}PO));
+        return Result.success(new ${table.className}DTO(${table.objectName}PO));
     }
 
     @Override
-    public OutVO<ListVO<${table.className}DTO>> list(${table.className}DTO ${table.objectName}DTO, Page page) {
-        PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
-        List<${table.className}PO> poList = ${table.objectName}DAO.list(${table.objectName}DTO);
-        PageInfo<${table.className}PO> pageInfo = new PageInfo<>(poList);
-        return OutVO.list(DTO.ofPO(poList,${table.className}DTO::new),  pageInfo.getTotal());
+    public Result<List<${table.className}DTO>> list(${table.className}DTO ${table.objectName}DTO, Page page) {
+        startPage(page);
+        return Result.success(DTO.ofPO(${table.objectName}DAO.list(${table.objectName}DTO),${table.className}DTO::new));
     }
 }

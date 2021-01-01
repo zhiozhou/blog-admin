@@ -30,24 +30,24 @@ public class ${table.className}RestController {
     }
 
     @RequestMapping("/save")
-    public OutVO<NULL> save(@Valid ${table.className}DTO ${table.objectName}DTO) {
+    public Result<NULL> save(@Valid ${table.className}DTO ${table.objectName}DTO) {
         return ${table.objectName}Service.save(${table.objectName}DTO);
     }
 
     @RequestMapping("/remove/{id}")
-    public OutVO<NULL> remove(@PathVariable Integer id) {
+    public Result<NULL> remove(@PathVariable Integer id) {
         return ${table.objectName}Service.remove(new ${table.className}DTO().setId(id));
     }
 
     @RequestMapping("/update")
-    public OutVO<NULL> update(@Valid ${table.className}DTO ${table.objectName}DTO) {
+    public Result<NULL> update(@Valid ${table.className}DTO ${table.objectName}DTO) {
         return ${table.objectName}Service.update(${table.objectName}DTO);
     }
 
 
     @RequestMapping("/list")
-    public OutVO<ListVO<${table.className}DTO>> list(${table.className}DTO ${table.objectName}DTO, Page page) {
-        return ${table.objectName}Service.list(${table.objectName}DTO, page);
+    public Result<ListVO<${table.className}DTO>> list(${table.className}DTO ${table.objectName}DTO, Page page) {
+        return Result.table(${table.objectName}Service.list(${table.objectName}DTO, page));
     }
 
 }

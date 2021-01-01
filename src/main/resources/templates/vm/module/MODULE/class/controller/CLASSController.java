@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ${app.packet}.common.domain.Module;
-import ${app.packet}.common.domain.vo.OutVO;
+import ${app.packet}.common.domain.vo.Result;
+import priv.zhou.common.domain.vo.TableVO;
 import ${app.packet}.common.controller.BaseController;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.I${table.className}Service;
@@ -43,22 +44,22 @@ public class ${table.className}Controller extends BaseController {
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
 
-        OutVO<${table.className}DTO> dtoVO = ${table.objectName}Service.get(new ${table.className}DTO().setId(id));
-        if (dtoVO.isFail()) {
+        Result<${table.className}DTO> getRes = ${table.objectName}Service.get(new ${table.className}DTO().setId(id));
+        if (getRes.isFail()) {
             return NOT_FOUNT;
         }
-        super.update(model, dtoVO.getData());
+        super.update(model, getRes.getData());
 
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        OutVO<${table.className}DTO> dtoVO = ${table.objectName}Service.get(new ${table.className}DTO().setId(id));
-        if (dtoVO.isFail()) {
+        Result<${table.className}DTO> getRes = ${table.objectName}Service.get(new ${table.className}DTO().setId(id));
+        if (getRes.isFail()) {
             return NOT_FOUNT;
         }
-        super.detail(model, dtoVO.getData());
+        super.detail(model, getRes.getData());
 
         return "$!{app.modulePath}${table.objectName}/detail";
     }
