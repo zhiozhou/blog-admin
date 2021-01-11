@@ -6,7 +6,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -38,13 +38,13 @@ public class BlockServiceImpl extends BaseService implements IBlockService {
     @Override
     public Result<NULL> save(BlockDTO blockDTO) {
         if (StringUtils.isBlank(blockDTO.getIp()) || null == blockDTO.getType()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         return blockDAO.save(blockDTO.toPO()
                 .setCreator(new UserPO().setId(ShiroUtil.getUserId()))) > 0 ?
                 Result.success() :
-                Result.fail(OutEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.FAIL_OPERATION);
 
     }
 
@@ -52,9 +52,9 @@ public class BlockServiceImpl extends BaseService implements IBlockService {
     public Result<NULL> remove(BlockDTO blockDTO) {
         BlockPO blockPO = blockDAO.get(blockDTO);
         if (null == blockPO) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (blockDAO.update(blockPO.setGmtFreed(new Date())) < 1) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         }
         return Result.success();
     }

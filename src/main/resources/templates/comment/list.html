@@ -32,7 +32,7 @@
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="comment-tool">
             <a class="layui-btn layui-btn-sm" lay-event="detail"
-               shiro:hasPermi=ssion=${_module.permissionPrefix+':detail'}>查看</a>
+               shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
             {{# if( d.state == 0) { }}
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="pass"
                shiro:hasPermission=${_module.permissionPrefix+':check'}>通过</a>

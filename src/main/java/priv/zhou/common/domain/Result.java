@@ -7,7 +7,9 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.tools.HttpUtil;
+import priv.zhou.common.tools.OkHttpUtil;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class Result<T> {
+
 
     /**
      * 系统状态
@@ -39,12 +42,12 @@ public class Result<T> {
     }
 
 
-    public static <E> Result<E> build(OutEnum outEnum) {
-        return build(outEnum, null);
+    public static <E> Result<E> build(ResultEnum resultEnum) {
+        return build(resultEnum, null);
     }
 
-    public static <E> Result<E> build(OutEnum outEnum, E data) {
-        return build(outEnum.getCode(), outEnum.getInfo(), data);
+    public static <E> Result<E> build(ResultEnum resultEnum, E data) {
+        return build(resultEnum.getCode(), resultEnum.getInfo(), data);
     }
 
     public static <E> Result<E> build(String code, String info) {
@@ -63,21 +66,21 @@ public class Result<T> {
      */
     @JsonIgnore
     public boolean isFail() {
-        return !OutEnum.SUCCESS.getCode().equals(this.code);
+        return !ResultEnum.SUCCESS.getCode().equals(this.code);
     }
 
     /**
      * 返回api错误
      */
-    public static <E> Result<E> fail(OutEnum outEnum) {
-        return build(outEnum.getCode(), outEnum.getInfo());
+    public static <E> Result<E> fail(ResultEnum resultEnum) {
+        return build(resultEnum.getCode(), resultEnum.getInfo());
     }
 
     /**
      * 返回api错误
      */
-    public static <E> Result<E> fail(OutEnum outEnum, String info) {
-        return build(outEnum.getCode(), info);
+    public static <E> Result<E> fail(ResultEnum resultEnum, String info) {
+        return build(resultEnum.getCode(), info);
     }
 
 
@@ -85,7 +88,7 @@ public class Result<T> {
      * 返回api成功
      */
     public static Result<NULL> success() {
-        return build(OutEnum.SUCCESS);
+        return build(ResultEnum.SUCCESS);
     }
 
 
@@ -93,16 +96,9 @@ public class Result<T> {
      * 返回api成功
      */
     public static <T> Result<T> success(T data) {
-        return build(OutEnum.SUCCESS, data);
+        return build(ResultEnum.SUCCESS, data);
     }
 
-
-    /**
-     * OutVO转OutVO
-     */
-    public static <T> Result<T> ofBO(Result<T> Result) {
-        return build(Result.getCode(), Result.getInfo(), Result.getData());
-    }
 
     /**
      * 渲染转换TableVO

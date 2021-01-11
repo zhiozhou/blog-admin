@@ -7,7 +7,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -48,11 +48,11 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
         // 2.验证参数
         if (null == dictPO.getDataList() || dictPO.getDataList().isEmpty()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         } else if (dictDAO.count(new DictDTO().setName(dictPO.getName())) > 0) {
-            return Result.fail(OutEnum.EXIST_NAME);
+            return Result.fail(ResultEnum.EXIST_NAME);
         } else if (dictDAO.count(new DictDTO().setKey(dictPO.getKey())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 3.补充参数
@@ -60,9 +60,9 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
         // 4.保存字典
         if (dictDAO.save(dictPO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (dictDAO.saveData(dictPO) < 1) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         }
         return Result.success();
 
@@ -73,11 +73,11 @@ public class DictServiceImpl extends BaseService implements IDictService {
     @Transactional
     public Result<NULL> remove(DictDTO dictDTO) {
         if (StringUtils.isBlank(dictDTO.getKey())) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         } else if (dictDAO.remove(dictDTO) < 0) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (dictDAO.removeData(dictDTO) < 0) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         }
         return Result.success();
     }
@@ -89,11 +89,11 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
         // 1.验证参数
         if (null == dictDTO.getDataList() || dictDTO.getDataList().isEmpty()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         } else if (dictDAO.count(new DictDTO().setName(dictDTO.getName()).setExclId(dictDTO.getId())) > 0) {
-            return Result.fail(OutEnum.EXIST_NAME);
+            return Result.fail(ResultEnum.EXIST_NAME);
         } else if (dictDAO.count(new DictDTO().setKey(dictDTO.getKey()).setExclId(dictDTO.getId())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 3.补充参数
@@ -103,9 +103,9 @@ public class DictServiceImpl extends BaseService implements IDictService {
         // 4.修改字典
         DictPO dbPO = dictDAO.get(new DictDTO().setId(dictPO.getId()));
         if (dictDAO.update(dictPO) < 1) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         } else if (dictDAO.removeData(new DictDTO().setKey(dbPO.getKey())) < 1 || dictDAO.saveData(dictPO) < 1) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         } else if (DICT_SNS_KEY.equals(dbPO.getKey())) {
             RedisUtil.delete(BS_DICT_DATA_KEY + dictDTO.getKey());
             RedisUtil.delete(BS_DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
@@ -118,7 +118,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
     public Result<DictDTO> get(DictDTO dictDTO) {
         DictPO dictPO = dictDAO.get(dictDTO);
         if (null == dictPO) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         }
         return Result.success(new DictDTO(dictPO));
     }

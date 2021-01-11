@@ -9,7 +9,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -45,9 +45,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         // 1.验证参数
         if (StringUtils.isBlank(userDTO.getPassword())) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         } else if (userDAO.count(new UserDTO().setUsername(userDTO.getUsername())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
 
@@ -61,7 +61,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         // 4.保存用户
         if (userDAO.save(userPO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         }
 
         // 5.保存角色
@@ -73,7 +73,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public Result<NULL> remove(UserDTO userDTO) {
         if (null == userDTO.getId()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         userDAO.update(new UserPO().setId(userDTO.getId()).setState(12));
@@ -87,11 +87,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
         UserPO userPO = userDTO.toPO();
 
         if (userDAO.count(new UserDTO().setUsername(userPO.getUsername()).setExclId(userPO.getId())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         } else if (userDAO.update(userPO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (userDAO.removeRole(userPO) < 1 || userDAO.saveRole(userPO) < 1) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         }
         return Result.success();
     }
@@ -99,9 +99,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public Result<NULL> updateState(UserDTO userDTO) {
         if (null == userDTO.getId() || null == userDTO.getState()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
-        return userDAO.update(userDTO.toPO()) > 0 ? Result.success() : Result.fail(OutEnum.FAIL_OPERATION);
+        return userDAO.update(userDTO.toPO()) > 0 ? Result.success() : Result.fail(ResultEnum.FAIL_OPERATION);
     }
 
 
@@ -109,17 +109,17 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public Result<NULL> resetPwd(UserDTO userDTO) {
 
         if (null == userDTO.getId() || StringUtils.isBlank(userDTO.getPassword())) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         UserPO userPO = userDTO.toPO(),
                 db = userDAO.get(new UserDTO().setId(userPO.getId()));
         if (null == db) {
-            return Result.fail(OutEnum.FAIL_PARAM);
+            return Result.fail(ResultEnum.FAIL_PARAM);
         }
         userPO.setPassword(new SimpleHash(SHIRO_ALGORITHM, userPO.getPassword(), ByteSource.Util.bytes(db.getSalt()), SHIRO_ITERATIONS).toString());
         ShiroUtil.getUserRealm().clearAllCachedAuthenticationInfo();
-        return userDAO.update(userPO) > 0 ? Result.success() : Result.fail(OutEnum.FAIL_OPERATION);
+        return userDAO.update(userPO) > 0 ? Result.success() : Result.fail(ResultEnum.FAIL_OPERATION);
     }
 
 
@@ -127,7 +127,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public Result<UserDTO> get(UserDTO userDTO) {
         UserPO userPO = userDAO.get(userDTO);
         if (null == userPO) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         }
         return Result.success(new UserDTO(userPO));
     }

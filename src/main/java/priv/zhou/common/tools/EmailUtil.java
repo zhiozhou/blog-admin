@@ -1,5 +1,6 @@
 package priv.zhou.common.tools;
 
+import com.sun.javaws.security.AppContextUtil;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,11 +13,11 @@ import priv.zhou.common.misc.AppProperties;
  */
 public class EmailUtil {
 
-	private static JavaMailSender SENDER = AppContextUtil.getBean(JavaMailSender.class);
+	private static JavaMailSender SENDER = SpringUtils.getBean(JavaMailSender.class);
 
-	private static MailProperties PROPERTIES = AppContextUtil.getBean(MailProperties.class);
+	private static MailProperties PROPERTIES = SpringUtils.getBean(MailProperties.class);
 
-	private static AppProperties APP_PROPERTIES = AppContextUtil.getBean(AppProperties.class);
+	private static AppProperties APP_PROPERTIES = SpringUtils.getBean(AppProperties.class);
 
 
 	/**

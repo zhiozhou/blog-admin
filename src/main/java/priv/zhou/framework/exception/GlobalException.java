@@ -1,9 +1,10 @@
 package priv.zhou.framework.exception;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.common.domain.Result;
-import lombok.Getter;
+import priv.zhou.common.misc.ResultEnum;
 
 /**
  * 活动错误异常
@@ -14,9 +15,21 @@ import lombok.Getter;
 @Accessors(chain = true)
 public class GlobalException extends RuntimeException {
 
-	/**
-	 * 包含错误信息的vo对象
-	 */
-	private Result<?> result;
+    /**
+     * 包含错误信息的vo对象
+     */
+    private Result<?> result;
+
+    public GlobalException(Result<?> result) {
+        this.result = result;
+    }
+
+    public GlobalException(ResultEnum resultEnum) {
+        this.result = Result.fail(resultEnum);
+    }
+
+    public GlobalException(ResultEnum resultEnum, String info) {
+        this.result = Result.fail(resultEnum, info);
+    }
 
 }

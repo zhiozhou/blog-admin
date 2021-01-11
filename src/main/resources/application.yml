@@ -3,18 +3,11 @@ server:
   servlet:
     context-path: /${spring.application.name}
 spring:
-  application:
-    name: blog-admin
+  profiles:
+    active: dev
   datasource:
-    username: root
-    password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/test_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    database: 0
-    host: 127.0.0.1
-    password:
-    port: 6379
     timeout: 50s
     jedis:
       pool:
@@ -25,25 +18,37 @@ spring:
   thymeleaf:
     mode: HTML
     cache: false
+logging:
+  path: logs/
 mybatis:
   mapper-locations: classpath:mapper/*/*Mapper.xml,classpath:mapper/*Mapper.xml
   type-aliases-package: priv.zhou.module.*.*.domain,priv.zhou.module.*.domain
   configuration:
     map-underscore-to-camel-case: true
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-logging:
-  path: logs/
 app:
   enc: UTF-8
   name: ${spring.application.name}
-  email: false
+  email: true
   admin-email: flyingnoob@qq.com
   access-limit: 200
-  file-service:  http://zhousb.cn/file-service/
+  file-service: https://zhousb.cn/file-service/
   file-upload-prefix: zhousb-admin
+--- # --------------------------------------------- 开发环境 -------------------------------------------------------
+spring:
+  profiles: dev
+  application:
+    name: blog-admin
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/test_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
+  redis:
+    database: 0
+    host: 127.0.0.1
+    password:
+    port: 6379
 --- # --------------------------------------------- 正式环境 -------------------------------------------------------
-server:
-  port: 8101
 spring:
   profiles: prod
   application:
@@ -52,35 +57,8 @@ spring:
     username: ENC(4tON3HWNbp+2fpzDD/CJdQ==)
     password: ENC(7tU3j83fuVlwx3i3s8bxZAzAVaY39mpp)
     url: jdbc:mysql://127.0.0.1:3306/zhousb_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
-    driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     database: 0
     host: 127.0.0.1
     password: ENC(H1dbY0iQVMvilQXpfEMuoxCeWyfg7Emx)
     port: 6379
-    timeout: 50s
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 8
-        min-idle: 0
-  thymeleaf:
-    mode: HTML
-    cache: false
-mybatis:
-  mapper-locations: classpath:mapper/*/*Mapper.xml,classpath:mapper/*Mapper.xml
-  type-aliases-package: priv.zhou.module.*.*.domain,priv.zhou.module.*.domain
-  configuration:
-    map-underscore-to-camel-case: true
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-logging:
-  path: logs/
-app:
-  enc: UTF-8
-  name: ${spring.application.name}
-  email: true
-  admin-email: flyingnoob@qq.com
-  access-limit: 200
-  file-service:  https://zhousb.cn/file-service/
-  file-upload-prefix: zhousb-admin

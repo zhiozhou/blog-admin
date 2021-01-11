@@ -13,7 +13,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.tools.ParseUtil;
 import priv.zhou.common.tools.RsaUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -46,17 +46,17 @@ public class UserRestController {
             // 参数传入时需要将+号替换为%2B
             userDTO.setPassword(RsaUtil.decode(userDTO.getPassword(), RSA_PRIVATE_KEY));
         } catch (Exception e) {
-            return Result.fail(OutEnum.FAIL_PARAM);
+            return Result.fail(ResultEnum.FAIL_PARAM);
         }
 
         try {
             SecurityUtils.getSubject().login(new UsernamePasswordToken(userDTO.getUsername(), userDTO.getPassword(), ParseUtil.unBox(userDTO.getRememberMe())));
         } catch (UnknownAccountException e) {
-            return Result.fail(OutEnum.NONE_USERNAME);
+            return Result.fail(ResultEnum.NONE_USERNAME);
         } catch (LockedAccountException e) {
-            return Result.fail(OutEnum.LOCKED_USERNAME);
+            return Result.fail(ResultEnum.LOCKED_USERNAME);
         } catch (AuthenticationException e) {
-            return Result.fail(OutEnum.FAIL_LOGIN);
+            return Result.fail(ResultEnum.FAIL_LOGIN);
         }
         return Result.success();
     }

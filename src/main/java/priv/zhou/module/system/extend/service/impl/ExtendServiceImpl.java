@@ -9,7 +9,7 @@ import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.service.IDictService;
 import priv.zhou.module.system.extend.domain.Demo;
@@ -55,7 +55,7 @@ public class ExtendServiceImpl implements IExtendService {
     public Result<byte[]> module(List<String> tableNames) throws Exception {
 
         if (null == tableNames || tableNames.isEmpty()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         Map<String, DictDataDTO> configMap = dictService.mapData(CONFIG_KEY, true);

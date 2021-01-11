@@ -11,7 +11,7 @@ import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.LoginLimitFilter;
 import priv.zhou.module.system.monitor.domain.dto.OnlineDTO;
@@ -61,7 +61,7 @@ public class OnlineServiceImpl implements IOnlineService {
     @Override
     public Result<NULL> offline(String id) {
         if (id.equals(ShiroUtil.getSession().getId())) {
-            return Result.fail(OutEnum.FAIL_PARAM);
+            return Result.fail(ResultEnum.FAIL_PARAM);
         }
         try {
             Session session = sessionManager.getSession(new DefaultSessionKey(id));
@@ -69,7 +69,7 @@ public class OnlineServiceImpl implements IOnlineService {
             sessionDAO.delete(session);
             return Result.success();
         } catch (UnknownSessionException e) {
-            return Result.fail(OutEnum.FAIL_OPERATION, e.getMessage());
+            return Result.fail(ResultEnum.FAIL_OPERATION, e.getMessage());
         }
     }
 

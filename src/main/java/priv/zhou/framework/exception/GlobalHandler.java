@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.misc.AppProperties;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.HttpUtil;
 
@@ -44,7 +44,7 @@ public class GlobalHandler {
         builder.append("请求参数 -->").append(HttpUtil.getParams(request)).append(" | ");
         builder.append("e -->");
         log.error(builder.toString(), e);
-        HttpUtil.out(response, Result.fail(OutEnum.ERROR_SYSTEM));
+        HttpUtil.out(response, Result.fail(ResultEnum.ERROR_SYSTEM));
         if (appProperties.isEmail()) {
             EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
         }
@@ -66,7 +66,7 @@ public class GlobalHandler {
     @ExceptionHandler(BindException.class)
     public void bindHand(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
         List<ObjectError> errs = e.getBindingResult().getAllErrors();
-        Result<?> result = Result.fail(OutEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
+        Result<?> result = Result.fail(ResultEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), result);
         HttpUtil.out(response, result);
     }
@@ -86,7 +86,7 @@ public class GlobalHandler {
      */
     @ExceptionHandler(UnauthorizedException.class)
     public void globalFailHand(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Result<NULL> result = Result.fail(OutEnum.ILLEGAL_VISIT);
+        Result<NULL> result = Result.fail(ResultEnum.ILLEGAL_VISIT);
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), result);
         HttpUtil.out(response, result);
     }

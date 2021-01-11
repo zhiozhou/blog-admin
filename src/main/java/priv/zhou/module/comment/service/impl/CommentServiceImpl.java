@@ -7,7 +7,7 @@ import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.block.domain.dto.BlockDTO;
@@ -44,24 +44,24 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
     @Override
     public Result<NULL> remove(CommentDTO commentDTO) {
         if (null == commentDTO.getId()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         return commentDAO.remove(commentDTO) < 1 ?
-                Result.fail(OutEnum.FAIL_OPERATION) :
+                Result.fail(ResultEnum.FAIL_OPERATION) :
                 Result.success();
     }
 
     @Override
     public Result<NULL> update(CommentDTO commentDTO) {
         if (null == commentDTO.getId()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         CommentPO commentPO = commentDTO.toPO();
         return commentDAO.update(commentPO) > 0 ?
                 Result.success() :
-                Result.fail(OutEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.FAIL_OPERATION);
 
     }
 
@@ -82,7 +82,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
     public Result<NULL> reply(CommentDTO commentDTO) {
         CommentPO targetPO = commentDAO.get(new CommentDTO().setId(commentDTO.getRepliedId()));
         if (null == targetPO || targetPO.getState().equals(0)) {
-            return Result.fail(OutEnum.FAIL_PARAM);
+            return Result.fail(ResultEnum.FAIL_PARAM);
         }
 
         CommentPO commentPO = commentDTO.toPO()
@@ -93,7 +93,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
                 .setTopicId(targetPO.getTopicId().equals(0) ? targetPO.getId() : targetPO.getTopicId());
         return commentDAO.save(commentPO) > 0 ?
                 Result.success() :
-                Result.fail(OutEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.FAIL_OPERATION);
     }
 
     @Override
@@ -101,16 +101,16 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
     public Result<NULL> block(Integer id, String reason) {
         CommentPO commentPO = commentDAO.get(new CommentDTO().setId(id));
         if (null == commentPO) {
-            return Result.fail(OutEnum.FAIL_PARAM);
+            return Result.fail(ResultEnum.FAIL_PARAM);
         } else if (commentDAO.update(commentPO.setState(10)) < 0) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (commentDAO.blockIP(commentPO.getIp()) < 1 ||
                 blockService.save(new BlockDTO()
                         .setType(0)
                         .setIp(commentPO.getIp())
                         .setReason(reason)
                         .setRemark(commentPO.getId().toString())).isFail()) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         }
         return Result.success();
     }

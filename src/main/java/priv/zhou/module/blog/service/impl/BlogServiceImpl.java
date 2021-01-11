@@ -7,7 +7,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.blog.domain.dao.BlogDAO;
@@ -47,7 +47,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
     public Result<NULL> save(BlogDTO blogDTO) {
 
         if (blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle())) > 0) {
-            return Result.fail(OutEnum.EXIST_NAME, "标题已存在");
+            return Result.fail(ResultEnum.EXIST_NAME, "标题已存在");
         }
 
         BlogPO blogPO = blogDTO.toPO()
@@ -55,7 +55,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
                 .setPv(0L)
                 .setCreateId(ShiroUtil.getUserId());
         if (blogDAO.save(blogPO) < 0) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         }
 
         saveTags(blogPO.getId(), blogPO.getTags(), false);
@@ -67,28 +67,28 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
     @Override
     public Result<NULL> remove(BlogDTO blogDTO) {
         if (null == blogDTO.getId()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         return blogDAO.update(blogDTO.toPO().setState(11)) > 0 ? Result.success() :
-                Result.fail(OutEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.FAIL_OPERATION);
     }
 
     @Override
     public Result<NULL> update(BlogDTO blogDTO) {
         if (null == blogDTO.getId()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         } else if (blogDAO.count(new BlogDTO().setTitle(blogDTO.getTitle()).setExclId(blogDTO.getId())) > 0) {
-            return Result.fail(OutEnum.EXIST_NAME, "标题已存在");
+            return Result.fail(ResultEnum.EXIST_NAME, "标题已存在");
         }
         BlogPO dbPO = blogDAO.get(new BlogDTO().setId(blogDTO.getId()));
         if (null == dbPO) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         }
 
         BlogPO blogPO = blogDTO.toPO();
         if (blogDAO.update(blogPO) < 0) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         }
 
         saveTags(blogPO.getId(), blogPO.getTags(), true);

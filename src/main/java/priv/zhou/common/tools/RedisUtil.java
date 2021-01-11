@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
     @SuppressWarnings("unchecked")
-    private final static RedisTemplate<String, Object> redisTemplate = AppContextUtil.getBean("redisTemplate", RedisTemplate.class);
+    private final static RedisTemplate<String, Object> redisTemplate = SpringUtils.getBean(RedisTemplate.class);
 
     static {
         redisTemplate.setKeySerializer(new StringRedisSerializer());

@@ -1,7 +1,7 @@
 package priv.zhou.common.tools;
 
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.framework.exception.GlobalException;
 
 import javax.crypto.Cipher;
@@ -48,7 +48,7 @@ public class RsaUtil {
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             return Base64Util.encode(cipher.doFinal(plainText.getBytes(UTF_8)));
         } catch (Exception e) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.LATER_RETRY));
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
     }
 
@@ -76,7 +76,7 @@ public class RsaUtil {
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             return new String(cipher.doFinal(bytes), UTF_8);
         } catch (Exception e) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.LATER_RETRY));
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
     }
 
@@ -118,7 +118,7 @@ public class RsaUtil {
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64Util.decode(keyB64));
             return KeyFactory.getInstance(CIPHER).generatePublic(keySpec);
         } catch (Exception e) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.LATER_RETRY));
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
 
     }
@@ -132,7 +132,7 @@ public class RsaUtil {
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64Util.decode(keyB64));
             return KeyFactory.getInstance(CIPHER).generatePrivate(keySpec);
         } catch (Exception e) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.LATER_RETRY));
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
 
     }
@@ -151,7 +151,7 @@ public class RsaUtil {
             System.out.println("私钥：" + Base64Util.encode(keyPair.getPrivate().getEncoded()).replace("\r\n", ""));
             return generator.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.LATER_RETRY));
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
     }
 

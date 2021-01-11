@@ -6,7 +6,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.PinyinUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -41,14 +41,14 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
         // 3.验证参数
         if (roleDAO.count(new RoleDTO().setName(roleDTO.getName())) > 0) {
-            return Result.fail(OutEnum.EXIST_NAME);
+            return Result.fail(ResultEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 4.保存角色
         if (roleDAO.save(rolePO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         }
 
         // 5.保存菜单
@@ -61,11 +61,11 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
     @Override
     public Result<NULL> remove(RoleDTO roleDTO) {
         if (null == roleDTO.getId()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         } else if (roleDAO.countUser(roleDTO) > 0) {
-            return Result.fail(OutEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
+            return Result.fail(ResultEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
         } else if (roleDAO.remove(roleDTO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         }
         roleDAO.clearMenu(roleDTO);
         return Result.success();
@@ -79,16 +79,16 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
         // 2.验证参数
         if (roleDAO.count(new RoleDTO().setName(rolePO.getName()).setExclId(rolePO.getId())) > 0) {
-            return Result.fail(OutEnum.EXIST_NAME);
+            return Result.fail(ResultEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey()).setExclId(roleDTO.getId())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 3.补充参数
         rolePO.setModifiedId(ShiroUtil.getUserId());
 
         if (roleDAO.update(rolePO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         }
 
         // 4.清除菜单
@@ -110,7 +110,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
         RolePO rolePO = roleDAO.get(roleDTO);
         if (null == rolePO) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         }
         return Result.success(new RoleDTO(rolePO));
     }

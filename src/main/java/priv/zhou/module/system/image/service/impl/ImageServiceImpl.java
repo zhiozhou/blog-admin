@@ -8,7 +8,7 @@ import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.AppProperties;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -44,7 +44,7 @@ public class ImageServiceImpl extends BaseService implements IImageService {
     @Override
     public Result<Integer> save(List<String> urlList, String remark) {
         if (null == urlList) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
         int failCount = 0;
         Integer userId = ShiroUtil.getUserId();
@@ -60,19 +60,19 @@ public class ImageServiceImpl extends BaseService implements IImageService {
     @Transactional
     public Result<NULL> remove(Integer id) {
         if (null == id) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
         ImageDTO queryDTO = new ImageDTO().setId(id);
         ImagePO imagePO = imageDAO.get(queryDTO);
         if (null != imagePO) {
             if (imageDAO.remove(queryDTO) < 1) {
-                return Result.fail(OutEnum.FAIL_OPERATION);
+                return Result.fail(ResultEnum.FAIL_OPERATION);
             }
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", imagePO.getUrl());
             Result<NULL> removeRes = httpPost("移除图片", appProperties.getFileService() + "/remove", params);
             if (removeRes.isFail()) {
-                throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+                throw new GlobalException(ResultEnum.FAIL_OPERATION);
             }
         }
         return Result.success();

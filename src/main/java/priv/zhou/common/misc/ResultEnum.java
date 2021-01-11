@@ -5,7 +5,7 @@ package priv.zhou.common.misc;
  * @author  zhou
  * @since 2019.03.11
  */
-public enum OutEnum {
+public enum ResultEnum {
 
 	SUCCESS("0000", "请求成功"),
 
@@ -40,12 +40,12 @@ public enum OutEnum {
 
 	OFTEN_OPERATION("9002", "操作频繁"),
 
-	RESPONSE_TIMEOUT("9003", "响应超时"),
+	TIMEOUT_RESPONSE("9003", "响应超时"),
 
 	ERROR_SYSTEM("9999", "系统异常");
 
 
-	OutEnum(String code, String info) {
+	ResultEnum(String code, String info) {
 		this.code = code;
 		this.info = info;
 	}

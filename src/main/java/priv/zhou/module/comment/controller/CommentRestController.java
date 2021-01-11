@@ -9,7 +9,7 @@ import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.tools.HttpUtil;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 import priv.zhou.module.comment.service.ICommentService;
@@ -57,7 +57,7 @@ public class CommentRestController {
     @RequestMapping("/reply/update")
     public Result<NULL> updateReply(CommentDTO commentDTO) {
         if (StringUtils.isBlank(commentDTO.getContent())) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
         return commentService.update(commentDTO);
     }

@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -41,10 +41,10 @@ public class MenuServiceImpl implements IMenuService {
 
         // 1.验证参数
         if (menuDAO.count(new MenuDTO().setName(menuDTO.getName()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
-            return Result.fail(OutEnum.EXIST_NAME);
+            return Result.fail(ResultEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType() && StringUtils.isNotBlank(menuDTO.getKey()) &&
                 menuDAO.count(new MenuDTO().setKey(menuDTO.getKey()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
 
@@ -54,7 +54,7 @@ public class MenuServiceImpl implements IMenuService {
 
         // 3.保存
         if (menuDAO.save(menuPO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
             // 4.移除服务端缓存
             RedisUtil.delete(BS_MENU_KEY);
@@ -68,14 +68,14 @@ public class MenuServiceImpl implements IMenuService {
     @Transactional
     public Result<NULL> remove(MenuDTO menuDTO) {
         if (null == menuDTO.getId()) {
-            return Result.fail(OutEnum.EMPTY_PARAM);
+            return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
         MenuPO menuPO = menuDAO.get(menuDTO);
         if (null == menuPO) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (menuDAO.remove(menuDTO) < 1 || roleDAO.clearMenu(new RoleDTO()) < 1) {
-            throw new GlobalException().setResult(Result.fail(OutEnum.FAIL_OPERATION));
+            throw new GlobalException(ResultEnum.FAIL_OPERATION);
         } else if (SERVICE_FLAG.equals(menuPO.getFlag())) {
             RedisUtil.delete(BS_MENU_KEY);
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);
@@ -95,21 +95,21 @@ public class MenuServiceImpl implements IMenuService {
                 .setId(menuDTO.getId())
                 .setFlag(menuDTO.getFlag()));
         if (null == menuDB) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (menuDAO.count(new MenuDTO()
                 .setName(menuDTO.getName())
                 .setExclId(menuDTO.getId())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0
         ) {
-            return Result.fail(OutEnum.EXIST_NAME);
+            return Result.fail(ResultEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType()
                 && menuDAO.count(new MenuDTO()
                 .setExclId(menuDTO.getId())
                 .setKey(menuDTO.getKey())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0) {
-            return Result.fail(OutEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 2.补充参数
@@ -118,7 +118,7 @@ public class MenuServiceImpl implements IMenuService {
 
         // 3.修改菜单
         if (menuDAO.update(menuPO) < 1) {
-            return Result.fail(OutEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (!menuDB.getKey().equals(menuPO.getKey())) {
             ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
         }
@@ -136,7 +136,7 @@ public class MenuServiceImpl implements IMenuService {
     public Result<MenuDTO> get(MenuDTO menuDTO) {
         MenuPO menuPO = menuDAO.get(menuDTO);
         if (null == menuPO) {
-            return Result.fail(OutEnum.EMPTY_DATA);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         }
         return Result.success(new MenuDTO(menuPO));
     }

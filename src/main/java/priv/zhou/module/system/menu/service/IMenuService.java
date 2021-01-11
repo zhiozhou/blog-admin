@@ -2,7 +2,7 @@ package priv.zhou.module.system.menu.service;
 
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.OutEnum;
+import priv.zhou.common.misc.ResultEnum;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 
@@ -45,8 +45,7 @@ public interface IMenuService {
                 dtoList.stream()
                         .filter(po -> entry.getKey().equals(po.getId()))
                         .findFirst()
-                        .orElseThrow(() -> new GlobalException()
-                                .setResult(Result.fail(OutEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey())))
+                        .orElseThrow(() -> new GlobalException(ResultEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey()))
                         .setChildList(entry.getValue());
             }
         }
