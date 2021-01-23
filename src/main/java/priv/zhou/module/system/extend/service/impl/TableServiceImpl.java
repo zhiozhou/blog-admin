@@ -1,5 +1,6 @@
 package priv.zhou.module.system.extend.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
@@ -12,13 +13,11 @@ import priv.zhou.module.system.extend.service.ITableService;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TableServiceImpl extends BaseService implements ITableService {
 
-    private TableDAO tableDAO;
+    private final TableDAO tableDAO;
 
-    public TableServiceImpl(TableDAO roleDAO) {
-        this.tableDAO = roleDAO;
-    }
 
 
     @Override

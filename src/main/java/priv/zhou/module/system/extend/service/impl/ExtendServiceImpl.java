@@ -1,5 +1,6 @@
 package priv.zhou.module.system.extend.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
@@ -37,6 +38,7 @@ import static priv.zhou.common.misc.Const.SEPARATOR;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ExtendServiceImpl implements IExtendService {
 
     private final TableDAO tableDAO;
@@ -45,11 +47,7 @@ public class ExtendServiceImpl implements IExtendService {
 
     private final IDictService dictService;
 
-    public ExtendServiceImpl(TableDAO tableDAO, ColumnDAO columnDAO, IDictService dictService) {
-        this.tableDAO = tableDAO;
-        this.columnDAO = columnDAO;
-        this.dictService = dictService;
-    }
+
 
     @Override
     public Result<byte[]> module(List<String> tableNames) throws Exception {

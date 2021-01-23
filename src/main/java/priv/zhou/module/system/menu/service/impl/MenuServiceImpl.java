@@ -1,5 +1,6 @@
 package priv.zhou.module.system.menu.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,16 +25,14 @@ import static priv.zhou.common.misc.Const.BS_MENU_KEY;
 import static priv.zhou.common.misc.Const.BS_MENU_MODIFIED_KEY;
 
 @Service
+@RequiredArgsConstructor
 public class MenuServiceImpl implements IMenuService {
 
     private final MenuDAO menuDAO;
 
     private final RoleDAO roleDAO;
 
-    public MenuServiceImpl(MenuDAO menuDAO, RoleDAO roleDAO) {
-        this.menuDAO = menuDAO;
-        this.roleDAO = roleDAO;
-    }
+
 
     @Override
     public Result<NULL> save(MenuDTO menuDTO) {

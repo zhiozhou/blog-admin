@@ -1,5 +1,6 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -26,13 +27,10 @@ import java.util.List;
  * @since ${app.since}
  */
 @Service
+@RequiredArgsConstructor
 public class ${table.className}ServiceImpl extends BaseServic implements I${table.className}Service {
 
     private final ${table.className}DAO ${table.objectName}DAO;
-
-    public ${table.className}ServiceImpl(${table.className}DAO ${table.objectName}DAO) {
-        this.${table.objectName}DAO = ${table.objectName}DAO;
-    }
 
     @Override
     public Result<NULL> save(${table.className}DTO ${table.objectName}DTO) {

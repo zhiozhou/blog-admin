@@ -1,5 +1,6 @@
 package priv.zhou.module.block.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
@@ -27,13 +28,10 @@ import java.util.List;
  * @since 2020.09.18
  */
 @Service
+@RequiredArgsConstructor
 public class BlockServiceImpl extends BaseService implements IBlockService {
 
     private final BlockDAO blockDAO;
-
-    public BlockServiceImpl(BlockDAO blockDAO) {
-        this.blockDAO = blockDAO;
-    }
 
     @Override
     public Result<NULL> save(BlockDTO blockDTO) {

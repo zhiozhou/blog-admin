@@ -7,6 +7,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.misc.AppProperties;
 import priv.zhou.common.misc.NULL;
@@ -15,7 +16,6 @@ import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.HttpUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,27 +27,24 @@ import java.util.List;
  */
 @Slf4j
 @ControllerAdvice
-public class GlobalHandler {
+public class GlobalHandler extends BaseController {
 
-    private final AppProperties appProperties;
-
-    public GlobalHandler(AppProperties appProperties) {
-        this.appProperties = appProperties;
+    public GlobalHandler() {
+        super(null);
     }
 
     /**
      * 全局异常
      */
     @ExceptionHandler(value = Exception.class)
-    public void globalHand(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception {
+    public Result<?> globalHand(HttpServletRequest request, Exception e) {
         StringBuilder builder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
         builder.append("请求参数 -->").append(HttpUtil.getParams(request)).append(" | ");
         builder.append("e -->");
         log.error(builder.toString(), e);
-        HttpUtil.out(response, Result.fail(ResultEnum.ERROR_SYSTEM));
-        if (appProperties.isEmail()) {
-            EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
-        }
+        EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
+        return Result.fail(ResultEnum.ERROR_SYSTEM);
+
     }
 
 
@@ -64,20 +61,20 @@ public class GlobalHandler {
      * 验证异常
      */
     @ExceptionHandler(BindException.class)
-    public void bindHand(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
+    public Result<?> bindHand(HttpServletRequest request, BindException e) {
         List<ObjectError> errs = e.getBindingResult().getAllErrors();
         Result<?> result = Result.fail(ResultEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), result);
-        HttpUtil.out(response, result);
+        return result;
     }
 
     /**
      * 全局错误异常
      */
     @ExceptionHandler(GlobalException.class)
-    public void globalFailHand(HttpServletRequest request, HttpServletResponse response, GlobalException e) throws Exception {
+    public Result<?> globalFailHand(HttpServletRequest request, GlobalException e) {
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getResult());
-        HttpUtil.out(response, e.getResult());
+        return e.getResult();
     }
 
 
@@ -85,10 +82,10 @@ public class GlobalHandler {
      * 无权限异常
      */
     @ExceptionHandler(UnauthorizedException.class)
-    public void globalFailHand(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Result<?> globalFailHand(HttpServletRequest request) {
         Result<NULL> result = Result.fail(ResultEnum.ILLEGAL_VISIT);
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), result);
-        HttpUtil.out(response, result);
+        return result;
     }
 
 
@@ -100,8 +97,8 @@ public class GlobalHandler {
             return outStream.toString(AppProperties.ENC);
         } catch (IOException ex) {
             ex.printStackTrace();
+            return null;
         }
-        return null;
     }
 
 }

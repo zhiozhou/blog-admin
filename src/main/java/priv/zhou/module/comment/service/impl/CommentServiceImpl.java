@@ -1,5 +1,6 @@
 package priv.zhou.module.comment.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.Result;
@@ -30,16 +31,12 @@ import static priv.zhou.common.misc.Const.ZHOU_VISITOR_ID;
  * @since 2020.09.17
  */
 @Service
+@RequiredArgsConstructor
 public class CommentServiceImpl extends BaseService implements ICommentService {
 
     private final CommentDAO commentDAO;
 
     private final IBlockService blockService;
-
-    public CommentServiceImpl(CommentDAO commentDAO, IBlockService blockService) {
-        this.commentDAO = commentDAO;
-        this.blockService = blockService;
-    }
 
     @Override
     public Result<NULL> remove(CommentDTO commentDTO) {

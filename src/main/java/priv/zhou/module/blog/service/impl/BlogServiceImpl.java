@@ -1,5 +1,6 @@
 package priv.zhou.module.blog.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,16 +32,13 @@ import static java.util.stream.Collectors.toSet;
  * @since 2020.09.14
  */
 @Service
+@RequiredArgsConstructor
 public class BlogServiceImpl extends BaseService implements IBlogService {
 
     private final TagDAO tagDAO;
 
     private final BlogDAO blogDAO;
 
-    public BlogServiceImpl(TagDAO tagDAO, BlogDAO blogDAO) {
-        this.tagDAO = tagDAO;
-        this.blogDAO = blogDAO;
-    }
 
     @Override
     @Transactional

@@ -1,5 +1,6 @@
 package priv.zhou.module.system.user.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
@@ -32,13 +33,11 @@ import static priv.zhou.common.misc.Const.SHIRO_ITERATIONS;
  * @since 2020.04.20
  */
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends BaseService implements IUserService {
 
     private final UserDAO userDAO;
 
-    public UserServiceImpl(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
 
     @Override
     public Result<NULL> save(UserDTO userDTO) {

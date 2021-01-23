@@ -1,5 +1,6 @@
 package priv.zhou.module.system.role.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
@@ -19,13 +20,11 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class RoleServiceImpl extends BaseService implements IRoleService {
 
     private final RoleDAO roleDAO;
 
-    public RoleServiceImpl(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
-    }
 
     @Override
     public Result<NULL> save(RoleDTO roleDTO) {

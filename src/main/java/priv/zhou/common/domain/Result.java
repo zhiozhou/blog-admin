@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.ResultEnum;
-import priv.zhou.common.tools.HttpUtil;
-import priv.zhou.common.tools.OkHttpUtil;
 
 import java.util.List;
 
@@ -20,7 +17,6 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class Result<T> {
-
 
     /**
      * 系统状态
@@ -36,11 +32,18 @@ public class Result<T> {
     private T data;
 
 
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
+    /**
+     * 状态玛是否错误
+     */
+    @JsonIgnore
+    public boolean isFail() {
+        return !ResultEnum.SUCCESS.equals(this);
     }
 
+
+    public static <E> Result<E> build() {
+        return new Result<>();
+    }
 
     public static <E> Result<E> build(ResultEnum resultEnum) {
         return build(resultEnum, null);
@@ -59,14 +62,20 @@ public class Result<T> {
         return result.setCode(code)
                 .setInfo(info)
                 .setData(data);
+
+
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 
     /**
-     * 状态玛是否错误
+     * 返回api错误
      */
-    @JsonIgnore
-    public boolean isFail() {
-        return !ResultEnum.SUCCESS.getCode().equals(this.code);
+    public static <E> Result<E> fail(Result<?> res) {
+        return build(res.getCode(), res.getInfo());
     }
 
     /**
@@ -87,7 +96,7 @@ public class Result<T> {
     /**
      * 返回api成功
      */
-    public static Result<NULL> success() {
+    public static <E> Result<E> success() {
         return build(ResultEnum.SUCCESS);
     }
 
@@ -98,7 +107,6 @@ public class Result<T> {
     public static <T> Result<T> success(T data) {
         return build(ResultEnum.SUCCESS, data);
     }
-
 
     /**
      * 渲染转换TableVO

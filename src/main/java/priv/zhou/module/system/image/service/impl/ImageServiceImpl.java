@@ -1,6 +1,7 @@
 package priv.zhou.module.system.image.service.impl;
 
 import com.google.common.collect.Maps;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.Result;
@@ -30,16 +31,12 @@ import static priv.zhou.common.tools.OkHttpUtil.httpPost;
  * @since 2020.06.01
  */
 @Service
+@RequiredArgsConstructor
 public class ImageServiceImpl extends BaseService implements IImageService {
 
     private final ImageDAO imageDAO;
 
     private final AppProperties appProperties;
-
-    public ImageServiceImpl(ImageDAO imageDAO, AppProperties appProperties) {
-        this.imageDAO = imageDAO;
-        this.appProperties = appProperties;
-    }
 
     @Override
     public Result<Integer> save(List<String> urlList, String remark) {

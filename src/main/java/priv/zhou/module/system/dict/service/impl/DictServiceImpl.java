@@ -1,5 +1,6 @@
 package priv.zhou.module.system.dict.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +32,10 @@ import static priv.zhou.common.misc.Const.BS_DICT_DATA_MODIFIED_KEY;
  * @since 2020.04.17
  */
 @Service
+@RequiredArgsConstructor
 public class DictServiceImpl extends BaseService implements IDictService {
 
     private final DictDAO dictDAO;
-
-    public DictServiceImpl(DictDAO dictDAO) {
-        this.dictDAO = dictDAO;
-    }
 
     @Override
     @Transactional

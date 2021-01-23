@@ -1,5 +1,6 @@
 package priv.zhou.module.system.monitor.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.apache.shiro.session.Session;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OnlineServiceImpl implements IOnlineService {
 
     private final SessionDAO sessionDAO;
@@ -31,12 +33,6 @@ public class OnlineServiceImpl implements IOnlineService {
 
     private final LoginLimitFilter loginLimitFilter;
 
-
-    public OnlineServiceImpl(SessionDAO sessionDAO, SessionManager sessionManager, LoginLimitFilter loginLimitFilter) {
-        this.sessionDAO = sessionDAO;
-        this.sessionManager = sessionManager;
-        this.loginLimitFilter = loginLimitFilter;
-    }
 
     @Override
     public Result<List<OnlineDTO>> list(OnlineDTO onlineDTO) {
