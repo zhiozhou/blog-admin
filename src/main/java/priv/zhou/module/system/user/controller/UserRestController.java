@@ -6,6 +6,7 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +60,15 @@ public class UserRestController {
             return Result.fail(ResultEnum.FAIL_LOGIN);
         }
         return Result.success();
+    }
+
+    public static void main(String[] args) {
+        String hashAlgorithmName = "MD5";//加密
+        String credentials = "zhou";//密码
+        int hashIterations = 1; //加密次数
+
+        Object obj = new SimpleHash(hashAlgorithmName, credentials, "111", hashIterations);//null 为盐
+        System.out.println(obj);
     }
 
     @RequiresPermissions("system:user:add")

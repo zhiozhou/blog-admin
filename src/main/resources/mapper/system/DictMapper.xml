@@ -19,46 +19,63 @@
         </collection>
     </resultMap>
 
-    <insert id="saveData" parameterType="DictDTO">
-        INSERT system_dict_data ( code, label, dict_key, type, top, spare )
-        VALUES
-        <foreach collection="dataList" index="index" item="item" separator=",">
-            ( #{item.code},#{item.label},#{key},#{item.type},#{item.top},#{item.spare} )
-        </foreach>
-    </insert>
+    <resultMap id="POMap" type="DictPO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="key" property="key"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="createBy" property="create_by"/>
+        <result column="modifiedBy" property="modified_by"/>
+        <result column="gmtCreate" property="gmt_create"/>
+        <result column="gmtModified" property="gmt_modified"/>
+        <result column="deleted" property="is_deleted"/>
+    </resultMap>
 
+    <resultMap id="TableVOMap" type="DictTableVO">
+        <result column="name" property="name"/>
+        <result column="key" property="key"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <sql id="POSql">
+        SELECT
+            id,
+            `name`,
+            `key`,
+            state,
+            remark,
+            create_by,
+            modified_by,
+            gmt_create,
+            gmt_modified,
+            is_deleted
+        FROM system_dict
+    </sql>
 
     <insert id="save" parameterType="DictPO">
-        INSERT INTO system_dict
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="name != null  and name != '' "> name ,</if>
-            <if test="key != null  and key != '' "> `key` ,</if>
-            <if test="state != null  "> state ,</if>
-            <if test="remark != null  and remark != '' "> remark ,</if>
-            create_id,
-            modified_id,
+        INSERT INTO system_dict(
+            `name`,
+            `key`,
+            state,
+            remark,
+            create_by,
             gmt_create,
-            gmt_modified
-        </trim>
-        values
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="name != null and name != ''">#{name} ,</if>
-            <if test="key != null and key != ''">#{key} ,</if>
-            <if test="state != null">#{state} ,</if>
-            <if test="remark != null and remark != ''">#{remark} ,</if>
-            #{createId},
-            #{createId},
+            is_deleted
+        )values(
+            #{name} ,
+            #{key} ,
+            #{state} ,
+            #{remark} ,
+            #{createBy},
             NOW(),
-            NOW()
-        </trim>
+            0
+        )
     </insert>
 
     <delete id="remove" parameterType="DictDTO">
-        delete from system_dict where `key` = #{key}
-    </delete>
-
-    <delete id="removeData" parameterType="DictDTO">
-         delete from system_dict_data where dict_key = #{key}
+        UPDATE system_dict SET is_deleted = 1 WHERE is_deleted = 0 and `key` = #{key}
     </delete>
 
     <update id="update" parameterType="DictPO">
@@ -68,13 +85,48 @@
             <if test="key != null and key != ''">`key` = #{key},</if>
             <if test="state != null"> state = #{state},</if>
             <if test="remark != null and remark != ''"> remark = #{remark},</if>
-            modified_id = #{modifiedId},
+            modified_by = #{modifiedBy},
             gmt_modified = NOW()
         </set>
-        WHERE id = #{id}
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="key != null and key != ''">AND `key` = #{key}</if>
+        </where>
     </update>
 
-    <select id="get" parameterType="DictDTO" resultMap="dictMap">
+    <select id="list" parameterType="DictQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        <where>
+            <if test="nameLike != null and nameLike != ''">and name LIKE CONCAT('%',#{nameLike},'%')</if>
+            <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
+            <if test="state != null"> and state = #{state}</if>
+        </where>
+    </select>
+
+    <select id="listTableVO" parameterType="DictQuery" resultMap="TableVOMap">
+        SELECT
+        `name`,
+        `key`,
+        state,
+        remark
+        FROM system_dict
+        <where>
+            is_deleted = 0
+            <if test="nameLike != null and nameLike != ''">and `name` LIKE CONCAT('%',#{nameLike},'%')</if>
+            <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
+            <if test="state != null"> and state = #{state}</if>
+        </where>
+    </select>
+
+    <select id="get" parameterType="DictQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="key != null and key != ''">AND `key` = #{key}</if>
+        </where>
+    </select>
+
+    <select id="getBO" parameterType="DictDTO" resultMap="dictMap">
         SELECT
             system_dict.id,
             name,
@@ -89,64 +141,19 @@
             spare
         FROM
             system_dict
-            LEFT JOIN system_dict_data ON system_dict.key = system_dict_data.dict_key
+        LEFT JOIN system_dict_data ON system_dict.key = system_dict_data.dict_key
         WHERE system_dict.id = #{id}
     </select>
 
-    <select id="getData" parameterType="DictDTO" resultType="DictDataPO">
-         SELECT
-            code,
-            label,
-            dict_key,
-            type,
-            top,
-            spare
-        FROM
-            system_dict_data
-        WHERE dict_key = #{dictKey} AND code = #{code}
-    </select>
-
-    <select id="list" parameterType="DictDTO" resultType="DictPO">
-        SELECT
-            id ,
-            name ,
-            `key` ,
-            state ,
-            remark
-        FROM system_dict
-        <where>
-            <if test="nameLike != null and nameLike != ''">and name LIKE CONCAT('%',#{nameLike},'%')</if>
-            <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
-            <if test="state != null"> and state = #{state}</if>
-        </where>
-        ORDER BY id DESC
-    </select>
-
-    <select id="listData" parameterType="DictDTO" resultType="DictDataPO">
-         SELECT
-            code,
-            label,
-            dict_key,
-            type,
-            top,
-            spare
-        FROM
-            system_dict_data
-        WHERE
-            system_dict_data.dict_key = #{dictKey}
-        <if test="type != null"> and type = #{type}</if>
-    </select>
-
-
-    <select id="count" parameterType="DictDTO" resultType="Integer">
+    <select id="count" parameterType="DictQuery" resultType="int">
         SELECT
             COUNT(0)
-        FROM
-        system_dict
+        FROM system_dict
         <where>
-            <if test="exclId != null ">and id != #{exclId}</if>
-            <if test="name != null and name != ''"> and name = #{name}</if>
+            <if test="ridId != null ">and id != #{ridId}</if>
+            <if test="name != null and name != ''"> and `name` = #{name}</if>
             <if test="key != null and key != ''"> and `key` = #{key}</if>
         </where>
     </select>
+
 </mapper>

@@ -91,7 +91,7 @@ public class UserController extends BaseController {
 
 
     @RequestMapping("/profile")
-    public String self(Model model) {
+    public String profile(Model model) {
         detail(model, ShiroUtil.getUserId());
         return "system/user/profile";
     }

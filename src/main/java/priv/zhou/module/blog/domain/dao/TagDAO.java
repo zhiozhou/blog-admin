@@ -3,7 +3,7 @@ package priv.zhou.module.blog.domain.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
-import priv.zhou.common.domain.dao.BaseDAO;
+import priv.zhou.common.domain.dao.BaseDAO1;
 import priv.zhou.module.blog.domain.dto.TagDTO;
 import priv.zhou.module.blog.domain.po.TagPO;
 
@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Mapper
 @Component
-public interface TagDAO extends BaseDAO<TagDTO, TagPO> {
+public interface TagDAO extends BaseDAO1<TagDTO, TagPO> {
 
     void saveMap(@Param("tags") Set<TagPO> tags, @Param("blogId") Integer blogId);
 

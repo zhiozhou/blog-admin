@@ -1,10 +1,11 @@
-package priv.zhou.module.system.dict.domain.po;
+package priv.zhou.module.system.dict.domain.bo;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import priv.zhou.module.system.dict.domain.po.DictDataPO;
 
-import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class DictPO implements Serializable{
+public class DictBO implements Serializable{
 
 
 	/**
@@ -47,14 +48,19 @@ public class DictPO implements Serializable{
 	private String remark;
 
 	/**
+	 * 数据列表
+	 */
+	private List<DictDataPO> dataList;
+
+	/**
 	 * 创建人
 	 */
-	private Integer createBy;
+	private Integer createId;
 
 	/**
 	 * 修改人
 	 */
-	private Integer modifiedBy;
+	private Integer modifiedId;
 
 	/**
 	 * 创建时间
@@ -66,8 +72,8 @@ public class DictPO implements Serializable{
 	 */
 	private Date gmtModified;
 
-	/**
-	 * 删除位
-	 */
-	private Boolean deleted;
+	@Override
+	public String toString() {
+		return JSON.toJSONString(this);
+	}
 }

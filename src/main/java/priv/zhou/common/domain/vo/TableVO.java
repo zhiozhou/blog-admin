@@ -22,11 +22,8 @@ public class TableVO<VO> {
     private Long count;
 
     private TableVO(List<VO> list) {
-
-        // todo: 封装了dto所以count是错的
-        PageInfo<VO> pageInfo = new PageInfo<>(list);
         this.list = list;
-        this.count = pageInfo.getTotal();
+        this.count = new PageInfo<>(list).getTotal();
     }
 
     public static <T> TableVO<T> build(List<T> list) {

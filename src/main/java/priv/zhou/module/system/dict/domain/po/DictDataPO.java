@@ -56,9 +56,4 @@ public class DictDataPO implements Serializable{
 	 */
 	private String spare;
 
-
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this);
-	}
 }

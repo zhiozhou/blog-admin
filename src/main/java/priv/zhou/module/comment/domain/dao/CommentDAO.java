@@ -1,12 +1,10 @@
 package priv.zhou.module.comment.domain.dao;
 
-import priv.zhou.common.domain.dao.BaseDAO;
+import priv.zhou.common.domain.dao.BaseDAO1;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 import priv.zhou.module.comment.domain.po.CommentPO;
-
-import java.util.List;
 
 
 /**
@@ -17,7 +15,7 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface CommentDAO extends BaseDAO<CommentDTO,CommentPO>{
+public interface CommentDAO extends BaseDAO1<CommentDTO,CommentPO>{
 
     Integer blockIP(String ip);
 }

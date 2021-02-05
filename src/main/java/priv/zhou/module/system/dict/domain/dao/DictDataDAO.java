@@ -3,12 +3,10 @@ package priv.zhou.module.system.dict.domain.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 import priv.zhou.common.domain.dao.BaseDAO;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.po.DictPO;
 import priv.zhou.module.system.dict.domain.query.DictQuery;
-import priv.zhou.module.system.dict.domain.vo.DictTableVO;
 
 import java.util.List;
 
@@ -21,7 +19,9 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface DictDAO extends BaseDAO<DictPO, DictQuery> {
+public interface DictDataDAO extends BaseDAO<DictPO, DictQuery> {
 
-    List<DictTableVO> listTableVO(DictQuery query);
+    int saveList(List<DictDataPO> poList);
+
+    int delete(DictQuery dictQuery);
 }

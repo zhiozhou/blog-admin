@@ -14,12 +14,17 @@ import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.dict.domain.dao.DictDAO;
+import priv.zhou.module.system.dict.domain.dao.DictDataDAO;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
+import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.po.DictPO;
+import priv.zhou.module.system.dict.domain.query.DictQuery;
 import priv.zhou.module.system.dict.service.IDictService;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static priv.zhou.common.misc.Const.BS_DICT_DATA_KEY;
 import static priv.zhou.common.misc.Const.BS_DICT_DATA_MODIFIED_KEY;
@@ -37,30 +42,39 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
     private final DictDAO dictDAO;
 
+    private final DictDataDAO dictDataDAO;
+
     @Override
     @Transactional
     public Result<NULL> save(DictDTO dictDTO) {
 
-        // 1.转换类型
-        DictPO dictPO = dictDTO.toPO();
-
-        // 2.验证参数
-        if (null == dictPO.getDataList() || dictPO.getDataList().isEmpty()) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        } else if (dictDAO.count(new DictDTO().setName(dictPO.getName())) > 0) {
+        if (dictDAO.count(new DictQuery().setName(dictDTO.getName())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
-        } else if (dictDAO.count(new DictDTO().setKey(dictPO.getKey())) > 0) {
+        } else if (dictDAO.count(new DictQuery().setKey(dictDTO.getKey())) > 0) {
             return Result.fail(ResultEnum.EXIST_KEY);
         }
 
-        // 3.补充参数
-        dictPO.setCreateId(ShiroUtil.getUserId());
+        DictPO dictPO = new DictPO()
+                .setKey(dictDTO.getKey())
+                .setName(dictDTO.getName())
+                .setGmtCreate(new Date())
+                .setState(dictDTO.getState())
+                .setCreateBy(ShiroUtil.getUserId());
 
         // 4.保存字典
         if (dictDAO.save(dictPO) < 1) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
-        } else if (dictDAO.saveData(dictPO) < 1) {
-            throw new GlobalException(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
+        } else if (dictDataDAO.saveList(dictDTO.getDataList()
+                .stream()
+                .map(dataDTO -> new DictDataPO()
+                        .setTop(dataDTO.getTop())
+                        .setCode(dataDTO.getCode())
+                        .setType(dataDTO.getType())
+                        .setLabel(dataDTO.getLabel())
+                        .setSpare(dataDTO.getSpare())
+                        .setDictKey(dataDTO.getDictKey()))
+                .collect(Collectors.toList())) < 1) {
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
 

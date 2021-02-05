@@ -2,7 +2,7 @@ package priv.zhou.module.system.image.domain.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
-import priv.zhou.common.domain.dao.BaseDAO;
+import priv.zhou.common.domain.dao.BaseDAO1;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
 import priv.zhou.module.system.image.domain.po.ImagePO;
 
@@ -15,5 +15,5 @@ import priv.zhou.module.system.image.domain.po.ImagePO;
  */
 @Mapper
 @Component
-public interface ImageDAO extends BaseDAO<ImageDTO, ImagePO>{
+public interface ImageDAO extends BaseDAO1<ImageDTO, ImagePO>{
 }

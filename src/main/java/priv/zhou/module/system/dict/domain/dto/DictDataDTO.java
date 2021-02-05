@@ -1,11 +1,11 @@
 package priv.zhou.module.system.dict.domain.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.module.system.dict.domain.po.DictDataPO;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 字典数据 数据传输模型
@@ -15,42 +15,24 @@ import priv.zhou.module.system.dict.domain.po.DictDataPO;
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @Accessors(chain = true)
-public class DictDataDTO extends DTO<DictDataPO> {
+public class DictDataDTO {
 
-    /**
-     * 标识码
-     */
+    @NotBlank(message = "标识码不可为空")
     private String code;
 
-    /**
-     * 标签
-     */
+    @NotBlank(message = "标签不可为空")
     private String label;
 
-    /**
-     * 字典标识
-     */
+    @NotBlank(message = "字典标识不可为空")
     private String dictKey;
 
-    /**
-     * 默认 0正常 1预留 11系统状态
-     */
+    @NotNull(message = "数据类型不可为空")
     private Integer type;
 
-    /**
-     * 默认 0正常 1默认
-     */
+    @NotNull(message = "默认标识不可为空")
     private Integer top;
 
-    /**
-     * 备用
-     */
     private String spare;
-
-    public DictDataDTO(DictDataPO dictDataPO) {
-        super(dictDataPO);
-    }
 
 }

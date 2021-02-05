@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.system.dict.domain.dao.DictDataDAO">
+
+    <resultMap id="POMap" type="DictDataPO">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="label" property="label"/>
+        <result column="dict_key" property="dict_key"/>
+        <result column="type" property="type"/>
+        <result column="top" property="top"/>
+        <result column="spare" property="spare"/>
+        <result column="deleted" property="is_deleted"/>
+    </resultMap>
+
+    <sql id="POSql">
+        SELECT
+            id,
+            `code`,
+            label,
+            dict_key,
+            type,
+            top,
+            spare,
+            is_deleted
+        FROM system_dict_data
+    </sql>
+
+    <insert id="saveList" parameterType="DictDataPO">
+        INSERT system_dict_data ( code, label, dict_key, type, top, spare, is_deleted )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            ( #{item.code},#{item.label},#{key},#{item.type},#{item.top},#{item.spare},0)
+        </foreach>
+    </insert>
+
+    <delete id="remove" parameterType="DictDataQuery">
+        update system_dict_data set is_deleted = 1 where is_deleted = 0 and dict_key = #{dictKey}
+    </delete>
+
+    <delete id="delete" parameterType="DictDataQuery">
+        delete from system_dict_data where dict_key = #{dictKey}
+    </delete>
+
+    <select id="list" parameterType="DictDataQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        <where>
+            is_deleted = 0
+            <if test="type != null"> and type = #{type}</if>
+            <if test="dictKey != null and dictKey != ''">and dict_key = #{dictKey}</if>
+        </where>
+    </select>
+
+    <select id="get" parameterType="DictDataQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        <where>
+            <if test="code != null and code != ''">and `code` = #{code</if>
+        </where>
+    </select>
+
+
+</mapper>
