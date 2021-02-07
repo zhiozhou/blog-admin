@@ -15,6 +15,14 @@
         <result column="deleted" property="is_deleted"/>
     </resultMap>
 
+    <resultMap id="VOMap" type="DictDataVO">
+        <result column="code" property="code"/>
+        <result column="label" property="label"/>
+        <result column="type" property="type"/>
+        <result column="top" property="top"/>
+        <result column="spare" property="spare"/>
+    </resultMap>
+
     <sql id="POSql">
         SELECT
             id,
@@ -60,5 +68,17 @@
         </where>
     </select>
 
-
+    <select id="listVO" parameterType="DictDataQuery" resultMap="VOMap">
+        SELECT
+            `code`,
+            label,
+            type,
+            top,
+            spare
+        FROM system_dict_data
+        <where>
+            <if test="type != null"> and type = #{type}</if>
+            <if test="dictKey != null and dictKey != ''">and dict_key = #{dictKey}</if>
+        </where>
+    </select>
 </mapper>

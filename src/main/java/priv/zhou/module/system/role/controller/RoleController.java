@@ -40,7 +40,7 @@ public class RoleController extends BaseController {
     @RequestMapping("/add")
     public String add(Model model) {
         super.add(model, new RoleDTO().setState(0));
-        model.addAttribute("stateList", dictService.listData(SYSTEM_ROLE_STATE));
+        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
         model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/role/au";
     }
@@ -54,7 +54,7 @@ public class RoleController extends BaseController {
         }
         super.update(model, dtoVO.getData());
 
-        model.addAttribute("stateList", dictService.listData(SYSTEM_ROLE_STATE));
+        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
         model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/role/au";
     }
@@ -78,7 +78,7 @@ public class RoleController extends BaseController {
     public String list(Model model) {
         super.list(model);
 
-        model.addAttribute("stateMap", dictService.mapData(SYSTEM_ROLE_STATE));
+        model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
         return "system/role/list";
     }
 }

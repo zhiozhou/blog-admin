@@ -53,7 +53,7 @@ public class CommentController extends BaseController {
     @RequestMapping("/list")
     public String list(Model model) {
         super.list(model);
-        model.addAttribute("stateMap", dictService.mapData(STATE_KEY));
+        model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY, DICT_NORM_TYPE));
         return "comment/list";
     }
 
@@ -78,7 +78,7 @@ public class CommentController extends BaseController {
     @RequestMapping("/block/{id}")
     public String block(Model model, @PathVariable Integer id) {
 
-        model.addAttribute("typeList", dictService.listData(BLOCK_TYPE_KEY));
+        model.addAttribute("typeList", dictService.listDataVO(BLOCK_TYPE_KEY, DICT_NORM_TYPE));
         model.addAttribute(ACTION_KEY, "/rest/block/" + id);
         return "comment/block";
     }

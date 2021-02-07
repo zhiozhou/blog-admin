@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.misc.ResultEnum;
-import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
+import priv.zhou.module.system.dict.domain.vo.DictDataVO;
 import priv.zhou.module.system.dict.service.IDictService;
 import priv.zhou.module.system.extend.domain.Demo;
 import priv.zhou.module.system.extend.domain.dao.ColumnDAO;
@@ -47,8 +47,6 @@ public class ExtendServiceImpl implements IExtendService {
 
     private final IDictService dictService;
 
-
-
     @Override
     public Result<byte[]> module(List<String> tableNames) throws Exception {
 
@@ -56,7 +54,7 @@ public class ExtendServiceImpl implements IExtendService {
             return Result.fail(ResultEnum.EMPTY_PARAM);
         }
 
-        Map<String, DictDataDTO> configMap = dictService.mapData(CONFIG_KEY, true);
+        Map<String, DictDataVO> configMap = dictService.mapDataVO(CONFIG_KEY);
         AppConfig appConfig = new AppConfig()
                 .setPacket(configMap.get("packet").getLabel())
                 .setAuthor(configMap.get("author").getLabel())

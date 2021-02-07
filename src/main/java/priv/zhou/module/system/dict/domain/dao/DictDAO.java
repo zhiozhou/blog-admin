@@ -9,6 +9,7 @@ import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.po.DictPO;
 import priv.zhou.module.system.dict.domain.query.DictQuery;
 import priv.zhou.module.system.dict.domain.vo.DictTableVO;
+import priv.zhou.module.system.dict.domain.vo.DictVO;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ import java.util.List;
 @Mapper
 @Component
 public interface DictDAO extends BaseDAO<DictPO, DictQuery> {
+
+    DictVO getVO(DictQuery query);
 
     List<DictTableVO> listTableVO(DictQuery query);
 }

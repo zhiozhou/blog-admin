@@ -23,7 +23,7 @@ import javax.servlet.ServletResponse;
 import java.io.Serializable;
 import java.util.Deque;
 
-import static priv.zhou.common.misc.Const.DEFAULT_FILL;
+import static priv.zhou.common.misc.Const.STR_0;
 import static priv.zhou.common.misc.Const.SESSION_KICK_OUT_KEY;
 
 /**
@@ -104,7 +104,7 @@ public class LoginLimitFilter extends AccessControlFilter {
             try {
                 Session kickOutSession = sessionManager.getSession(new DefaultSessionKey(sessionId));
                 if (kickOutSession != null) {
-                    kickOutSession.setAttribute(SESSION_KICK_OUT_KEY, DEFAULT_FILL);
+                    kickOutSession.setAttribute(SESSION_KICK_OUT_KEY, STR_0);
                 }
             } catch (UnknownSessionException e) {
                 log.info(e.getMessage());

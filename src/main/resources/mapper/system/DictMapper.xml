@@ -4,21 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.system.dict.domain.dao.DictDAO">
 
-    <resultMap id="dictMap" type="DictPO">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="key" property="key"/>
-        <result column="state" property="state"/>
-        <result column="remark" property="remark"/>
-        <collection property="dataList"  ofType="DictDataPO">
-            <result column="code" property="code"/>
-            <result column="label" property="label" />
-            <result column="data_type" property="type" />
-            <result column="top" property="top" />
-            <result column="spare" property="spare" />
-        </collection>
-    </resultMap>
-
     <resultMap id="POMap" type="DictPO">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
@@ -32,12 +17,29 @@
         <result column="deleted" property="is_deleted"/>
     </resultMap>
 
+    <resultMap id="VOMap" type="DictVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="key" property="key"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <collection property="dataList"  ofType="DictDataVO">
+            <result column="code" property="code"/>
+            <result column="label" property="label" />
+            <result column="type" property="type" />
+            <result column="top" property="top" />
+            <result column="spare" property="spare" />
+        </collection>
+    </resultMap>
+
     <resultMap id="TableVOMap" type="DictTableVO">
+        <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="key" property="key"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
     </resultMap>
+
 
     <sql id="POSql">
         SELECT
@@ -75,7 +77,7 @@
     </insert>
 
     <delete id="remove" parameterType="DictDTO">
-        UPDATE system_dict SET is_deleted = 1 WHERE is_deleted = 0 and `key` = #{key}
+        UPDATE system_dict SET is_deleted = 1 WHERE is_deleted = 0 and id = #{id}
     </delete>
 
     <update id="update" parameterType="DictPO">
@@ -94,6 +96,31 @@
         </where>
     </update>
 
+    <select id="get" parameterType="DictQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="key != null and key != ''">AND `key` = #{key}</if>
+        </where>
+    </select>
+
+    <select id="getVO" parameterType="DictQuery" resultMap="VOMap">
+        SELECT
+            dict.id,
+            dict.`name`,
+            dict.`key`,
+            dict.state,
+            dict.remark,
+            dict_data.`code`,
+            dict_data.label,
+            dict_data.type,
+            dict_data.top,
+            dict_data.spare
+        FROM system_dict AS dict
+        LEFT JOIN system_dict_data AS dict_data ON dict.`key` = dict_data.dict_key
+        WHERE dict.is_deleted = 0 and dict.id = #{id}
+    </select>
+
     <select id="list" parameterType="DictQuery" resultMap="POMap">
         <include refid="POSql"/>
         <where>
@@ -105,10 +132,11 @@
 
     <select id="listTableVO" parameterType="DictQuery" resultMap="TableVOMap">
         SELECT
-        `name`,
-        `key`,
-        state,
-        remark
+            id,
+            `name`,
+            `key`,
+            state,
+            remark
         FROM system_dict
         <where>
             is_deleted = 0
@@ -116,33 +144,6 @@
             <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
             <if test="state != null"> and state = #{state}</if>
         </where>
-    </select>
-
-    <select id="get" parameterType="DictQuery" resultMap="POMap">
-        <include refid="POSql"/>
-        <where>
-            <if test="id != null">AND id = #{id}</if>
-            <if test="key != null and key != ''">AND `key` = #{key}</if>
-        </where>
-    </select>
-
-    <select id="getBO" parameterType="DictDTO" resultMap="dictMap">
-        SELECT
-            system_dict.id,
-            name,
-            `key`,
-            system_dict.state,
-            remark,
-            code,
-            label,
-            dict_key,
-            system_dict_data.type data_type,
-            top,
-            spare
-        FROM
-            system_dict
-        LEFT JOIN system_dict_data ON system_dict.key = system_dict_data.dict_key
-        WHERE system_dict.id = #{id}
     </select>
 
     <select id="count" parameterType="DictQuery" resultType="int">

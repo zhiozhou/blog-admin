@@ -1,21 +1,13 @@
 package priv.zhou.module.system.dict.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.module.system.dict.domain.po.DictPO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
-
-import static java.util.Objects.nonNull;
 
 
 /**
@@ -27,8 +19,9 @@ import static java.util.Objects.nonNull;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class DictDTO{
+public class DictDTO {
 
+    private Integer id;
 
     @NotBlank(message = "名称不可为空")
     private String name;
@@ -38,6 +31,8 @@ public class DictDTO{
 
     @NotNull(message = "状态不可为空")
     private Integer state;
+
+    private String remark;
 
     @Valid
     @NotNull(message = "数据项不可为空")

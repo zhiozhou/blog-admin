@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.Result;
-import priv.zhou.module.system.dict.domain.dto.DictDTO;
-import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
+import priv.zhou.module.system.dict.domain.query.DictQuery;
+import priv.zhou.module.system.dict.domain.vo.DictDataVO;
+import priv.zhou.module.system.dict.domain.vo.DictVO;
 import priv.zhou.module.system.dict.service.IDictService;
 
 /**
@@ -34,29 +34,23 @@ public class DictController extends BaseController {
     @RequiresPermissions("system:dict:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        super.add(model, new DictDTO().setState(0).setDataList(Lists.newArrayList(new DictDataDTO().setType(0).setTop(0))));
+        super.add(model, new DictVO()
+                .setState(0)
+                .setDataList(Lists.newArrayList(new DictDataVO().setType(0).setTop(0))));
         return "system/dict/au";
     }
 
     @RequiresPermissions("system:dict:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        Result<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return NOT_FOUNT;
-        }
-        super.update(model, dtoVO.getData());
+        super.update(model, dictService.getVO(new DictQuery().setId(id)));
         return "system/dict/au";
     }
 
     @RequiresPermissions("system:dict:detail")
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        Result<DictDTO> dtoVO = dictService.get(new DictDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return NOT_FOUNT;
-        }
-        super.detail(model, dtoVO.getData());
+        super.detail(model, dictService.getVO(new DictQuery().setId(id)));
         return "system/dict/detail";
     }
 

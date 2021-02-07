@@ -6,7 +6,9 @@ import java.util.Map;
 
 public interface Const {
 
-    String DEFAULT_FILL = "0";
+    String STR_0 = "0";
+
+    String EMPTY_STR = "0";
 
 
     /**

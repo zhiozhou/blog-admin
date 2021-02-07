@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 
 /**
- * 字典 数据表格渲染领域模型
+ * 字典 数据渲染领域模型
  *
  * @author zhou
  * @since 2020.04.17
@@ -14,16 +16,17 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class DictTableVO {
+public class DictVO {
 
     private Integer id;
 
     private String name;
 
-    private String key;
-
     private Integer state;
+
+    private String key;
 
     private String remark;
 
+    private List<DictDataVO> dataList;
 }

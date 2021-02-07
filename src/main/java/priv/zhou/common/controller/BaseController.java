@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.misc.AppProperties;
+import priv.zhou.framework.exception.NotFoundException;
 import priv.zhou.module.system.dict.service.IDictService;
 
 import java.util.HashMap;
@@ -17,6 +18,8 @@ public class BaseController {
     protected IDictService dictService;
 
     protected Module module;
+
+    protected final Integer DICT_NORM_TYPE = 0;
 
     protected final String MODULE_KEY = "_module";
 
@@ -49,6 +52,9 @@ public class BaseController {
      * 修改页填充 提交地址，vo对象
      */
     protected void update(Model model, Object vo) {
+        if (null == vo) {
+            throw new NotFoundException();
+        }
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, UPDATE_ACTION);
@@ -58,6 +64,9 @@ public class BaseController {
      * 详情页填充：vo对象
      */
     protected void detail(Model model, Object vo) {
+        if (null == vo) {
+            throw new NotFoundException();
+        }
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
     }

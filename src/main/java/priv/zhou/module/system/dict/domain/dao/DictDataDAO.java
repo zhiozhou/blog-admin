@@ -6,7 +6,9 @@ import priv.zhou.common.domain.dao.BaseDAO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.po.DictPO;
+import priv.zhou.module.system.dict.domain.query.DictDataQuery;
 import priv.zhou.module.system.dict.domain.query.DictQuery;
+import priv.zhou.module.system.dict.domain.vo.DictDataVO;
 
 import java.util.List;
 
@@ -19,9 +21,11 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface DictDataDAO extends BaseDAO<DictPO, DictQuery> {
+public interface DictDataDAO extends BaseDAO<DictDataPO, DictDataQuery> {
 
     int saveList(List<DictDataPO> poList);
 
-    int delete(DictQuery dictQuery);
+    int delete(DictDataQuery query);
+
+    List<DictDataVO> listVO(DictDataQuery query);
 }

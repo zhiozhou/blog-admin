@@ -1,11 +1,10 @@
 package priv.zhou.module.system.dict.service.impl;
 
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.misc.NULL;
 import priv.zhou.common.misc.ResultEnum;
@@ -19,7 +18,11 @@ import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.dto.DictDataDTO;
 import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.po.DictPO;
+import priv.zhou.module.system.dict.domain.query.DictDataQuery;
 import priv.zhou.module.system.dict.domain.query.DictQuery;
+import priv.zhou.module.system.dict.domain.vo.DictDataVO;
+import priv.zhou.module.system.dict.domain.vo.DictTableVO;
+import priv.zhou.module.system.dict.domain.vo.DictVO;
 import priv.zhou.module.system.dict.service.IDictService;
 
 import java.util.Date;
@@ -51,7 +54,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
         if (dictDAO.count(new DictQuery().setName(dictDTO.getName())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (dictDAO.count(new DictQuery().setKey(dictDTO.getKey())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.REPEAT_KEY);
         }
 
         DictPO dictPO = new DictPO()
@@ -83,13 +86,20 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
     @Override
     @Transactional
-    public Result<NULL> remove(DictDTO dictDTO) {
-        if (StringUtils.isBlank(dictDTO.getKey())) {
+    public Result<NULL> remove(List<Integer> idList) {
+        if (null == idList) {
             return Result.fail(ResultEnum.EMPTY_PARAM);
-        } else if (dictDAO.remove(dictDTO) < 0) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
-        } else if (dictDAO.removeData(dictDTO) < 0) {
-            throw new GlobalException(ResultEnum.FAIL_OPERATION);
+        }
+        for (Integer id : idList) {
+
+            DictPO dictPO = dictDAO.get(new DictQuery().setId(id));
+            if (null == dictPO) {
+                return Result.fail(ResultEnum.EMPTY_DATA);
+            } else if (dictDAO.remove(new DictQuery().setId(id)) < 0) {
+                throw new GlobalException(ResultEnum.LATER_RETRY);
+            } else if (dictDataDAO.remove(new DictDataQuery().setDictKey(dictPO.getKey())) < 0) {
+                throw new GlobalException(ResultEnum.LATER_RETRY);
+            }
         }
         return Result.success();
     }
@@ -98,63 +108,68 @@ public class DictServiceImpl extends BaseService implements IDictService {
     @Transactional
     public Result<NULL> update(DictDTO dictDTO) {
 
+        if (dictDTO.getDataList().stream()
+                .map(DictDataDTO::getCode)
+                .distinct().count() != dictDTO.getDataList().size()) {
+            return Result.fail(ResultEnum.REPEAT_KEY);
+        }
 
-        // 1.验证参数
-        if (null == dictDTO.getDataList() || dictDTO.getDataList().isEmpty()) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        } else if (dictDAO.count(new DictDTO().setName(dictDTO.getName()).setExclId(dictDTO.getId())) > 0) {
+        DictPO dictPO = dictDAO.get(new DictQuery().setId(dictDTO.getId()));
+        if (null == dictPO) {
+            return Result.fail(ResultEnum.EMPTY_DATA);
+        } else if (!dictPO.getName().equals(dictDTO.getName()) &&
+                dictDAO.count(new DictQuery().setName(dictDTO.getName()).setRidId(dictPO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
-        } else if (dictDAO.count(new DictDTO().setKey(dictDTO.getKey()).setExclId(dictDTO.getId())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
-        }
-
-        // 3.补充参数
-        DictPO dictPO = dictDTO.toPO().setModifiedId(ShiroUtil.getUserId());
-
-
-        // 4.修改字典
-        DictPO dbPO = dictDAO.get(new DictDTO().setId(dictPO.getId()));
-        if (dictDAO.update(dictPO) < 1) {
+        } else if (!dictPO.getKey().equals(dictDTO.getKey()) &&
+                dictDAO.count(new DictQuery().setKey(dictDTO.getKey()).setRidId(dictPO.getId())) > 0) {
+            return Result.fail(ResultEnum.REPEAT_KEY);
+        } else if (dictDAO.update(new DictPO()
+                .setKey(dictDTO.getKey())
+                .setName(dictDTO.getName())
+                .setRemark(dictDTO.getRemark())
+                .setModifiedBy(ShiroUtil.getUserId())) < 1) {
+            return Result.fail(ResultEnum.LATER_RETRY);
+        } else if (dictDataDAO.delete(new DictDataQuery().setDictKey(dictDTO.getKey())) < 1 ||
+                dictDataDAO.saveList(dictDTO.getDataList().stream()
+                        .map(data -> new DictDataPO()
+                                .setDictKey(dictDTO.getKey())
+                                .setTop(data.getTop())
+                                .setCode(data.getCode())
+                                .setLabel(data.getLabel())
+                                .setSpare(data.getSpare()))
+                        .collect(Collectors.toList())) != dictDTO.getDataList().size()) {
             throw new GlobalException(ResultEnum.FAIL_OPERATION);
-        } else if (dictDAO.removeData(new DictDTO().setKey(dbPO.getKey())) < 1 || dictDAO.saveData(dictPO) < 1) {
-            throw new GlobalException(ResultEnum.FAIL_OPERATION);
-        } else if (DICT_SNS_KEY.equals(dbPO.getKey())) {
-            RedisUtil.delete(BS_DICT_DATA_KEY + dictDTO.getKey());
-            RedisUtil.delete(BS_DICT_DATA_MODIFIED_KEY + dictDTO.getKey());
         }
+        RedisUtil.delete(Lists.newArrayList(BS_DICT_DATA_KEY + dictPO.getKey(), BS_DICT_DATA_MODIFIED_KEY + dictDTO.getKey()));
         return Result.success();
     }
 
-
     @Override
-    public Result<DictDTO> get(DictDTO dictDTO) {
-        DictPO dictPO = dictDAO.get(dictDTO);
-        if (null == dictPO) {
-            return Result.fail(ResultEnum.EMPTY_DATA);
-        }
-        return Result.success(new DictDTO(dictPO));
+    public DictVO getVO(DictQuery query) {
+        return dictDAO.getVO(query);
     }
 
     @Override
-    public Result<DictDataDTO> getData(DictDataDTO dictDataDTO) {
-        return Result.success(new DictDataDTO(dictDAO.getData(dictDataDTO)));
-    }
-
-
-    @Override
-    public Result<List<DictDTO>> list(DictDTO dictDTO, Page page) {
+    public List<DictTableVO> listTableVO(DictQuery query, Page page) {
         startPage(page);
-        return Result.success(DTO.ofPO(dictDAO.list(dictDTO), DictDTO::new));
+        return dictDAO.listTableVO(query);
     }
 
 
     @Override
-    public List<DictDataDTO> listData(String dictKey, boolean all) {
-        DictDataDTO dto = new DictDataDTO().setDictKey(dictKey);
-        if (!all) {
-            dto.setType(PUBLIC_TYPE);
-        }
-        return DTO.ofPO(dictDAO.listData(dto), DictDataDTO::new);
+    public DictDataPO getData(DictDataQuery query) {
+        return dictDataDAO.get(query);
+    }
+
+
+    @Override
+    public List<DictDataPO> listData(DictDataQuery query) {
+        return dictDataDAO.list(query);
+    }
+
+    @Override
+    public List<DictDataVO> listDataVO(DictDataQuery query) {
+        return dictDataDAO.listVO(query);
     }
 
 }

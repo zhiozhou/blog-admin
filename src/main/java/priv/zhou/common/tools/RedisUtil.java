@@ -99,6 +99,13 @@ public class RedisUtil {
     }
 
     /**
+     * 删除key
+     */
+    public static void delete(List<String> keys) {
+        redisTemplate.delete(keys);
+    }
+
+    /**
      * 以map状态保存数据
      */
     public static void putHash(String key, String hashKey, Object value) {

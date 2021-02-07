@@ -73,7 +73,7 @@
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove">移除</a>
         </script>
         <script th:inline="javascript">
-            const dictData = [[${_vo.dataList}]]
+            const dataListEcho = [[${_vo.dataList}]]
         </script>
         <script th:inline="none">
             const prefix = `${_gate}system/dict`
@@ -89,7 +89,7 @@
                 table.render({
                     id: 'data-table',
                     elem: '#data-table',
-                    data: dictData,
+                    data: dataListEcho,
                     cellMinWidth: '80',
                     cols: [[
                         {field: 'code', title: '编码值', edit: true},
@@ -122,14 +122,14 @@
                 //监听提交
                 form.on('submit(submit)', ({form, field}) => {
 
-                    let distList = dictData.filter(d => d.code)
-                    if (!dictList.length) {
+                    let dataList = dataListEcho.filter(d => d.code)
+                    if (!dataList.length) {
                         return warn('数据项不可为空')
                     }
 
                     let codeSet = new Set()
-                    for (let i in distList) {
-                        let {code} = temp = dictData[i]
+                    for (let i in dataList) {
+                        let {code} = temp = dataListEcho[i]
                         if (codeSet.has(code)) {
                             return warn('数据项不可重复')
                         }
@@ -151,21 +151,21 @@
                     let index = tr.data('index')
                     switch (action) {
                         case 'insert':
-                            dictData.splice(1 + index, 0, {type: 0, top: 0})
+                            dataListEcho.splice(1 + index, 0, {type: 0, top: 0})
                             break
                         case 'remove':
-                            if (1 === dictData.length) {
+                            if (1 === dataListEcho.length) {
                                 return warn('数据项至少存在一个')
                             }
-                            dictData.splice(index, 1)
+                            dataListEcho.splice(index, 1)
                             break
                     }
-                    table.reload('data-table', {data: dictData})
+                    table.reload('data-table', {data: dataListEcho})
                 }
 
                 // 数据编辑
                 table.on('edit(data-table)', ({tr, field, value}) => {
-                    dictData[tr.data('index')][field] = value
+                    dataListEcho[tr.data('index')][field] = value
                 })
 
                 // 修改状态
@@ -189,15 +189,15 @@
                     btn.data('type', type)
                         .html(info)
                         .addClass(spare)
-                    dictData[index].type = type
+                    dataListEcho[index].type = type
                 }).on('click', '.top-btn', function () {
                     let index = $(this).parents('tr').data('index')
                     if (topIndex !== index) {
                         if (0 === topIndex || topIndex) {
-                            dictData[topIndex].top = 0
+                            dataListEcho[topIndex].top = 0
                         }
-                        dictData[index].top = 1
-                        table.reload('data-table', {data: dictData})
+                        dataListEcho[index].top = 1
+                        table.reload('data-table', {data: dataListEcho})
                     }
                 })
             })

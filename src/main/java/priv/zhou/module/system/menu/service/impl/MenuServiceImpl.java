@@ -43,7 +43,7 @@ public class MenuServiceImpl implements IMenuService {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType() && StringUtils.isNotBlank(menuDTO.getKey()) &&
                 menuDAO.count(new MenuDTO().setKey(menuDTO.getKey()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.REPEAT_KEY);
         }
 
 
@@ -108,7 +108,7 @@ public class MenuServiceImpl implements IMenuService {
                 .setKey(menuDTO.getKey())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.REPEAT_KEY);
         }
 
         // 2.补充参数

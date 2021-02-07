@@ -27,7 +27,7 @@ public class BlockController extends BaseController {
     @RequestMapping("/list")
     public String list(Model model) {
         super.list(model);
-        model.addAttribute("typeMap", dictService.mapData(TYPE_KEY));
+        model.addAttribute("typeMap", dictService.mapDataVO(TYPE_KEY,DICT_NORM_TYPE));
         return "block/list";
     }
 }

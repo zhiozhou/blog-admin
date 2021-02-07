@@ -42,7 +42,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         if (roleDAO.count(new RoleDTO().setName(roleDTO.getName())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.REPEAT_KEY);
         }
 
         // 4.保存角色
@@ -80,7 +80,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         if (roleDAO.count(new RoleDTO().setName(rolePO.getName()).setExclId(rolePO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey()).setExclId(roleDTO.getId())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.REPEAT_KEY);
         }
 
         // 3.补充参数

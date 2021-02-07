@@ -37,8 +37,8 @@ public class MenuController extends BaseController {
     public String add(Model model) {
 
         super.add(model, new MenuDTO().setParentId(0).setType(0).setState(0));
-        model.addAttribute("typeList", dictService.listData(SYSTEM_MENU_TYPE));
-        model.addAttribute("stateList", dictService.listData(SYSTEM_MENU_STATE));
+        model.addAttribute("typeList", dictService.listDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
+        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));
         model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/menu/au";
     }
@@ -52,8 +52,8 @@ public class MenuController extends BaseController {
         }
         super.update(model, dtoVO.getData());
 
-        model.addAttribute("typeList", dictService.listData(SYSTEM_MENU_TYPE));
-        model.addAttribute("stateList", dictService.listData(SYSTEM_MENU_STATE));
+        model.addAttribute("typeList", dictService.listDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
+        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));
         model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
         return "system/menu/au";
     }
@@ -63,8 +63,8 @@ public class MenuController extends BaseController {
     public String login(Model model) {
         super.list(model);
 
-        model.addAttribute("typeMap", dictService.mapData(SYSTEM_MENU_TYPE));
-        model.addAttribute("stateMap", dictService.mapData(SYSTEM_MENU_STATE));
+        model.addAttribute("typeMap", dictService.mapDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
+        model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));
         return "system/menu/list";
     }
 }

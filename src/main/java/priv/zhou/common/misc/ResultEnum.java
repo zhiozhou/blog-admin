@@ -22,12 +22,16 @@ public enum ResultEnum {
 
     FAIL_DATA("0005", "数据异常"),
 
+    EXIST_NAME("0006", "名称已存在"),
 
-    EXIST_NAME("0101", "名称已存在"),
+    EXIST_KEY("0007", "标识值已存在"),
 
-    EXIST_KEY("0102", "标识值已存在"),
+    EXIST_RELATION("0008", "存在关联数据"),
 
-    EXIST_RELATION("0103", "存在关联数据"),
+
+
+    REPEAT_KEY("0101", "标识值重复"),
+
 
 
     NONE_USERNAME("1001", "用户名不存在"),

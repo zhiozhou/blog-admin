@@ -46,7 +46,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if (StringUtils.isBlank(userDTO.getPassword())) {
             return Result.fail(ResultEnum.EMPTY_PARAM);
         } else if (userDAO.count(new UserDTO().setUsername(userDTO.getUsername())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.REPEAT_KEY);
         }
 
 
@@ -86,7 +86,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         UserPO userPO = userDTO.toPO();
 
         if (userDAO.count(new UserDTO().setUsername(userPO.getUsername()).setExclId(userPO.getId())) > 0) {
-            return Result.fail(ResultEnum.EXIST_KEY);
+            return Result.fail(ResultEnum.REPEAT_KEY);
         } else if (userDAO.update(userPO) < 1) {
             return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (userDAO.removeRole(userPO) < 1 || userDAO.saveRole(userPO) < 1) {
