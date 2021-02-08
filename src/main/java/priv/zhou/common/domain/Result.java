@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.enums.ResultEnum;
 
 import java.util.List;
 

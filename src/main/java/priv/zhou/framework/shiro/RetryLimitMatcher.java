@@ -9,7 +9,8 @@ import org.apache.shiro.cache.CacheManager;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static priv.zhou.common.misc.Const.LOGIN_ATTEMPT_LIMIT;
+import static priv.zhou.common.constant.ShiroConst.LOGIN_ATTEMPT_LIMIT;
+
 
 public class RetryLimitMatcher extends HashedCredentialsMatcher {
 

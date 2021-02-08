@@ -2,7 +2,7 @@ package priv.zhou.module.system.dict.service;
 
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.misc.NULL;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.query.DictDataQuery;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static priv.zhou.common.misc.Const.EMPTY_STR;
+import static priv.zhou.common.constant.GlobalConst.EMPTY_STR;
 
 /**
  * 字典 服务层定义

@@ -27,7 +27,6 @@ mybatis:
     map-underscore-to-camel-case: true
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 app:
-  enc: UTF-8
   name: ${spring.application.name}
   email: true
   admin-email: flyingnoob@qq.com

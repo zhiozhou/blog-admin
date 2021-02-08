@@ -1,8 +1,8 @@
 package priv.zhou.module.system.menu.service;
 
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.constant.NULL;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 

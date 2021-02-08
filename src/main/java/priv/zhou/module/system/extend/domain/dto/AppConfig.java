@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import priv.zhou.common.tools.DateUtil;
 import priv.zhou.module.system.extend.domain.Demo;
 
+import java.io.File;
 import java.util.List;
 
-import static priv.zhou.common.misc.Const.SEPARATOR;
 
 
 @Getter
@@ -69,7 +69,7 @@ public class AppConfig {
 
     public AppConfig setPacket(String packet) {
         this.packet = packet;
-        this.packetPath = packet.replace(".", SEPARATOR);
+        this.packetPath = packet.replace(".", File.separator);
         return this;
     }
 
@@ -81,7 +81,7 @@ public class AppConfig {
         } else {
             this.module = module;
             this.moduleRef += ".";
-            this.modulePath += SEPARATOR;
+            this.modulePath += File.separator;
         }
         return this;
     }

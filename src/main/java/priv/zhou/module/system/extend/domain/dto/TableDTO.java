@@ -10,7 +10,7 @@ import priv.zhou.module.system.extend.domain.po.TablePO;
 
 import java.util.List;
 
-import static priv.zhou.common.misc.Const.PRIMARY;
+import static priv.zhou.common.constant.GlobalConst.PRIMARY;
 
 /**
  * @author zhou

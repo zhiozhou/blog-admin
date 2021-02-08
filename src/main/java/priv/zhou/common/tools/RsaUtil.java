@@ -1,7 +1,6 @@
 package priv.zhou.common.tools;
 
-import priv.zhou.common.domain.Result;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.framework.exception.GlobalException;
 
 import javax.crypto.Cipher;

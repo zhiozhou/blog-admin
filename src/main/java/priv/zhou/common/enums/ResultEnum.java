@@ -1,4 +1,4 @@
-package priv.zhou.common.misc;
+package priv.zhou.common.enums;
 
 import priv.zhou.common.domain.Result;
 

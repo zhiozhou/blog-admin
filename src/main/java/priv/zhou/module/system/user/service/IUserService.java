@@ -2,7 +2,7 @@ package priv.zhou.module.system.user.service;
 
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.misc.NULL;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 
 import java.util.List;

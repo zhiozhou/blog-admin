@@ -1,10 +1,9 @@
 package priv.zhou.common.tools;
 
-import com.sun.javaws.security.AppContextUtil;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import priv.zhou.common.misc.AppProperties;
+import priv.zhou.common.properties.AppProperties;
 
 /**
  *

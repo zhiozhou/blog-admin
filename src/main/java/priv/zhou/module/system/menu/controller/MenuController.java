@@ -11,8 +11,8 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 
-import static priv.zhou.common.misc.Const.SYSTEM_MENU_STATE;
-import static priv.zhou.common.misc.Const.SYSTEM_MENU_TYPE;
+import static priv.zhou.common.constant.DictConst.SYSTEM_MENU_STATE;
+import static priv.zhou.common.constant.DictConst.SYSTEM_MENU_TYPE;
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 /**

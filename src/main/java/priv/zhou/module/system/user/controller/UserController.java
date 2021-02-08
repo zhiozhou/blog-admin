@@ -15,8 +15,8 @@ import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.service.IUserService;
 
-import static priv.zhou.common.misc.Const.RSA_PUBLIC_KEY;
-import static priv.zhou.common.misc.Const.SYSTEM_USER_STATE;
+import static priv.zhou.common.constant.DictConst.SYSTEM_USER_STATE;
+import static priv.zhou.common.constant.GlobalConst.RSA_PUBLIC_KEY;
 
 /**
  * 用户 视图控制层

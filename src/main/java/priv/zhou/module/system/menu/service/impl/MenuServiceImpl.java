@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.constant.NULL;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
@@ -21,8 +21,9 @@ import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import java.util.List;
 import java.util.Set;
 
-import static priv.zhou.common.misc.Const.BS_MENU_KEY;
-import static priv.zhou.common.misc.Const.BS_MENU_MODIFIED_KEY;
+import static priv.zhou.common.constant.RedisConst.BS_MENU_KEY;
+import static priv.zhou.common.constant.RedisConst.BS_MENU_MODIFIED_KEY;
+
 
 @Service
 @RequiredArgsConstructor

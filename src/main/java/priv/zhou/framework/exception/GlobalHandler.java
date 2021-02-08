@@ -7,11 +7,10 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.misc.AppProperties;
-import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.HttpUtil;
 
@@ -20,6 +19,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+
+import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
 
 /**
  * @author zhou
@@ -94,7 +95,7 @@ public class GlobalHandler extends BaseController {
              PrintWriter writer = new PrintWriter(outStream)) {
             e.printStackTrace(writer);
             writer.flush();
-            return outStream.toString(AppProperties.ENC);
+            return outStream.toString(DEFAULT_CHARSET);
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;

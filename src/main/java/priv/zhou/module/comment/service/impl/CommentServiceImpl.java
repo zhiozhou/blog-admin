@@ -7,8 +7,8 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.constant.NULL;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.block.domain.dto.BlockDTO;
@@ -21,7 +21,7 @@ import priv.zhou.module.visitor.domain.po.VisitorPO;
 
 import java.util.List;
 
-import static priv.zhou.common.misc.Const.ZHOU_VISITOR_ID;
+import static priv.zhou.common.constant.GlobalConst.ZHOU_VISITOR_ID;
 
 
 /**

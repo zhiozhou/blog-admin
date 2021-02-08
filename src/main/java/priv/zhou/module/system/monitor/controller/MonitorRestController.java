@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.misc.NULL;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.module.system.monitor.domain.dto.OnlineDTO;
 import priv.zhou.module.system.monitor.service.IOnlineService;
 

@@ -10,7 +10,7 @@ import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.module.system.dict.domain.vo.DictDataVO;
 import priv.zhou.module.system.dict.service.IDictService;
 import priv.zhou.module.system.extend.domain.Demo;
@@ -32,14 +32,15 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static priv.zhou.common.misc.AppProperties.ENC;
-import static priv.zhou.common.misc.Const.DEMO_PATH;
-import static priv.zhou.common.misc.Const.SEPARATOR;
+import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
+
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExtendServiceImpl implements IExtendService {
+
+
 
     private final TableDAO tableDAO;
 
@@ -93,12 +94,12 @@ public class ExtendServiceImpl implements IExtendService {
 
                 // 渲染模板
                 StringWriter buffer = new StringWriter();
-                Template template = Velocity.getTemplate(DEMO_PATH + demo.getPath(), ENC);
+                Template template = Velocity.getTemplate(DEMO_PATH + demo.getPath(), DEFAULT_CHARSET);
                 template.merge(context, buffer);
 
                 // 输出到zip
                 zipStream.putNextEntry(new ZipEntry(demo.getOutPath(appConfig.getModule(), table.getClassName(), table.getObjectName())));
-                IOUtils.write(buffer.toString(), zipStream, ENC);
+                IOUtils.write(buffer.toString(), zipStream, DEFAULT_CHARSET);
                 zipStream.closeEntry();
             }
         }
@@ -122,7 +123,7 @@ public class ExtendServiceImpl implements IExtendService {
      * 递归放入所有模板资源
      */
     private void putDemo(AppConfig appConfig, File file, String path) {
-        path += SEPARATOR + file.getName();
+        path += File.separator + file.getName();
         if (file.isDirectory()) {
             for (File temp : nullFill(file.listFiles())) {
                 putDemo(appConfig, temp, path);

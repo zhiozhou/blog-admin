@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.misc.NULL;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.domain.dto.TagDTO;
 import priv.zhou.module.blog.service.IBlogService;

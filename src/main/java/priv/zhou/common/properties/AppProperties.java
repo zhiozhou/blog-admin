@@ -1,4 +1,4 @@
-package priv.zhou.common.misc;
+package priv.zhou.common.properties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
-
-	public static String ENC;
 
 	private String gate;
 
@@ -32,8 +30,5 @@ public class AppProperties {
 
 	private Integer cacheSecond = 60 * 60 * 24 * 30 * 12; //缓存一年
 
-	public void setEnc(String enc) {
-		ENC = enc;
-	}
 }
 

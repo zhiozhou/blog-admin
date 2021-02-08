@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.misc.NULL;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
 import priv.zhou.module.system.image.service.IImageService;
 

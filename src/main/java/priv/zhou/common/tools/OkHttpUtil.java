@@ -11,7 +11,7 @@ import okhttp3.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.framework.exception.GlobalException;
 
 import java.io.File;

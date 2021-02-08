@@ -23,8 +23,8 @@ import javax.servlet.ServletResponse;
 import java.io.Serializable;
 import java.util.Deque;
 
-import static priv.zhou.common.misc.Const.STR_0;
-import static priv.zhou.common.misc.Const.SESSION_KICK_OUT_KEY;
+import static priv.zhou.common.constant.GlobalConst.STR_0;
+import static priv.zhou.common.constant.ShiroConst.SESSION_KICK_OUT_KEY;
 
 /**
  * 登陆限制过滤器

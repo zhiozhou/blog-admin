@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.constant.NULL;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ParseUtil;
 import priv.zhou.common.tools.RsaUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -23,7 +23,7 @@ import priv.zhou.module.system.user.service.IUserService;
 
 import javax.validation.Valid;
 
-import static priv.zhou.common.misc.Const.RSA_PRIVATE_KEY;
+import static priv.zhou.common.constant.GlobalConst.RSA_PRIVATE_KEY;
 
 /**
  * 用户rest 控制层

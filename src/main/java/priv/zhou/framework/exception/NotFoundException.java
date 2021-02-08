@@ -3,8 +3,6 @@ package priv.zhou.framework.exception;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.domain.Result;
-import priv.zhou.common.misc.ResultEnum;
 
 /**
  * 活动错误异常

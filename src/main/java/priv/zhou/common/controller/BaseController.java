@@ -3,7 +3,7 @@ package priv.zhou.common.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.misc.AppProperties;
+import priv.zhou.common.properties.AppProperties;
 import priv.zhou.framework.exception.NotFoundException;
 import priv.zhou.module.system.dict.service.IDictService;
 

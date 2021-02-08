@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.misc.NULL;
-import priv.zhou.common.misc.ResultEnum;
+import priv.zhou.common.constant.NULL;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -29,8 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static priv.zhou.common.misc.Const.BS_DICT_DATA_KEY;
-import static priv.zhou.common.misc.Const.BS_DICT_DATA_MODIFIED_KEY;
+import static priv.zhou.common.constant.RedisConst.BS_DICT_DATA_KEY;
+import static priv.zhou.common.constant.RedisConst.BS_DICT_DATA_MODIFIED_KEY;
 
 
 /**
