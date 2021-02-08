@@ -62,7 +62,6 @@ public class RedisUtil {
         redisTemplate.opsForValue().set(key, value, timeout, unit);
     }
 
-
     /**
      * 获取数据
      */

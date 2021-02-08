@@ -2,11 +2,9 @@ package priv.zhou.framework.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
@@ -16,10 +14,6 @@ import org.apache.shiro.web.filter.mgt.DefaultFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.assertj.core.util.Lists;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -28,9 +22,14 @@ import priv.zhou.common.tools.AesUtil;
 import priv.zhou.framework.shiro.LoginLimitFilter;
 import priv.zhou.framework.shiro.RetryLimitMatcher;
 import priv.zhou.framework.shiro.UserRealm;
-import priv.zhou.framework.shiro.UserSessionListener;
+import priv.zhou.framework.shiro.session.UserSessionListener;
+import priv.zhou.framework.shiro.cache.RedisCacheManager;
+import priv.zhou.framework.shiro.session.RedisSessionDAO;
+import priv.zhou.framework.shiro.session.ShiroSessionFactory;
+import priv.zhou.framework.shiro.session.ShiroSessionManager;
 
 import javax.servlet.Filter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -172,25 +171,11 @@ public class ShiroConfigurer {
     @Bean
     public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
         //redis中针对不同用户缓存
-        redisCacheManager.setPrincipalIdFieldName("username");
+        redisCacheManager.setPrincipalIdFieldName(CACHE_PRINCIPAL_FILE);
         //用户权限信息缓存时间
         redisCacheManager.setExpire(200000);
         return redisCacheManager;
-    }
-
-
-    @Bean
-    public RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost(RedisHost);
-        redisManager.setPort(RedisPort);
-        if (StringUtils.isNotBlank(RedisPwd)) {
-            redisManager.setPassword(RedisPwd);
-        }
-        redisManager.setDatabase(RedisDB);
-        return redisManager;
     }
 
 
@@ -199,20 +184,40 @@ public class ShiroConfigurer {
      */
     @Bean
     public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        Collection<SessionListener> listeners = Lists.newArrayList(sessionListener());
+
+
+        ShiroSessionManager sessionManager = new ShiroSessionManager();
+        Collection<SessionListener> listeners = new ArrayList<>();
+        //配置监听
+        listeners.add(sessionListener());
         sessionManager.setSessionListeners(listeners);
         sessionManager.setSessionIdCookie(sessionIdCookie());
         sessionManager.setSessionDAO(sessionDAO());
         sessionManager.setCacheManager(cacheManager());
+        sessionManager.setSessionFactory(sessionFactory());
 
-
-        sessionManager.setGlobalSessionTimeout(1800000);        // session 无响应过期时间 30分钟
-        sessionManager.setSessionValidationInterval(900000);   // session 过期验证周期 15分钟
-        sessionManager.setSessionIdUrlRewritingEnabled(false);  // 取消url后JSESSIONID
+        //全局会话超时时间（单位毫秒），默认30分钟  暂时设置为10秒钟 用来测试
+        sessionManager.setGlobalSessionTimeout(1800000);
+        //是否开启删除无效的session对象  默认为true
+        sessionManager.setDeleteInvalidSessions(true);
+        //是否开启定时调度器进行检测过期session 默认为true
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        //设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话 默认为 1个小时
+        //设置该属性 就不需要设置 ExecutorServiceSessionValidationScheduler 底层也是默认自动调用ExecutorServiceSessionValidationScheduler
+        //暂时设置为 5秒 用来测试
+        sessionManager.setSessionValidationInterval(3600000);
+        //取消url 后面的 JSESSIONID
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;
     }
 
+    /**
+     * session工厂
+     */
+    @Bean("sessionFactory")
+    public ShiroSessionFactory sessionFactory() {
+        return new ShiroSessionFactory();
+    }
 
     /**
      * 配置session监听
@@ -228,11 +233,9 @@ public class ShiroConfigurer {
      */
     @Bean
     public SessionDAO sessionDAO() {
-        EnterpriseCacheSessionDAO enterpriseCacheSessionDAO = new EnterpriseCacheSessionDAO();
-        enterpriseCacheSessionDAO.setCacheManager(cacheManager());
-        enterpriseCacheSessionDAO.setActiveSessionsCacheName(SESSION_CACHE_NAME);
-        enterpriseCacheSessionDAO.setSessionIdGenerator(sessionIdGenerator());
-        return enterpriseCacheSessionDAO;
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setExpire(12000);
+        return redisSessionDAO;
     }
 
     /**

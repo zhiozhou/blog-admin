@@ -1,4 +1,4 @@
-package priv.zhou.framework.shiro;
+package priv.zhou.framework.shiro.session;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;

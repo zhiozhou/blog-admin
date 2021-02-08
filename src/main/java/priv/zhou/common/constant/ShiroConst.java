@@ -19,6 +19,9 @@ public interface ShiroConst {
      */
     int LOGIN_ATTEMPT_LIMIT = 5;
 
+
+    String CACHE_PRINCIPAL_FILE ="username";
+
     /**
      * 用户realm名称
      */
