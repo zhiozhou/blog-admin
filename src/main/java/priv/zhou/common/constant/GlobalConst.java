@@ -12,6 +12,11 @@ public interface GlobalConst {
 
     String EMPTY_STR = "0";
 
+    /**
+     * 通配符
+     */
+    String WILDCARD = "*";
+
 
     /**
      * 登陆机智

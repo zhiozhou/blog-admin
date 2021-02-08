@@ -8,9 +8,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import priv.zhou.module.system.menu.controller.MenuController;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.service.IRoleService;
@@ -18,7 +16,6 @@ import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.po.UserPO;
 
-import static java.util.Objects.isNull;
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
 public class UserRealm extends AuthorizingRealm {
@@ -52,7 +49,6 @@ public class UserRealm extends AuthorizingRealm {
         }
 
         // todo 验证用户状态
-
         return new SimpleAuthenticationInfo(new UserDTO(userPO), userPO.getPassword(), new CacheByteSource(userPO.getSalt()), getName());
     }
 

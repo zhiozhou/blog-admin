@@ -2,6 +2,7 @@ package priv.zhou.framework.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -14,6 +15,8 @@ import org.apache.shiro.web.filter.mgt.DefaultFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -22,10 +25,8 @@ import priv.zhou.common.tools.AesUtil;
 import priv.zhou.framework.shiro.LoginLimitFilter;
 import priv.zhou.framework.shiro.RetryLimitMatcher;
 import priv.zhou.framework.shiro.UserRealm;
-import priv.zhou.framework.shiro.session.UserSessionListener;
-import priv.zhou.framework.shiro.cache.RedisCacheManager;
-import priv.zhou.framework.shiro.session.RedisSessionDAO;
-import priv.zhou.framework.shiro.session.ShiroSessionFactory;
+import priv.zhou.framework.shiro.session.ShiroSessionDAO;
+import priv.zhou.framework.shiro.session.ShiroSessionListener;
 import priv.zhou.framework.shiro.session.ShiroSessionManager;
 
 import javax.servlet.Filter;
@@ -48,7 +49,6 @@ public class ShiroConfigurer {
     private int RedisPort;
     @Value("${spring.redis.password}")
     private String RedisPwd;
-
     /**
      * 配置过滤器
      */
@@ -171,13 +171,27 @@ public class ShiroConfigurer {
     @Bean
     public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
         //redis中针对不同用户缓存
-        redisCacheManager.setPrincipalIdFieldName(CACHE_PRINCIPAL_FILE);
+        redisCacheManager.setPrincipalIdFieldName("username");
         //用户权限信息缓存时间
         redisCacheManager.setExpire(200000);
         return redisCacheManager;
     }
 
+
+
+    @Bean
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(RedisHost);
+        redisManager.setPort(RedisPort);
+        if (StringUtils.isNotBlank(RedisPwd)) {
+            redisManager.setPassword(RedisPwd);
+        }
+        redisManager.setDatabase(RedisDB);
+        return redisManager;
+    }
 
     /**
      * 配置session管理器
@@ -194,7 +208,6 @@ public class ShiroConfigurer {
         sessionManager.setSessionIdCookie(sessionIdCookie());
         sessionManager.setSessionDAO(sessionDAO());
         sessionManager.setCacheManager(cacheManager());
-        sessionManager.setSessionFactory(sessionFactory());
 
         //全局会话超时时间（单位毫秒），默认30分钟  暂时设置为10秒钟 用来测试
         sessionManager.setGlobalSessionTimeout(1800000);
@@ -211,20 +224,13 @@ public class ShiroConfigurer {
         return sessionManager;
     }
 
-    /**
-     * session工厂
-     */
-    @Bean("sessionFactory")
-    public ShiroSessionFactory sessionFactory() {
-        return new ShiroSessionFactory();
-    }
 
     /**
      * 配置session监听
      */
     @Bean
-    public UserSessionListener sessionListener() {
-        return new UserSessionListener();
+    public ShiroSessionListener sessionListener() {
+        return new ShiroSessionListener();
     }
 
     /**
@@ -233,9 +239,11 @@ public class ShiroConfigurer {
      */
     @Bean
     public SessionDAO sessionDAO() {
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setExpire(12000);
-        return redisSessionDAO;
+        ShiroSessionDAO shiroSessionDAO = new ShiroSessionDAO();
+        shiroSessionDAO.setCacheManager(cacheManager());
+        shiroSessionDAO.setActiveSessionsCacheName(SESSION_CACHE_NAME);
+        shiroSessionDAO.setSessionIdGenerator(sessionIdGenerator());
+        return shiroSessionDAO;
     }
 
     /**

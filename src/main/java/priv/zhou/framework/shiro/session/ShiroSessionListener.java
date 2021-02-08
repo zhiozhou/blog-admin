@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * session 监听
  */
-public class UserSessionListener implements SessionListener {
+public class ShiroSessionListener implements SessionListener {
 
     /**
      * 统计在线人数

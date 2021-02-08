@@ -1,5 +1,8 @@
 package priv.zhou.framework.shiro.session;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.shiro.session.mgt.SimpleSession;
 
 import java.io.Serializable;
@@ -7,12 +10,18 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * @author: wangsaichao
- * @date: 2018/6/23
- * @description: 由于SimpleSession lastAccessTime更改后也会调用SessionDao update方法，
- * 增加标识位，如果只是更新lastAccessTime SessionDao update方法直接返回
+ * SimpleSession 修改lastAccessTime也会调用SessionDao的update方法频繁访问
+ * 修改为如只修改lastAccessTime则直接返回
+ *
+ * @author zhou
+ * @date 2021.02.08
  */
+// 忽略父级方法防止反序列化失败
+@Getter
+@Setter
+@JsonIgnoreProperties({"valid", "attributeKeys", "alteredFieldsBitMask", "attributesLazy", "stopped", "timedOut"})
 public class ShiroSession extends SimpleSession implements Serializable {
+
     // 除lastAccessTime以外其他字段发生改变时为true
     private boolean isChanged = false;
 
@@ -20,12 +29,6 @@ public class ShiroSession extends SimpleSession implements Serializable {
         super();
         this.setChanged(true);
     }
-
-    public ShiroSession(String host) {
-        super(host);
-        this.setChanged(true);
-    }
-
 
     @Override
     public void setId(Serializable id) {
@@ -75,49 +78,15 @@ public class ShiroSession extends SimpleSession implements Serializable {
         return super.removeAttribute(key);
     }
 
-    /**
-     * 停止
-     */
     @Override
     public void stop() {
         super.stop();
         this.setChanged(true);
     }
 
-    /**
-     * 设置过期
-     */
     @Override
     protected void expire() {
         this.stop();
         this.setExpired(true);
-    }
-
-    public boolean isChanged() {
-        return isChanged;
-    }
-
-    public void setChanged(boolean isChanged) {
-        this.isChanged = isChanged;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
-    @Override
-    protected boolean onEquals(SimpleSession ss) {
-        return super.onEquals(ss);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

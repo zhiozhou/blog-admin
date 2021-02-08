@@ -20,7 +20,21 @@ public interface ShiroConst {
     int LOGIN_ATTEMPT_LIMIT = 5;
 
 
-    String CACHE_PRINCIPAL_FILE ="username";
+    /**
+     * 针对不同用户的区分字段
+     */
+    String CACHE_USER_PRINCIPAL_FILE = "username";
+
+    /**
+     * 用户权限缓存时间
+     */
+    int CACHE_AUTHORIZATION_EXPIRE = 200000;
+
+    /**
+     * 用户会话前缀
+     */
+    String SESSION_KEY_PREFIX = "shiro:session:";
+
 
     /**
      * 用户realm名称
