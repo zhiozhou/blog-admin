@@ -41,9 +41,14 @@ public interface ShiroConst {
     String SESSION_CACHE_NAME = "active-session-sache";
 
     /**
-     * 登录限制缓存名
+     * 登录重试限制缓存名
      */
     String RETRY_CACHE_NAME = "retry-cache";
+
+    /**
+     * 多点登录限制缓存名
+     */
+    String LOGIN_LIMIT_CACHE_NAME = "login-limit-cache";
 
     /**
      * session踢出标识

@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Deque;
 
 import static priv.zhou.common.constant.GlobalConst.STR_0;
+import static priv.zhou.common.constant.ShiroConst.LOGIN_LIMIT_CACHE_NAME;
 import static priv.zhou.common.constant.ShiroConst.SESSION_KICK_OUT_KEY;
 
 /**
@@ -55,7 +56,7 @@ public class LoginLimitFilter extends AccessControlFilter {
 
 
     public LoginLimitFilter setCacheManager(CacheManager cacheManager) {
-        this.cache = cacheManager.getCache("loginLimitCache");
+        this.cache = cacheManager.getCache(LOGIN_LIMIT_CACHE_NAME);
         return this;
     }
 
