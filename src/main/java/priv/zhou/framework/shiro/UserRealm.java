@@ -50,6 +50,9 @@ public class UserRealm extends AuthorizingRealm {
         if (null == userPO) {
             return null;
         }
+
+        // todo 验证用户状态
+
         return new SimpleAuthenticationInfo(new UserDTO(userPO), userPO.getPassword(), new CacheByteSource(userPO.getSalt()), getName());
     }
 

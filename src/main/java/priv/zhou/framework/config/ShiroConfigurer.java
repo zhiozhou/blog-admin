@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static priv.zhou.common.constant.GlobalConst.*;
+import static priv.zhou.common.constant.GlobalConst.LOGIN_PATH;
 import static priv.zhou.common.constant.ShiroConst.*;
 
 @Configuration
@@ -262,10 +262,10 @@ public class ShiroConfigurer {
      */
     @Bean
     public SimpleCookie rememberMeCookie() {
-        SimpleCookie simpleCookie = new SimpleCookie(REMEMBER_NAME); // 默认为: JSESSIONID,与SERVLET容器名冲突,重新定义rememberMe
+        SimpleCookie simpleCookie = new SimpleCookie(REMEMBER_COOKIE_NAME); // 默认为: JSESSIONID,与SERVLET容器名冲突,重新定义rememberMe
         simpleCookie.setHttpOnly(true); // 只http访问,js不可访问,防止xss读取cookie
         simpleCookie.setPath("/");
-        simpleCookie.setMaxAge(2592000); // 30天
+        simpleCookie.setMaxAge(60 * 60 * 24 * 30); // 30天
         return simpleCookie;
     }
 

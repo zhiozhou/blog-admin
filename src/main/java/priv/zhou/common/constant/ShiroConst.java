@@ -27,18 +27,23 @@ public interface ShiroConst {
     /**
      * 授权缓存名
      */
-    String AUTHORIZATION_CACHE_NAME = "authorizationCache";
+    String AUTHORIZATION_CACHE_NAME = "authorization-cache";
 
     /**
      * 认证缓存名
      */
-    String AUTHENTICATION_CACHE_NAME = "authenticationCache";
+    String AUTHENTICATION_CACHE_NAME = "authentication-cache";
 
 
     /**
      * session缓存名
      */
-    String SESSION_CACHE_NAME = "activeSessionCache";
+    String SESSION_CACHE_NAME = "active-session-sache";
+
+    /**
+     * 登录限制缓存名
+     */
+    String RETRY_CACHE_NAME = "retry-cache";
 
     /**
      * session踢出标识
@@ -46,7 +51,7 @@ public interface ShiroConst {
     String SESSION_KICK_OUT_KEY = "KICK_OUT";
 
 
-    String REMEMBER_NAME = "rememberMe";
+    String REMEMBER_COOKIE_NAME = "rememberMe";
 
     /**
      * 记住我 密钥 必须为8的倍数

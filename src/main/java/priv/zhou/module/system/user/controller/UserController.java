@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.annotation.CipherId;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.Result;
@@ -49,7 +48,7 @@ public class UserController extends BaseController {
     public String add(Model model) {
 
         super.add(model, new UserDTO().setState(0));
-        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE,DICT_NORM_TYPE));
+        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";
     }
@@ -63,7 +62,7 @@ public class UserController extends BaseController {
         }
         super.update(model, dtoVO.getData());
 
-        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE,DICT_NORM_TYPE));
+        model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";
     }
@@ -98,7 +97,7 @@ public class UserController extends BaseController {
 
     @RequiresPermissions("system:user:detail")
     @RequestMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable @CipherId Integer id) {
+    public String detail(Model model, @PathVariable Integer id) {
         Result<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
         if (dtoVO.isFail()) {
             return NOT_FOUNT;
