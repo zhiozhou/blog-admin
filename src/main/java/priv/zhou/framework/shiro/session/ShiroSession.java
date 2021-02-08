@@ -19,7 +19,6 @@ import java.util.Map;
 // 忽略父级方法防止反序列化失败
 @Getter
 @Setter
-@JsonIgnoreProperties({"valid", "attributeKeys", "alteredFieldsBitMask", "attributesLazy", "stopped", "timedOut"})
 public class ShiroSession extends SimpleSession implements Serializable {
 
     // 除lastAccessTime以外其他字段发生改变时为true
