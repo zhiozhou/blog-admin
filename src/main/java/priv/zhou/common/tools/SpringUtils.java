@@ -17,18 +17,21 @@ import java.util.Locale;
 @SuppressWarnings("unused")
 public final class SpringUtils implements ApplicationContextAware {
 
+    public static Boolean devEnc;
 
     public static ApplicationContext context;
 
+    public static final String devEncProfile = "dev";
+
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        context = applicationContext;
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+        SpringUtils.context = context;
     }
 
     /**
      * 获取环境前缀
      */
-    public static String getProfiles() {
+    public static String getProfile() {
         String[] profiles = context.getEnvironment().getActiveProfiles();
         if (0 == profiles.length) {
             profiles = context.getEnvironment().getDefaultProfiles();
@@ -78,10 +81,16 @@ public final class SpringUtils implements ApplicationContextAware {
         return context.getAliases(name);
     }
 
-
-
     public static String getMessage(String key, Object... args) {
         return context.getMessage(key, args, Locale.getDefault());
+    }
+
+
+    /**
+     * 是否为开发环境
+     */
+    public static boolean isDevEnc() {
+        return null == devEnc ? devEnc = devEncProfile.equals(getProfile()) : devEnc;
     }
 
 }
