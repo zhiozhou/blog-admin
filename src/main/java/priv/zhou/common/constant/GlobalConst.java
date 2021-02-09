@@ -13,17 +13,6 @@ public interface GlobalConst {
     String EMPTY_STR = "0";
 
     /**
-     * 通配符
-     */
-    String WILDCARD = "*";
-
-
-    /**
-     * 登陆机智
-     */
-    String LOGIN_PATH = "/system/user/login";
-
-    /**
      * 站长id
      */
     Integer ZHOU_VISITOR_ID = 0;

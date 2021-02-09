@@ -14,7 +14,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.shiro.LoginLimitFilter;
+import priv.zhou.framework.shiro.SyncLoginFilter;
 import priv.zhou.module.system.monitor.domain.dto.OnlineDTO;
 import priv.zhou.module.system.monitor.service.IOnlineService;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
@@ -31,7 +31,7 @@ public class OnlineServiceImpl implements IOnlineService {
 
     private final SessionManager sessionManager;
 
-    private final LoginLimitFilter loginLimitFilter;
+    private final SyncLoginFilter syncLoginFilter;
 
 
     @Override
@@ -61,7 +61,7 @@ public class OnlineServiceImpl implements IOnlineService {
         }
         try {
             Session session = sessionManager.getSession(new DefaultSessionKey(id));
-            loginLimitFilter.remove(session);
+            syncLoginFilter.remove(session);
             sessionDAO.delete(session);
             return Result.success();
         } catch (UnknownSessionException e) {

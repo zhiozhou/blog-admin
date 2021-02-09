@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
@@ -24,8 +23,6 @@ import java.io.Serializable;
 import java.util.Deque;
 
 import static priv.zhou.common.constant.GlobalConst.STR_0;
-import static priv.zhou.common.constant.ShiroConst.LOGIN_LIMIT_CACHE_NAME;
-import static priv.zhou.common.constant.ShiroConst.SESSION_KICK_OUT_KEY;
 
 /**
  * 登陆限制过滤器
@@ -34,9 +31,15 @@ import static priv.zhou.common.constant.ShiroConst.SESSION_KICK_OUT_KEY;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class LoginLimitFilter extends AccessControlFilter {
+public class SyncLoginFilter extends AccessControlFilter {
 
     private final String name = "loginLimit";
+
+    /**
+     * session踢出标识
+     */
+    private String kickOutKey = "KICK_OUT";
+
 
     /**
      * 踢出后到的地址
@@ -44,9 +47,9 @@ public class LoginLimitFilter extends AccessControlFilter {
     private String outUrl;
 
     /**
-     * 同一个帐号最大会话数 默认1
+     * 同一账号最多同时登录数
      */
-    private int limit = 1;
+    private int maxSync = 1;
 
 
     private SessionManager sessionManager;
@@ -55,8 +58,8 @@ public class LoginLimitFilter extends AccessControlFilter {
     private Cache<String, Deque<Serializable>> cache;
 
 
-    public LoginLimitFilter setCacheManager(CacheManager cacheManager) {
-        this.cache = cacheManager.getCache(LOGIN_LIMIT_CACHE_NAME);
+    public SyncLoginFilter setCacheManager(Cache<String, Deque<Serializable>> cache) {
+        this.cache = cache;
         return this;
     }
 
@@ -84,12 +87,12 @@ public class LoginLimitFilter extends AccessControlFilter {
         Session session = subject.getSession();
         UserDTO userDTO = (UserDTO) subject.getPrincipal();
         Deque<Serializable> deque = cache.get(userDTO.getUsername());
-        if (null ==deque) {
+        if (null == deque) {
             cache.put(userDTO.getUsername(), deque = Lists.newLinkedList());
         }
 
         // 3.放入登陆队列
-        if (null == session.getAttribute(SESSION_KICK_OUT_KEY) && !deque.contains(session.getId())) {
+        if (null == session.getAttribute(kickOutKey) && !deque.contains(session.getId())) {
 
             UserAgent userAgent = UserAgent.parseUserAgentString(((ShiroHttpServletRequest) request).getHeader("User-Agent"));
             session.setAttribute("username", userDTO.getUsername());
@@ -100,12 +103,12 @@ public class LoginLimitFilter extends AccessControlFilter {
         }
 
         // 4.登陆队列大于限制,标识踢出session
-        while (deque.size() > limit) {
+        while (deque.size() > maxSync) {
             Serializable sessionId = deque.removeLast();
             try {
                 Session kickOutSession = sessionManager.getSession(new DefaultSessionKey(sessionId));
                 if (kickOutSession != null) {
-                    kickOutSession.setAttribute(SESSION_KICK_OUT_KEY, STR_0);
+                    kickOutSession.setAttribute(kickOutKey, STR_0);
                 }
             } catch (UnknownSessionException e) {
                 log.info(e.getMessage());
@@ -113,7 +116,7 @@ public class LoginLimitFilter extends AccessControlFilter {
         }
 
         // 5.当前没被标识
-        if (null == session.getAttribute(SESSION_KICK_OUT_KEY)) {
+        if (null == session.getAttribute(kickOutKey)) {
             return true;
         }
 

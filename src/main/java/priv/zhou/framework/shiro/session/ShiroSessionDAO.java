@@ -11,8 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static priv.zhou.common.constant.ShiroConst.SESSION_KEY_PREFIX;
-
 /**
  * @author zhou
  * @date 2021.02.08
@@ -21,7 +19,7 @@ import static priv.zhou.common.constant.ShiroConst.SESSION_KEY_PREFIX;
 @Slf4j
 public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
 
-    private String keyPrefix = SESSION_KEY_PREFIX;
+    private String keyPrefix;
 
     /**
      * doReadSession在登录时会被调用10次左右,将会话保存到ThreadLocal以解决此问题
@@ -90,7 +88,6 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
         }
         return session;
     }
-
 
     private String getSessionKey(Serializable sessionId) {
         return this.keyPrefix + sessionId;
