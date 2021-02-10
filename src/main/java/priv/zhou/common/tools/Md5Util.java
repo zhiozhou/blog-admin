@@ -1,6 +1,6 @@
 package priv.zhou.common.tools;
 
-import java.security.MessageDigest;
+import org.springframework.util.DigestUtils;
 
 /**
  * @author zhou
@@ -9,20 +9,11 @@ import java.security.MessageDigest;
 public class Md5Util {
 
 
-	/**
-	 * MD5加密
-	 */
-	public static String encrypt(String data) throws Exception {
-		StringBuilder sb = new StringBuilder();
-		MessageDigest md5 = MessageDigest.getInstance("MD5");
-		byte[] bytes = md5.digest(data.getBytes());
-		for (byte b : bytes) {
-			int bt = b & 0xff;
-			if (bt < 16) {
-				sb.append(0);
-			}
-			sb.append(Integer.toHexString(bt));
-		}
-		return sb.toString();
-	}
+    /**
+     * MD5加密
+     */
+    public static String encrypt(String data) {
+        return DigestUtils.md5DigestAsHex(data.getBytes());
+    }
+
 }

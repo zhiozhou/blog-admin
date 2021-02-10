@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "shiro")
 public class ShiroProperties {
 
-
     /**
      * 缓存过期时间，单位秒
      * 默认为2天
@@ -47,14 +46,35 @@ public class ShiroProperties {
     private String attemptLoginCacheName = "attempt-login-cache";
 
     /**
-     * 同时登录限制缓存名称
+     * 同时登录限制缓存名
      */
     private String syncLoginCacheName = "sync-login-cache";
+
+    /**
+     * 会话id的cookie名
+     */
+    private String sessionIdCookieName = "sid";
 
     /**
      * 会话key的前缀
      */
     private String sessionKeyPrefix = "shiro:session";
+
+    /**
+     * 记住我cookie过期时间，单位秒
+     * 默认30天
+     */
+    private Integer rememberMeExpire = 60 * 60 * 24 * 30;
+
+    /**
+     * 记住我cookie名
+     */
+    private String rememberMeCookieName = "rememberMe";
+
+    /**
+     * 记住我cookie名称
+     */
+    String REMEMBER_COOKIE_NAME = "rememberMe";
 
     /**
      * 尝试登录最大限制
@@ -65,8 +85,6 @@ public class ShiroProperties {
      * 同时登录最大限制
      */
     private Integer syncLoginLimit;
-
-
 
 
 }

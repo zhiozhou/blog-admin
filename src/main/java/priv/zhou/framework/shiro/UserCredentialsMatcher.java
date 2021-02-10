@@ -3,19 +3,22 @@ package priv.zhou.framework.shiro;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class AttemptLimitMatcher extends HashedCredentialsMatcher {
+public class UserCredentialsMatcher extends SimpleCredentialsMatcher {
 
     private final int maxAttempt;
 
     private final Cache<String, AtomicInteger> attemptCache;
 
-    public AttemptLimitMatcher(int maxAttempt, Cache<String, AtomicInteger> attemptCache) {
+    public UserCredentialsMatcher(int maxAttempt, Cache<String, AtomicInteger> attemptCache) {
         this.maxAttempt = maxAttempt;
         this.attemptCache = attemptCache;
     }
@@ -36,6 +39,8 @@ public class AttemptLimitMatcher extends HashedCredentialsMatcher {
         }
 
         // 2.使用父级匹配
+        PrincipalCollection principals = authInfo.getPrincipals();
+//        boolean matched = match(token.getCredentials(),authInfo.)
         boolean result = super.doCredentialsMatch(token, authInfo);
         if (result) {
             // 成功登录，清除缓存
@@ -46,4 +51,15 @@ public class AttemptLimitMatcher extends HashedCredentialsMatcher {
         }
         return result;
     }
+
+
+    public boolean match(String hashed, String salt, String cert) {
+        return cert.equals(buildCert(hashed, salt));
+    }
+
+    public String buildCert(String hashed, String salt) {
+        return new Md5Hash(hashed + salt).toHex();
+    }
+
+
 }

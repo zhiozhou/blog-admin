@@ -6,24 +6,23 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.constant.NULL;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
+import priv.zhou.common.tools.Md5Util;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.po.UserPO;
 import priv.zhou.module.system.user.service.IUserService;
 
 import java.util.List;
-
-import static priv.zhou.common.constant.ShiroConst.SHIRO_ALGORITHM;
-import static priv.zhou.common.constant.ShiroConst.SHIRO_ITERATIONS;
 
 
 /**
@@ -37,6 +36,8 @@ import static priv.zhou.common.constant.ShiroConst.SHIRO_ITERATIONS;
 public class UserServiceImpl extends BaseService implements IUserService {
 
     private final UserDAO userDAO;
+
+    private final UserCredentialsMatcher certMatcher;
 
 
     @Override
@@ -56,7 +57,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
                 .setSalt(RandomUtil.chars(6));
 
         // 3.密码加密
-        userPO.setPassword(new SimpleHash(SHIRO_ALGORITHM, userPO.getPassword(), ByteSource.Util.bytes(userPO.getSalt()), SHIRO_ITERATIONS).toString());
+        userPO.setPassword(certMatcher.buildCert(Md5Util.encrypt(userPO.getPassword()), userPO.getSalt()));
 
         // 4.保存用户
         if (userDAO.save(userPO) < 1) {
@@ -112,11 +113,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
         }
 
         UserPO userPO = userDTO.toPO(),
-                db = userDAO.get(new UserDTO().setId(userPO.getId()));
-        if (null == db) {
+                userDB = userDAO.get(new UserDTO().setId(userPO.getId()));
+        if (null == userDB) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         }
-        userPO.setPassword(new SimpleHash(SHIRO_ALGORITHM, userPO.getPassword(), ByteSource.Util.bytes(db.getSalt()), SHIRO_ITERATIONS).toString());
+        userPO.setPassword(certMatcher.buildCert(Md5Util.encrypt(userPO.getPassword()), userDB.getSalt()));
         ShiroUtil.getUserRealm().clearAllCachedAuthenticationInfo();
         return userDAO.update(userPO) > 0 ? Result.success() : Result.fail(ResultEnum.FAIL_OPERATION);
     }

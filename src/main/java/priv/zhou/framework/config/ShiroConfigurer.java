@@ -1,10 +1,11 @@
 package priv.zhou.framework.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
@@ -17,30 +18,30 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import priv.zhou.common.properties.ShiroProperties;
 import priv.zhou.common.tools.AesUtil;
-import priv.zhou.framework.shiro.AttemptLimitMatcher;
 import priv.zhou.framework.shiro.SyncLoginFilter;
+import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.framework.shiro.UserRealm;
 import priv.zhou.framework.shiro.session.ShiroSessionDAO;
 import priv.zhou.framework.shiro.session.ShiroSessionListener;
 import priv.zhou.framework.shiro.session.ShiroSessionManager;
 
 import javax.servlet.Filter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static priv.zhou.common.constant.ShiroConst.*;
 
 @Configuration
+@RequiredArgsConstructor
 public class ShiroConfigurer {
+
+    private final ShiroProperties shiroProperties;
 
     @Value("${spring.redis.host}")
     private String RedisHost;
@@ -54,9 +55,6 @@ public class ShiroConfigurer {
     @Value("${spring.redis.password}")
     private String RedisPwd;
 
-    @Autowired
-    private ShiroProperties shiroProperties;
-
     /**
      * 配置过滤器
      */
@@ -66,7 +64,7 @@ public class ShiroConfigurer {
         // 自定过滤器
         LinkedHashMap<String, Filter> filters = Maps.newLinkedHashMap();
 
-        SyncLoginFilter syncLoginFilter = loginLimitFilter();
+        SyncLoginFilter syncLoginFilter = syncLoginFilter();
         filters.put(syncLoginFilter.getName(), syncLoginFilter);
 
         // 访问过滤
@@ -99,11 +97,11 @@ public class ShiroConfigurer {
 
 
     @Bean
-    public MethodInvokingFactoryBean getMethodInvokingFactoryBean() {
-        MethodInvokingFactoryBean factoryBean = new MethodInvokingFactoryBean();
-        factoryBean.setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
-        factoryBean.setArguments(securityManager());
-        return factoryBean;
+    public MethodInvokingFactoryBean methodInvokingFactoryBean() {
+        return new MethodInvokingFactoryBean() {{
+            setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
+            setArguments(securityManager());
+        }};
     }
 
 
@@ -112,34 +110,23 @@ public class ShiroConfigurer {
      */
     @Bean
     public SecurityManager securityManager() {
-
-        // 配置认证匹配器
-        RedisCacheManager cacheManager = cacheManager();
-        AttemptLimitMatcher matcher = new AttemptLimitMatcher(
-                shiroProperties.getAttemptLoginLimit(),
-                cacheManager.getCache(shiroProperties.getAttemptLoginCacheName()));
-        matcher.setHashAlgorithmName(SHIRO_ALGORITHM);
-        matcher.setHashIterations(SHIRO_ITERATIONS);
-        UserRealm userRealm = realm();
-        userRealm.setCredentialsMatcher(matcher);
-
-        // 配置安全管理器
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(userRealm);
-        securityManager.setCacheManager(cacheManager);
-        securityManager.setSessionManager(sessionManager());
-        securityManager.setRememberMeManager(rememberMeManager());
-        return securityManager;
+        return new DefaultWebSecurityManager() {{
+            setRealm(userRealm());
+            setCacheManager(cacheManager());
+            setSessionManager(sessionManager());
+            setRememberMeManager(rememberMeManager());
+        }};
     }
 
     /**
      * 配置自定义 验证/授权 realm
      */
     @Bean
-    public UserRealm realm() {
+    public UserRealm userRealm() {
         return new UserRealm() {{
             setName(USER_REALM_NAME);
             setCachingEnabled(true);
+            setCredentialsMatcher(credentialsMatcher());
 
             // 授权缓存
             setAuthorizationCachingEnabled(true);
@@ -152,17 +139,26 @@ public class ShiroConfigurer {
     }
 
     /**
+     * 配置自定义证书匹配
+     */
+    @Bean
+    public UserCredentialsMatcher credentialsMatcher() {
+        return new UserCredentialsMatcher(
+                shiroProperties.getAttemptLoginLimit(),
+                cacheManager().getCache(shiroProperties.getAttemptLoginCacheName()));
+    }
+
+    /**
      * 账号登录限制
      */
     @Bean
-    public SyncLoginFilter loginLimitFilter() {
-        RedisCacheManager cacheManager = cacheManager();
-        SyncLoginFilter syncLoginFilter = new SyncLoginFilter()
-                .setMaxSync(shiroProperties.getSyncLoginLimit())
-                .setCacheManager(cacheManager.getCache(shiroProperties.getSyncLoginCacheName()))
-                .setSessionManager(sessionManager());
-        syncLoginFilter.setOutUrl(LOGIN_PATH + "?" + syncLoginFilter.getName());
-        return syncLoginFilter;
+    public SyncLoginFilter syncLoginFilter() {
+        return new SyncLoginFilter() {{
+            setSessionManager(sessionManager());
+            setOutUrl(LOGIN_PATH + "?" + this.getName());
+            setMaxSync(shiroProperties.getSyncLoginLimit());
+            setCacheManager(cacheManager().getCache(shiroProperties.getSyncLoginCacheName()));
+        }};
     }
 
 
@@ -189,17 +185,19 @@ public class ShiroConfigurer {
         return redisCacheManager;
     }
 
-
+    /**
+     * Redis管理
+     */
     @Bean
     public RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost(RedisHost);
-        redisManager.setPort(RedisPort);
-        if (StringUtils.isNotBlank(RedisPwd)) {
-            redisManager.setPassword(RedisPwd);
-        }
-        redisManager.setDatabase(RedisDB);
-        return redisManager;
+        return new RedisManager() {{
+            setHost(RedisHost);
+            setPort(RedisPort);
+            setDatabase(RedisDB);
+            if (StringUtils.isNotBlank(RedisPwd)) {
+                setPassword(RedisPwd);
+            }
+        }};
     }
 
     /**
@@ -207,30 +205,23 @@ public class ShiroConfigurer {
      */
     @Bean
     public SessionManager sessionManager() {
+        return new ShiroSessionManager() {{
+            setSessionListeners(Lists.newArrayList(sessionListener()));
+            setSessionIdCookie(sessionIdCookie());
+            setSessionDAO(sessionDAO());
+            setCacheManager(cacheManager());
+            setGlobalSessionTimeout(1800000); // 会话超时时间 单位毫秒，默认30分钟
 
+            setDeleteInvalidSessions(true);  //是否开启删除无效的session对象  默认为true
 
-        ShiroSessionManager sessionManager = new ShiroSessionManager();
-        Collection<SessionListener> listeners = new ArrayList<>();
-        //配置监听
-        listeners.add(sessionListener());
-        sessionManager.setSessionListeners(listeners);
-        sessionManager.setSessionIdCookie(sessionIdCookie());
-        sessionManager.setSessionDAO(sessionDAO());
-        sessionManager.setCacheManager(cacheManager());
-
-        //全局会话超时时间（单位毫秒），默认30分钟  暂时设置为10秒钟 用来测试
-        sessionManager.setGlobalSessionTimeout(1800000);
-        //是否开启删除无效的session对象  默认为true
-        sessionManager.setDeleteInvalidSessions(true);
-        //是否开启定时调度器进行检测过期session 默认为true
-        sessionManager.setSessionValidationSchedulerEnabled(true);
-        //设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话 默认为 1个小时
-        //设置该属性 就不需要设置 ExecutorServiceSessionValidationScheduler 底层也是默认自动调用ExecutorServiceSessionValidationScheduler
-        //暂时设置为 5秒 用来测试
-        sessionManager.setSessionValidationInterval(3600000);
-        //取消url 后面的 JSESSIONID
-        sessionManager.setSessionIdUrlRewritingEnabled(false);
-        return sessionManager;
+            setSessionValidationSchedulerEnabled(true);  //是否开启定时调度器进行检测过期session 默认为true
+            //设置session失效的扫描时间, 清理用户直接关闭浏览器造成的孤立会话 默认为 1个小时
+            //设置该属性 就不需要设置 ExecutorServiceSessionValidationScheduler 底层也是默认自动调用ExecutorServiceSessionValidationScheduler
+            //暂时设置为 5秒 用来测试
+            setSessionValidationInterval(3600000);
+            //取消url 后面的 JSESSIONID
+            setSessionIdUrlRewritingEnabled(false);
+        }};
     }
 
 
@@ -248,11 +239,11 @@ public class ShiroConfigurer {
      */
     @Bean
     public SessionDAO sessionDAO() {
-        ShiroSessionDAO shiroSessionDAO = new ShiroSessionDAO();
-        shiroSessionDAO.setCacheManager(cacheManager());
-        shiroSessionDAO.setActiveSessionsCacheName(shiroProperties.getSessionCacheName());
-        shiroSessionDAO.setSessionIdGenerator(sessionIdGenerator());
-        return shiroSessionDAO;
+        return new ShiroSessionDAO() {{
+            setCacheManager(cacheManager());
+            setActiveSessionsCacheName(shiroProperties.getSessionCacheName());
+            setSessionIdGenerator(sessionIdGenerator());
+        }};
     }
 
     /**
@@ -269,11 +260,11 @@ public class ShiroConfigurer {
      */
     @Bean
     public SimpleCookie sessionIdCookie() {
-        SimpleCookie simpleCookie = new SimpleCookie("sid");
-        simpleCookie.setHttpOnly(true);
-        simpleCookie.setPath("/");
-        simpleCookie.setMaxAge(-1); // 浏览器关闭时失效此Cookie
-        return simpleCookie;
+        return new SimpleCookie(shiroProperties.getSessionIdCookieName()) {{
+            setHttpOnly(true);
+            setPath("/");
+            setMaxAge(-1); // 浏览器关闭时失效此Cookie
+        }};
     }
 
 
@@ -282,11 +273,11 @@ public class ShiroConfigurer {
      */
     @Bean
     public SimpleCookie rememberMeCookie() {
-        SimpleCookie simpleCookie = new SimpleCookie(REMEMBER_COOKIE_NAME); // 默认为: JSESSIONID,与SERVLET容器名冲突,重新定义rememberMe
-        simpleCookie.setHttpOnly(true); // 只http访问,js不可访问,防止xss读取cookie
-        simpleCookie.setPath("/");
-        simpleCookie.setMaxAge(60 * 60 * 24 * 30); // 30天
-        return simpleCookie;
+        return new SimpleCookie(shiroProperties.getRememberMeCookieName()) {{
+            setHttpOnly(true); // 只http访问,js不可访问,防止xss读取cookie
+            setPath("/");
+            setMaxAge(shiroProperties.getRememberMeExpire()); // 30天
+        }};
     }
 
 
@@ -323,9 +314,9 @@ public class ShiroConfigurer {
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor Advisor = new AuthorizationAttributeSourceAdvisor();
-        Advisor.setSecurityManager(securityManager);
-        return Advisor;
+        AuthorizationAttributeSourceAdvisor sourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        sourceAdvisor.setSecurityManager(securityManager);
+        return sourceAdvisor;
     }
 
 }
