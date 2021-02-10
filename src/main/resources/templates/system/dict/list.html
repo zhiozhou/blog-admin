@@ -70,14 +70,17 @@
 
                 tableRender(table, {cols})
 
-                table.on('tool(table)', (tool)=>{
+                table.on('tool(table)', (tool) => {
                     if ('remove' === tool.event) {
+                        console.log(tool.data.id)
                         return layer.confirm(`确认移除该${_module.name}吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
                             }, () => httpPost({
                                 url: `${prefix}/rest/remove`,
-                                data: {key: tool.data.key},
+                                data: {
+                                    ids: [tool.data.id]
+                                },
                                 cb: () => msg(reloadTable)
                             })
                         )

@@ -26,7 +26,7 @@
     <sql id="POSql">
         SELECT
             id,
-            `code`,
+            `code`dictData,
             label,
             dict_key,
             type,
@@ -39,8 +39,8 @@
     <insert id="saveList" parameterType="DictDataPO">
         INSERT system_dict_data ( code, label, dict_key, type, top, spare, is_deleted )
         VALUES
-        <foreach collection="list" index="index" item="item" separator=",">
-            ( #{item.code},#{item.label},#{key},#{item.type},#{item.top},#{item.spare},0)
+        <foreach collection="list" index="index" item="dictData" separator=",">
+            ( #{dictData.code},#{dictData.label},#{dictData.dictKey},#{dictData.type},#{dictData.top},#{dictData.spare},0)
         </foreach>
     </insert>
 

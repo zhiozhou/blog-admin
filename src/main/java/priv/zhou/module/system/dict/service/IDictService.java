@@ -1,8 +1,8 @@
 package priv.zhou.module.system.dict.service;
 
+import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.constant.NULL;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
 import priv.zhou.module.system.dict.domain.po.DictDataPO;
 import priv.zhou.module.system.dict.domain.query.DictDataQuery;
@@ -27,7 +27,7 @@ public interface IDictService {
 
     Result<NULL> save(DictDTO dictDTO);
 
-    Result<NULL> remove(List<Integer> idList);
+    Result<NULL> remove(int[] ids);
 
     Result<NULL> update(DictDTO dictDTO);
 

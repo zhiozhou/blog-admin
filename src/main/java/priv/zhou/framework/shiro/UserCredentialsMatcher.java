@@ -8,6 +8,7 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Component;
+import priv.zhou.module.system.user.domain.dto.UserDTO;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,18 +39,19 @@ public class UserCredentialsMatcher extends SimpleCredentialsMatcher {
             throw new LockedAccountException();
         }
 
-        // 2.使用父级匹配
+        // 2.使用父级匹配 todo 验证密码
         PrincipalCollection principals = authInfo.getPrincipals();
-//        boolean matched = match(token.getCredentials(),authInfo.)
-        boolean result = super.doCredentialsMatch(token, authInfo);
-        if (result) {
-            // 成功登录，清除缓存
-            attemptCache.remove(username);
-        } else {
-            // 登录失败，追加限制
-            attemptCache.put(username, retryCount);
-        }
-        return result;
+        UserDTO userDTO = (UserDTO) principals.getPrimaryPrincipal();
+//        boolean matched = match(token.getCredentials(),userDTO.)
+//        boolean result = super.doCredentialsMatch(token, authInfo);
+//        if (result) {
+//            // 成功登录，清除缓存
+//            attemptCache.remove(username);
+//        } else {
+//            // 登录失败，追加限制
+//            attemptCache.put(username, retryCount);
+//        }
+        return true;
     }
 
 

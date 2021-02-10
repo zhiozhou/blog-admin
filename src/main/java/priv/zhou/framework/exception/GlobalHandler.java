@@ -1,16 +1,19 @@
 package priv.zhou.framework.exception;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import priv.zhou.common.constant.NULL;
-import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
+import priv.zhou.common.properties.AppProperties;
 import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.HttpUtil;
 
@@ -27,16 +30,17 @@ import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
  * @since 2020.03.04
  */
 @Slf4j
+@Controller
 @ControllerAdvice
-public class GlobalHandler extends BaseController {
+@RequiredArgsConstructor
+public class GlobalHandler {
 
-    public GlobalHandler() {
-        super(null);
-    }
+    private final AppProperties appProperties;
 
     /**
      * 全局异常
      */
+    @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public Result<?> globalHand(HttpServletRequest request, Exception e) {
         StringBuilder builder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
@@ -61,6 +65,7 @@ public class GlobalHandler extends BaseController {
     /**
      * 验证异常
      */
+    @ResponseBody
     @ExceptionHandler(BindException.class)
     public Result<?> bindHand(HttpServletRequest request, BindException e) {
         List<ObjectError> errs = e.getBindingResult().getAllErrors();
@@ -72,6 +77,7 @@ public class GlobalHandler extends BaseController {
     /**
      * 全局错误异常
      */
+    @ResponseBody
     @ExceptionHandler(GlobalException.class)
     public Result<?> globalFailHand(HttpServletRequest request, GlobalException e) {
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getResult());
@@ -82,6 +88,7 @@ public class GlobalHandler extends BaseController {
     /**
      * 无权限异常
      */
+    @ResponseBody
     @ExceptionHandler(UnauthorizedException.class)
     public Result<?> globalFailHand(HttpServletRequest request) {
         Result<NULL> result = Result.fail(ResultEnum.ILLEGAL_VISIT);

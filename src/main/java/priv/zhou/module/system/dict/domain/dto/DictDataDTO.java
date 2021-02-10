@@ -24,9 +24,6 @@ public class DictDataDTO {
     @NotBlank(message = "标签不可为空")
     private String label;
 
-    @NotBlank(message = "字典标识不可为空")
-    private String dictKey;
-
     @NotNull(message = "数据类型不可为空")
     private Integer type;
 

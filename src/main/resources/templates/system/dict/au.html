@@ -133,7 +133,7 @@
                         if (codeSet.has(code)) {
                             return warn('数据项不可重复')
                         }
-                        codeSet.push(code)
+                        codeSet.add(code)
                         for (let key in temp) {
                             field[`dataList[${i}].${key}`] = temp[key]
                         }

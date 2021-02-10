@@ -1,6 +1,5 @@
 package priv.zhou.framework.shiro.session;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.shiro.session.mgt.SimpleSession;

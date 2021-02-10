@@ -51,6 +51,18 @@ public class ShiroProperties {
     private String syncLoginCacheName = "sync-login-cache";
 
     /**
+     * session过期时间
+     * 单位毫秒，默认为半小时
+     */
+    private Integer sessionExpire = 1800000;
+
+    /**
+     * session失效扫描间隔,用于清理直接关浏览器造成的孤立会话
+     * 单位毫秒，默认为1小时
+     */
+    private Integer sessionValidInterval = 3600000;
+
+    /**
      * 会话id的cookie名
      */
     private String sessionIdCookieName = "sid";

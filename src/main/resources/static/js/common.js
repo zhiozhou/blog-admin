@@ -53,10 +53,10 @@ function fail(code) {
 /**
  * 全局http请求
  */
-function httpPost({url, data, cb}) {
-    loading()
+function httpPost({url, data, cb, load = true}) {
+    load && loading()
     layui.jquery.post(url, data, ({code, info, data}) => {
-        loaded()
+        load && loaded()
         if (fail(code)) return warn(info)
         cb(data)
     })

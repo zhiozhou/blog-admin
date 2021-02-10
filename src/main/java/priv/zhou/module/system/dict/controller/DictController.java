@@ -36,7 +36,11 @@ public class DictController extends BaseController {
     public String add(Model model) {
         super.add(model, new DictVO()
                 .setState(0)
-                .setDataList(Lists.newArrayList(new DictDataVO().setType(0).setTop(0))));
+                .setDataList(Lists.newArrayList(new DictDataVO()
+                        .setType(0)
+                        .setTop(1)
+                        .setCode("0")
+                        .setLabel("正常"))));
         return "system/dict/au";
     }
 

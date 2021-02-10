@@ -2,11 +2,12 @@ package priv.zhou.module.system.dict.service.impl;
 
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.constant.NULL;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RedisUtil;
@@ -75,7 +76,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
                         .setType(dataDTO.getType())
                         .setLabel(dataDTO.getLabel())
                         .setSpare(dataDTO.getSpare())
-                        .setDictKey(dataDTO.getDictKey()))
+                        .setDictKey(dictDTO.getKey()))
                 .collect(Collectors.toList())) < 1) {
             throw new GlobalException(ResultEnum.LATER_RETRY);
         }
@@ -86,12 +87,11 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
     @Override
     @Transactional
-    public Result<NULL> remove(List<Integer> idList) {
-        if (null == idList) {
+    public Result<NULL> remove(int[] ids) {
+        if (ArrayUtils.isEmpty(ids)) {
             return Result.fail(ResultEnum.EMPTY_PARAM);
         }
-        for (Integer id : idList) {
-
+        for (int id : ids) {
             DictPO dictPO = dictDAO.get(new DictQuery().setId(id));
             if (null == dictPO) {
                 return Result.fail(ResultEnum.EMPTY_DATA);
@@ -135,6 +135,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
                                 .setDictKey(dictDTO.getKey())
                                 .setTop(data.getTop())
                                 .setCode(data.getCode())
+                                .setType(data.getType())
                                 .setLabel(data.getLabel())
                                 .setSpare(data.getSpare()))
                         .collect(Collectors.toList())) != dictDTO.getDataList().size()) {
