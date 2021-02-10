@@ -26,11 +26,12 @@ public enum ResultEnum {
 
     EXIST_KEY("0007", "标识值已存在"),
 
-    EXIST_RELATION("0008", "存在关联数据"),
+    EXIST_PHONE("0008", "手机号已存在"),
 
-
+    EXIST_RELATION("0009", "存在关联数据"),
 
     REPEAT_KEY("0101", "标识值重复"),
+
 
 
 
@@ -38,7 +39,9 @@ public enum ResultEnum {
 
     FAIL_LOGIN("1002", "用户名或密码错误"),
 
-    LOCKED_USERNAME("1003", "账号已被锁定，请稍后再试"),
+    FROZE_USERNAME("1003", "账号已被冻结"),
+
+    LOCKED_USERNAME("1004", "账号已被锁定，请稍后再试"),
 
 
     ILLEGAL_VISIT("9000", "非法访问"),

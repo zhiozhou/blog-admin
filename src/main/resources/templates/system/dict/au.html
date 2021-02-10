@@ -3,8 +3,7 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
-                  th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_isAdd?_action:_action+_vo.id}" th:object="${_vo}">
 
                 <div class="layui-tab">
                     <ul class="layui-tab-title">

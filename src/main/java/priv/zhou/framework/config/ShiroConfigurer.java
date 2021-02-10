@@ -30,6 +30,7 @@ import priv.zhou.framework.shiro.UserRealm;
 import priv.zhou.framework.shiro.session.ShiroSessionDAO;
 import priv.zhou.framework.shiro.session.ShiroSessionListener;
 import priv.zhou.framework.shiro.session.ShiroSessionManager;
+import priv.zhou.module.system.user.domain.dao.UserDAO;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -40,6 +41,8 @@ import static priv.zhou.common.constant.ShiroConst.*;
 @Configuration
 @RequiredArgsConstructor
 public class ShiroConfigurer {
+
+    private final UserDAO userDAO;
 
     private final ShiroProperties shiroProperties;
 
@@ -144,8 +147,9 @@ public class ShiroConfigurer {
     @Bean
     public UserCredentialsMatcher credentialsMatcher() {
         return new UserCredentialsMatcher(
+                userDAO,
                 shiroProperties.getAttemptLoginLimit(),
-                cacheManager().getCache(shiroProperties.getAttemptLoginCacheName()));
+                cacheManager().getCache(shiroProperties.getAttemptLoginCacheName()) );
     }
 
     /**
@@ -181,7 +185,7 @@ public class ShiroConfigurer {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
         redisCacheManager.setExpire(shiroProperties.getCacheExpire());
-        redisCacheManager.setPrincipalIdFieldName(shiroProperties.getCachePrincipalField());
+        redisCacheManager.setPrincipalIdFieldName(CACHE_PRINCIPAL_FIELD);
         return redisCacheManager;
     }
 

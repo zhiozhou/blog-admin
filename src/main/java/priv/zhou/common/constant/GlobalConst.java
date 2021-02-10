@@ -15,8 +15,9 @@ public interface GlobalConst {
     /**
      * 站长id
      */
-    Integer ZHOU_VISITOR_ID = 0;
+    Integer ZHOU_ID = 0;
 
+    long SERIAL_VERSION_UID = 1L;
 
     String RSA_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnhWMXpLf1LwEY5mO6JO4vdCgYS+S/VV6x5Uz2LkYOM5SOAdWwRH6SjU9Pofi8xAl0xZ+Ohtpo36WbjdCeZORStoQMkV6Pq7Z1K47s/wxoy2NwglvJNuWtk4fIIeH3X9I6M8mumnEKsOBtI3yXsFHt0qG+2ktTalBgwefzVlqVxD2c1QcggmoCjCCmNAzdLFDQJZqTjH0KRqlTROMxT3kOUCRft2UnWpRzSYvicjvRvXYfkRE5lhmhxsRhS35umrRh7k1oTOtm9oWa19IGw3oyDlttNckVbVun+zW4Up3830dggGo1OnjnoZES+nRFjApckExfIbX9+NU2Gs/B0q96QIDAQAB";
 

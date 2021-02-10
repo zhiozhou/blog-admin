@@ -21,11 +21,6 @@ public class ShiroProperties {
     private Integer cacheExpire = 172800;
 
     /**
-     * 不同用户的缓存区分字段
-     */
-    private String cachePrincipalField;
-
-    /**
      * 授权缓存名
      */
     private String authenticationCacheName = "authentication-cache";

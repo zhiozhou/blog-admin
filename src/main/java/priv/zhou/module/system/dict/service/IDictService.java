@@ -33,12 +33,7 @@ public interface IDictService {
 
     DictVO getVO(DictQuery query);
 
-    default List<DictTableVO> listTableVO(DictQuery query) {
-        return listTableVO(query, null);
-    }
-
     List<DictTableVO> listTableVO(DictQuery query, Page page);
-
 
     DictDataPO getData(DictDataQuery query);
 

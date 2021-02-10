@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.service.IRoleService;
+import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
-import priv.zhou.module.system.user.domain.dto.UserDTO;
-import priv.zhou.module.system.user.domain.po.UserPO;
+import priv.zhou.module.system.user.domain.query.UserQuery;
 
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 
@@ -32,46 +32,25 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         // 获取授权
-        UserDTO userDTO = (UserDTO) principals.getPrimaryPrincipal();
-        SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo();
-        authInfo.setRoles(roleService.keySet(userDTO.getId()));
-        authInfo.setStringPermissions(menuService.keySet(new MenuDTO().setUserId(userDTO.getId()).setFlag(ADMIN_FLAG)));
+        UserPrincipal userPrincipal = (UserPrincipal) principals.getPrimaryPrincipal();
+        SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo(roleService.keySet(userPrincipal.getId()));
+        authInfo.setStringPermissions(menuService.keySet(new MenuDTO().setUserId(userPrincipal.getId()).setFlag(ADMIN_FLAG)));
         return authInfo;
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        // 获取账户信息
+        // 获取用户信息
         String username = (String) token.getPrincipal();
-        UserPO userPO = userDAO.get(new UserDTO().setUsername(username).setState(0));
-        if (null == userPO) {
+        UserPrincipal userPrincipal = userDAO.getPrincipal(new UserQuery().setUsername(username));
+        if (null == userPrincipal) {
             return null;
         }
-
-        // todo 验证用户状态
-        return new SimpleAuthenticationInfo(new UserDTO(userPO), userPO.getPassword(), new CacheByteSource(userPO.getSalt()), getName());
+        return buildAuthenticationInfo(userPrincipal);
     }
 
-
-    /**
-     * 自定义方法：清除所有 授权缓存
-     */
-    public void clearAllCachedAuthorizationInfo() {
-        getAuthorizationCache().clear();
+    public static AuthenticationInfo buildAuthenticationInfo(UserPrincipal userPrincipal) {
+        return new SimpleAuthenticationInfo(userPrincipal, userPrincipal.getPassword(), new CacheByteSource(userPrincipal.getSalt()), userPrincipal.getUsername());
     }
 
-    /**
-     * 自定义方法：清除所有 认证缓存
-     */
-    public void clearAllCachedAuthenticationInfo() {
-        getAuthenticationCache().clear();
-    }
-
-    /**
-     * 清除所有的  认证缓存  和 授权缓存
-     */
-    public void clearAllCache() {
-        clearAllCachedAuthenticationInfo();
-        clearAllCachedAuthorizationInfo();
-    }
 }

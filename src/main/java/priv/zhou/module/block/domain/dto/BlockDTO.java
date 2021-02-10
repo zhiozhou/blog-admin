@@ -75,7 +75,7 @@ public class BlockDTO extends DTO<BlockPO> {
 
     public BlockDTO(BlockPO blockPO) {
         super(blockPO);
-        this.creator = ofPO(blockPO.getCreator(), UserDTO::new);
+//        this.creator = ofPO(blockPO.getCreator(), UserDTO::new);
     }
 
 }

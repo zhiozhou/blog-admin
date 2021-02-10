@@ -19,4 +19,5 @@ public interface RoleDAO extends BaseDAO1<RoleDTO, RolePO> {
     int countUser(RoleDTO roleDTO);
 
     Set<String> keySet(Integer userId);
+
 }

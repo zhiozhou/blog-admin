@@ -1,29 +1,27 @@
 package priv.zhou.module.system.user.controller;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.constant.NULL;
 import priv.zhou.common.enums.ResultEnum;
-import priv.zhou.common.tools.ParseUtil;
-import priv.zhou.common.tools.RsaUtil;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.module.system.user.domain.dto.UserDTO;
+import priv.zhou.module.system.user.domain.dto.UserLoginDTO;
+import priv.zhou.module.system.user.domain.dto.UserSaveDTO;
+import priv.zhou.module.system.user.domain.dto.UserUpdateDTO;
+import priv.zhou.module.system.user.domain.query.UserQuery;
+import priv.zhou.module.system.user.domain.vo.UserTableVO;
 import priv.zhou.module.system.user.service.IUserService;
 
 import javax.validation.Valid;
-
-import static priv.zhou.common.constant.GlobalConst.RSA_PRIVATE_KEY;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * 用户rest 控制层
@@ -42,83 +40,69 @@ public class UserRestController {
     }
 
     @RequestMapping("/login")
-    public Result<NULL> login(UserDTO userDTO) {
+    public Result<NULL> login(UserLoginDTO loginDTO) {
         try {
-            // 参数传入时需要将+号替换为%2B
-            userDTO.setPassword(RsaUtil.decode(userDTO.getPassword(), RSA_PRIVATE_KEY));
-        } catch (Exception e) {
-            return Result.fail(ResultEnum.FAIL_PARAM);
-        }
-
-        try {
-            SecurityUtils.getSubject().login(new UsernamePasswordToken(userDTO.getUsername(), userDTO.getPassword(), ParseUtil.unBox(userDTO.getRememberMe())));
+            SecurityUtils.getSubject().login(new UsernamePasswordToken(loginDTO.getUsername(), loginDTO.getPassword(), loginDTO.isRememberMe()));
         } catch (UnknownAccountException e) {
             return Result.fail(ResultEnum.NONE_USERNAME);
         } catch (LockedAccountException e) {
             return Result.fail(ResultEnum.LOCKED_USERNAME);
+        } catch (DisabledAccountException e) {
+            return Result.fail(ResultEnum.FROZE_USERNAME);
         } catch (AuthenticationException e) {
             return Result.fail(ResultEnum.FAIL_LOGIN);
         }
         return Result.success();
     }
 
-    public static void main(String[] args) {
-        String hashAlgorithmName = "MD5";//加密
-        String credentials = "zhou";//密码
-        int hashIterations = 1; //加密次数
-
-        Object obj = new SimpleHash(hashAlgorithmName, credentials, "111", hashIterations);//null 为盐
-        System.out.println(obj);
-    }
 
     @RequiresPermissions("system:user:add")
     @RequestMapping("/save")
-    public Result<NULL> save(@Valid UserDTO userDTO) {
-        return userService.save(userDTO);
+    public Result<NULL> save(@Valid UserSaveDTO saveDTO) {
+        return userService.save(saveDTO);
     }
 
     @RequiresPermissions("system:user:remove")
-    @RequestMapping("/remove/{id}")
-    public Result<NULL> remove(@PathVariable Integer id) {
-        return userService.remove(new UserDTO().setId(id));
+    @RequestMapping("/remove")
+    public Result<NULL> remove(@RequestParam(value = "ids[]") int[] ids) {
+        return userService.remove(ids);
     }
 
     @RequiresPermissions("system:user:update")
-    @RequestMapping("/update")
-    public Result<NULL> update(@Valid UserDTO userDTO) {
-        return userService.update(userDTO);
+    @RequestMapping("/update/{id}")
+    public Result<NULL> update(@PathVariable Integer id, @Valid UserUpdateDTO updateDTO) {
+        return userService.update(updateDTO.setId(id));
     }
-
 
     @RequiresPermissions("system:user:reset:pwd")
     @RequestMapping("/reset/pwd/{id}")
-    public Result<NULL> resetPwd(@PathVariable Integer id, UserDTO userDTO) {
-        return userService.resetPwd(userDTO.setId(id));
+    public Result<NULL> resetPwd(@PathVariable Integer id, @NotEmpty(message = "密码不可为空") String password) {
+        return userService.resetPwd(id, password);
     }
 
     @RequestMapping("/reset/pwd/own")
-    public Result<NULL> resetPwd(UserDTO userDTO) {
-        return userService.resetPwd(userDTO.setId(ShiroUtil.getUserId()));
+    public Result<NULL> resetPwd(@NotEmpty(message = "密码不可为空") String password) {
+        return userService.resetPwd(ShiroUtil.getUserId(), password);
     }
 
 
     @RequiresPermissions("system:user:freeze")
     @RequestMapping("/freeze/{id}")
     public Result<NULL> freeze(@PathVariable Integer id) {
-        return userService.updateState(new UserDTO().setId(id).setState(11));
+        return userService.freeze(id);
     }
 
     @RequiresPermissions("system:user:freeze")
     @RequestMapping("/unfreeze/{id}")
     public Result<NULL> unfreeze(@PathVariable Integer id) {
-        return userService.updateState(new UserDTO().setId(id).setState(0));
+        return userService.unfreeze(id);
     }
 
 
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
-    public Result<TableVO<UserDTO>> list(UserDTO userDTO, Page page) {
-        return Result.table(userService.list(userDTO, page));
+    public Result<TableVO<UserTableVO>> list(UserQuery query, Page page) {
+        return Result.success(TableVO.build(userService.listTableVO(query, page)));
     }
 
 }

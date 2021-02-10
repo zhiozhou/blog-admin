@@ -1,9 +1,14 @@
 package priv.zhou.module.system.user.service;
 
+import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.constant.NULL;
-import priv.zhou.module.system.user.domain.dto.UserDTO;
+import priv.zhou.module.system.user.domain.dto.UserSaveDTO;
+import priv.zhou.module.system.user.domain.dto.UserUpdateDTO;
+import priv.zhou.module.system.user.domain.po.UserPO;
+import priv.zhou.module.system.user.domain.query.UserQuery;
+import priv.zhou.module.system.user.domain.vo.UserTableVO;
+import priv.zhou.module.system.user.domain.vo.UserVO;
 
 import java.util.List;
 
@@ -15,21 +20,19 @@ import java.util.List;
  */
 public interface IUserService {
 
-    Result<NULL> save(UserDTO userDTO);
+    Result<NULL> save(UserSaveDTO saveDTO);
 
-    Result<NULL> remove(UserDTO userDTO);
+    Result<NULL> remove(int[] ids);
 
-    Result<NULL> update(UserDTO userDTO);
+    Result<NULL> update(UserUpdateDTO updateDTO);
 
-    Result<NULL> updateState(UserDTO userDTO);
+    UserVO getVO(UserQuery query);
 
-    Result<NULL> resetPwd(UserDTO userDTO);
+    List<UserTableVO> listTableVO(UserQuery query, Page page);
 
-    Result<UserDTO> get(UserDTO userDTO);
+    Result<NULL> freeze(Integer id);
 
-    default Result<List<UserDTO>> list(UserDTO userDTO) {
-        return list(userDTO, null);
-    }
+    Result<NULL> unfreeze(Integer id);
 
-    Result<List<UserDTO>> list(UserDTO userDTO, Page page);
+    Result<NULL> resetPwd(Integer id, String password);
 }

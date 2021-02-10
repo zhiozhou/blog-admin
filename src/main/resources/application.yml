@@ -27,7 +27,6 @@ mybatis:
     map-underscore-to-camel-case: true
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 shiro:
-  cache-principal-field: username # 不同用户的缓存区分字段
   attempt-login-limit: 5 # 尝试登录最大限制
   sync-login-limit: 1 # 单一账号同时登录登录限制
 app:

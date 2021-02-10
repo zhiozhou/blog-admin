@@ -15,6 +15,8 @@ import priv.zhou.module.system.role.domain.dao.RoleDAO;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.domain.po.RolePO;
 import priv.zhou.module.system.role.service.IRoleService;
+import priv.zhou.module.system.user.domain.dao.UserDAO;
+import priv.zhou.module.system.user.domain.query.UserQuery;
 
 import java.util.List;
 import java.util.Set;
@@ -22,6 +24,8 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl extends BaseService implements IRoleService {
+
+    private final UserDAO userDAO;
 
     private final RoleDAO roleDAO;
 
@@ -42,7 +46,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         if (roleDAO.count(new RoleDTO().setName(roleDTO.getName())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey())) > 0) {
-            return Result.fail(ResultEnum.REPEAT_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 4.保存角色
@@ -80,7 +84,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         if (roleDAO.count(new RoleDTO().setName(rolePO.getName()).setExclId(rolePO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleDTO().setKey(rolePO.getKey()).setExclId(roleDTO.getId())) > 0) {
-            return Result.fail(ResultEnum.REPEAT_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 3.补充参数
@@ -99,7 +103,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         }
 
         // 6.清除授权
-        ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
+        ShiroUtil.clearRoleAuthorization(rolePO.getName());
         return Result.success();
 
     }

@@ -62,11 +62,4 @@ public class MenuRestController {
         return Result.success(menuService.tree(menuDTO.setFlag(ADMIN_FLAG)));
     }
 
-    @RequiresPermissions("system:menu:refresh")
-    @RequestMapping("/refresh")
-    public Result<NULL> refresh() {
-        ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
-        return Result.success();
-    }
-
 }

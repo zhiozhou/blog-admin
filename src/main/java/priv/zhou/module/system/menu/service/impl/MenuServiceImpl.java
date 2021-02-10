@@ -44,7 +44,7 @@ public class MenuServiceImpl implements IMenuService {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType() && StringUtils.isNotBlank(menuDTO.getKey()) &&
                 menuDAO.count(new MenuDTO().setKey(menuDTO.getKey()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
-            return Result.fail(ResultEnum.REPEAT_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
 
@@ -82,7 +82,7 @@ public class MenuServiceImpl implements IMenuService {
         }
 
         // 刷新权限
-        ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
+        ShiroUtil.clearPermissionAuthorization(menuDTO.getKey());
         return Result.success();
     }
 
@@ -109,7 +109,7 @@ public class MenuServiceImpl implements IMenuService {
                 .setKey(menuDTO.getKey())
                 .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0) {
-            return Result.fail(ResultEnum.REPEAT_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         // 2.补充参数
@@ -120,7 +120,7 @@ public class MenuServiceImpl implements IMenuService {
         if (menuDAO.update(menuPO) < 1) {
             return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (!menuDB.getKey().equals(menuPO.getKey())) {
-            ShiroUtil.getUserRealm().clearAllCachedAuthorizationInfo();
+            ShiroUtil.clearPermissionAuthorization(menuPO.getKey());
         }
 
         // 4.移除服务端缓存

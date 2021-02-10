@@ -55,7 +55,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
         if (dictDAO.count(new DictQuery().setName(dictDTO.getName())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (dictDAO.count(new DictQuery().setKey(dictDTO.getKey())) > 0) {
-            return Result.fail(ResultEnum.REPEAT_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         }
 
         DictPO dictPO = new DictPO()
@@ -122,7 +122,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (!dictPO.getKey().equals(dictDTO.getKey()) &&
                 dictDAO.count(new DictQuery().setKey(dictDTO.getKey()).setRidId(dictPO.getId())) > 0) {
-            return Result.fail(ResultEnum.REPEAT_KEY);
+            return Result.fail(ResultEnum.EXIST_KEY);
         } else if (dictDAO.update(new DictPO()
                 .setKey(dictDTO.getKey())
                 .setName(dictDTO.getName())

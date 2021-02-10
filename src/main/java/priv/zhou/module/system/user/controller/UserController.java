@@ -12,6 +12,8 @@ import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
+import priv.zhou.module.system.user.domain.query.UserQuery;
+import priv.zhou.module.system.user.domain.vo.UserVO;
 import priv.zhou.module.system.user.service.IUserService;
 
 import static priv.zhou.common.constant.DictConst.SYSTEM_USER_STATE;
@@ -47,7 +49,7 @@ public class UserController extends BaseController {
     @RequestMapping("/add")
     public String add(Model model) {
 
-        super.add(model, new UserDTO().setState(0));
+        super.add(model, new UserVO().setState(0));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";
@@ -56,12 +58,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        Result<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return NOT_FOUNT;
-        }
-        super.update(model, dtoVO.getData());
-
+        super.update(model, userService.getVO(new UserQuery().setId(id)));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";
@@ -78,13 +75,8 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:reset:pwd")
     @RequestMapping("/reset/pwd/{id}")
     public String resetPwd(Model model, @PathVariable Integer id) {
-        Result<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return NOT_FOUNT;
-        }
-        UserDTO userDTO = dtoVO.getData();
-        super.update(model, userDTO);
-        model.addAttribute(ACTION_KEY, "/rest/reset/pwd/" + userDTO.getId());
+        super.update(model, userService.getVO(new UserQuery().setId(id)));
+        model.addAttribute(ACTION_KEY, "/rest/reset/pwd/" + id);
         return "system/user/resetPwd";
     }
 
@@ -98,13 +90,9 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:detail")
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        Result<UserDTO> dtoVO = userService.get(new UserDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return NOT_FOUNT;
-        }
-        UserDTO userDTO = dtoVO.getData();
-        userDTO.setStateStr(dictService.getLabel(SYSTEM_USER_STATE, userDTO.getState()));
-        super.detail(model, userDTO);
+        UserVO userVO = userService.getVO(new UserQuery().setId(id));
+        super.detail(model, userVO);
+        userVO.setStateStr(dictService.getLabel(SYSTEM_USER_STATE, userVO.getState()));
         return "system/user/detail";
     }
 

@@ -26,7 +26,7 @@
     <sql id="POSql">
         SELECT
             id,
-            `code`dictData,
+            `code`,
             label,
             dict_key,
             type,
@@ -64,6 +64,7 @@
     <select id="get" parameterType="DictDataQuery" resultMap="POMap">
         <include refid="POSql"/>
         <where>
+            is_deleted = 0
             <if test="code != null and code != ''">and `code` = #{code</if>
         </where>
     </select>
@@ -77,6 +78,7 @@
             spare
         FROM system_dict_data
         <where>
+            is_deleted = 0
             <if test="type != null"> and type = #{type}</if>
             <if test="dictKey != null and dictKey != ''">and dict_key = #{dictKey}</if>
         </where>

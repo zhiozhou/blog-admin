@@ -21,7 +21,7 @@ import priv.zhou.module.visitor.domain.po.VisitorPO;
 
 import java.util.List;
 
-import static priv.zhou.common.constant.GlobalConst.ZHOU_VISITOR_ID;
+import static priv.zhou.common.constant.GlobalConst.ZHOU_ID;
 
 
 /**
@@ -86,7 +86,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
                 .setState(1)
                 .setBlog(targetPO.getBlog())
                 .setToVid(targetPO.getFromVisitor().getId())
-                .setFromVisitor(new VisitorPO().setId(ZHOU_VISITOR_ID))
+                .setFromVisitor(new VisitorPO().setId(ZHOU_ID))
                 .setTopicId(targetPO.getTopicId().equals(0) ? targetPO.getId() : targetPO.getTopicId());
         return commentDAO.save(commentPO) > 0 ?
                 Result.success() :

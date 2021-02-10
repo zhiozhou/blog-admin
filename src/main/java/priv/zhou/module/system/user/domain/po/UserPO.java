@@ -19,6 +19,7 @@ import java.util.Date;
 @Setter
 @Accessors(chain = true)
 public class UserPO implements Serializable {
+
     /**
      * id
      */
@@ -45,9 +46,19 @@ public class UserPO implements Serializable {
     private String name;
 
     /**
+     * 手机号
+     */
+    private String phone;
+
+    /**
      * 状态 关联字典
      */
     private Integer state;
+
+    /**
+     * 创建人
+     */
+    private Integer createBy;
 
     /**
      * 创建时间
@@ -55,14 +66,20 @@ public class UserPO implements Serializable {
     private Date gmtCreate;
 
     /**
+     * 修改人
+     */
+    private Integer modifiedBy;
+
+    /**
      * 修改时间
      */
     private Date gmtModified;
 
-	/**
-	 * 角色
-	 */
-    private RolePO role;
+    /**
+     * 删除位
+     */
+    private Boolean deleted;
+
 
     @Override
     public String toString() {

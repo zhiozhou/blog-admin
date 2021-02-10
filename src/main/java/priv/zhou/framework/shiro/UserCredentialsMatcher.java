@@ -2,24 +2,33 @@ package priv.zhou.framework.shiro;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.stereotype.Component;
-import priv.zhou.module.system.user.domain.dto.UserDTO;
+import priv.zhou.common.enums.ResultEnum;
+import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.module.system.user.domain.bo.UserPrincipal;
+import priv.zhou.module.system.user.domain.dao.UserDAO;
+import priv.zhou.module.system.user.domain.po.UserPO;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static priv.zhou.common.constant.GlobalConst.ZHOU_ID;
 
 
 public class UserCredentialsMatcher extends SimpleCredentialsMatcher {
 
     private final int maxAttempt;
 
+    private final UserDAO userDAO;
+
     private final Cache<String, AtomicInteger> attemptCache;
 
-    public UserCredentialsMatcher(int maxAttempt, Cache<String, AtomicInteger> attemptCache) {
+    public UserCredentialsMatcher(UserDAO userDAO, int maxAttempt, Cache<String, AtomicInteger> attemptCache) {
+        this.userDAO = userDAO;
         this.maxAttempt = maxAttempt;
         this.attemptCache = attemptCache;
     }
@@ -27,31 +36,41 @@ public class UserCredentialsMatcher extends SimpleCredentialsMatcher {
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo authInfo) {
 
-        String username = (String) token.getPrincipal();
+        // 1.验证用户
+        UserPrincipal userPrincipal = (UserPrincipal) authInfo.getPrincipals().getPrimaryPrincipal();
+        if (userPrincipal.getState() == 11) {
+            throw new LockedAccountException();
+        } else if (userPrincipal.getState() == 12) {
+            throw new DisabledAccountException();
+        }
 
-        // 1.验证登录次数
-        AtomicInteger retryCount = attemptCache.get(username);
+        // 2.验证登录次数
+        String cacheKey = userPrincipal.getUsername();
+        AtomicInteger retryCount = attemptCache.get(cacheKey);
         if (null == retryCount) {
             retryCount = new AtomicInteger(1);
-            attemptCache.put(username, retryCount);
+            attemptCache.put(cacheKey, retryCount);
         } else if (retryCount.incrementAndGet() > maxAttempt) {
-            // 修改数据库状态未锁定，管理端增加解锁
+            if (userDAO.update(new UserPO()
+                    .setId(userPrincipal.getId())
+                    .setState(11)
+                    .setModifiedBy(ZHOU_ID)) < 1) {
+                throw new GlobalException(ResultEnum.LATER_RETRY);
+            }
+            ShiroUtil.putAuthentication(userPrincipal.getUsername(), UserRealm.buildAuthenticationInfo(userPrincipal.setState(11)));
             throw new LockedAccountException();
         }
 
-        // 2.使用父级匹配 todo 验证密码
-        PrincipalCollection principals = authInfo.getPrincipals();
-        UserDTO userDTO = (UserDTO) principals.getPrimaryPrincipal();
-//        boolean matched = match(token.getCredentials(),userDTO.)
-//        boolean result = super.doCredentialsMatch(token, authInfo);
-//        if (result) {
-//            // 成功登录，清除缓存
-//            attemptCache.remove(username);
-//        } else {
-//            // 登录失败，追加限制
-//            attemptCache.put(username, retryCount);
-//        }
-        return true;
+        // 3.匹配密码
+        if (match(new String((char[]) token.getCredentials()), userPrincipal.getSalt(), userPrincipal.getPassword())) {
+            // 成功登录，清除缓存
+            attemptCache.remove(cacheKey);
+            return true;
+        }
+
+        // 登录失败，追加限制
+        attemptCache.put(cacheKey, retryCount);
+        return false;
     }
 
 

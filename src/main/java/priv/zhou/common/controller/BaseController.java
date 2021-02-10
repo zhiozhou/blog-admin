@@ -27,9 +27,11 @@ public class BaseController {
 
     protected final String ACTION_KEY = "_action";
 
+    protected final String ACTION_FLAG_KEY = "_isAdd";
+
     protected final String ADD_ACTION = "/rest/save";
 
-    protected final String UPDATE_ACTION = "/rest/update";
+    protected final String UPDATE_ACTION = "/rest/update/";
 
     protected final String UPLOAD_PARAM_KEY = "_upload";
 
@@ -46,6 +48,7 @@ public class BaseController {
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, ADD_ACTION);
+        model.addAttribute(ACTION_FLAG_KEY, true);
     }
 
     /**
@@ -58,6 +61,7 @@ public class BaseController {
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, UPDATE_ACTION);
+        model.addAttribute(ACTION_FLAG_KEY, false);
     }
 
     /**

@@ -76,7 +76,7 @@
         )
     </insert>
 
-    <delete id="remove" parameterType="DictDTO">
+    <delete id="remove" parameterType="DictQuery">
         UPDATE system_dict SET is_deleted = 1 WHERE is_deleted = 0 and id = #{id}
     </delete>
 
@@ -99,6 +99,7 @@
     <select id="get" parameterType="DictQuery" resultMap="POMap">
         <include refid="POSql"/>
         <where>
+            is_deleted = 0
             <if test="id != null">AND id = #{id}</if>
             <if test="key != null and key != ''">AND `key` = #{key}</if>
         </where>
@@ -124,6 +125,7 @@
     <select id="list" parameterType="DictQuery" resultMap="POMap">
         <include refid="POSql"/>
         <where>
+            is_deleted = 0
             <if test="nameLike != null and nameLike != ''">and name LIKE CONCAT('%',#{nameLike},'%')</if>
             <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
             <if test="state != null"> and state = #{state}</if>
@@ -151,6 +153,7 @@
             COUNT(0)
         FROM system_dict
         <where>
+            is_deleted = 0
             <if test="ridId != null ">and id != #{ridId}</if>
             <if test="name != null and name != ''"> and `name` = #{name}</if>
             <if test="key != null and key != ''"> and `key` = #{key}</if>

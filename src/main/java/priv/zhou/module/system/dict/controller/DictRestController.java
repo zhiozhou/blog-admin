@@ -2,10 +2,7 @@ package priv.zhou.module.system.dict.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
@@ -43,9 +40,9 @@ public class DictRestController {
     }
 
     @RequiresPermissions("system:dict:update")
-    @PostMapping("/update")
-    public Result<NULL> update(@Valid DictDTO dictDTO) {
-        return dictService.update(dictDTO);
+    @PostMapping("/update/{id}")
+    public Result<NULL> update(@PathVariable Integer id, @Valid DictDTO dictDTO) {
+        return dictService.update(dictDTO.setId(id));
     }
 
     @RequiresPermissions("system:dict:list")
