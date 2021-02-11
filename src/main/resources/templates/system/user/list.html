@@ -85,8 +85,11 @@
                         {field: 'name', title: '姓名', minWidth: '100'},
                         {field: 'phone', title: '手机号', minWidth: '120'},
                         {
-                            field: 'role', title: '角色', minWidth: '120',
-                            templet: ({role}) => `<a class="role-btn" data-id="${role.id}">${role.name}</a>`
+                            field: 'roles', title: '角色', minWidth: '120',
+                            templet: ({roles}) => roles.split(',').map(rSt => {
+                                let r = rSt.split('-');
+                                return `<a class="layui-btn layui-btn-xs role-btn" data-id="${r[0]}">${r[1]}</a>`
+                            }).join(' ')
                         },
                         {
                             field: 'state', title: '状态',

@@ -51,10 +51,8 @@
 
     <delete id="clearMenu" parameterType="RoleDTO">
         delete from system_role_menu
-        <where>
-            menu_id NOT IN ( SELECT id FROM system_menu )
-            <if test="id != null">or role_id = #{id}</if>
-        </where>
+        WHERE menu_id NOT IN ( SELECT id FROM system_menu )
+        <if test="id != null">or role_id = #{id}</if>
     </delete>
 
     <delete id="remove" parameterType="RoleDTO">
@@ -83,7 +81,7 @@
             system_role.name,
             system_role.state,
             system_role.remark,
-            system_menu.id menu_id,
+            system_menu.id AS menu_id,
             system_menu.parent_id menu_parent_id,
             system_menu.name menu_name
         FROM
@@ -122,8 +120,6 @@
         </where>
     </select>
 
-
-
     <select id="countUser" parameterType="RoleDTO" resultType="integer">
         SELECT
             COUNT( 0 )
@@ -133,8 +129,6 @@
             role_id = #{id}
         </where>
     </select>
-
-
 
     <select id="keySet" parameterType="integer" resultType="string">
         SELECT

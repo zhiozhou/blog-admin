@@ -21,28 +21,34 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input"  th:value="*{role.name}" disabled>
+                        <a class="layui-btn layui-btn-xs role-btn"
+                           th:each="role : *{roles}"
+                           th:attr="data-id=${role.id}"
+                           th:text="${role.name}"
+                        >
+                        </a>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
-                        <input type="text"  class="layui-input" th:value="*{stateStr}" disabled>
+                        <input type="text" class="layui-input" th:value="*{stateStr}" disabled>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">创建时间：</label>
                     <div class="layui-input-block">
-                        <input type="text" th:value="*{gmtCreate}" class="layui-input date-field" disabled>
+                        <input type="text" class="layui-input" th:value="*{#dates.format(gmtCreate, 'yyyy-MM-dd')}"
+                               disabled>
                     </div>
                 </div>
 
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" >修改密码</button>
+                        <button class="layui-btn  layui-btn-normal">修改密码</button>
                     </div>
                 </div>
             </form>

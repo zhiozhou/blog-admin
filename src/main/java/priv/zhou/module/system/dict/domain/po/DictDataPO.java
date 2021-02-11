@@ -56,4 +56,9 @@ public class DictDataPO implements Serializable{
 	 */
 	private String spare;
 
+	/**
+	 * 删除位
+	 */
+	private Boolean deleted;
+
 }

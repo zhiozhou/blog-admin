@@ -38,10 +38,10 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
-                        <select lay-verify="required" lay-search="">
-                            <option th:each="role:${roleList}"
+                        <select lay-verify="required" lay-search="" multiple>
+                            <option th:each="role:${roles}"
                                     th:value="${role.id}"
-                                    th:field="*{role.id}"
+<!--                                    th:field="*{role.id}"-->
                                     th:text="${role.name}"></option>
                         </select>
                     </div>

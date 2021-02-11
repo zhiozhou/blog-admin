@@ -25,5 +25,5 @@ public class UserTableVO {
 
     private Integer state;
 
-    private String roleNames;
+    private String roles;
 }

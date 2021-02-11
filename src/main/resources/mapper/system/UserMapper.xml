@@ -24,7 +24,7 @@
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
         <result column="state" property="state"/>
-        <result column="role_names" property="roleNames"/>
+        <result column="roles" property="roles"/>
     </resultMap>
 
     <resultMap id="VOMap" type="UserVO">
@@ -133,7 +133,7 @@
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id
-        WHERE `user`.is_deleted = 0 and id = #{id}
+        WHERE `user`.is_deleted = 0 and `user`.id = #{id}
     </select>
 
     <select id="getPrincipal" parameterType="UserQuery" resultMap="PrincipalMap">
@@ -169,7 +169,7 @@
             `user`.`name`,
             `user`.phone,
             `user`.state,
-            GROUP_CONCAT( role.`name` ) as role_names
+            GROUP_CONCAT(concat(role.id,'-',role.`name`)) as roles
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id

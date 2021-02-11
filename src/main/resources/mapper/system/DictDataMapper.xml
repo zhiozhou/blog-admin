@@ -8,11 +8,11 @@
         <id column="id" property="id"/>
         <result column="code" property="code"/>
         <result column="label" property="label"/>
-        <result column="dict_key" property="dict_key"/>
+        <result column="dict_key" property="dictKey"/>
         <result column="type" property="type"/>
         <result column="top" property="top"/>
         <result column="spare" property="spare"/>
-        <result column="deleted" property="is_deleted"/>
+        <result column="is_deleted" property="deleted"/>
     </resultMap>
 
     <resultMap id="VOMap" type="DictDataVO">
@@ -65,7 +65,8 @@
         <include refid="POSql"/>
         <where>
             is_deleted = 0
-            <if test="code != null and code != ''">and `code` = #{code</if>
+            <if test="code != null and code != ''">and `code` = #{code}</if>
+            <if test="dictKey != null and dictKey != ''">and dict_key = #{dictKey}</if>
         </where>
     </select>
 
