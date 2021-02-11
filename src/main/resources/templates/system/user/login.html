@@ -32,12 +32,7 @@
             </div>
         </div>
         <div th:include="include :: footer"></div>
-        <script th:src="@{/plugin/jsencrypt.min.js}"></script>
-        <script th:inline="javascript">
-            const rsaUtil = new JSEncrypt(),
-                rsaPublicKey = [[${rsaPublicKey}]]
-            rsaUtil.setPublicKey(rsaPublicKey)
-        </script>
+        <div th:include="include :: md5-js"></div>
         <script>
             layui.use(['form', 'jquery'], () => {
                 const {form} = layui
@@ -45,12 +40,11 @@
                     warn('账号在其他设备登陆')
                 }
                 form.on('submit(login)', ({field: data}) => {
-                    data.password = rsaUtil.encrypt(data.password)
+                    data.password = md5(data.username + data.password)
                     return httpPost({
                         url: `${_gate}system/user/rest/login`,
                         data,
                         cb: () => {
-                            loading()
                             location.href = `${_gate}index`
                         }
                     })

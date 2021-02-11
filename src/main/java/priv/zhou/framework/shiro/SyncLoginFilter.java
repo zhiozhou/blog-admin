@@ -63,10 +63,8 @@ public class SyncLoginFilter extends AccessControlFilter {
         return this;
     }
 
-    public void remove(Session session) {
-        String username = (String) session.getAttribute("username");
-        Deque<Serializable> deque = cache.get(username);
-        deque.remove();
+    public void remove(String username) {
+        cache.get(username).remove();
     }
 
     /**
@@ -96,7 +94,7 @@ public class SyncLoginFilter extends AccessControlFilter {
 
             UserAgent userAgent = UserAgent.parseUserAgentString(((ShiroHttpServletRequest) request).getHeader("User-Agent"));
             session.setAttribute("username", userPrincipal.getUsername());
-            session.setAttribute("role", userPrincipal.getRoleNames());
+            session.setAttribute("roleNames", userPrincipal.getRoleNames());
             session.setAttribute("browser", userAgent.getBrowser().getName());
             session.setAttribute("os", userAgent.getOperatingSystem().getName());
             deque.push(session.getId());

@@ -59,9 +59,13 @@
         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
            shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
     </script>
-
-
 </div>
+
+
+<div th:fragment="md5-js" xmlns:th="http://www.thymeleaf.org">
+    <script th:src="@{/plugin/md5.min.js}"></script>
+</div>
+
 
 
 

@@ -37,13 +37,16 @@ public class ShiroUtil {
         getSession().stop();
     }
 
-
     public static UserPrincipal getUser() {
         return (UserPrincipal) getSubject().getPrincipal();
     }
 
     public static Integer getUserId() {
         return getUser().getId();
+    }
+
+    public static String getUserName() {
+        return getUser().getName();
     }
 
 

@@ -10,10 +10,8 @@
                                autocomplete="off">
                     </div>
                     <div class="layui-inline">
-                        <select name="role.id" lay-search="">
-                            <option value="">Select a Role</option>
-                            <option th:each="role:${roleList}" th:value="${role.id}" th:text="${role.name}"></option>
-                        </select>
+                        <input type="text" name="host" class="layui-input" placeholder="Input Host"
+                               autocomplete="off">
                     </div>
                     <div class="layui-inline">
                         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search-all">
@@ -50,18 +48,12 @@
                 const {table, jquery: $} = layui,
                     cols = [[
                         {field: 'username', title: 'Username', minWidth: '100'},
-                        {field: 'role', title: 'Role', minWidth: '120', templet: ({role}) => role.name},
+                        {field: 'roleNames', title: 'Role', minWidth: '120'},
                         {field: 'host', title: 'IP', minWidth: '120'},
                         {field: 'os', title: 'OS', minWidth: '150'},
                         {field: 'browser', title: 'Browser', minWidth: '120'},
-                        {
-                            field: 'loginTime', title: 'Login Time', sminWidth: '120',
-                            templet: ({loginTime}) => formatDate(loginTime)
-                        },
-                        {
-                            field: 'lastAccessTime', title: 'Last Access', minWidth: '120',
-                            templet: ({lastAccessTime}) => formatDate(lastAccessTime)
-                        },
+                        {field: 'loginTime', title: 'Login Time', sminWidth: '120'},
+                        {field: 'lastAccessTime', title: 'Last Access', minWidth: '120'},
                         {title: 'Operation', toolbar: '#monitor-tool'}
                     ]]
 

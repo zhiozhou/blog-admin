@@ -1,5 +1,6 @@
-package priv.zhou.module.system.monitor.domain.dto;
+package priv.zhou.module.system.monitor.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.Date;
 @Setter
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OnlineDTO {
+public class SessionVO {
 
     @NotEmpty(message = "id不可为空")
     private String id;
@@ -26,7 +27,7 @@ public class OnlineDTO {
     /**
      * 角色名称
      */
-    private RoleDTO role;
+    private String roleNames;
 
     /**
      * 操作系统
@@ -46,11 +47,13 @@ public class OnlineDTO {
     /**
      * 开始时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date loginTime;
 
     /**
      * 最后访问时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastAccessTime;
 
 
