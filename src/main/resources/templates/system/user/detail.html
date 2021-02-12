@@ -21,11 +21,10 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色：</label>
                     <div class="layui-input-block">
-                        <a class="layui-btn layui-btn-xs role-btn"
+                        <a class="layui-btn layui-btn-sm role-btn"
                            th:each="role : *{roles}"
                            th:attr="data-id=${role.id}"
-                           th:text="${role.name}"
-                        >
+                           th:text="${role.name}">
                         </a>
                     </div>
                 </div>
@@ -44,7 +43,6 @@
                                disabled>
                     </div>
                 </div>
-
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">

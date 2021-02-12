@@ -81,8 +81,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
         for (int id : ids) {
             if (userDAO.remove(new UserQuery().setId(id)) < 1) {
                 return Result.fail(ResultEnum.FAIL_PARAM);
-            } else if (userDAO.unRelateRole(id) < 1) {
-                return Result.fail(ResultEnum.LATER_RETRY);
             }
         }
         return Result.success();
@@ -91,7 +89,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     @Transactional
     public Result<NULL> update(UserUpdateDTO updateDTO) {
-        if (userDAO.count(new UserQuery().setPhone(updateDTO.getPhone())) > 0) {
+        if (userDAO.count(new UserQuery().setPhone(updateDTO.getPhone()).setRidId(updateDTO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_PHONE);
         } else if (userDAO.update(new UserPO()
                 .setId(updateDTO.getId())

@@ -143,8 +143,8 @@ function iframeSubmit({form, field: data}) {
 /**
  * 内联页面消息提示，成功后关闭并刷新父级表格
  */
-function iframeDone(){
-    outMsg(()=>{
+function iframeDone() {
+    outMsg(() => {
         parent.layer.close(parent.layer.getFrameIndex(window.name))
         parent.layui.table.reload('table')
     })

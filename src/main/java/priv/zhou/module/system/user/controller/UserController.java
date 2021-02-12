@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.Result;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
+import priv.zhou.module.system.role.domain.vo.RoleVO;
 import priv.zhou.module.system.role.service.IRoleService;
-import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.query.UserQuery;
 import priv.zhou.module.system.user.domain.vo.UserVO;
 import priv.zhou.module.system.user.service.IUserService;
 
+import java.util.stream.Collectors;
+
 import static priv.zhou.common.constant.DictConst.SYSTEM_USER_STATE;
-import static priv.zhou.common.constant.GlobalConst.RSA_PUBLIC_KEY;
 
 /**
  * 用户 视图控制层
@@ -57,7 +57,12 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        super.update(model, userService.getVO(new UserQuery().setId(id)));
+        UserVO userVO = userService.getVO(new UserQuery().setId(id));
+        userVO.setRoleIdSet(userVO.getRoles()
+                .stream()
+                .map(RoleVO::getId)
+                .collect(Collectors.toSet()));
+        super.update(model, userVO.setRoles(null));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";

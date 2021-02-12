@@ -22,11 +22,12 @@
                         </select>
                     </div>
                     <div class="layui-inline">
-                        <select name="role.id" lay-search="">
-                            <option value="">请选择一个角色</option>
-                            <option th:each="role:${roleList}"
+                        <select name="inRoles" multiple lay-search="">
+                            <option value="">按角色查询</option>
+                            <option th:each="role : ${roleList}"
                                     th:value="${role.id}"
-                                    th:text="${role.name}"></option>
+                                    th:text="${role.name}"
+                            ></option>
                         </select>
                     </div>
                     <div class="layui-inline">
@@ -56,21 +57,19 @@
         <script type="text/html" id="user-tool">
             <a class="layui-btn layui-btn-sm" lay-event="detail"
                shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
-            {{#  if(d.state != 12){ }}
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="update"
                shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="resetPwd"
                shiro:hasPermission=${_module.permissionPrefix+':resetPwd'}>修改密码</a>
-            {{#  if(d.state != 11){ }}
+            {{#  if(d.state != 12){ }}
             <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="freeze"
                shiro:hasPermission=${_module.permissionPrefix+':freeze'}>冻结</a>
             {{# }else{ }}
-            <a class="layui-btn layui-btn-sm" lay-event="unfreeze"
+            <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="unfreeze"
                shiro:hasPermission=${_module.permissionPrefix+':freeze'}>解冻</a>
             {{#  } }}
             <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="remove"
                shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
-            {{#  } }}
         </script>
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]
@@ -108,6 +107,19 @@
                             return httpPost({url: `${prefix}/rest/freeze/${data.id}`, cb: () => msg(reloadTable())})
                         case 'unfreeze':
                             return httpPost({url: `${prefix}/rest/unfreeze/${data.id}`, cb: () => msg(reloadTable())})
+                        case 'remove':
+                            return layer.confirm(`确认移除该${_module.name}吗`, {
+                                    btn: ['确定', '取消'],
+                                    shade: [0.1, '#fff']
+                                }, () => httpPost({
+                                    url: `${prefix}/rest/remove`,
+                                    data: {
+                                        ids: [data.id]
+                                    },
+                                    cb: () => msg(reloadTable)
+                                })
+                            )
+
                     }
                     iframeAction({data, event})
                 })

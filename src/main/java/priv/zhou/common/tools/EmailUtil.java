@@ -1,6 +1,7 @@
 package priv.zhou.common.tools;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import priv.zhou.common.properties.AppProperties;
@@ -10,13 +11,14 @@ import priv.zhou.common.properties.AppProperties;
  * @author zhou
  * @since 2019.03.11
  */
+@DependsOn(value = {"javaMailSender", "mailProperties","appProperties"})
 public class EmailUtil {
 
-	private static JavaMailSender SENDER = SpringUtils.getBean(JavaMailSender.class);
+	private static final JavaMailSender SENDER = SpringUtils.getBean(JavaMailSender.class);
 
-	private static MailProperties PROPERTIES = SpringUtils.getBean(MailProperties.class);
+	private static final MailProperties PROPERTIES = SpringUtils.getBean(MailProperties.class);
 
-	private static AppProperties APP_PROPERTIES = SpringUtils.getBean(AppProperties.class);
+	private static final AppProperties APP_PROPERTIES = SpringUtils.getBean(AppProperties.class);
 
 
 	/**

@@ -125,9 +125,8 @@
                     if (!dataList.length) {
                         return warn('数据项不可为空')
                     }
-
                     let codeSet = new Set()
-                    for (let i in dataList) {
+                    for (let i = 0; i < dataList.length; i++) {
                         let {code} = temp = dataListEcho[i]
                         if (codeSet.has(code)) {
                             return warn('数据项不可重复')
