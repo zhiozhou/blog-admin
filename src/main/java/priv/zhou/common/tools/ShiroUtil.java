@@ -75,6 +75,13 @@ public class ShiroUtil {
     }
 
     /**
+     * 清除指定用户权限缓存
+     */
+    public static void clearUserAuthorization(String username) {
+        cacheManager.getCache(shiroProperties.getAuthorizationCacheName()).remove(username);
+    }
+
+    /**
      * 清除指定角色权限缓存
      */
     public static void clearRoleAuthorization(String roleName) {

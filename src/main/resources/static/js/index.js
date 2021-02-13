@@ -81,8 +81,6 @@ layui.use(['layer', 'element', 'jquery'], () => {
             tabSpreadTimer ? clearTimeout(tabSpreadTimer) : $(this).find('.text-spread').fadeOut()
         }).on('mouseenter', `#layout-tab>.layui-tab-title>li`, function () {
             tabSpreadTimer = setTimeout(() => {
-                console.log('aaa')
-                console.log($(this).find('.text-spread'))
                 $(this).find('.text-spread').fadeIn()
                 tabSpreadTimer = false
             }, 600)

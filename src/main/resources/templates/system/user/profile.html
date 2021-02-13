@@ -22,7 +22,11 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">角色：</label>
                         <div class="layui-input-block">
-                            <input type="text" class="layui-input" th:value="*{role.name}" disabled>
+                            <a class="layui-btn layui-btn-sm role-btn"
+                               th:each="role : *{roles}"
+                               th:attr="data-id=${role.id}"
+                               th:text="${role.name}">
+                            </a>
                         </div>
                     </div>
 
@@ -36,7 +40,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">创建时间：</label>
                         <div class="layui-input-block">
-                            <input type="text" class="layui-input date-field" th:value="*{gmtCreate }"
+                            <input type="text" class="layui-input date-field" th:value="*{#dates.format(gmtCreate, 'yyyy-MM-dd')}"
                                    disabled>
                         </div>
                     </div>
@@ -56,7 +60,7 @@
             layui.use(['jquery'], () => {
                 let {jquery:$} = layui
                 $('#reset-pwd').click(()=>{
-                    return newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/own`)
+                    return newFrame(`修改密码`, `${prefix}/reset/pwd/own`)
                 })
             })
         </script>

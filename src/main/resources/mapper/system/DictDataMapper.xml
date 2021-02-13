@@ -10,7 +10,7 @@
         <result column="label" property="label"/>
         <result column="dict_key" property="dictKey"/>
         <result column="type" property="type"/>
-        <result column="top" property="top"/>
+        <result column="is_perf" property="perf"/>
         <result column="spare" property="spare"/>
         <result column="is_deleted" property="deleted"/>
     </resultMap>
@@ -30,17 +30,17 @@
             label,
             dict_key,
             type,
-            top,
+            is_perf,
             spare,
             is_deleted
         FROM system_dict_data
     </sql>
 
     <insert id="saveList" parameterType="DictDataPO">
-        INSERT system_dict_data ( code, label, dict_key, type, top, spare, is_deleted )
+        INSERT system_dict_data ( code, label, dict_key, type, is_perf, spare, is_deleted )
         VALUES
         <foreach collection="list" index="index" item="dictData" separator=",">
-            ( #{dictData.code},#{dictData.label},#{dictData.dictKey},#{dictData.type},#{dictData.top},#{dictData.spare},0)
+            ( #{dictData.code},#{dictData.label},#{dictData.dictKey},#{dictData.type},#{dictData.perf},#{dictData.spare},0)
         </foreach>
     </insert>
 
@@ -75,7 +75,7 @@
             `code`,
             label,
             type,
-            top,
+            is_perf,
             spare
         FROM system_dict_data
         <where>

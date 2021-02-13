@@ -1,6 +1,7 @@
 package priv.zhou.module.system.user.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,8 +48,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:add")
     @RequestMapping("/add")
     public String add(Model model) {
-
-        super.add(model, new UserVO().setState(0));
+        super.add(model, new UserVO().setState(0).setRoleIdSet(Sets.newHashSet()));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
         model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
         return "system/user/au";

@@ -11,11 +11,12 @@
                                placeholder="请输入用户名"
                                th:field="*{username}"
                                th:disabled="${!_isAdd}"
-                               th:classappend="${_isAdd&&'layui-disabled'}">
+                               th:classappend="${_isAdd?'':'layui-disabled'}"
+                               th:attr="lay-verify=${_isAdd?'required':''}"/>
                     </div>
                 </div>
 
-                <div class="layui-form-item" th:if="${isAdd}">
+                <div class="layui-form-item" th:if="${_isAdd}">
                     <label class="layui-form-label">密码：</label>
                     <div class="layui-input-block">
                         <input type="password" class="layui-input" autocomplete="off" lay-verify="required"
@@ -67,13 +68,18 @@
             </form>
         </div>
         <div th:include="include :: au-footer"></div>
+        <div th:include="include :: md5-js"></div>
         <script th:inline="javascript">
             const prefix = `${_gate}system/user`
 
             layui.use(['form'], () => {
                 const {form} = layui
-                form.on('submit(submit)', iframeSubmit)
-
+                form.on('submit(submit)', ({form, field}) => {
+                    if (field.password) {
+                        field.password = md5(field.username + field.password)
+                    }
+                    return iframeSubmit({form, field})
+                })
             })
 
         </script>

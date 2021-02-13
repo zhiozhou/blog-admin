@@ -81,7 +81,7 @@
                 1: {spare: 'layui-btn-primary', info: '预留'},
                 11: {spare: '', info: '系统'},
             }
-            let topIndex  // 默认数据索引
+            let perfIndex  // 默认数据索引
 
             layui.use(['table', 'form', 'jquery'], () => {
                 const {table, form, jquery: $} = layui
@@ -98,29 +98,31 @@
                             field: 'type', title: '状态',
                             templet: ({type}) => {
                                 let {spare, info} = typeMap[type]
-                                return `<a data-type="${type}" class="type-btn layui-btn layui-btn-xs ${spare}">${info}</a>`
+                                return `<a data-type="${type}" class="layui-btn layui-btn-xs type-btn ${spare}">${info}</a>`
                             }
                         },
                         {
-                            field: 'top', title: '默认使用',
-                            templet: ({top}) => {
-                                let css = 'layui-bg-blue', info = '正常'
-                                if (1 === top) {
+                            field: 'perf', title: '默认使用',
+                            templet: ({perf}) => {
+                                let css, info
+                                if (perf) {
                                     css = 't'
                                     info = '默认'
+                                } else {
+                                    css = 'layui-bg-blue'
+                                    info = '正常'
                                 }
-                                return `<a class="top-btn layui-btn layui-btn-xs ${css}">${info}</a>`
+                                return `<a class="layui-btn layui-btn-xs perf-btn ${css}">${info}</a>`
                             }
                         },
                         {title: '操作', toolbar: '#dict-tool'}
                     ]],
-                    done: () => topIndex = $('.t').parents('tr').data('index')
+                    done: () => perfIndex = $('.t').parents('tr').data('index')
                 })
 
 
                 //监听提交
                 form.on('submit(submit)', ({form, field}) => {
-
                     let dataList = dataListEcho.filter(d => d.code)
                     if (!dataList.length) {
                         return warn('数据项不可为空')
@@ -149,7 +151,7 @@
                     let index = tr.data('index')
                     switch (action) {
                         case 'insert':
-                            dataListEcho.splice(1 + index, 0, {type: 0, top: 0})
+                            dataListEcho.splice(1 + index, 0, {type: 0, perf: 0})
                             break
                         case 'remove':
                             if (1 === dataListEcho.length) {
@@ -188,13 +190,13 @@
                         .html(info)
                         .addClass(spare)
                     dataListEcho[index].type = type
-                }).on('click', '.top-btn', function () {
+                }).on('click', '.perf-btn', function () {
                     let index = $(this).parents('tr').data('index')
-                    if (topIndex !== index) {
-                        if (0 === topIndex || topIndex) {
-                            dataListEcho[topIndex].top = 0
+                    if (perfIndex !== index) {
+                        if (0 === perfIndex || perfIndex) {
+                            dataListEcho[perfIndex].perf = false
                         }
-                        dataListEcho[index].top = 1
+                        dataListEcho[index].perf = true
                         table.reload('data-table', {data: dataListEcho})
                     }
                 })

@@ -12,6 +12,7 @@ import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
+import priv.zhou.module.system.role.domain.dao.RoleDAO;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.dto.UserSaveDTO;
 import priv.zhou.module.system.user.domain.dto.UserUpdateDTO;
@@ -23,6 +24,7 @@ import priv.zhou.module.system.user.domain.vo.UserVO;
 import priv.zhou.module.system.user.service.IUserService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -37,6 +39,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl extends BaseService implements IUserService {
 
     private final UserDAO userDAO;
+
+    private final RoleDAO roleDAO;
 
     private final UserCredentialsMatcher certMatcher;
 
@@ -91,22 +95,36 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public Result<NULL> update(UserUpdateDTO updateDTO) {
         if (userDAO.count(new UserQuery().setPhone(updateDTO.getPhone()).setRidId(updateDTO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_PHONE);
+        }
+
+        UserPO userPO = userDAO.get(new UserQuery().setId(updateDTO.getId()));
+        if (null == userPO) {
+            return Result.fail(ResultEnum.FAIL_PARAM);
         } else if (userDAO.update(new UserPO()
                 .setId(updateDTO.getId())
                 .setName(updateDTO.getName())
                 .setPhone(updateDTO.getPhone())
                 .setModifiedBy(ShiroUtil.getUserId())) < 1) {
             return Result.fail(ResultEnum.LATER_RETRY);
-        } else if (userDAO.unRelateRole(updateDTO.getId()) < 1) {
-            return Result.fail(ResultEnum.LATER_RETRY);
-        } else if (userDAO.relateRole(updateDTO.getRoles()
-                .stream()
-                .map(roleId -> new UserRolePO()
-                        .setRoleId(roleId)
-                        .setUserId(updateDTO.getId()))
-                .collect(Collectors.toList())) != updateDTO.getRoles().size()) {
-            return Result.fail(ResultEnum.LATER_RETRY);
         }
+        Set<Integer> roleSet = roleDAO.idSet(updateDTO.getId());
+        if (roleSet.size() != updateDTO.getRoles().size() ||
+                updateDTO.getRoles().stream()
+                        .noneMatch(roleSet::contains)) {
+            if (userDAO.unRelateRole(updateDTO.getId()) < 1) {
+                return Result.fail(ResultEnum.LATER_RETRY);
+            } else if (userDAO.relateRole(updateDTO.getRoles()
+                    .stream()
+                    .map(roleId -> new UserRolePO()
+                            .setRoleId(roleId)
+                            .setUserId(updateDTO.getId()))
+                    .collect(Collectors.toList())) != updateDTO.getRoles().size()) {
+                return Result.fail(ResultEnum.LATER_RETRY);
+            }
+            ShiroUtil.clearUserAuthorization(userPO.getUsername());
+        }
+
+
         return Result.success();
     }
 
@@ -127,7 +145,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if (null == userPO) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         }
-        return userDAO.update(new UserPO().setId(id).setState(12).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
+        return userDAO.update(new UserPO().setId(id).setState(11).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
                 Result.success() :
                 Result.fail(ResultEnum.FAIL_OPERATION);
     }

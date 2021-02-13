@@ -24,7 +24,7 @@ public class DictDataVO {
 
     private Integer type;
 
-    private Integer top;
+    private Boolean perf;
 
     private String spare;
 

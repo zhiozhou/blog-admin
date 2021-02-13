@@ -102,7 +102,6 @@ public class UserRestController {
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
     public Result<TableVO<UserTableVO>> list(UserQuery query, Page page) {
-        // TODO 角色多选有问题
         return Result.success(TableVO.build(userService.listTableVO(query, page)));
     }
 

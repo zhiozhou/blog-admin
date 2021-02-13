@@ -146,6 +146,7 @@ function iframeSubmit({form, field: data}) {
 function iframeDone() {
     outMsg(() => {
         parent.layer.close(parent.layer.getFrameIndex(window.name))
-        parent.layui.table.reload('table')
+        let pt = parent.layui.table
+        pt && pt.reload('table')
     })
 }

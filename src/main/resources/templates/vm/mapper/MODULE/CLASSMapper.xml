@@ -35,7 +35,7 @@
         WHERE ${table.primaryKey.name} = #{${table.primaryKey.attrName}}
     </update>
 
-    <sql id="selectSQL">
+    <sql id="POSql">
         SELECT
 #foreach($column in $table.columnList)
             ${column.name} #if($velocityCount != $table.columnList.size()),
@@ -47,19 +47,18 @@
 
 
     <select id="get" parameterType="${table.className}DTO" resultType="${table.className}PO">
-        <include refid="selectSQL"/>
+        <include refid="POSql"/>
         WHERE ${table.primaryKey.name} = #{${table.primaryKey.attrName}}
     </select>
 
 
     <select id="list" parameterType="${table.className}DTO" resultType="${table.className}PO">
-        <include refid="selectSQL"/>
+        <include refid="POSql"/>
         <where>
 #foreach($column in $table.columnList)
             <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != ''#end "> and ${column.name} = #{${column.attrName}}</if>
 #end
         </where>
-        ORDER BY ${table.primaryKey.name} DESC
     </select>
 
 

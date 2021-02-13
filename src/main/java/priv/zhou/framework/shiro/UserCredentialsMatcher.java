@@ -40,8 +40,6 @@ public class UserCredentialsMatcher extends SimpleCredentialsMatcher {
         UserPrincipal userPrincipal = (UserPrincipal) authInfo.getPrincipals().getPrimaryPrincipal();
         if (userPrincipal.getState() == 11) {
             throw new LockedAccountException();
-        } else if (userPrincipal.getState() == 12) {
-            throw new DisabledAccountException();
         }
 
         // 2.验证登录次数

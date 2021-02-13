@@ -84,12 +84,15 @@
                             templet: ({type}) => dictRender(type, typeMap)
                         },
                         {
-                            field: 'top', title: '默认使用',
-                            templet: ({top}) => {
-                                let css = 'layui-bg-blue', info = '正常'
-                                if (1 === top) {
+                            field: 'perf', title: '默认使用',
+                            templet: ({perf}) => {
+                                let css, info
+                                if (perf) {
                                     css = 't'
                                     info = '默认'
+                                } else {
+                                    css = 'layui-bg-blue'
+                                    info = '正常'
                                 }
                                 return `<a class="layui-btn layui-btn-xs ${css}">${info}</a>`
                             }

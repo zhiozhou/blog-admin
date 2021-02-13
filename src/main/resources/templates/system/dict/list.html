@@ -72,7 +72,6 @@
 
                 table.on('tool(table)', (tool) => {
                     if ('remove' === tool.event) {
-                        console.log(tool.data.id)
                         return layer.confirm(`确认移除该${_module.name}吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']

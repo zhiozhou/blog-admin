@@ -46,9 +46,9 @@ public class DictDataPO implements Serializable{
 
 
 	/**
-	 * 默认 0正常 1默认
+	 * 首选标志位
 	 */
-	private Integer top;
+	private Boolean perf;
 
 
 	/**

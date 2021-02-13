@@ -27,7 +27,7 @@
             <result column="code" property="code"/>
             <result column="label" property="label" />
             <result column="type" property="type" />
-            <result column="top" property="top" />
+            <result column="is_perf" property="perf" />
             <result column="spare" property="spare" />
         </collection>
     </resultMap>
@@ -115,7 +115,7 @@
             dict_data.`code`,
             dict_data.label,
             dict_data.type,
-            dict_data.top,
+            dict_data.is_perf,
             dict_data.spare
         FROM system_dict AS dict
         LEFT JOIN system_dict_data AS dict_data ON dict.`key` = dict_data.dict_key

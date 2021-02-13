@@ -22,12 +22,12 @@
                         </select>
                     </div>
                     <div class="layui-inline">
-                        <select name="inRoles" multiple lay-search="">
+                        <select name="inRoles"  lay-search="" multiple>
                             <option value="">按角色查询</option>
                             <option th:each="role : ${roleList}"
                                     th:value="${role.id}"
-                                    th:text="${role.name}"
-                            ></option>
+                                    th:text="${role.name}">
+                            </option>
                         </select>
                     </div>
                     <div class="layui-inline">
@@ -61,12 +61,12 @@
                shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="resetPwd"
                shiro:hasPermission=${_module.permissionPrefix+':resetPwd'}>修改密码</a>
-            {{#  if(d.state != 12){ }}
+            {{#  if(d.state == 11){ }}
+            <a class="layui-btn layui-btn-sm" lay-event="unfreeze"
+               shiro:hasPermission=${_module.permissionPrefix+':freeze'}>解冻</a>
+            {{# }else{ }}
             <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="freeze"
                shiro:hasPermission=${_module.permissionPrefix+':freeze'}>冻结</a>
-            {{# }else{ }}
-            <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="unfreeze"
-               shiro:hasPermission=${_module.permissionPrefix+':freeze'}>解冻</a>
             {{#  } }}
             <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="remove"
                shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>

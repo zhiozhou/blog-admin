@@ -1,5 +1,6 @@
 package priv.zhou.common.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
@@ -48,7 +49,7 @@ public class BaseController {
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, ADD_ACTION);
-        model.addAttribute(ACTION_FLAG_KEY, true);
+        model.addAttribute(ACTION_FLAG_KEY, Boolean.TRUE);
     }
 
     /**
@@ -61,7 +62,7 @@ public class BaseController {
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, UPDATE_ACTION);
-        model.addAttribute(ACTION_FLAG_KEY, false);
+        model.addAttribute(ACTION_FLAG_KEY, Boolean.FALSE);
     }
 
     /**

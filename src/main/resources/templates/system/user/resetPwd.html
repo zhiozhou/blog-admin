@@ -16,7 +16,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password" class="layui-input" lay-verify="required" utocomplete="off" placeholder="请输入密码">
+                        <input type="password" name="password" class="layui-input" lay-verify="required"
+                               autocomplete="off" placeholder="请输入密码">
                     </div>
                 </div>
 
@@ -32,11 +33,18 @@
             </form>
         </div>
         <div th:include="include :: au-footer"></div>
+        <div th:include="include :: md5-js"></div>
         <script th:inline="javascript">
             const prefix = `${_gate}system/user`
+
             layui.use(['form'], () => {
                 const {form} = layui
-                form.on('submit(submit)', iframeSubmit)
+                form.on('submit(submit)', ({form, field}) => {
+                    if (field.password) {
+                        field.password = md5(field.username + field.password)
+                    }
+                    return iframeSubmit({form, field})
+                })
             })
 
         </script>
