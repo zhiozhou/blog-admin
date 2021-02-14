@@ -1,16 +1,14 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto;
 
-import ${app.packet}.common.tools.DateUtil;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
 import java.util.Date;
+import ${app.packet}.common.tools.DateUtil;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**

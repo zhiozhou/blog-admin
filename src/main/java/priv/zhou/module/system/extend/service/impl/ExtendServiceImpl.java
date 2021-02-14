@@ -110,7 +110,7 @@ public class ExtendServiceImpl implements IExtendService {
      * 递归放入所有模板资源
      */
     private void putDemo(AppConfig appConfig, File file, String path) {
-        path += File.separator + file.getName();
+        path += "/" + file.getName();
         if (file.isDirectory()) {
             for (File temp : nullFill(file.listFiles())) {
                 putDemo(appConfig, temp, path);

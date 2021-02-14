@@ -1,13 +1,12 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.query;
 
-import ${app.packet}.common.tools.DateUtil;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import lombok.experimental.Accessors;
 import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+import ${app.packet}.common.tools.DateUtil;
 
-import java.util.List;
 
 
 /**

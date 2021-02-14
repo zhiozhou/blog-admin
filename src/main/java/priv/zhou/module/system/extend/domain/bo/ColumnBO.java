@@ -58,7 +58,7 @@ public class ColumnBO {
     public ColumnBO setName(String name) {
         this.name = name;
         this.attrName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name.startsWith("is_") ? name.substring(3) : name);
-        this.getSetName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, name);
+        this.getSetName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, attrName);
         return this;
     }
 

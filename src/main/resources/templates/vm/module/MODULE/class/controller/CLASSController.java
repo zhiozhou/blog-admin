@@ -1,15 +1,14 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.controller;
 
-import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import ${app.packet}.common.domain.Module;
-import ${app.packet}.common.domain.vo.Result;
-import priv.zhou.common.domain.vo.TableVO;
 import ${app.packet}.common.controller.BaseController;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.query.${table.className}Query;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.I${table.className}Service;
 
 /**
@@ -37,20 +36,19 @@ public class ${table.className}Controller extends BaseController {
     @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new ${table.className}DTO());
-
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
 #if(!$table.primaryKeys.isEmpty())
     @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        super.update(model, ${table.objectName}Service.getV0(new ${table.className}Query().setId(id)));
+        super.update(model, ${table.objectName}Service.getVO(new ${table.className}Query().setId(id)));
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        super.detail(model, ${table.objectName}Service.getV0(new ${table.className}Query().setId(id)));
+        super.detail(model, ${table.objectName}Service.getVO(new ${table.className}Query().setId(id)));
         return "$!{app.modulePath}${table.objectName}/detail";
     }
 
@@ -58,7 +56,6 @@ public class ${table.className}Controller extends BaseController {
     @GetMapping("/list")
     public String list(Model model) {
         super.list(model);
-
         return "$!{app.modulePath}${table.objectName}/list";
     }
 }

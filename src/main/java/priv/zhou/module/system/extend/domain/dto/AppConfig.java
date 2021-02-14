@@ -68,7 +68,7 @@ public class AppConfig {
 
     public AppConfig setPacket(String packet) {
         this.packet = packet;
-        this.packetPath = packet.replace(".", File.separator);
+        this.packetPath = packet.replace(".", "/");
         return this;
     }
 
@@ -80,7 +80,7 @@ public class AppConfig {
         } else {
             this.module = module;
             this.moduleRef = module + ".";
-            this.modulePath = module + File.separator;
+            this.modulePath = module + "/";
         }
         return this;
     }
