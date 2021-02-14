@@ -9,18 +9,14 @@ import org.apache.velocity.app.Velocity;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.module.system.dict.domain.vo.DictDataVO;
 import priv.zhou.module.system.dict.service.IDictService;
-import priv.zhou.module.system.extend.domain.Demo;
-import priv.zhou.module.system.extend.domain.dao.ColumnDAO;
+import priv.zhou.module.system.extend.domain.bo.Demo;
+import priv.zhou.module.system.extend.domain.bo.TableBO;
 import priv.zhou.module.system.extend.domain.dao.TableDAO;
 import priv.zhou.module.system.extend.domain.dto.AppConfig;
-import priv.zhou.module.system.extend.domain.dto.ColumnDTO;
-import priv.zhou.module.system.extend.domain.dto.TableDTO;
-import priv.zhou.module.system.extend.domain.po.ColumnPO;
-import priv.zhou.module.system.extend.domain.po.TablePO;
+import priv.zhou.module.system.extend.domain.dto.ExtendDTO;
+import priv.zhou.module.system.extend.domain.query.TableQuery;
 import priv.zhou.module.system.extend.service.IExtendService;
 
 import java.io.ByteArrayOutputStream;
@@ -41,19 +37,13 @@ import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
 public class ExtendServiceImpl implements IExtendService {
 
 
-
     private final TableDAO tableDAO;
 
-    private final ColumnDAO columnDAO;
 
     private final IDictService dictService;
 
     @Override
-    public Result<byte[]> module(List<String> tableNames) throws Exception {
-
-        if (null == tableNames || tableNames.isEmpty()) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        }
+    public Result<byte[]> generate(ExtendDTO extendDTO) throws Exception {
 
         Map<String, DictDataVO> configMap = dictService.mapDataVO(CONFIG_KEY);
         AppConfig appConfig = new AppConfig()
@@ -62,14 +52,15 @@ public class ExtendServiceImpl implements IExtendService {
                 .setModule(configMap.get("module").getLabel())
                 .setKeepPrefix(configMap.get("keepPrefix").getLabel().startsWith("t"));
 
-        List<TablePO> poList = tableDAO.list(new TableDTO().setNameIn(tableNames));
-        return coreGenerate(appConfig, DTO.ofPO(poList, TableDTO::new));
+        // todo 使用bo子查询列 参考kid-server
+        List<TableBO> tables = tableDAO.listBO(new TableQuery().setInNames(extendDTO.getNames()));
+        return coreGenerate(appConfig, tables);
     }
 
     /**
      * 初始化模板，生成对应代码
      */
-    private Result<byte[]> coreGenerate(AppConfig appConfig, List<TableDTO> tableList) throws Exception {
+    private Result<byte[]> coreGenerate(AppConfig appConfig, List<TableBO> tables) throws Exception {
 
         // 初始化
         VelocityContext context = new VelocityContext();
@@ -79,12 +70,8 @@ public class ExtendServiceImpl implements IExtendService {
         ZipOutputStream zipStream = new ZipOutputStream(outStream);
 
         // 循环渲染
-        for (TableDTO table : tableList) {
+        for (TableBO table : tables) {
 
-            // 初始化表
-            List<ColumnPO> poList = columnDAO.list(new ColumnDTO().setTableName(table.getName()));
-            List<ColumnDTO> dtoList = DTO.ofPO(poList, ColumnDTO::new);
-            table.setColumnList(dtoList);
             if (!appConfig.getKeepPrefix()) {
                 table.setClassName(table.getName().substring(table.getName().indexOf("_") + 1));
             }
@@ -98,7 +85,7 @@ public class ExtendServiceImpl implements IExtendService {
                 template.merge(context, buffer);
 
                 // 输出到zip
-                zipStream.putNextEntry(new ZipEntry(demo.getOutPath(appConfig.getModule(), table.getClassName(), table.getObjectName())));
+                zipStream.putNextEntry(new ZipEntry(demo.getOutPath(appConfig.getModulePath(), table.getClassName(), table.getObjectName())));
                 IOUtils.write(buffer.toString(), zipStream, DEFAULT_CHARSET);
                 zipStream.closeEntry();
             }

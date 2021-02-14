@@ -900,11 +900,11 @@ layui.define('layer', function (exports) {
 
             if (/^checkbox|radio$/.test(item.type) && !item.checked) return;
             if ((item.type).indexOf("multiple") !== -1) {
-                let arr = $(item).val()
-                if (!arr || !arr.length) return;
-                for (let i = 0; i < arr.length; i++) {
-                    field[`${item.name}[${i}]`] = arr[i]
-                }
+                merge({
+                    arr: $(item).val(),
+                    name: item.name,
+                    data: field
+                })
             } else {
                 field[item.name] = item.value;
             }

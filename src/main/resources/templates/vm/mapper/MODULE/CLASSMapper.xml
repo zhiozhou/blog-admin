@@ -38,8 +38,9 @@
         SELECT
 #foreach($column in $table.columnList)
             ${column.name} #if($velocityCount != $table.columnList.size()),
-            #end
 #end
+#end
+
         FROM ${table.name}
     </sql>
 
@@ -47,14 +48,14 @@
         INSERT INTO ${table.name}(
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
-             ${column.name} #if($velocityCount != $table.columnList.size()),
+             ${column.name} #if($velocityCount != $table.columnList.size()),#end
 
 #end
 #end
         )
         VALUES(
 #foreach($column in $table.columnList)
-#if($column.name != $table.primaryKey.name)
+#if(!$table.primaryKeys.contains($column))
             #{$column.attrName} #if($velocityCount != $table.columnList.size()), #end
 
 #end
@@ -67,39 +68,49 @@
         UPDATE ${table.name}
         <set>
 #foreach($column in $table.columnList)
-#if($table.primaryKeys.contains($column))
-            <if test="${column.attrName} != null and ${column.attrName} != ''">${column.name} = #{${column.attrName}},</if>
+#if(!$table.primaryKeys.contains($column))
+            <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
 #end
 #end
         </set>
         WHERE ${table.primaryKeys[0].name} = #{${table.primaryKeys[0].attrName}}
     </update>
 
-    <select id="get" parameterType="${table.className}Query" resultType="POMap">
+    <select id="get" parameterType="${table.className}Query" resultMap="POMap">
         <include refid="POSql"/>
-        WHERE ${table.primaryKey[0].name} = #{${table.primaryKey[0].attrName}}
+        WHERE ${table.primaryKeys[0].name} = #{${table.primaryKeys[0].attrName}}
     </select>
 
-    <select id="getVO" parameterType="${table.className}Query" resultType="VOMap">
+    <select id="getVO" parameterType="${table.className}Query" resultMap="VOMap">
         <include refid="POSql"/>
-        WHERE ${table.primaryKey[0].name} = #{${table.primaryKey[0].attrName}}
+        WHERE ${table.primaryKeys[0].name} = #{${table.primaryKeys[0].attrName}}
     </select>
 #end
 
-    <select id="list" parameterType="${table.className}Query" resultType="POMap">
+    <select id="list" parameterType="${table.className}Query" resultMap="POMap">
         <include refid="POSql"/>
         <where>
 #foreach($column in $table.columnList)
-            <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != ''#end "> and ${column.name} = #{${column.attrName}}</if>
+#if(!$table.primaryKeys.contains($column))
+            <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
+#end
 #end
         </where>
     </select>
 
-    <select id="listTableVO" parameterType="${table.className}Query" resultType="TableVOMap">
-        <include refid="POSql"/>
+    <select id="listTableVO" parameterType="${table.className}Query" resultMap="TableVOMap">
+        SELECT
+#foreach($column in $table.columnList)
+            ${column.name} #if($velocityCount != $table.columnList.size()),
+#end
+#end
+
+        FROM ${table.name}
         <where>
 #foreach($column in $table.columnList)
-            <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != ''#end "> and ${column.name} = #{${column.attrName}}</if>
+#if(!$table.primaryKeys.contains($column))
+            <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
+#end
 #end
         </where>
     </select>
@@ -108,11 +119,12 @@
     <select id="count" parameterType="${table.className}Query" resultType="int">
         SELECT
             count(0)
-        FROM
-        ${table.name}
+        FROM ${table.name}
         <where>
 #foreach($column in $table.columnList)
-            <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != ''#end "> and ${column.name} = #{${column.attrName}}</if>
+#if(!$table.primaryKeys.contains($column))
+            <if test="${column.attrName} != null #if($column.javaType =="String") and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
+#end
 #end
         </where>
     </select>

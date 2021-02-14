@@ -1,23 +1,19 @@
-package priv.zhou.module.system.extend.domain.dto;
+package priv.zhou.module.system.extend.domain.bo;
 
 import com.google.common.base.CaseFormat;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.domain.dto.DTO;
-import priv.zhou.module.system.extend.domain.po.ColumnPO;
 
-import static priv.zhou.common.constant.GlobalConst.TYPE_MAP;
+import static priv.zhou.module.system.extend.service.IExtendService.TYPE_MAP;
 
 /**
  * 列信息
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @Accessors(chain = true)
-public class ColumnDTO extends DTO<ColumnPO> {
+public class ColumnBO {
 
     /**
      * 键类型
@@ -59,21 +55,15 @@ public class ColumnDTO extends DTO<ColumnPO> {
      */
     private String comment;
 
-    /**
-     * 表名称
-     */
-    private String tableName;
-
-
-    public ColumnDTO setName(String name) {
+    public ColumnBO setName(String name) {
         this.name = name;
-        this.attrName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name);
-        this.getSetName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name);
+        this.attrName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name.startsWith("is_") ? name.substring(3) : name);
+        this.getSetName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, name);
         return this;
     }
 
 
-    public ColumnDTO setType(String columnType) {
+    public ColumnBO setType(String columnType) {
         this.type = columnType;
         this.javaType = TYPE_MAP.get(columnType);
         return this;
@@ -83,8 +73,5 @@ public class ColumnDTO extends DTO<ColumnPO> {
         this.nullable = "YES".equals(nullable);
     }
 
-    public ColumnDTO(ColumnPO columnPO) {
-        super(columnPO);
-    }
 }
 

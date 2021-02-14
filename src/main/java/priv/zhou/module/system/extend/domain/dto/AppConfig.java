@@ -5,11 +5,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 import priv.zhou.common.tools.DateUtil;
-import priv.zhou.module.system.extend.domain.Demo;
+import priv.zhou.module.system.extend.domain.bo.Demo;
 
 import java.io.File;
 import java.util.List;
-
 
 
 @Getter
@@ -80,8 +79,8 @@ public class AppConfig {
             this.modulePath = "";
         } else {
             this.module = module;
-            this.moduleRef += ".";
-            this.modulePath += File.separator;
+            this.moduleRef = module + ".";
+            this.modulePath = module + File.separator;
         }
         return this;
     }

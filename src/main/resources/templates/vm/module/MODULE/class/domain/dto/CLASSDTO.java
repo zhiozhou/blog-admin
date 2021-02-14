@@ -1,5 +1,6 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto;
 
+import ${app.packet}.common.tools.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -28,10 +29,13 @@ public class ${table.className}DTO {
     /**
      * ${column.comment}
      */
-#if($column.name!=$table.primaryKey.name && !$column.nullable)
+#if(!$table.primaryKeys.contains($column))
 #if($column.javaType=="String")
     @NotBlank(message = "${column.comment}不可为空")
-#else($column.javaType=="Integer")
+#else
+#if($column.javaType=="Date")
+    @DateTimeFormat(pattern = DateUtil.YMD)
+#end
     @NotNull(message = "${column.comment}不可为空")
 #end
 #end

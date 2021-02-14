@@ -10,10 +10,19 @@
         <result column="create_time" property="gmtCreate"/>
     </resultMap>
 
-<!--    <resultMap id="BOMap" type="BOMap">-->
-<!--        <result column="table_name" property="name"/>-->
-<!--        <result column="table_comment" property="comment"/>-->
-<!--    </resultMap>-->
+    <resultMap id="BOMap" type="TableBO">
+        <result column="table_name" property="name"/>
+        <result column="table_comment" property="comment"/>
+        <collection property="columnList" column="table_name" select="listColumnBO"/>
+    </resultMap>
+
+    <resultMap id="ColumnBOMap" type="ColumnBO">
+        <result column="column_key" property="key"/>
+        <result column="column_name" property="name"/>
+        <result column="data_type" property="type"/>
+        <result column="column_comment" property="comment"/>
+        <result column="is_nullable" property="nullable"/>
+    </resultMap>
 
     <select id="listTableVO" parameterType="TableQuery" resultMap="TableVOMap">
         SELECT
@@ -25,16 +34,30 @@
         <if test="nameLike != null and nameLike != ''">and table_name LIKE CONCAT('%',#{nameLike},'%')</if>
     </select>
 
-<!--    <select id="list" parameterType="TableQuery" resultType="BOMap">-->
-<!--        SELECT-->
-<!--        table_name NAME,-->
-<!--        table_comment COMMENT-->
-<!--        FROM information_schema.TABLES-->
-<!--        WHERE table_schema = ( SELECT DATABASE ())-->
-<!--        AND table_name in-->
-<!--        <foreach collection="nameIn" index="index" item="item" open="(" separator="," close=")">-->
-<!--            #{item}-->
-<!--        </foreach>-->
-<!--    </select>-->
+    <select id="listBO" parameterType="TableQuery" resultMap="BOMap">
+        SELECT
+        table_name,
+        table_comment
+        FROM information_schema.TABLES
+        WHERE table_schema = ( SELECT DATABASE ())
+        AND table_name in
+        <foreach collection="inNames" index="index" item="name" open="(" separator="," close=")">
+            #{name}
+        </foreach>
+    </select>
+
+    <select id="listColumnBO" parameterType="String" resultMap="ColumnBOMap">
+        SELECT
+            column_key,
+            column_name ,
+            data_type,
+            column_comment,
+            is_nullable
+        FROM information_schema.COLUMNS
+        WHERE table_name = #{tableName}
+        AND table_schema = (
+            SELECT DATABASE ())
+        ORDER BY  ordinal_position
+    </select>
 
 </mapper>

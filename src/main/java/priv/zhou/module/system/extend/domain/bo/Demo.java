@@ -1,8 +1,10 @@
-package priv.zhou.module.system.extend.domain;
+package priv.zhou.module.system.extend.domain.bo;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.io.File;
 
 
 @Getter
@@ -23,6 +25,6 @@ public class Demo {
     public String getOutPath(String moduleName, String className, String objectName) {
         return path.replace("CLASS", className)
                 .replace("class", objectName)
-                .replace("MODULE/", moduleName.replaceAll("\\.","/")); // 包符号替换为路径符
+                .replace("MODULE" + File.separator, moduleName.replaceAll("\\.", File.separator)); // 包符号替换为路径符
     }
 }

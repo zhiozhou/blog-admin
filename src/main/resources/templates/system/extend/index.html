@@ -47,19 +47,19 @@
                 tableRender(table, {cols, url: `${prefix}/rest/table/list`})
 
                 $('.coffee-btn').click(() => {
-                    let {data: list} = table.checkStatus('table')
-                    if (0 === list.length) {
+                    let {data} = table.checkStatus('table')
+                    if (0 === data.length) {
                         return warn('请选中要生成的表')
                     }
 
                     let hasEmpty = false,
-                        url = `${prefix}/rest/extend?tableNames=`
-                    for ({name, comment} of list) {
-                        url += `${name},`
-                        if (!comment) {
-                            hasEmpty = true
-                        }
+                        url = `${prefix}/rest/extend?`
+                    for (let i = 0; i < data.length; i++) {
+                        let {name, comment} = data[i]
+                        url += `names[${i}]=${name}&`
+                        if (!comment) hasEmpty = true
                     }
+                    url = encodeURI(url)
 
                     hasEmpty ?
                         layer.confirm(`选中表存在空描述，会导致注释异常，确认生成吗`, {

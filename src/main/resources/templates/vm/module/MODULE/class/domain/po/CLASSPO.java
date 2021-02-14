@@ -27,8 +27,4 @@ public class ${table.className}PO implements Serializable{
 	private ${column.javaType} ${column.attrName};
 #end
 
-	@Override
-	public String toString() {
-		return JSON.toJSONString(this);
-	}
 }

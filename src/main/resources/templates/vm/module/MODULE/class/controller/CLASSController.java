@@ -3,7 +3,7 @@ package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.controller;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import ${app.packet}.common.domain.Module;
 import ${app.packet}.common.domain.vo.Result;
@@ -34,7 +34,7 @@ public class ${table.className}Controller extends BaseController {
         this.${table.objectName}Service = ${table.objectName}Service;
     }
 
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new ${table.className}DTO());
 
@@ -42,20 +42,20 @@ public class ${table.className}Controller extends BaseController {
     }
 
 #if(!$table.primaryKeys.isEmpty())
-    @RequestMapping("/update/{id}")
+    @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
         super.update(model, ${table.objectName}Service.getV0(new ${table.className}Query().setId(id)));
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         super.detail(model, ${table.objectName}Service.getV0(new ${table.className}Query().setId(id)));
         return "$!{app.modulePath}${table.objectName}/detail";
     }
 
 #end
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public String list(Model model) {
         super.list(model);
 

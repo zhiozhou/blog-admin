@@ -64,6 +64,19 @@ function httpPost({url, data, cb, load = true}) {
 }
 
 /**
+ * 将数组合并到data中
+ */
+function merge({arr, name, data}) {
+    if (!arr || !arr.length) return
+    for (let i = 0; i < arr.length; i++) {
+        data[`${name}[${i}]`] = arr[i]
+    }
+}
+
+
+
+
+/**
  * 文本复制
  * @param text 要复制的文本
  */

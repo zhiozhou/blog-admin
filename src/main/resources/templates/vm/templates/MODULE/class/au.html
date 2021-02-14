@@ -3,7 +3,7 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form " th:attr="action=${_isAdd?_action:_action+_vo.id}" th:object="${_vo}">
+            <form class="layui-form " th:attr="action=\$\{_isAdd?_action:_action+_vo.id\}" th:object="${_vo}">
                 <input type="hidden" th:field="*{id}">
                 #foreach ($column in $table.columnList)
 

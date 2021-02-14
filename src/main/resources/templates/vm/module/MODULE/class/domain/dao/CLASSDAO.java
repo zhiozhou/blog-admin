@@ -19,15 +19,15 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface ${table.className}DAO extends BaseDAO<${table.className}PO,${table.className}Query>{
+public interface ${table.className}DAO extends BaseDAO<${table.className}PO, ${table.className}Query>{
 
 #if(!$table.primaryKeys.isEmpty())
 
-    ${table.className}VO removeList(int[] ids);
+    ${table.className}VO removeList($table.primaryKeys[0].javaType[] ids);
 
     ${table.className}VO getVO(${table.className}Query query);
 
-    ${table.className}TableVO listTableVO(${table.className}Query query);
 #end
+    List<${table.className}TableVO> listTableVO(${table.className}Query query);
 
 }

@@ -26,10 +26,8 @@ public class ${table.className}Query {
     /**
      * ${column.comment}
      */
-#if($column.name!=$table.primaryKey.name && !$column.nullable)
 #if($column.javaType=="Date")
     @DateTimeFormat(pattern = DateUtil.YMD)
-#end
 #end
     private ${column.javaType} ${column.attrName};
 #end
