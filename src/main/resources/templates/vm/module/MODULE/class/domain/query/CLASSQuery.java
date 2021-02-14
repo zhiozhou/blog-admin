@@ -1,19 +1,17 @@
-package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto;
+package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.query;
 
+import ${app.packet}.common.tools.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
- * ${table.comment} 数据传输模型
+ * ${table.comment} 数据查询模型
  *
  * @author ${app.author}
  * @since ${app.since}
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ${table.className}DTO {
+public class ${table.className}Query {
 
 #foreach ($column in $table.columnList)
 
@@ -29,10 +27,8 @@ public class ${table.className}DTO {
      * ${column.comment}
      */
 #if($column.name!=$table.primaryKey.name && !$column.nullable)
-#if($column.javaType=="String")
-    @NotBlank(message = "${column.comment}不可为空")
-#else($column.javaType=="Integer")
-    @NotNull(message = "${column.comment}不可为空")
+#if($column.javaType=="Date")
+    @DateTimeFormat(pattern = DateUtil.YMD)
 #end
 #end
     private ${column.javaType} ${column.attrName};

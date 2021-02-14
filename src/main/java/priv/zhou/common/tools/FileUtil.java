@@ -9,7 +9,7 @@ import java.io.File;
  * Copyright (C) 2012-2018 天津紫藤科技有限公司. Co. Ltd. All Rights Reserved
  *
  * @author zhou
- * @date 2021-01-06
+ * @since 2021-01-06
  */
 public class FileUtil {
 

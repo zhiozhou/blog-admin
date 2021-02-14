@@ -1,5 +1,6 @@
 package priv.zhou.module.system.user.controller;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -65,6 +66,9 @@ public class UserRestController {
     @RequiresPermissions("system:user:remove")
     @RequestMapping("/remove")
     public Result<NULL> remove(@RequestParam(value = "ids[]") int[] ids) {
+        if (ArrayUtils.isEmpty(ids)) {
+            return Result.fail(ResultEnum.EMPTY_PARAM);
+        }
         return userService.remove(ids);
     }
 
@@ -85,7 +89,6 @@ public class UserRestController {
         return userService.resetPwd(ShiroUtil.getUserId(), password);
     }
 
-
     @RequiresPermissions("system:user:freeze")
     @RequestMapping("/freeze/{id}")
     public Result<NULL> freeze(@PathVariable Integer id) {
@@ -102,7 +105,7 @@ public class UserRestController {
     @RequiresPermissions("system:user:list")
     @RequestMapping("/list")
     public Result<TableVO<UserTableVO>> list(UserQuery query, Page page) {
-        return Result.success(TableVO.build(userService.listTableVO(query, page)));
+        return Result.table(userService.listTableVO(query, page));
     }
 
 }

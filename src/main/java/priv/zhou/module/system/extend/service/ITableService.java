@@ -1,16 +1,13 @@
 package priv.zhou.module.system.extend.service;
 
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.domain.Result;
-import priv.zhou.module.system.extend.domain.dto.TableDTO;
+import priv.zhou.module.system.extend.domain.query.TableQuery;
+import priv.zhou.module.system.extend.domain.vo.TableTableVO;
 
 import java.util.List;
 
 public interface ITableService {
 
-    default Result<List<TableDTO>> list(TableDTO tableDTO) {
-        return list(tableDTO, null);
-    }
+    List<TableTableVO> listTableVO(TableQuery query, Page page);
 
-    Result<List<TableDTO>> list(TableDTO tableDTO, Page page);
 }

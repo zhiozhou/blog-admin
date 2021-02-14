@@ -14,7 +14,7 @@ import java.io.Serializable;
  * 解决单次请求频繁访问Redis
  *
  * @author zhou
- * @date 2021.02.08
+ * @since 2021.02.08
  */
 @Slf4j
 public class ShiroSessionManager extends DefaultWebSessionManager {

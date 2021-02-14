@@ -1,7 +1,6 @@
 package priv.zhou.module.system.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.constant.NULL;
@@ -79,9 +78,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public Result<NULL> remove(int[] ids) {
-        if (ArrayUtils.isEmpty(ids)) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        }
         for (int id : ids) {
             if (userDAO.remove(new UserQuery().setId(id)) < 1) {
                 return Result.fail(ResultEnum.FAIL_PARAM);

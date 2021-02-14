@@ -15,7 +15,7 @@ import priv.zhou.common.tools.OkHttpUtil;
  * 设备端接口测试
  *
  * @author xwc
- * @date 2020/10/23
+ * @since 2020/10/23
  */
 @Slf4j
 @ActiveProfiles("dev")

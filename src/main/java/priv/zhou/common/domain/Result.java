@@ -117,5 +117,12 @@ public class Result<T> {
                 success(TableVO.build(Result.getData()));
     }
 
+    /**
+     * 返回表格渲染模型
+     */
+    public static <T> Result<TableVO<T>> table(List<T> list) {
+        return Result.success(TableVO.build(list));
+    }
+
 
 }

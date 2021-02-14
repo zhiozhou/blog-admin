@@ -23,7 +23,6 @@ public class ColumnPO {
      */
     private String type;
 
-
     /**
      * 描述
      */

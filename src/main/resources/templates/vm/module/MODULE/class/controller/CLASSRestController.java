@@ -39,15 +39,14 @@ public class ${table.className}RestController {
         return ${table.objectName}Service.remove(new ${table.className}DTO().setId(id));
     }
 
-    @RequestMapping("/update")
-    public Result<NULL> update(@Valid ${table.className}DTO ${table.objectName}DTO) {
-        return ${table.objectName}Service.update(${table.objectName}DTO);
+    @RequestMapping("/update/{id}")
+    public Result<NULL> update(@PathVariable Integer id,@Valid ${table.className}DTO ${table.objectName}DTO) {
+        return ${table.objectName}Service.update(${table.objectName}DTO.setId(id));
     }
-
 
     @RequestMapping("/list")
     public Result<ListVO<${table.className}DTO>> list(${table.className}DTO ${table.objectName}DTO, Page page) {
-        return Result.table(${table.objectName}Service.list(${table.objectName}DTO, page));
+        return Result.success(${table.objectName}Service.list(${table.objectName}DTO, page));
     }
 
 }

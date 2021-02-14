@@ -40,7 +40,8 @@
                     cols = [[
                         {type: 'checkbox'},
                         {field: 'name', title: '名称'},
-                        {field: 'comment', title: '描述'}
+                        {field: 'comment', title: '描述'},
+                        {field: 'gmtCreate', title: '创建时间'},
                     ]]
 
                 tableRender(table, {cols, url: `${prefix}/rest/table/list`})

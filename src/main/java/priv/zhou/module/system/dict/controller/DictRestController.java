@@ -48,7 +48,7 @@ public class DictRestController {
     @RequiresPermissions("system:dict:list")
     @PostMapping("/list")
     public Result<TableVO<DictTableVO>> listTableVO(DictQuery query, Page page) {
-        return Result.success(TableVO.build(dictService.listTableVO(query, page)));
+        return Result.table(dictService.listTableVO(query, page));
     }
 
 

@@ -2,9 +2,11 @@ package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dao;
 
 import ${app.packet}.common.domain.dao.BaseDAO;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Component;
-import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
+import org.springframework.stereotype.Repository;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.query.${table.className}Query;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po.${table.className}PO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.vo.${table.className}VO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.vo.${table.className}TableVO;
 
 import java.util.List;
 
@@ -16,6 +18,16 @@ import java.util.List;
  * @since ${app.since}
  */
 @Mapper
-@Component
-public interface ${table.className}DAO extends BaseDAO<${table.className}DTO,${table.className}PO>{
+@Repository
+public interface ${table.className}DAO extends BaseDAO<${table.className}PO,${table.className}Query>{
+
+#if(!$table.primaryKeys.isEmpty())
+
+    ${table.className}VO removeList(int[] ids);
+
+    ${table.className}VO getVO(${table.className}Query query);
+
+    ${table.className}TableVO listTableVO(${table.className}Query query);
+#end
+
 }

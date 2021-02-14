@@ -14,6 +14,9 @@ import ${app.packet}.common.param.ResultEnum;
 import ${app.packet}.common.domain.dto.DTO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dao.${table.className}DAO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.vo.${table.className}TableVO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.vo.${table.className}VO;
+import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.query.${table.className}Query;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po.${table.className}PO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.I${table.className}Service;
 import static java.util.Objects.isNull;
@@ -35,19 +38,24 @@ public class ${table.className}ServiceImpl extends BaseServic implements I${tabl
     @Override
     public Result<NULL> save(${table.className}DTO ${table.objectName}DTO) {
 
-        ${table.className}PO ${table.objectName}PO = ${table.objectName}DTO.toPO();
+        ${table.className}PO ${table.objectName}PO = new ${table.className}PO()#if($velocityCount != $table.columnList.size());
+#end
+#foreach($column in $table.columnList)
+#if($column.name != $table.primaryKey.name)
+            .set${column.getSetName}(${table.objectName}DTO.get${column.getSetName}())#if($velocityCount != $table.columnList.size());
+#end
+#end
+#end
         return ${table.objectName}DAO.save(${table.objectName}PO) > 0 ?
                 Result.success():
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
 
     }
 
+#if(!$table.primaryKeys.isEmpty())
     @Override
-    public Result<NULL> remove(${table.className}DTO ${table.objectName}DTO) {
-        if (null == ${table.objectName}DTO.getId()) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        }
-        return  ${table.objectName}DAO.remove(${table.objectName}DTO) > 0 ?
+    public Result<NULL> remove(${table.primaryKeys[0].javaType}[] ids) {
+        return  ${table.objectName}DAO.removeList(ids) > 0 ?
             Result.success():
             Result.fail(ResultEnum.FAIL_OPERATION);
     }
@@ -62,17 +70,21 @@ public class ${table.className}ServiceImpl extends BaseServic implements I${tabl
 
     }
 
-
     @Override
-    public Result<${table.className}DTO> get(${table.className}DTO ${table.objectName}DTO) {
-
-        ${table.className}PO ${table.objectName}PO = ${table.objectName}DAO.get(${table.objectName}DTO);
-        return Result.success(new ${table.className}DTO(${table.objectName}PO));
+    public ${table.className}PO get(${table.className}Query query) {
+        return ${table.objectName}DAO.get(query);
     }
 
+
     @Override
-    public Result<List<${table.className}DTO>> list(${table.className}DTO ${table.objectName}DTO, Page page) {
+    public ${table.className}VO getVO(${table.className}Query query) {
+        return ${table.objectName}DAO.getVO(query);
+    }
+
+#end
+    @Override
+    public List<${table.className}TableVO> listTableVO(${table.className}Query query, Page page) {
         startPage(page);
-        return Result.success(DTO.ofPO(${table.objectName}DAO.list(${table.objectName}DTO),${table.className}DTO::new));
+        return ${table.objectName}DAO.listTableVO(query);
     }
 }

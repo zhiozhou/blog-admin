@@ -28,6 +28,8 @@ public class DateUtil {
 
     public final static String YMDHMS = "yyyy-MM-dd HH:mm:ss";
 
+    public final static String TIME_ZONE = "GMT+8";
+
 
     /**
      * 默认格式

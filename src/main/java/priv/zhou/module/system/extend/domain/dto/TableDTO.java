@@ -9,6 +9,7 @@ import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.module.system.extend.domain.po.TablePO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static priv.zhou.common.constant.GlobalConst.PRIMARY;
 
@@ -41,11 +42,10 @@ public class TableDTO extends DTO<TablePO> {
      */
     private String comment;
 
-
     /**
      * 表的主键列信息
      */
-    private ColumnDTO primaryKey;
+    private List<ColumnDTO> primaryKeys;
 
     /**
      * 表的列名(不包含主键)
@@ -76,7 +76,7 @@ public class TableDTO extends DTO<TablePO> {
     public void setColumnList(List<ColumnDTO> columnList) {
         if (null != columnList) {
             this.columnList = columnList;
-            this.primaryKey = columnList.stream().filter(column -> PRIMARY.equals(column.getKey())).findFirst().orElse(null);
+            this.primaryKeys = columnList.stream().filter(column -> PRIMARY.equals(column.getKey())).collect(Collectors.toList());
         }
     }
 

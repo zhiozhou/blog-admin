@@ -45,6 +45,11 @@ public class ColumnDTO extends DTO<ColumnPO> {
     private String attrName;
 
     /**
+     * GetSet名称(第一个字母大写)，如：user_name => UserName
+     */
+    private String getSetName;
+
+    /**
      * 可以为空
      */
     private Boolean nullable;
@@ -53,7 +58,6 @@ public class ColumnDTO extends DTO<ColumnPO> {
      * 描述
      */
     private String comment;
-
 
     /**
      * 表名称
@@ -64,6 +68,7 @@ public class ColumnDTO extends DTO<ColumnPO> {
     public ColumnDTO setName(String name) {
         this.name = name;
         this.attrName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name);
+        this.getSetName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name);
         return this;
     }
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.module.system.role.domain.dto.RoleDTO;
+import priv.zhou.common.tools.DateUtil;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
@@ -47,13 +47,13 @@ public class SessionVO {
     /**
      * 开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = DateUtil.YMDHMS, timezone = DateUtil.TIME_ZONE)
     private Date loginTime;
 
     /**
      * 最后访问时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = DateUtil.YMDHMS, timezone = DateUtil.TIME_ZONE)
     private Date lastAccessTime;
 
 

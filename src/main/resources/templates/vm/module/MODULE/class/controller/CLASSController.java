@@ -41,29 +41,20 @@ public class ${table.className}Controller extends BaseController {
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
+#if(!$table.primaryKeys.isEmpty())
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-
-        Result<${table.className}DTO> getRes = ${table.objectName}Service.get(new ${table.className}DTO().setId(id));
-        if (getRes.isFail()) {
-            return NOT_FOUNT;
-        }
-        super.update(model, getRes.getData());
-
+        super.update(model, ${table.objectName}Service.getV0(new ${table.className}Query().setId(id)));
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
     @RequestMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        Result<${table.className}DTO> getRes = ${table.objectName}Service.get(new ${table.className}DTO().setId(id));
-        if (getRes.isFail()) {
-            return NOT_FOUNT;
-        }
-        super.detail(model, getRes.getData());
-
+        super.detail(model, ${table.objectName}Service.getV0(new ${table.className}Query().setId(id)));
         return "$!{app.modulePath}${table.objectName}/detail";
     }
 
+#end
     @RequestMapping("/list")
     public String list(Model model) {
         super.list(model);
