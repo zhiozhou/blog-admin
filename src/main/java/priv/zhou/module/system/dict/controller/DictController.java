@@ -3,6 +3,7 @@ package priv.zhou.module.system.dict.controller;
 import com.google.common.collect.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import priv.zhou.module.system.dict.service.IDictService;
  * @author zhou
  * @since 2020.04.17
  */
-@Component
+@Controller
 @RequestMapping("/system/dict")
 public class DictController extends BaseController {
 

@@ -4,7 +4,9 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.module.system.extend.domain.dto.ExtendDTO;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public interface IExtendService {
 
@@ -34,6 +36,25 @@ public interface IExtendService {
         put("datetime", "Date");
         put("timestamp", "Date");
     }};
+
+    Set<String> KEYWORD_SET = new HashSet<String>() {{
+        add("status");
+        add("level");
+        add("key");
+        add("name");
+        add("period");
+        add("password");
+        add("order");
+        add("while");
+        add("sql");
+        add("unique");
+        add("or");
+        add("outer");
+        add("range");
+        add("lock");
+        add("grant");
+    }};
+
 
     String PRIMARY = "PRI";
 

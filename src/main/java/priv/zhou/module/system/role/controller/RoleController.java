@@ -2,6 +2,7 @@ package priv.zhou.module.system.role.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
  * @author zhou
  * @since 2020.04.15
  */
-@Component
+@Controller
 @RequestMapping("/system/role")
 public class RoleController extends BaseController {
 

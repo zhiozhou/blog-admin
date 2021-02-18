@@ -3,7 +3,7 @@ package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import ${app.packet}.common.domain.Module;
 import ${app.packet}.common.controller.BaseController;
@@ -18,7 +18,7 @@ import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.I${tabl
  * @since ${app.since}
  */
 
-@Component
+@Controller
 @RequestMapping("/$!{app.modulePath}${table.objectName}")
 public class ${table.className}Controller extends BaseController {
 

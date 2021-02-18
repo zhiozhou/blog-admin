@@ -37,7 +37,7 @@
     <sql id="POSql">
         SELECT
 #foreach($column in $table.columnList)
-            ${column.name}#if($velocityCount != $table.columnList.size()),
+            ${column.columnName}#if($velocityCount != $table.columnList.size()),
 #end
 #end
 
@@ -48,7 +48,7 @@
         INSERT INTO ${table.name}(
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
-             ${column.name}#if($velocityCount != $table.columnList.size()),#end
+             ${column.columnName}#if($velocityCount != $table.columnList.size()),#end
 
 #end
 #end
@@ -56,7 +56,11 @@
         VALUES(
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
+#if($column.name == "gmt_create" || $column.name == "create_time")
+            NOW()#if($velocityCount != $table.columnList.size()),#end
+#else
             #{$column.attrName}#if($velocityCount != $table.columnList.size()),#end
+#end
 
 #end
 #end
@@ -69,21 +73,26 @@
         <set>
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
-            <if test="${column.attrName} != null #if($column.javaType =="String")and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
+#if($column.name == "gmt_modified" || $column.name == "update_time")
+            ${column.columnName} = NOW()#if($velocityCount != $table.columnList.size()),#end
+
+#else
+            <if test="${column.attrName} != null#if($column.javaType =="String") and ${column.attrName} != ''#end"> ${column.columnName} = #{${column.attrName}#if($column.javaType=="Date"),jdbcType=DATE#end},</if>
+#end
 #end
 #end
         </set>
-        WHERE ${table.primaryKeys[0].name} = #{${table.primaryKeys[0].attrName}}
+        WHERE ${table.primaryKeys[0].columnName} = #{${table.primaryKeys[0].attrName}}
     </update>
 
     <select id="get" parameterType="${table.className}Query" resultMap="POMap">
         <include refid="POSql"/>
-        WHERE ${table.primaryKeys[0].name} = #{${table.primaryKeys[0].attrName}}
+        WHERE ${table.primaryKeys[0].columnName} = #{${table.primaryKeys[0].attrName}}
     </select>
 
     <select id="getVO" parameterType="${table.className}Query" resultMap="VOMap">
         <include refid="POSql"/>
-        WHERE ${table.primaryKeys[0].name} = #{${table.primaryKeys[0].attrName}}
+        WHERE ${table.primaryKeys[0].columnName} = #{${table.primaryKeys[0].attrName}}
     </select>
 #end
 
@@ -92,7 +101,7 @@
         <where>
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
-            <if test="${column.attrName} != null #if($column.javaType =="String")and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
+            <if test="${column.attrName} != null#if($column.javaType =="String") and ${column.attrName} != ''#end"> AND ${column.columnName} = #{${column.attrName}}</if>
 #end
 #end
         </where>
@@ -101,7 +110,7 @@
     <select id="listTableVO" parameterType="${table.className}Query" resultMap="TableVOMap">
         SELECT
 #foreach($column in $table.columnList)
-            ${column.name}#if($velocityCount != $table.columnList.size()),
+            ${column.columnName}#if($velocityCount != $table.columnList.size()),
 #end
 #end
 
@@ -109,12 +118,11 @@
         <where>
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
-            <if test="${column.attrName} != null #if($column.javaType =="String")and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
+            <if test="${column.attrName} != null#if($column.javaType =="String") and ${column.attrName} != ''#end"> AND ${column.columnName} = #{${column.attrName}#if($column.javaType=="Date"),jdbcType=DATE#end}</if>
 #end
 #end
         </where>
     </select>
-
 
     <select id="count" parameterType="${table.className}Query" resultType="int">
         SELECT
@@ -123,9 +131,10 @@
         <where>
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
-            <if test="${column.attrName} != null #if($column.javaType =="String")and ${column.attrName} != '' #end"> AND ${column.name} = #{${column.attrName}}</if>
+            <if test="${column.attrName} != null#if($column.javaType =="String") and ${column.attrName} != ''#end"> AND ${column.columnName} = #{${column.attrName}#if($column.javaType=="Date"),jdbcType=DATE#end}</if>
 #end
 #end
         </where>
     </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package priv.zhou.module.system.monitor.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
@@ -16,7 +17,7 @@ import priv.zhou.module.system.role.service.IRoleService;
  * @author zhou
  * @since 2020.04.17
  */
-@Component
+@Controller
 @RequestMapping("/system/monitor")
 public class MonitorController extends BaseController {
 

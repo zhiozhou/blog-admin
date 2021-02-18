@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import static priv.zhou.module.system.extend.service.IExtendService.KEYWORD_SET;
 import static priv.zhou.module.system.extend.service.IExtendService.TYPE_MAP;
 
 /**
@@ -24,6 +25,11 @@ public class ColumnBO {
      * 名称
      */
     private String name;
+
+    /**
+     * 名称
+     */
+    private String columnName;
 
     /**
      * 类型
@@ -57,6 +63,7 @@ public class ColumnBO {
 
     public ColumnBO setName(String name) {
         this.name = name;
+        this.columnName = KEYWORD_SET.contains(name) ? "`" + name + "`" : name;
         this.attrName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name.startsWith("is_") ? name.substring(3) : name);
         this.getSetName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, attrName);
         return this;
