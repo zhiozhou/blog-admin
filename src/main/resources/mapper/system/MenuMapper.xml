@@ -16,9 +16,7 @@
         <if test="key != null and key != ''">`key`,</if>
         flag,
         create_id,
-        modified_id,
-        gmt_create,
-        gmt_modified
+        gmt_create
         )
         VALUES(
         #{parentId},
@@ -31,8 +29,6 @@
         <if test="key != null and key != ''">#{key},</if>
         #{flag},
         #{createId},
-        #{createId},
-        NOW(),
         NOW()
         )
     </insert>

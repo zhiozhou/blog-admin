@@ -40,7 +40,6 @@
         <result column="remark" property="remark"/>
     </resultMap>
 
-
     <sql id="POSql">
         SELECT
             id,
