@@ -72,11 +72,7 @@
         SELECT
         system_menu.id,
         system_menu.parent_id,
-        CASE
-        system_menu.parent_id
-        WHEN 0 THEN
-        '根目录' ELSE parent_menu.name
-        END parentName,
+        IF(system_menu.parent_id = 0, '根目录', parent_menu.name) parentName,
         system_menu.name,
         system_menu.icon,
         system_menu.path,
