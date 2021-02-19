@@ -4,59 +4,81 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.system.role.domain.dao.RoleDAO">
 
-    
-    <resultMap id="roleMap" type="RolePO">
+    <resultMap id="POMap" type="RolePO">
         <id column="id" property="id"/>
         <result column="key" property="key"/>
         <result column="name" property="name"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
-        <collection property="menuList"  ofType="MenuPO">
+        <result column="create_id" property="createId"/>
+        <result column="modified_id" property="modifiedId"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+    <resultMap id="VOMap" type="RoleVO">
+        <id column="id" property="id"/>
+        <result column="key" property="key"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <collection property="menus"  ofType="MenuVO">
             <id column="menu_id" property="id"/>
             <result column="menu_parent_id" property="parentId"/>
             <result column="menu_name" property="name" />
         </collection>
     </resultMap>
 
-    <insert id="save"  parameterType="RolePO" useGeneratedKeys="true" keyProperty="id">
+    <resultMap id="TableVOMap" type="RoleTableVO">
+        <id column="id" property="id"/>
+        <result column="key" property="key"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <sql id="POSql">
+        SELECT
+            id,
+            `key`,
+            `name`,
+            state,
+            remark,
+            create_id,
+            modified_id,
+            gmt_create,
+            gmt_modified,
+            is_deleted
+        FROM system_role
+    </sql>
+
+    <insert id="save" parameterType="RolePO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO system_role(
             `key`,
             name,
             state,
             remark,
             create_id,
-            modified_id,
             gmt_create,
-            gmt_modified)
-        VALUES(
+            is_deleted
+        )VALUES(
             #{key},
             #{name},
             #{state},
             #{remark},
             #{createId},
-            #{createId},
-		    NOW(),
-	        NOW()
+	        NOW(),
+            0
         )
     </insert>
 
-    <insert id="saveMenu" parameterType="RolePO">
-        INSERT INTO system_role_menu ( role_id, menu_id )
-        VALUES
-        <foreach collection="menuList" index="index" item="item" separator=",">
-            ( #{id},#{item.id} )
+    <delete id="removeList" parameterType="RoleDTO">
+        update system_role set is_deleted = 1
+        where is_deleted = 0 and id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
         </foreach>
-    </insert>
-
-
-    <delete id="clearMenu" parameterType="RoleDTO">
-        delete from system_role_menu
-        WHERE menu_id NOT IN ( SELECT id FROM system_menu )
-        <if test="id != null">or role_id = #{id}</if>
-    </delete>
-
-    <delete id="remove" parameterType="RoleDTO">
-        delete from system_role where id = #{id}
     </delete>
 
     <update id="update" parameterType="RolePO">
@@ -72,82 +94,104 @@
         where id = #{id}
     </update>
 
-    
-    <select id="get" parameterType="RoleDTO" resultMap="roleMap">
-        SELECT
-            system_role.id,
-            system_role.key,
-            system_role.name,
-            system_role.state,
-            system_role.remark,
-            system_menu.id AS menu_id,
-            system_menu.parent_id menu_parent_id,
-            system_menu.name menu_name
-        FROM
-            system_role
-            LEFT JOIN system_role_menu ON system_role.id = system_role_menu.role_id
-            LEFT JOIN system_menu ON system_role_menu.menu_id = system_menu.id
-        WHERE
-            system_role.id = #{id}
+    <select id="get" parameterType="RoleQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        WHERE id = #{id}
     </select>
 
-    <select id="list" parameterType="RoleDTO" resultType="RolePO">
+    <select id="getVO" parameterType="RoleDTO" resultMap="VOMap">
+        SELECT
+            role.id,
+            role.`key`,
+            role.`name`,
+            role.state,
+            role.remark,
+            menu.id AS menu_id,
+            menu.parent_id AS menu_parent_id,
+            menu.NAME AS menu_name
+        FROM system_role AS role
+        LEFT JOIN system_role_menu AS role_menu ON role.id = role_menu.role_id
+        LEFT JOIN system_menu AS menu ON role_menu.menu_id = menu.id
+        WHERE role.id = #{id}
+    </select>
+
+    <select id="list" parameterType="RoleQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        <where>
+            <if test="key != null and key != ''"> AND `key` = #{key}</if>
+            <if test="name != null and name != ''"> AND `name` = #{name}</if>
+            <if test="state != null"> AND state = #{state}</if>
+            <if test="remark != null and remark != ''"> AND remark = #{remark}</if>
+            <if test="createId != null"> AND create_id = #{createId}</if>
+        </where>
+    </select>
+
+    <select id="listTableVO" parameterType="RoleQuery" resultMap="TableVOMap">
         SELECT
             id,
             `key`,
             name,
             state,
             remark
-        FROM
-            system_role
+        FROM system_role
         <where>
             <if test="state != null">and state = #{state} </if>
-            <if test="nameLike != null and nameLike != ''">and name LIKE CONCAT('%',#{nameLike},'%')</if>
+            <if test="nameLike != null and nameLike != ''">and `name` LIKE CONCAT('%',#{nameLike},'%')</if>
         </where>
-        ORDER BY id desc
     </select>
 
-    <select id="count" parameterType="RoleDTO" resultType="integer">
+    <select id="count" parameterType="RoleQuery" resultType="integer">
         SELECT
         COUNT( 0 )
         FROM
         system_role
         <where>
-            <if test="exclId != null ">and id != #{exclId}</if>
-            <if test="name != null and name != ''">and name = #{name}</if>
+            <if test="ridId != null ">and id != #{ridId}</if>
+            <if test="name != null and name != ''">and `name` = #{name}</if>
             <if test="key != null and key != ''">and `key` = #{key}</if>
         </where>
     </select>
 
-    <select id="countUser" parameterType="RoleDTO" resultType="integer">
+    <insert id="relateMenu" parameterType="RoleMenuPO">
+        INSERT INTO system_role_menu ( role_id, menu_id )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            ( #{item.roleId},#{item.menuId} )
+        </foreach>
+    </insert>
+
+    <delete id="unRelateMenu" parameterType="Integer">
+        delete from system_role_menu where role_id = #{id}
+    </delete>
+
+    <select id="countUser" parameterType="RoleQuery" resultType="int">
         SELECT
-            COUNT( 0 )
-        FROM
-        system_user_role
+            COUNT(0)
+        FROM system_user_role
         <where>
-            role_id = #{id}
+            <if test="id != null ">and role_id != #{id}</if>
+            <if test="ids != null">and role_id IN
+                <foreach collection="ids" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
         </where>
     </select>
 
-    <select id="keySet" parameterType="integer" resultType="string">
+    <select id="keySet" parameterType="Integer" resultType="String">
         SELECT
             `key`
-        FROM
-            system_role
-            LEFT JOIN system_user_role ON system_role.id = system_user_role.role_id
-        WHERE
-            state = 0
-            AND system_user_role.user_id = #{value}
+        FROM system_role
+        LEFT JOIN system_user_role ON system_role.id = system_user_role.role_id AND system_role.is_deleted = 0
+        WHERE state = 0 AND system_user_role.user_id = #{value}
     </select>
-
 
     <select id="idSet" parameterType="integer" resultType="integer">
         SELECT
             id
         FROM system_role
-        LEFT JOIN system_user_role ON system_role.id = system_user_role.role_id
-        WHERE state = 0  AND system_user_role.user_id = #{value}
+        LEFT JOIN system_user_role ON system_role.id = system_user_role.role_id AND system_role.is_deleted = 0
+        WHERE state = 0 AND system_user_role.user_id = #{value}
     </select>
-
 
 </mapper>

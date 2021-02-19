@@ -22,7 +22,7 @@ public interface IUserService {
 
     Result<NULL> save(UserSaveDTO saveDTO);
 
-    Result<NULL> remove(int[] ids);
+    Result<NULL> remove(Integer[] ids);
 
     Result<NULL> update(UserUpdateDTO updateDTO);
 

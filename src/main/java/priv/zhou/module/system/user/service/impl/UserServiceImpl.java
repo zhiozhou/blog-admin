@@ -10,6 +10,7 @@ import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.module.system.role.domain.dao.RoleDAO;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
@@ -77,11 +78,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public Result<NULL> remove(int[] ids) {
-        for (int id : ids) {
-            if (userDAO.remove(new UserQuery().setId(id)) < 1) {
-                return Result.fail(ResultEnum.FAIL_PARAM);
-            }
+    public Result<NULL> remove(Integer[] ids) {
+        if (userDAO.removeList(ids)!= ids.length){
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
     }

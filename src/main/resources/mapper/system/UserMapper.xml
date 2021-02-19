@@ -92,8 +92,12 @@
         )
     </insert>
 
-    <update id="remove" parameterType="UserQuery">
-        UPDATE system_user SET is_deleted = 1 WHERE is_deleted = 0 and id = #{id}
+    <update id="removeList" parameterType="Integer">
+        UPDATE system_user SET is_deleted = 1
+        WHERE is_deleted = 0 and id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </update>
 
     <update id="update" parameterType="UserQuery">

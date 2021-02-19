@@ -65,7 +65,7 @@ public class UserRestController {
 
     @RequiresPermissions("system:user:remove")
     @RequestMapping("/remove")
-    public Result<NULL> remove(@RequestParam(value = "ids[]") int[] ids) {
+    public Result<NULL> remove(@RequestParam(value = "ids[]") Integer[] ids) {
         if (ArrayUtils.isEmpty(ids)) {
             return Result.fail(ResultEnum.EMPTY_PARAM);
         }

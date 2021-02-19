@@ -16,6 +16,8 @@ import java.util.List;
 @Repository
 public interface UserDAO extends BaseDAO<UserPO, UserQuery> {
 
+    int removeList(Integer[] ids);
+
     List<UserTableVO> listTableVO(UserQuery userQuery);
 
     UserVO getVO(UserQuery userQuery);

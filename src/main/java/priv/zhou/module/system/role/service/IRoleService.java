@@ -4,6 +4,10 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
+import priv.zhou.module.system.role.domain.po.RolePO;
+import priv.zhou.module.system.role.domain.query.RoleQuery;
+import priv.zhou.module.system.role.domain.vo.RoleTableVO;
+import priv.zhou.module.system.role.domain.vo.RoleVO;
 
 import java.util.List;
 import java.util.Set;
@@ -13,17 +17,15 @@ public interface IRoleService {
 
     Result<NULL> save(RoleDTO roleDTO);
 
-    Result<NULL> remove(RoleDTO roleDTO);
+    Result<NULL> remove(Integer[] ids);
 
     Result<NULL> update(RoleDTO roleDTO);
 
-    Result<RoleDTO> get(RoleDTO roleDTO);
+    RolePO get(RoleQuery query);
 
-    default Result<List<RoleDTO>> list(RoleDTO roleDTO) {
-        return list(roleDTO, null);
-    }
+    RoleVO getVO(RoleQuery query);
 
-    Result<List<RoleDTO>> list(RoleDTO roleDTO, Page page);
+    List<RoleTableVO> listTableVO(RoleQuery query, Page page);
 
     /**
      * 获取用户的权限字符set
