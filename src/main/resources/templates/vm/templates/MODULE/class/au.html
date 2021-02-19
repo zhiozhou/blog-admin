@@ -2,21 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
+#set($action='${_isAdd?_action:_action+_vo.id}')
         <div class="layout-iframe">
-            <form class="layui-form " th:attr="action=\$\{_isAdd?_action:_action+_vo.id\}" th:object="${_vo}">
-                <input type="hidden" th:field="*{id}">
-                #foreach ($column in $table.columnList)
+            <form class="layui-form " th:attr="action=$action" th:object="${_vo}">
+#foreach ($primary in $table.primaryKeys)
+                <input type="hidden" th:field="*{${primary.attrName}}">
 
+#end
+#foreach ($column in $table.columnList)
+#if(!$table.primaryKeys.contains($column) && $column.name != "gmt_create" && $column.name != "create_time" && $column.name != "gmt_modified" && $column.name != "update_time")
+#if($column.javaType!="Date")
                 <div class="layui-form-item">
                     <label class="layui-form-label">${column.comment}：</label>
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{${column.attrName}}" lay-verify="required"
-                               placeholder="请输入${column.comment}" autocomplete="off">
+                               placeholder="请输入${column.comment}" autocomplete="off"/>
                     </div>
                 </div>
-                #end
+#else
+                <div class="layui-form-item">
+                    <label class="layui-form-label">${column.comment}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input"
+                               name="${column.attrName}"
+                               th:value="*{#dates.format(${column.attrName})}" lay-verify="required"
+                        placeholder="请输入${column.comment}" autocomplete="off"/>
+                    </div>
+                </div>
+#end
 
+#end
+#end
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>

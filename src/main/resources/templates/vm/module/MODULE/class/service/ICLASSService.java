@@ -21,7 +21,7 @@ public interface I${table.className}Service {
     Result<NULL> save(${table.className}DTO ${table.objectName}DTO);
 
 #if(!$table.primaryKeys.isEmpty())
-    Result<NULL> remove(${table.primaryKeys[0].javaType}[] ids);
+    Result<NULL> remove(${table.primaryKeys[0].javaType}[] ${table.primaryKeys[0].attrName}s);
 
     Result<NULL> update(${table.className}DTO ${table.objectName}DTO);
 

@@ -5,8 +5,8 @@
         <div class="layout-page">
             <div>
                 <div class="layout-table-tool">
-#set($left="${")
-                    <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn" shiro:hasPermission=$left _module.permissionPrefix+':add'}>
+#set($permission="_module.permissionPrefix+':add'")
+                    <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn" shiro:hasPermission=${${permission}}>
                         <i class="fa fa-plus"></i> 添加
                     </a>
                 </div>
@@ -17,17 +17,18 @@
         <script th:inline="none">
             const prefix = `${_gate}${app.modulePath}${table.objectName}`
 
-
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
 #foreach ($column in $table.columnList)
+#if(!$table.primaryKeys.contains($column))
                         {field: '${column.attrName}', title: '${column.comment}'},
+#end
 #end
                         {title: '操作',  toolbar: '#rud'}
                     ]]
 
-                 tableRender(table,{cols})
+                tableRender(table,{cols})
                 table.on('tool(table)', iframeAction)
             })
         </script>

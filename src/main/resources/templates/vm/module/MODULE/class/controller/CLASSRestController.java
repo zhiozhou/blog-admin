@@ -37,8 +37,8 @@ public class ${table.className}RestController {
     }
 
     @PostMapping("/remove")
-    public Result<NULL> remove(${table.primaryKeys[0].javaType}[] ids) {
-        return ${table.objectName}Service.remove(ids);
+    public Result<NULL> remove(${table.primaryKeys[0].javaType}[] ${table.primaryKeys[0].attrName}s) {
+        return ${table.objectName}Service.remove(${table.primaryKeys[0].attrName}s);
     }
 
     @PostMapping("/update/{id}")

@@ -1,5 +1,6 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.service.impl;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
@@ -8,6 +9,7 @@ import ${app.packet}.common.domain.Result;
 import ${app.packet}.common.domain.dto.Page;
 import ${app.packet}.common.enums.ResultEnum;
 import ${app.packet}.common.service.BaseService;
+import ${app.packet}.framework.exception.GlobalException;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.vo.${table.className}VO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po.${table.className}PO;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dao.${table.className}DAO;
@@ -50,10 +52,12 @@ public class ${table.className}ServiceImpl extends BaseService implements I${tab
 
 #if(!$table.primaryKeys.isEmpty())
     @Override
-    public Result<NULL> remove(${table.primaryKeys[0].javaType}[] ids) {
-        return ${table.objectName}DAO.removeList(ids) > 0 ?
-            Result.success():
-            Result.fail(ResultEnum.FAIL_OPERATION);
+    @Transactional
+    public Result<NULL> remove(${table.primaryKeys[0].javaType}[] ${table.primaryKeys[0].attrName}s) {
+        if(${table.objectName}DAO.removeList(${table.primaryKeys[0].attrName}s) != ${table.primaryKeys[0].attrName}s.length){
+            throw new GlobalException(ResultEnum.LATER_RETRY);
+        }
+        return Result.success();
     }
 
     @Override

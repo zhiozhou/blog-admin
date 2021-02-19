@@ -5,21 +5,21 @@
         <div class="layout-iframe">
             <form class="layui-form-pane" th:object="${_vo}">
 #foreach ($column in $table.columnList)
-
+#if(!$table.primaryKeys.contains($column))
                 <div class="layui-form-item">
                     <label class="layui-form-label">${column.comment}：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" th:value="*{${column.attrName}}" disabled>
+                        <input type="text" class="layui-input" th:value="*{#if($column.javaType!="Date")${column.attrName}#else#dates.format(${column.attrName})#end}" disabled/>
                     </div>
                 </div>
+
+#end
 #end
 
             </form>
         </div>
         <div th:include="include :: footer"></div>
-        <script th:inline="javascript">
-
-        </script>
+        <script th:inline="javascript"></script>
     </body>
 
 </html>
