@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.module.system.menu.domain.vo.MenuTreeVO;
-
-import java.util.List;
 
 /**
  * 角色 下拉渲染模型

@@ -4,6 +4,7 @@ import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.Tree;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
+import priv.zhou.module.system.menu.domain.query.MenuQuery;
 
 import java.util.List;
 import java.util.Set;
@@ -38,7 +39,7 @@ public interface IMenuService {
     /**
      * 获取用户的权限字符set
      */
-    Set<String> keySet(MenuDTO menuDTO);
+    Set<String> keySet(MenuQuery menuQuery);
 
 
 }

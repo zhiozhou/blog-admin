@@ -10,5 +10,17 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class MenuTreeVO extends Tree implements Serializable {
+public class MenuVO extends Tree implements Serializable {
+
+    private String parentName;
+
+    private String icon;
+
+    private String path;
+
+    private Integer type;
+
+    private Integer sort;
+
+    private String key;
 }

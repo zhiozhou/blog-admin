@@ -8,4 +8,16 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class MenuQuery {
+
+    private Integer id;
+
+    private Integer parentId;
+
+    private Integer userId;
+
+    private String name;
+
+    private String key;
+
+    private Integer state;
 }

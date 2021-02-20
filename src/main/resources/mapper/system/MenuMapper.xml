@@ -4,6 +4,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.system.menu.domain.dao.MenuDAO">
 
+    <resultMap id="VOMap" type="MenuVO">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="parent_name" property="parentName"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="path" property="path"/>
+        <result column="type" property="type"/>
+        <result column="sort" property="sort"/>
+        <result column="key" property="key"/>
+    </resultMap>
+
+    <resultMap id="TableVOMap" type="MenuVO">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="path" property="path"/>
+        <result column="type" property="type"/>
+        <result column="sort" property="sort"/>
+        <result column="key" property="key"/>
+    </resultMap>
+
     <insert id="save" parameterType="MenuPO">
         INSERT INTO system_menu(
             parent_id,
@@ -15,7 +38,7 @@
             sort,
             `key`,
             flag,
-            create_id,
+            create_by,
             gmt_create
         )
         VALUES(
@@ -28,12 +51,12 @@
             #{sort},
             #{key},
             #{flag},
-            #{createId},
+            #{createBy},
             NOW()
         )
     </insert>
 
-    <delete id="remove" parameterType="MenuDTO">
+    <delete id="remove" parameterType="Integer">
         delete from system_menu
         where id = #{id} or id in (
             SELECT
@@ -62,47 +85,40 @@
             <if test="state != null ">state = #{state},</if>
             <if test="sort != null ">sort = #{sort},</if>
             <if test="key != null and key != ''">`key` = #{key},</if>
-            modified_id = #{modifiedId},
+            modified_by = #{modifiedId},
             gmt_modified = NOW()
         </set>
         where id = #{id} and flag = #{flag}
     </update>
 
-    <select id="get" parameterType="MenuDTO" resultType="MenuPO">
+    <select id="getVO" parameterType="MenuQuery" resultMap="MenuVO">
         SELECT
-        system_menu.id,
-        system_menu.parent_id,
-        IF(system_menu.parent_id = 0, '根目录', parent_menu.name) parentName,
-        system_menu.name,
-        system_menu.icon,
-        system_menu.path,
-        system_menu.type,
-        system_menu.state,
-        system_menu.sort,
-        system_menu.`key`,
-        system_menu.flag
-        FROM
-        system_menu
-        LEFT JOIN system_menu AS parent_menu ON system_menu.parent_id = parent_menu.id
-        <where>
-            system_menu.flag = #{flag}
-            <if test="id != null">AND system_menu.id = #{id}</if>
-        </where>
+            menu.id,
+            menu.parent_id,
+            IF(menu.parent_id = 0, '根目录', parent_menu.name) parent_name,
+            menu.name,
+            menu.icon,
+            menu.path,
+            menu.type,
+            menu.sort,
+            menu.`key`
+        FROM system_menu AS menu
+        LEFT JOIN system_menu AS parent_menu ON menu.parent_id = parent_menu.id
+        WHERE menu.flag = #{flag} AND menu.id = #{id}
     </select>
 
-    <select id="list" parameterType="MenuDTO" resultType="MenuPO">
+    <select id="listTableVO" parameterType="MenuQuery" resultMap="TableVOMap">
         SELECT
-        id,
-        parent_id,
-        system_menu.name,
-        icon,
-        path,
-        type,
-        state,
-        sort,
-        `key`
-        FROM
-        system_menu
+            id,
+            parent_id,
+            system_menu.name,
+            icon,
+            path,
+            type,
+            state,
+            sort,
+            `key`
+        FROM system_menu
         <if test="userId != null">
             LEFT JOIN system_role_menu ON system_menu.id = system_role_menu.menu_id
             LEFT JOIN system_user_role ON system_role_menu.role_id = system_user_role.role_id
@@ -117,21 +133,18 @@
                 </foreach>
             </if>
         </where>
-        ORDER BY
-        parent_id,
-        sort
     </select>
 
-    <select id="count" parameterType="MenuDTO" resultType="integer">
+    <select id="count" parameterType="MenuQuery" resultType="int">
         SELECT
-        COUNT( 0 )
+        COUNT(0)
         FROM
         system_menu
         <where>
             flag = #{flag}
-            <if test="exclId != null ">and id != #{exclId}</if>
-            <if test="parentId != null ">and parent_id = #{parentId}</if>
-            <if test="name != null and name != ''">and name = #{name}</if>
+            <if test="exclId != null">and id != #{exclId}</if>
+            <if test="parentId != null">and parent_id = #{parentId}</if>
+            <if test="name != null and name != ''">and `name` = #{name}</if>
             <if test="key != null and key != ''">and `key` = #{key}</if>
         </where>
     </select>

@@ -1,21 +1,29 @@
-package priv.zhou.module.system.menu.domain.po;
+package priv.zhou.module.system.menu.domain.vo;
 
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.experimental.Accessors;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
-import priv.zhou.module.system.menu.domain.dto.MenuDTO;
-
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import priv.zhou.common.tools.DateUtil;
 
+/**
+ * 菜单 表格渲染模型
+ *
+ * @author zhou
+ * @since 2021.02.20
+ */
 @Getter
 @Setter
 @Accessors(chain = true)
-public class MenuPO implements Serializable {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class MenuTableVO {
+
 
 	/**
-	 * id
+	 * 
 	 */
 	private Integer id;
 
@@ -23,11 +31,6 @@ public class MenuPO implements Serializable {
 	 * 父级id
 	 */
 	private Integer parentId;
-
-	/**
-	 * 父级名称
-	 */
-	private String parentName;
 
 	/**
 	 * 名称
@@ -45,17 +48,17 @@ public class MenuPO implements Serializable {
 	private String path;
 
 	/**
-	 * 类型 0 目录 1 菜单 2按钮
+	 * 类型 关联字典
 	 */
 	private Integer type;
 
 	/**
-	 * 状态 0 正常 11隐藏
+	 * 状态 关联字典
 	 */
 	private Integer state;
 
 	/**
-	 * 排序
+	 * 排序 从小直大
 	 */
 	private Integer sort;
 
@@ -65,30 +68,30 @@ public class MenuPO implements Serializable {
 	private String key;
 
 	/**
-	 * 旗帜 区分前后台菜单
+	 * 旗帜 0为后台 1为前台
 	 */
 	private Integer flag;
 
 	/**
-	 * 创建人id
+	 * 创建人
 	 */
 	private Integer createBy;
 
 	/**
 	 * 创建时间
 	 */
+	@JsonFormat(pattern = DateUtil.YMDHMS, timezone = DateUtil.TIME_ZONE)
 	private Date gmtCreate;
 
 	/**
-	 * 修改人id
+	 * 修改人
 	 */
 	private Integer modifiedBy;
-
 
 	/**
 	 * 修改时间
 	 */
+	@JsonFormat(pattern = DateUtil.YMDHMS, timezone = DateUtil.TIME_ZONE)
 	private Date gmtModified;
-
 
 }

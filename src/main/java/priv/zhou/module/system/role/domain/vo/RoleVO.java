@@ -7,7 +7,7 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import priv.zhou.module.system.menu.domain.vo.MenuTreeVO;
+import priv.zhou.module.system.menu.domain.vo.MenuVO;
 
 /**
  * 角色 数据持久化模型
@@ -51,5 +51,5 @@ public class RoleVO {
 	/**
 	 * 绑定菜单
 	 */
-	private List<MenuTreeVO> menus;
+	private List<MenuVO> menus;
 }
