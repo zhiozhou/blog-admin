@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.module.system.role.domain.dto.RoleDTO;
+import priv.zhou.module.system.role.domain.query.RoleQuery;
 import priv.zhou.module.system.role.domain.vo.RoleVO;
 import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.query.UserQuery;
@@ -41,7 +41,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("/login")
-    public String login(Model model) {
+    public String login() {
         return "system/user/login";
     }
 
@@ -50,7 +50,7 @@ public class UserController extends BaseController {
     public String add(Model model) {
         super.add(model, new UserVO().setState(0).setRoleIdSet(Sets.newHashSet()));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
-        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
+        model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery().setState(0)));
         return "system/user/au";
     }
 
@@ -64,7 +64,7 @@ public class UserController extends BaseController {
                 .collect(Collectors.toSet()));
         super.update(model, userVO.setRoles(null));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
-        model.addAttribute("roleList", roleService.list(new RoleDTO().setState(0)).getData());
+        model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery().setState(0)));
         return "system/user/au";
     }
 
@@ -105,7 +105,7 @@ public class UserController extends BaseController {
     public String list(Model model) {
         super.list(model);
 
-        model.addAttribute("roleList", roleService.list(new RoleDTO()).getData());
+        model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery()));
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_USER_STATE));
         return "system/user/list";
     }

@@ -49,7 +49,7 @@ public class MenuServiceImpl implements IMenuService {
 
 
         // 2.转换类型
-        MenuPO menuPO = menuDTO.toPO()
+        MenuPO menuPO = new MenuPO()
                 .setCreateId(ShiroUtil.getUserId());
 
         // 3.保存
@@ -74,9 +74,9 @@ public class MenuServiceImpl implements IMenuService {
         MenuPO menuPO = menuDAO.get(menuDTO);
         if (null == menuPO) {
             return Result.fail(ResultEnum.EMPTY_DATA);
-        } else if (menuDAO.remove(menuDTO) < 1 || roleDAO.clearMenu(new RoleDTO()) < 1) {
+        }/* else if (menuDAO.remove(menuDTO) < 1 || roleDAO.clearMenu(new RoleDTO()) < 1) {
             throw new GlobalException(ResultEnum.FAIL_OPERATION);
-        } else if (SERVICE_FLAG.equals(menuPO.getFlag())) {
+        }*/ else if (SERVICE_FLAG.equals(menuPO.getFlag())) {
             RedisUtil.delete(BS_MENU_KEY);
             RedisUtil.delete(BS_MENU_MODIFIED_KEY);
         }
@@ -113,7 +113,7 @@ public class MenuServiceImpl implements IMenuService {
         }
 
         // 2.补充参数
-        MenuPO menuPO = menuDTO.toPO()
+        MenuPO menuPO = new MenuPO()
                 .setModifiedId(ShiroUtil.getUserId());
 
         // 3.修改菜单
@@ -138,12 +138,12 @@ public class MenuServiceImpl implements IMenuService {
         if (null == menuPO) {
             return Result.fail(ResultEnum.EMPTY_DATA);
         }
-        return Result.success(new MenuDTO(menuPO));
+        return Result.success(null);
     }
 
     @Override
     public Result<List<MenuDTO>> list(MenuDTO menuDTO) {
-        return Result.success(DTO.ofPO(menuDAO.list(menuDTO), MenuDTO::new));
+        return Result.success(null);
     }
 
     @Override

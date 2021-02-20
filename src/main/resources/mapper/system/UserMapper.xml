@@ -18,13 +18,31 @@
         <result column="is_deleted" property="deleted"/>
     </resultMap>
 
-    <resultMap id="TableVOMap" type="UserTableVO">
+    <resultMap id="BOMap" type="UserBO">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
         <result column="state" property="state"/>
-        <result column="roles" property="roles"/>
+        <result column="create_by" property="createBy"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modified_by" property="modifiedBy"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <collection property="roles" ofType="RolePO">
+            <result column="role_id" property="id"/>
+            <result column="role_name" property="name"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="PrincipalMap" type="UserPrincipal">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="state" property="state"/>
+        <result column="role_names" property="roleNames"/>
     </resultMap>
 
     <resultMap id="VOMap" type="UserVO">
@@ -40,15 +58,13 @@
         </collection>
     </resultMap>
 
-    <resultMap id="PrincipalMap" type="UserPrincipal">
-        <result column="id" property="id"/>
+    <resultMap id="TableVOMap" type="UserTableVO">
+        <id column="id" property="id"/>
         <result column="username" property="username"/>
-        <result column="password" property="password"/>
-        <result column="salt" property="salt"/>
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
         <result column="state" property="state"/>
-        <result column="role_names" property="roleNames"/>
+        <result column="roles" property="roles"/>
     </resultMap>
 
     <sql id="POSql">
@@ -124,6 +140,25 @@
         </where>
     </select>
 
+    <select id="getBO" parameterType="UserQuery" resultMap="BOMap">
+        SELECT
+            `user`.id,
+            `user`.username,
+            `user`.`name`,
+            `user`.phone,
+            `user`.state,
+            `user`.create_by,
+            `user`.gmt_create,
+            `user`.modified_by,
+            `user`.gmt_modified,
+            user_role.role_id,
+            role.`name` as role_name
+        FROM system_user AS `user`
+        LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
+        LEFT JOIN system_role AS role ON user_role.role_id = role.id
+        WHERE `user`.is_deleted = 0 and `user`.id = #{id}
+    </select>
+
     <select id="getVO" parameterType="UserQuery" resultMap="VOMap">
         SELECT
             `user`.id,
@@ -153,7 +188,7 @@
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id
-        WHERE is_deleted = 0 and username = #{username}
+        WHERE `user`.is_deleted = 0 and username = #{username}
         GROUP BY `user`.id
     </select>
 

@@ -10,11 +10,27 @@
         <result column="name" property="name"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
-        <result column="create_id" property="createId"/>
-        <result column="modified_id" property="modifiedId"/>
+        <result column="create_by" property="createBy"/>
+        <result column="modified_by" property="modifiedBy"/>
         <result column="gmt_create" property="gmtCreate"/>
         <result column="gmt_modified" property="gmtModified"/>
         <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+    <resultMap id="BOMap" type="RoleBO">
+        <id column="id" property="id"/>
+        <result column="key" property="key"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="create_by" property="createBy"/>
+        <result column="modified_by" property="modifiedBy"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <collection property="menus"  ofType="MenuPO">
+            <id column="menu_id" property="id"/>
+            <result column="menu_name" property="name" />
+        </collection>
     </resultMap>
 
     <resultMap id="VOMap" type="RoleVO">
@@ -23,7 +39,7 @@
         <result column="name" property="name"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
-        <collection property="menus"  ofType="MenuVO">
+        <collection property="menus" ofType="MenuPO">
             <id column="menu_id" property="id"/>
             <result column="menu_parent_id" property="parentId"/>
             <result column="menu_name" property="name" />
@@ -38,6 +54,11 @@
         <result column="remark" property="remark"/>
     </resultMap>
 
+    <resultMap id="SelectVOMap" type="RoleSelectVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
     <sql id="POSql">
         SELECT
             id,
@@ -45,8 +66,8 @@
             `name`,
             state,
             remark,
-            create_id,
-            modified_id,
+            create_by,
+            modified_by,
             gmt_create,
             gmt_modified,
             is_deleted
@@ -59,7 +80,7 @@
             name,
             state,
             remark,
-            create_id,
+            create_by,
             gmt_create,
             is_deleted
         )VALUES(
@@ -67,13 +88,13 @@
             #{name},
             #{state},
             #{remark},
-            #{createId},
+            #{createBy},
 	        NOW(),
             0
         )
     </insert>
 
-    <delete id="removeList" parameterType="RoleDTO">
+    <delete id="removeList" parameterType="Integer">
         update system_role set is_deleted = 1
         where is_deleted = 0 and id in
         <foreach item="id" collection="ids" open="(" separator="," close=")">
@@ -88,7 +109,7 @@
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="state != null ">state = #{state},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
-            modified_id = #{modifiedId},
+            modified_by = #{modifiedBy},
             gmt_modified = NOW()
         </set>
         where id = #{id}
@@ -96,10 +117,29 @@
 
     <select id="get" parameterType="RoleQuery" resultMap="POMap">
         <include refid="POSql"/>
-        WHERE id = #{id}
+        WHERE is_deleted = 0 and id = #{id}
     </select>
 
-    <select id="getVO" parameterType="RoleDTO" resultMap="VOMap">
+    <select id="getBO" parameterType="RoleQuery" resultMap="BOMap">
+        SELECT
+            role.id,
+            role.`key`,
+            role.`name`,
+            role.state,
+            role.remark,
+            role.create_by,
+            role.gmt_create,
+            role.modified_by,
+            role.gmt_modified,
+            menu.id AS menu_id,
+            menu.`name` AS menu_name
+        FROM system_role AS role
+        LEFT JOIN system_role_menu AS role_menu ON role.id = role_menu.role_id
+        LEFT JOIN system_menu AS menu ON role_menu.menu_id = menu.id
+        WHERE is_deleted = 0 AND role.id = #{id}
+    </select>
+
+    <select id="getVO" parameterType="RoleQuery" resultMap="VOMap">
         SELECT
             role.id,
             role.`key`,
@@ -108,7 +148,7 @@
             role.remark,
             menu.id AS menu_id,
             menu.parent_id AS menu_parent_id,
-            menu.NAME AS menu_name
+            menu.`name` AS menu_name
         FROM system_role AS role
         LEFT JOIN system_role_menu AS role_menu ON role.id = role_menu.role_id
         LEFT JOIN system_menu AS menu ON role_menu.menu_id = menu.id
@@ -118,11 +158,12 @@
     <select id="list" parameterType="RoleQuery" resultMap="POMap">
         <include refid="POSql"/>
         <where>
+            is_deleted = 0
             <if test="key != null and key != ''"> AND `key` = #{key}</if>
             <if test="name != null and name != ''"> AND `name` = #{name}</if>
             <if test="state != null"> AND state = #{state}</if>
             <if test="remark != null and remark != ''"> AND remark = #{remark}</if>
-            <if test="createId != null"> AND create_id = #{createId}</if>
+            <if test="createBy != null"> AND create_by = #{createBy}</if>
         </where>
     </select>
 
@@ -135,8 +176,21 @@
             remark
         FROM system_role
         <where>
+            is_deleted = 0
             <if test="state != null">and state = #{state} </if>
             <if test="nameLike != null and nameLike != ''">and `name` LIKE CONCAT('%',#{nameLike},'%')</if>
+        </where>
+    </select>
+
+
+    <select id="listSelectVO" parameterType="RoleQuery" resultMap="SelectVOMap">
+        SELECT
+            id,
+            name
+        FROM system_role
+        <where>
+            is_deleted = 0
+            <if test="state != null">and state = #{state} </if>
         </where>
     </select>
 
@@ -146,6 +200,7 @@
         FROM
         system_role
         <where>
+            is_deleted = 0
             <if test="ridId != null ">and id != #{ridId}</if>
             <if test="name != null and name != ''">and `name` = #{name}</if>
             <if test="key != null and key != ''">and `key` = #{key}</if>
@@ -169,6 +224,7 @@
             COUNT(0)
         FROM system_user_role
         <where>
+            is_deleted = 0
             <if test="id != null ">and role_id != #{id}</if>
             <if test="ids != null">and role_id IN
                 <foreach collection="ids" item="id" open="(" separator="," close=")">

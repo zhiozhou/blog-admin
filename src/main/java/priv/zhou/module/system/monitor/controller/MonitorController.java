@@ -9,6 +9,7 @@ import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
+import priv.zhou.module.system.role.domain.query.RoleQuery;
 import priv.zhou.module.system.role.service.IRoleService;
 
 /**
@@ -34,7 +35,7 @@ public class MonitorController extends BaseController {
         super.list(model);
 
         model.addAttribute("id", ShiroUtil.getSession().getId());
-        model.addAttribute("roleList", roleService.list(new RoleDTO()).getData());
+        model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery()));
         return "system/monitor/list";
     }
 }

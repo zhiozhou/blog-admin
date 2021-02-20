@@ -6,6 +6,7 @@ import priv.zhou.common.constant.NULL;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.domain.po.RolePO;
 import priv.zhou.module.system.role.domain.query.RoleQuery;
+import priv.zhou.module.system.role.domain.vo.RoleSelectVO;
 import priv.zhou.module.system.role.domain.vo.RoleTableVO;
 import priv.zhou.module.system.role.domain.vo.RoleVO;
 
@@ -21,9 +22,9 @@ public interface IRoleService {
 
     Result<NULL> update(RoleDTO roleDTO);
 
-    RolePO get(RoleQuery query);
-
     RoleVO getVO(RoleQuery query);
+
+    List<RoleSelectVO> listSelectVO(RoleQuery query);
 
     List<RoleTableVO> listTableVO(RoleQuery query, Page page);
 

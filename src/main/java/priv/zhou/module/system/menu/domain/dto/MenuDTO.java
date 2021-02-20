@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.domain.dto.DTO;
+import priv.zhou.common.domain.Tree;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
 
 import javax.validation.constraints.NotBlank;
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MenuDTO extends DTO<MenuPO> {
+public class MenuDTO extends Tree {
 
     /**
      * id
@@ -103,8 +103,4 @@ public class MenuDTO extends DTO<MenuPO> {
      */
     private Boolean checked;
 
-
-    public MenuDTO(MenuPO menuPO) {
-        super(menuPO);
-    }
 }

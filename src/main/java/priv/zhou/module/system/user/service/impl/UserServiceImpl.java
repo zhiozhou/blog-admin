@@ -13,6 +13,8 @@ import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.module.system.role.domain.dao.RoleDAO;
+import priv.zhou.module.system.role.domain.po.RolePO;
+import priv.zhou.module.system.user.domain.bo.UserBO;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.dto.UserSaveDTO;
 import priv.zhou.module.system.user.domain.dto.UserUpdateDTO;
@@ -79,7 +81,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public Result<NULL> remove(Integer[] ids) {
-        if (userDAO.removeList(ids)!= ids.length){
+        if (userDAO.removeList(ids) != ids.length) {
             throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
@@ -92,8 +94,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
             return Result.fail(ResultEnum.EXIST_PHONE);
         }
 
-        UserPO userPO = userDAO.get(new UserQuery().setId(updateDTO.getId()));
-        if (null == userPO) {
+        UserBO userDB = userDAO.getBO(new UserQuery().setId(updateDTO.getId()));
+        if (null == userDB) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         } else if (userDAO.update(new UserPO()
                 .setId(updateDTO.getId())
@@ -102,7 +104,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
                 .setModifiedBy(ShiroUtil.getUserId())) < 1) {
             return Result.fail(ResultEnum.LATER_RETRY);
         }
-        Set<Integer> roleSet = roleDAO.idSet(updateDTO.getId());
+
+        Set<Integer> roleSet = userDB.getRoles()
+                .stream()
+                .map(RolePO::getId)
+                .collect(Collectors.toSet());
         if (roleSet.size() != updateDTO.getRoles().size() ||
                 updateDTO.getRoles().stream()
                         .noneMatch(roleSet::contains)) {
@@ -116,7 +122,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
                     .collect(Collectors.toList())) != updateDTO.getRoles().size()) {
                 return Result.fail(ResultEnum.LATER_RETRY);
             }
-            ShiroUtil.clearUserAuthorization(userPO.getUsername());
+            ShiroUtil.clearUserAuthorization(userDB.getUsername());
         }
 
 

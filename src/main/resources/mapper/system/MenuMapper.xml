@@ -6,30 +6,30 @@
 
     <insert id="save" parameterType="MenuPO">
         INSERT INTO system_menu(
-        parent_id,
-        name,
-        icon,
-        path,
-        type,
-        state,
-        sort,
-        <if test="key != null and key != ''">`key`,</if>
-        flag,
-        create_id,
-        gmt_create
+            parent_id,
+            name,
+            icon,
+            path,
+            type,
+            state,
+            sort,
+            `key`,
+            flag,
+            create_id,
+            gmt_create
         )
         VALUES(
-        #{parentId},
-        #{name},
-        #{icon},
-        #{path},
-        #{type},
-        #{state},
-        #{sort},
-        <if test="key != null and key != ''">#{key},</if>
-        #{flag},
-        #{createId},
-        NOW()
+            #{parentId},
+            #{name},
+            #{icon},
+            #{path},
+            #{type},
+            #{state},
+            #{sort},
+            #{key},
+            #{flag},
+            #{createId},
+            NOW()
         )
     </insert>
 
@@ -122,7 +122,6 @@
         sort
     </select>
 
-
     <select id="count" parameterType="MenuDTO" resultType="integer">
         SELECT
         COUNT( 0 )
@@ -151,6 +150,5 @@
             AND `key` is not null
             AND system_user_role.user_id = #{userId}
     </select>
-
 
 </mapper>
