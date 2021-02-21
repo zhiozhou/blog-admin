@@ -25,20 +25,10 @@ public class MenuDTO extends Tree {
     private Integer id;
 
     /**
-     * 去除id
-     */
-    private Integer exclId;
-
-    /**
      * 父级id
      */
     @NotNull(message = "父级id不可为空")
     private Integer parentId;
-
-    /**
-     * 父级名称
-     */
-    private String parentName;
 
     /**
      * 名称
@@ -82,25 +72,5 @@ public class MenuDTO extends Tree {
      * 旗帜 区分前后台菜单
      */
     private Integer flag;
-
-    /**
-     * 查找的范围
-     */
-    private List<Integer> types;
-
-    /**
-     * 用户id
-     */
-    private Integer userId;
-
-    /**
-     * 子级列表
-     */
-    private List<MenuDTO> childList;
-
-    /**
-     * 是否选中
-     */
-    private Boolean checked;
 
 }

@@ -1,15 +1,14 @@
 package priv.zhou.module.system.menu.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
-import priv.zhou.common.domain.Result;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
+import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
 
 import static priv.zhou.common.constant.DictConst.SYSTEM_MENU_STATE;
@@ -47,11 +46,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("system:menu:update")
     @RequestMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        Result<MenuDTO> dtoVO = menuService.get(new MenuDTO().setId(id).setFlag(ADMIN_FLAG));
-        if (dtoVO.isFail()) {
-            return NOT_FOUNT;
-        }
-        super.update(model, dtoVO.getData());
+        super.update(model, menuService.getVO(new MenuQuery().setId(id).setFlag(ADMIN_FLAG)));
 
         model.addAttribute("typeList", dictService.listDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));

@@ -8,6 +8,7 @@ import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 import priv.zhou.module.system.user.domain.po.UserPO;
 import priv.zhou.module.system.user.domain.po.UserRolePO;
 import priv.zhou.module.system.user.domain.query.UserQuery;
+import priv.zhou.module.system.user.domain.query.UserRoleQuery;
 import priv.zhou.module.system.user.domain.vo.UserTableVO;
 import priv.zhou.module.system.user.domain.vo.UserVO;
 
@@ -15,16 +16,10 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface UserDAO extends BaseDAO<UserPO, UserQuery> {
+public interface UserRoleDAO extends BaseDAO<UserRolePO, UserRoleQuery> {
 
-    int removeList(Integer[] ids);
+    int saveList(List<UserRolePO> userRoles);
 
-    List<UserTableVO> listTableVO(UserQuery userQuery);
-
-    UserBO getBO(UserQuery userQuery);
-
-    UserVO getVO(UserQuery userQuery);
-
-    UserPrincipal getPrincipal(UserQuery userQuery);
+    int remove(Integer userId);
 
 }

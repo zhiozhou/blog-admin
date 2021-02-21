@@ -11,6 +11,8 @@ public class MenuQuery {
 
     private Integer id;
 
+    private Integer ridId;
+
     private Integer parentId;
 
     private Integer userId;
@@ -20,4 +22,6 @@ public class MenuQuery {
     private String key;
 
     private Integer state;
+
+    private Integer flag;
 }

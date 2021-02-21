@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.constant.NULL;
-import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
+import priv.zhou.module.system.menu.domain.query.MenuQuery;
+import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
 import priv.zhou.module.system.menu.service.IMenuService;
 
 import javax.validation.Valid;
@@ -41,7 +43,7 @@ public class MenuRestController {
     @RequiresPermissions("system:menu:remove")
     @RequestMapping("/remove/{id}")
     public Result<NULL> remove(@PathVariable Integer id) {
-        return menuService.remove(new MenuDTO().setId(id).setFlag(ADMIN_FLAG));
+        return menuService.remove(id);
     }
 
     @RequiresPermissions("system:menu:update")
@@ -52,8 +54,8 @@ public class MenuRestController {
 
     @RequiresPermissions("system:menu:list")
     @RequestMapping("/list")
-    public Result<List<MenuDTO>> list(MenuDTO menuDTO) {
-        return menuService.list(menuDTO.setFlag(ADMIN_FLAG));
+    public Result<TableVO<MenuTableVO>> list(MenuQuery query) {
+        return Result.table(menuService.listTableVO(query.setFlag(ADMIN_FLAG)));
     }
 
     @RequiresPermissions("system:menu:list")

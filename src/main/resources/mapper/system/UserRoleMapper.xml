@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.system.user.domain.dao.UserRoleDAO">
+
+    <insert id="saveList" parameterType="UserRolePO">
+        insert system_user_role( user_id , role_id ) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.userId},#{item.roleId})
+        </foreach>
+    </insert>
+
+    <delete id="remove" parameterType="Integer">
+        delete from system_user_role where user_id = #{userId}
+    </delete>
+
+    <select id="count" parameterType="RoleQuery" resultType="int">
+        SELECT
+            COUNT(0)
+        FROM system_user_role
+        <where>
+            is_deleted = 0
+            <if test="userId != null ">and user_id != #{userId}</if>
+            <if test="roleId != null ">and role_id != #{roleId}</if>
+            <if test="roleIds != null">and role_id IN
+                <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+                    #{roleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

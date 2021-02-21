@@ -12,10 +12,10 @@ import priv.zhou.common.tools.RandomUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
-import priv.zhou.module.system.role.domain.dao.RoleDAO;
 import priv.zhou.module.system.role.domain.po.RolePO;
 import priv.zhou.module.system.user.domain.bo.UserBO;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
+import priv.zhou.module.system.user.domain.dao.UserRoleDAO;
 import priv.zhou.module.system.user.domain.dto.UserSaveDTO;
 import priv.zhou.module.system.user.domain.dto.UserUpdateDTO;
 import priv.zhou.module.system.user.domain.po.UserPO;
@@ -42,7 +42,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     private final UserDAO userDAO;
 
-    private final RoleDAO roleDAO;
+    private final UserRoleDAO userRoleDAO;
 
     private final UserCredentialsMatcher certMatcher;
 
@@ -67,7 +67,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
         if (userDAO.save(userPO) < 1) {
             return Result.fail(ResultEnum.LATER_RETRY);
-        } else if (userDAO.relateRole(saveDTO.getRoles()
+        } else if (userRoleDAO.saveList(saveDTO.getRoles()
                 .stream()
                 .map(roleId -> new UserRolePO()
                         .setRoleId(roleId)
@@ -112,9 +112,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if (roleSet.size() != updateDTO.getRoles().size() ||
                 updateDTO.getRoles().stream()
                         .noneMatch(roleSet::contains)) {
-            if (userDAO.unRelateRole(updateDTO.getId()) < 1) {
+            if (userRoleDAO.remove(updateDTO.getId()) < 1) {
                 return Result.fail(ResultEnum.LATER_RETRY);
-            } else if (userDAO.relateRole(updateDTO.getRoles()
+            } else if (userRoleDAO.saveList(updateDTO.getRoles()
                     .stream()
                     .map(roleId -> new UserRolePO()
                             .setRoleId(roleId)

@@ -207,44 +207,9 @@
         </where>
     </select>
 
-    <insert id="relateMenu" parameterType="RoleMenuPO">
-        INSERT INTO system_role_menu ( role_id, menu_id )
-        VALUES
-        <foreach collection="list" index="index" item="item" separator=",">
-            ( #{item.roleId},#{item.menuId} )
-        </foreach>
-    </insert>
-
-    <delete id="unRelateMenu" parameterType="Integer">
-        delete from system_role_menu where role_id = #{id}
-    </delete>
-
-    <select id="countUser" parameterType="RoleQuery" resultType="int">
-        SELECT
-            COUNT(0)
-        FROM system_user_role
-        <where>
-            is_deleted = 0
-            <if test="id != null ">and role_id != #{id}</if>
-            <if test="ids != null">and role_id IN
-                <foreach collection="ids" item="id" open="(" separator="," close=")">
-                    #{id}
-                </foreach>
-            </if>
-        </where>
-    </select>
-
     <select id="keySet" parameterType="Integer" resultType="String">
         SELECT
             `key`
-        FROM system_role
-        LEFT JOIN system_user_role ON system_role.id = system_user_role.role_id AND system_role.is_deleted = 0
-        WHERE state = 0 AND system_user_role.user_id = #{value}
-    </select>
-
-    <select id="idSet" parameterType="integer" resultType="integer">
-        SELECT
-            id
         FROM system_role
         LEFT JOIN system_user_role ON system_role.id = system_user_role.role_id AND system_role.is_deleted = 0
         WHERE state = 0 AND system_user_role.user_id = #{value}

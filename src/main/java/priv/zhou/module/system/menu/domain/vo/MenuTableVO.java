@@ -67,31 +67,4 @@ public class MenuTableVO {
 	 */
 	private String key;
 
-	/**
-	 * 旗帜 0为后台 1为前台
-	 */
-	private Integer flag;
-
-	/**
-	 * 创建人
-	 */
-	private Integer createBy;
-
-	/**
-	 * 创建时间
-	 */
-	@JsonFormat(pattern = DateUtil.YMDHMS, timezone = DateUtil.TIME_ZONE)
-	private Date gmtCreate;
-
-	/**
-	 * 修改人
-	 */
-	private Integer modifiedBy;
-
-	/**
-	 * 修改时间
-	 */
-	@JsonFormat(pattern = DateUtil.YMDHMS, timezone = DateUtil.TIME_ZONE)
-	private Date gmtModified;
-
 }

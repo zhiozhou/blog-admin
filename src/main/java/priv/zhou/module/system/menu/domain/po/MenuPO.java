@@ -25,11 +25,6 @@ public class MenuPO implements Serializable {
 	private Integer parentId;
 
 	/**
-	 * 父级名称
-	 */
-	private String parentName;
-
-	/**
 	 * 名称
 	 */
 	private String name;
@@ -83,7 +78,6 @@ public class MenuPO implements Serializable {
 	 * 修改人id
 	 */
 	private Integer modifiedBy;
-
 
 	/**
 	 * 修改时间

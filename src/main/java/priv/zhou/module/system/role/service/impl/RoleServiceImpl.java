@@ -15,6 +15,7 @@ import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
 import priv.zhou.module.system.role.domain.bo.RoleBO;
 import priv.zhou.module.system.role.domain.dao.RoleDAO;
+import priv.zhou.module.system.role.domain.dao.RoleMenuDAO;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.domain.po.RoleMenuPO;
 import priv.zhou.module.system.role.domain.po.RolePO;
@@ -23,6 +24,8 @@ import priv.zhou.module.system.role.domain.vo.RoleSelectVO;
 import priv.zhou.module.system.role.domain.vo.RoleTableVO;
 import priv.zhou.module.system.role.domain.vo.RoleVO;
 import priv.zhou.module.system.role.service.IRoleService;
+import priv.zhou.module.system.user.domain.dao.UserRoleDAO;
+import priv.zhou.module.system.user.domain.query.UserRoleQuery;
 
 import java.util.List;
 import java.util.Set;
@@ -33,6 +36,10 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl extends BaseService implements IRoleService {
 
     private final RoleDAO roleDAO;
+
+    private final RoleMenuDAO roleMenuDAO;
+
+    private final UserRoleDAO userRoleDAO;
 
 
     @Override
@@ -55,7 +62,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
                 .setCreateBy(ShiroUtil.getUserId());
         if (roleDAO.save(rolePO) < 1) {
             return Result.fail(ResultEnum.LATER_RETRY);
-        } else if (null != roleDTO.getMenus() && roleDAO.relateMenu(roleDTO.getMenus()
+        } else if (null != roleDTO.getMenus() && roleMenuDAO.saveList(roleDTO.getMenus()
                 .stream()
                 .map(menuId -> new RoleMenuPO()
                         .setRoleId(rolePO.getId())
@@ -69,7 +76,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
     @Override
     @Transactional
     public Result<NULL> remove(Integer[] ids) {
-        if (roleDAO.countUser(new RoleQuery().setIds(ids)) > 0) {
+        if (userRoleDAO.count(new UserRoleQuery().setRoleIds(ids)) > 0) {
             return Result.fail(ResultEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
         } else if (roleDAO.removeList(ids) != ids.length) {
             throw new GlobalException(ResultEnum.LATER_RETRY);
@@ -110,9 +117,9 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         if (roleDB.getMenus().size() != roleDTO.getMenus().size() ||
                 roleDTO.getMenus().stream()
                         .noneMatch(menuSet::contains)) {
-            if (roleDAO.unRelateMenu(rolePO.getId()) < 1) {
+            if (roleMenuDAO.remove(rolePO.getId()) < 1) {
                 return Result.fail(ResultEnum.LATER_RETRY);
-            } else if (roleDAO.relateMenu(roleDTO.getMenus()
+            } else if (roleMenuDAO.saveList(roleDTO.getMenus()
                     .stream()
                     .map(menuId -> new RoleMenuPO()
                             .setMenuId(menuId)

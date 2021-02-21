@@ -32,14 +32,6 @@ public interface RoleDAO extends BaseDAO<RolePO, RoleQuery> {
 
     List<RoleSelectVO> listSelectVO(RoleQuery query);
 
-    int relateMenu(List<RoleMenuPO> userRoles);
-
-    int unRelateMenu(Integer roleId);
-
-    int countUser(RoleQuery query);
-
-    Set<Integer> idSet(Integer userId);
-
     Set<String> keySet(Integer userId);
 
 }
