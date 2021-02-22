@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
+import static priv.zhou.common.constant.GlobalConst.DEFAULT_ENC;
 
 
 @Slf4j
@@ -81,12 +81,12 @@ public class ExtendServiceImpl implements IExtendService {
 
                 // 渲染模板
                 StringWriter buffer = new StringWriter();
-                Template template = Velocity.getTemplate(DEMO_PATH + demo.getPath(), DEFAULT_CHARSET);
+                Template template = Velocity.getTemplate(DEMO_PATH + demo.getPath(), DEFAULT_ENC);
                 template.merge(context, buffer);
 
                 // 输出到zip
                 zipStream.putNextEntry(new ZipEntry(demo.getOutPath(appConfig.getModulePath(), table.getClassName(), table.getObjectName())));
-                IOUtils.write(buffer.toString(), zipStream, DEFAULT_CHARSET);
+                IOUtils.write(buffer.toString(), zipStream, DEFAULT_ENC);
                 zipStream.closeEntry();
             }
         }

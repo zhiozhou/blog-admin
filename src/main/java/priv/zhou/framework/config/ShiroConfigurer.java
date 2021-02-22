@@ -16,6 +16,7 @@ import org.apache.shiro.web.filter.mgt.DefaultFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.tomcat.util.buf.HexUtils;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import priv.zhou.common.properties.ShiroProperties;
-import priv.zhou.common.tools.AesUtil;
 import priv.zhou.framework.shiro.SyncLoginFilter;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.framework.shiro.UserRealm;
@@ -149,7 +149,7 @@ public class ShiroConfigurer {
         return new UserCredentialsMatcher(
                 userDAO,
                 shiroProperties.getAttemptLoginLimit(),
-                cacheManager().getCache(shiroProperties.getAttemptLoginCacheName()) );
+                cacheManager().getCache(shiroProperties.getAttemptLoginCacheName()));
     }
 
     /**
@@ -173,9 +173,10 @@ public class ShiroConfigurer {
     public CookieRememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey(AesUtil.hexStrToByte(REMEMBER_ME_CIPHER_KEY));
+        cookieRememberMeManager.setCipherKey(HexUtils.fromHexString(REMEMBER_ME_CIPHER_KEY));
         return cookieRememberMeManager;
     }
+
 
     /**
      * 缓存管理

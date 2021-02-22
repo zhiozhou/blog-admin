@@ -76,7 +76,6 @@ public class OkHttpUtil {
             for (String key : params.keySet()) {
                 Object value = params.get(key);
                 if (null == value) {
-                    continue;
                 } else if (value instanceof List) {
                     List<Object> list = (List<Object>) value;
                     for (int i = 0; i < list.size(); i++) {
@@ -110,7 +109,6 @@ public class OkHttpUtil {
             for (String key : params.keySet()) {
                 Object value = params.get(key);
                 if (null == value) {
-                    continue;
                 } else if (value instanceof File) {
                     File file = (File) value;
                     builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(MimeEnum.getValue(file)), file));
@@ -172,7 +170,7 @@ public class OkHttpUtil {
     private static <T> T call(String desc, Request request, Class<T> clazz) {
         Stopwatch stopWatch = Stopwatch.createStarted();
         try (Response response = httpClient.newCall(request).execute()) {
-            if (response.isSuccessful() && null == response.body()) {
+            if (response.isSuccessful() && null != response.body()) {
                 String result = response.body().string();
                 log.info("收到 {} 接口响应, 响应报文 -->{}, 耗时 {}ms", desc, result, stopWatch.elapsed(TimeUnit.MILLISECONDS));
                 return clazz.equals(String.class) ? (T) result : ParseUtil.object(result, clazz);
@@ -188,9 +186,6 @@ public class OkHttpUtil {
         return null;
     }
 
-
-    private static void addList(FormBody.Builder builder, String key, List<Object> list) {
-    }
 
     public enum MimeEnum {
         TXT("txt", "text/plain"),

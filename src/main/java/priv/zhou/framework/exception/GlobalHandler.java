@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
+import static priv.zhou.common.constant.GlobalConst.DEFAULT_ENC;
 
 /**
  * @author zhou
@@ -102,7 +102,7 @@ public class GlobalHandler {
              PrintWriter writer = new PrintWriter(outStream)) {
             e.printStackTrace(writer);
             writer.flush();
-            return outStream.toString(DEFAULT_CHARSET);
+            return outStream.toString(DEFAULT_ENC);
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;

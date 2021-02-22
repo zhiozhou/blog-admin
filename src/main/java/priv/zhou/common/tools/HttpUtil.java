@@ -3,7 +3,6 @@ package priv.zhou.common.tools;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.properties.AppProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 
-import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
+import static priv.zhou.common.constant.GlobalConst.DEFAULT_ENC;
 
 @SuppressWarnings("unused")
 public class HttpUtil {
@@ -64,7 +63,7 @@ public class HttpUtil {
      * 返回错误信息
      */
     public static void out(HttpServletResponse response, Result<?> result) throws IOException {
-        response.setCharacterEncoding(DEFAULT_CHARSET);
+        response.setCharacterEncoding(DEFAULT_ENC);
         response.setContentType("application/json; charset=utf-8");
         try (PrintWriter out = response.getWriter()) {
             out.print(result);

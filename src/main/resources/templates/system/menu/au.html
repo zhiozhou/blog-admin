@@ -57,7 +57,9 @@
                     <div class="layui-input-block">
                         <input type="radio" class="type" lay-filter="type"
                                th:each="type,iterStat:${typeList}"
-                               th:value="${type.code}" th:title="${type.label}" th:id="${'type'+ type.code}"
+                               th:value="${type.code}"
+                               th:title="${type.label}"
+                               th:id="${'type'+ type.code}"
                                th:field="*{type}">
                     </div>
                 </div>

@@ -1,9 +1,11 @@
 package priv.zhou.common.constant;
 
 
+import java.nio.charset.StandardCharsets;
+
 public interface GlobalConst {
 
-    String DEFAULT_CHARSET = "UTF-8";
+    String DEFAULT_ENC =StandardCharsets.UTF_8.name();
 
     String STR_0 = "0";
 

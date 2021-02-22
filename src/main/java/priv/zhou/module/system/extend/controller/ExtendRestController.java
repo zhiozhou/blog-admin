@@ -19,7 +19,7 @@ import priv.zhou.module.system.extend.service.ITableService;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static priv.zhou.common.constant.GlobalConst.DEFAULT_CHARSET;
+import static priv.zhou.common.constant.GlobalConst.DEFAULT_ENC;
 
 /**
  * 模块生成 接口控制层
@@ -56,7 +56,7 @@ public class ExtendRestController {
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"extend-" + StringUtils.join(extendDTO.getNames(), ",") + ".zip\"");
         response.addHeader("Content-Length", String.valueOf(data.length));
-        response.setContentType("application/octet-stream; charset=" + DEFAULT_CHARSET);
+        response.setContentType("application/octet-stream; charset=" + DEFAULT_ENC);
         response.getOutputStream().write(data);
 
         return null;
