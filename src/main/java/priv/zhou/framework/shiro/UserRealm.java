@@ -9,7 +9,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import priv.zhou.module.system.menu.domain.dto.MenuDTO;
+import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.service.IRoleService;
 import priv.zhou.module.system.user.domain.bo.UserPrincipal;
@@ -34,7 +34,7 @@ public class UserRealm extends AuthorizingRealm {
         // 获取授权
         UserPrincipal userPrincipal = (UserPrincipal) principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo(roleService.keySet(userPrincipal.getId()));
-        authInfo.setStringPermissions(menuService.keySet(new MenuDTO().setUserId(userPrincipal.getId()).setFlag(ADMIN_FLAG)));
+        authInfo.setStringPermissions(menuService.keySet(new MenuQuery().setUserId(userPrincipal.getId()).setFlag(ADMIN_FLAG)));
         return authInfo;
     }
 

@@ -8,6 +8,7 @@ import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
+import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
@@ -36,7 +37,7 @@ public class IndexController extends BaseController {
 
         UserPrincipal userPrincipal = ShiroUtil.getUser();
         model.addAttribute("user", userPrincipal);
-        model.addAttribute("menuList", menuService.tree(new MenuDTO()
+        model.addAttribute("menuList", menuService.treeVO(new MenuQuery()
                 .setUserId(userPrincipal.getId())
                 .setFlag(ADMIN_FLAG)
                 .setState(0)

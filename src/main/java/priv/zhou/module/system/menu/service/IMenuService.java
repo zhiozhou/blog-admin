@@ -5,6 +5,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.Tree;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
+import priv.zhou.module.system.menu.domain.vo.MenuSelectVO;
 import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
 import priv.zhou.module.system.menu.domain.vo.MenuVO;
 
@@ -27,13 +28,16 @@ public interface IMenuService {
 
     MenuVO getVO(MenuQuery query);
 
-    MenuVO listVO(MenuQuery query);
+    List<MenuVO> listVO(MenuQuery query);
 
-    List<MenuTableVO> listTableVO(MenuQuery query);
+    List<MenuSelectVO> listSelectVO(MenuQuery query);
 
-    default List<MenuDTO> tree(MenuDTO menuDTO) {
-        Result<List<MenuDTO>> listRes = (menuDTO);
-        return listRes.isFail() ? null : Tree.term(listRes.getData(), ROOT_ID);
+    default List<MenuVO> treeVO(MenuQuery query) {
+        return Tree.term(listVO(query), ROOT_ID);
+    }
+
+    default List<MenuSelectVO> treeSelectVO(MenuQuery query) {
+        return Tree.term(listSelectVO(query), ROOT_ID);
     }
 
     /**

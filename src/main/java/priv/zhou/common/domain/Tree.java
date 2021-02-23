@@ -35,7 +35,7 @@ public class Tree {
     /**
      * 子级
      */
-    protected List<Tree> childs;
+    protected List<Tree> children;
 
 
     /**
@@ -50,7 +50,7 @@ public class Tree {
                         .filter(po -> entry.getKey().equals(po.getId()))
                         .findFirst()
                         .orElseThrow(() -> new GlobalException(ResultEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey()))
-                        .setChilds(entry.getValue());
+                        .setChildren(entry.getValue());
             }
         }
         return (List<M>) groupMap.get(rootId);

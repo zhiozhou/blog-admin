@@ -14,6 +14,7 @@ import priv.zhou.module.system.menu.domain.dao.MenuDAO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
+import priv.zhou.module.system.menu.domain.vo.MenuSelectVO;
 import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
 import priv.zhou.module.system.menu.domain.vo.MenuVO;
 import priv.zhou.module.system.menu.service.IMenuService;
@@ -126,9 +127,15 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
-    public List<MenuTableVO> listTableVO(MenuQuery query) {
-        return menuDAO.listTableVO(query);
+    public List<MenuVO> listVO(MenuQuery query) {
+        return menuDAO.listVO(query);
     }
+
+    @Override
+    public List<MenuSelectVO> listSelectVO(MenuQuery query) {
+        return  menuDAO.listSelectVO(query);
+    }
+
 
     @Override
     public Set<String> keySet(MenuQuery query) {

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import priv.zhou.common.domain.dao.BaseDAO;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
-import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
+import priv.zhou.module.system.menu.domain.vo.MenuSelectVO;
 import priv.zhou.module.system.menu.domain.vo.MenuVO;
 
 import java.util.List;
@@ -19,7 +19,9 @@ public interface MenuDAO extends BaseDAO<MenuPO, MenuQuery> {
 
     MenuVO getVO(MenuQuery query);
 
-    List<MenuTableVO> listTableVO(MenuQuery query);
+    List<MenuVO> listVO(MenuQuery query);
+
+    List<MenuSelectVO> listSelectVO(MenuQuery query);
 
     Set<String> keySet(MenuQuery query);
 

@@ -2,15 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
     <style>
-        .depth0 {
+        .depth-0 {
             padding-left: 19px;
         }
 
-        .depth1 {
+        .depth-1 {
             padding-left: 19px;
         }
 
-        .depth2 {
+        .depth-2 {
             padding-left: 38px;
         }
 
@@ -27,11 +27,11 @@
             width: 14px;
         }
 
-        .child-btn {
+        .tree-btn {
             cursor: pointer;
         }
 
-        .child-btn > span {
+        .tree-btn > span {
             margin-left: 5px;
         }
     </style>
@@ -54,57 +54,42 @@
                 stateMap = [[${stateMap}]]
         </script>
         <script th:inline="none">
-            var openId
             const prefix = `${_gate}system/menu`
+            let openId
 
             layui.use(['table', 'jquery'], () => {
                 const {table, jquery: $} = layui
+
+
+                initTreeTable()
 
                 table.render({
                     id: 'table',
                     elem: '#table',
                     page: false,
                     method: 'post',
+                    url: `${prefix}/rest/list`,
                     cellMinWidth: '80',
-                    url: `${prefix}/rest/tree`,
-                    parseData: ({code, info: msg, data: src}) => {
-                        let dest = null
-                        if (src) {
-                            dest = [...src]
-                            sort(dest, src, 0)
-                        }
-                        return {code, msg, "data": dest}
-                    },
+                    parseData: treeTableOptions.parseData,
                     cols: [[
                         {
                             field: 'name', title: '名称', minWidth: '150', align: 'left',
-                            templet: ({id, depth, parentId, childList, name}) => {
-                                let div = $(`<i><span>${name}</span></i>`)
-                                    .addClass(`depth${depth}`)
-                                    .attr({'data-id': id, 'data-parent-id': parentId})
-                                childList && div.addClass('child-btn fa fa-chevron-right')
-                                return div.prop('outerHTML')
-                            }
+                            templet: treeTableOptions.template
                         },
                         {field: 'path', title: '跳转地址', minWidth: '150',},
                         {field: 'key', title: '权限标识', minWidth: '150',},
                         {
                             field: 'type', title: '类型',
-                            templet: ({type}) => dictRender(type,typeMap)
+                            templet: ({type}) => dictRender(type, typeMap)
                         },
                         {
                             field: 'state', title: '状态',
-                            templet: ({state}) => dictRender(state,stateMap)
+                            templet: ({state}) => dictRender(state, stateMap)
                         },
                         {field: 'sort', title: '排序'},
                         {title: '操作', toolbar: '#ud'}
                     ]],
-                    done: () => {
-                        let parentId = $(`[data-id=${openId}]`).data('parent-id')
-                        $('[data-parent-id]')
-                            .not(`[data-parent-id=${openId}],[data-parent-id=${parentId}],[data-parent-id=0]`)
-                            .parents('tr').hide()
-                    }
+                    done: treeTableOptions.done
                 })
 
                 // 交给通用操作
@@ -117,64 +102,7 @@
                         cb: () => msg()
                     })
                 })
-
-
-                // 子级列表 显示/隐藏
-                $('body').on('click', '.child-btn', function () {
-                    childHandle(this)
-                })
-
-                function childHandle(btn) {
-                    let $btn = $(btn),
-                        id = $btn.data('id'),
-                        childs = $(`[data-parent-id=${id}]`),
-                        show = 'fa-chevron-down',
-                        hide = 'fa-chevron-right'
-
-                    if ($btn.hasClass(hide)) {
-
-                        // 展开
-                        $btn.removeClass(hide).addClass(show)
-                        childs.parents('tr').show()
-                    } else {
-
-                        // 收起
-                        $btn.removeClass(show).addClass(hide)
-                        childs.each((index, child) => {
-                            // 子级为目录，孙级也隐藏
-                            if ($(child).is(`.child-btn.${show}`)) {
-                                childHandle(child)
-                            }
-                            $(child).parents('tr').hide()
-                        })
-                    }
-                }
             })
-
-
-            // 结构排序成列表
-            function sort(dest, src, depth) {
-                for (let item of src) {
-                    item.depth = depth
-                    let {id, childList} = item
-                    if (childList) {
-                        // 将子元素插入父级元素后
-                        dest.splice(1 + getIndex(dest, id), 0, ...childList)
-                        // 子孙级递归插入
-                        sort(dest, childList, 1 + depth)
-                        --item.depth
-                    }
-                }
-            }
-
-            // 获取id元素的索引位置
-            function getIndex(list, id) {
-                for (let i in list) {
-                    if (id === list[i].id) {
-                        return parseInt(i)
-                    }
-                }
-            }
         </script>
     </body>
 

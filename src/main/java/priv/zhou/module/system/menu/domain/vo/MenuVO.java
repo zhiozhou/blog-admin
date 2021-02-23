@@ -20,6 +20,8 @@ public class MenuVO extends Tree implements Serializable {
 
     private Integer type;
 
+    private Integer state;
+
     private Integer sort;
 
     private String key;

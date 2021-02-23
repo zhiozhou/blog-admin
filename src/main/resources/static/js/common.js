@@ -74,8 +74,6 @@ function merge({arr, name, data}) {
 }
 
 
-
-
 /**
  * 文本复制
  * @param text 要复制的文本

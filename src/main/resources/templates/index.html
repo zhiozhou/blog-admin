@@ -15,8 +15,8 @@
                             <i class="fa" th:classappend="${menu.icon}"></i>
                             [[${menu.name}]]
                         </a>
-                        <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.childList)}">
-                            <dd th:each="child : ${menu.childList}">
+                        <dl class="layui-nav-child" th:if="${not #lists.isEmpty(menu.children)}">
+                            <dd th:each="child : ${menu.children}">
                                 <a href="#"
                                    th:attr="data-id=${child.id} , data-url=${child.path} , data-title=${child.name}">
                                     [[${child.name}]]

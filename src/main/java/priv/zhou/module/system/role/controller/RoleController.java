@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.Tree;
-import priv.zhou.module.system.menu.domain.dto.MenuDTO;
+import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.domain.query.RoleQuery;
@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
     public String add(Model model) {
         super.add(model, new RoleDTO().setState(0));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
-        model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
+        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery().setFlag(ADMIN_FLAG)));
         return "system/role/au";
     }
 
@@ -53,7 +53,7 @@ public class RoleController extends BaseController {
         super.update(model, roleService.getVO(new RoleQuery().setId(id)));
 
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
-        model.addAttribute("menuTree", menuService.tree(new MenuDTO().setFlag(ADMIN_FLAG)));
+        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery().setFlag(ADMIN_FLAG)));
         return "system/role/au";
     }
 

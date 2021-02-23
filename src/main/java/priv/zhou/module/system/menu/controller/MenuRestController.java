@@ -10,6 +10,7 @@ import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
+import priv.zhou.module.system.menu.domain.vo.MenuVO;
 import priv.zhou.module.system.menu.service.IMenuService;
 
 import javax.validation.Valid;
@@ -54,14 +55,7 @@ public class MenuRestController {
 
     @RequiresPermissions("system:menu:list")
     @RequestMapping("/list")
-    public Result<TableVO<MenuTableVO>> list(MenuQuery query) {
-        return Result.table(menuService.listTableVO(query.setFlag(ADMIN_FLAG)));
+    public Result<List<MenuVO>> trimList(MenuQuery query) {
+        return Result.success(menuService.treeVO(query.setFlag(ADMIN_FLAG)));
     }
-
-    @RequiresPermissions("system:menu:list")
-    @RequestMapping("/tree")
-    public Result<List<MenuDTO>> trimList(MenuDTO menuDTO) {
-        return Result.success(menuService.tree(menuDTO.setFlag(ADMIN_FLAG)));
-    }
-
 }

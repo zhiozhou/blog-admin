@@ -29,19 +29,15 @@
         <result column="icon" property="icon"/>
         <result column="path" property="path"/>
         <result column="type" property="type"/>
+        <result column="state" property="state"/>
         <result column="sort" property="sort"/>
         <result column="key" property="key"/>
     </resultMap>
 
-    <resultMap id="TableVOMap" type="MenuVO">
+    <resultMap id="SelectVOMap" type="MenuSelectVO">
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId"/>
         <result column="name" property="name"/>
-        <result column="icon" property="icon"/>
-        <result column="path" property="path"/>
-        <result column="type" property="type"/>
-        <result column="sort" property="sort"/>
-        <result column="key" property="key"/>
     </resultMap>
 
     <sql id="POSql">
@@ -61,6 +57,30 @@
             modified_by,
             gmt_modified
         FROM system_menu
+    </sql>
+
+    <sql id="VOSql">
+        SELECT
+            menu.id,
+            menu.parent_id,
+        <if test="userId == null">
+            IF(menu.parent_id = 0, '根目录', parent_menu.`name`) parent_name,
+        </if>
+            menu.name,
+            menu.icon,
+            menu.path,
+            menu.type,
+            menu.state,
+            menu.sort,
+            menu.`key`
+        FROM system_menu AS menu
+        <if test="userId == null">
+            LEFT JOIN system_menu AS parent_menu ON menu.parent_id = parent_menu.id
+        </if>
+        <if test="userId != null">
+            LEFT JOIN system_role_menu ON menu.id = system_role_menu.menu_id
+            LEFT JOIN system_user_role ON system_role_menu.role_id = system_user_role.role_id
+        </if>
     </sql>
 
     <insert id="save" parameterType="MenuPO">
@@ -133,47 +153,31 @@
     </select>
 
     <select id="getVO" parameterType="MenuQuery" resultMap="VOMap">
-        SELECT
-            menu.id,
-            menu.parent_id,
-            IF(menu.parent_id = 0, '根目录', parent_menu.name) parent_name,
-            menu.name,
-            menu.icon,
-            menu.path,
-            menu.type,
-            menu.sort,
-            menu.`key`
-        FROM system_menu AS menu
-        LEFT JOIN system_menu AS parent_menu ON menu.parent_id = parent_menu.id
+        <include refid="VOSql"/>
         WHERE menu.flag = #{flag} AND menu.id = #{id}
     </select>
 
-    <select id="listTableVO" parameterType="MenuQuery" resultMap="TableVOMap">
-        SELECT
-            id,
-            parent_id,
-            system_menu.name,
-            icon,
-            path,
-            type,
-            state,
-            sort,
-            `key`
-        FROM system_menu
-        <if test="userId != null">
-            LEFT JOIN system_role_menu ON system_menu.id = system_role_menu.menu_id
-            LEFT JOIN system_user_role ON system_role_menu.role_id = system_user_role.role_id
-        </if>
+    <select id="listVO" parameterType="MenuQuery" resultMap="VOMap">
+        <include refid="VOSql"/>
         <where>
-            flag = #{flag}
+            menu.flag = #{flag}
             <if test="userId != null">AND system_user_role.user_id = #{userId}</if>
-            <if test="state != null">AND state = #{state}</if>
-            <if test="types != null">AND type IN
+            <if test="state != null">AND menu.state = #{state}</if>
+            <if test="types != null">AND menu.type IN
                 <foreach collection="types" index="index" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
         </where>
+    </select>
+
+    <select id="listSelectVO" parameterType="MenuQuery" resultMap="SelectVOMap">
+        SELECT
+            id,
+            parent_id,
+            `name`
+        FROM system_menu
+        WHERE flag = #{flag}
     </select>
 
     <select id="count" parameterType="MenuQuery" resultType="int">

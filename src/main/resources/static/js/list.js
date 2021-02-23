@@ -54,6 +54,7 @@ layui.use(['table', 'form', 'jquery'], () => {
             where: null
         })
     })
+
 })
 
 
@@ -81,6 +82,88 @@ function tableRender(table, options) {
         ...options
     })
 }
+
+
+const treeTableOptions = {
+    parseData: null,
+    template: null,
+    done: null
+}
+
+/**
+ * 初始化树形表格
+ */
+function initTreeTable() {
+    const $ = layui.$
+
+    // 子级列表 显示/隐藏
+    $('body').on('click', '.tree-btn', function childHandle() {
+        let $btn = $(this),
+            id = $btn.data('id'),
+            childs = $(`[data-parent-id=${id}]`),
+            show = 'fa-chevron-down',
+            hide = 'fa-chevron-right'
+
+        if ($btn.hasClass(hide)) {
+
+            console.log('if')
+            // 展开
+            $btn.removeClass(hide).addClass(show)
+            childs.parents('tr').show()
+        } else {
+
+            console.log('else')
+            // 收起
+            $btn.removeClass(show).addClass(hide)
+            childs.each((index, child) => {
+                // 子级为目录，孙级也隐藏
+                if ($(child).is(`.tree-btn.${show}`)) {
+                    childHandle(child)
+                }
+                console.log(child)
+                $(child).parents('tr').hide()
+            })
+        }
+    })
+
+    treeTableOptions.parseData = ({code, info: msg, data: src}) => {
+        let dest = null
+        if (src) {
+            const term = (dest, src, depth) => {
+                for (let item of src) {
+                    item.depth = depth
+                    let {id, children} = item
+                    if (children) {
+                        // 将子元素插入父级元素后
+                        dest.splice(1 + parseInt(dest.findIndex(({itemId}) => id === itemId)), 0, ...children)
+                        // 子孙级递归插入
+                        term(dest, children, 1 + depth)
+                        --item.depth
+                    }
+                }
+            }
+            dest = [...src]
+            term(dest, src, 0)
+        }
+        return {code, msg, "data": dest}
+    }
+
+    treeTableOptions.template = ({id, depth, parentId, children, name}) => {
+        let div = $(`<i><span>${name}</span></i>`)
+            .addClass(`depth-${depth}`)
+            .attr({'data-id': id, 'data-parent-id': parentId})
+        children && div.addClass('tree-btn fa fa-chevron-right')
+        return div.prop('outerHTML')
+    }
+
+    treeTableOptions.done = () => {
+        let parentId = $(`[data-id=${openId}]`).data('parent-id')
+        $('[data-parent-id]')
+            .not(`[data-parent-id=${openId}],[data-parent-id=${parentId}],[data-parent-id=0]`)
+            .parents('tr').hide()
+    }
+}
+
 
 /**
  * 通用的字典字段渲染
