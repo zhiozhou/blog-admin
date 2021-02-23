@@ -132,7 +132,7 @@
         WHERE id = #{id}
     </select>
 
-    <select id="getVO" parameterType="MenuQuery" resultMap="MenuVO">
+    <select id="getVO" parameterType="MenuQuery" resultMap="VOMap">
         SELECT
             menu.id,
             menu.parent_id,
