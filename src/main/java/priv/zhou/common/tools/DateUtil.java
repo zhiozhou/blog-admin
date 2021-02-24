@@ -106,7 +106,7 @@ public class DateUtil {
      * 两个时间是否为同一天
      */
     public static Time getTime(Date date) {
-        return new Time(parse(format(date, HMS), HMS).getTime());
+        return Time.valueOf(format(date, HMS));
     }
 
 
