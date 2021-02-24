@@ -52,7 +52,7 @@
             const prefix = `${_gate}comment`
 
             layui.use(['form', 'jquery'], () => {
-                const {form, jquery: $} = layui
+                const {form, $} = layui
 
                 form.on('submit(submit)', ({form, field}) => {
                     if ('other' === field.reason) {

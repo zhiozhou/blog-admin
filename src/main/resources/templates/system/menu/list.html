@@ -1,40 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head th:include="include :: header"></head>
-    <style>
-        .depth-0 {
-            padding-left: 19px;
-        }
-
-        .depth-1 {
-            padding-left: 19px;
-        }
-
-        .depth-2 {
-            padding-left: 38px;
-        }
-
-        td {
-            user-select: none;
-        }
-
-        td i {
-            font-style: inherit;
-        }
-
-        td i:before {
-            display: inline-block;
-            width: 14px;
-        }
-
-        .tree-btn {
-            cursor: pointer;
-        }
-
-        .tree-btn > span {
-            margin-left: 5px;
-        }
-    </style>
     <body>
         <div class="layout-page">
             <div>
@@ -58,10 +24,8 @@
             let openId
 
             layui.use(['table', 'jquery'], () => {
-                const {table, jquery: $} = layui
-
-
-                initTreeTable()
+                const {table, $} = layui
+                const treeOptions = initTreeTable()
 
                 table.render({
                     id: 'table',
@@ -70,11 +34,11 @@
                     method: 'post',
                     url: `${prefix}/rest/list`,
                     cellMinWidth: '80',
-                    parseData: treeTableOptions.parseData,
+                    parseData: treeOptions.parseData,
                     cols: [[
                         {
                             field: 'name', title: '名称', minWidth: '150', align: 'left',
-                            templet: treeTableOptions.template
+                            templet: treeOptions.template
                         },
                         {field: 'path', title: '跳转地址', minWidth: '150',},
                         {field: 'key', title: '权限标识', minWidth: '150',},
@@ -89,7 +53,7 @@
                         {field: 'sort', title: '排序'},
                         {title: '操作', toolbar: '#ud'}
                     ]],
-                    done: treeTableOptions.done
+                    done: treeOptions.done
                 })
 
                 // 交给通用操作

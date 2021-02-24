@@ -7,7 +7,7 @@ layui.config({
  * 全局初始化方法
  */
 layui.use(['jquery', 'util', 'layer'], function () {
-    const {jquery: $} = layui
+    const {$} = layui
 
     // 初始化时间
     $('.date-field').each((index, field) => $(field).val(formatDate($(field).val(), $(field).data('format'))))

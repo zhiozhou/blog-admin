@@ -78,7 +78,7 @@
             const prefix = `${_gate}comment`
 
             layui.use(['jquery'], () => {
-                const {jquery: $} = layui
+                const {$} = layui
 
                 $('#pass').click(() => httpPost({
                         url: `${prefix}/rest/pass/${$('#id').val()}`,

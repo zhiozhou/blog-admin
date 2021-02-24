@@ -45,13 +45,10 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
     @Override
     @Transactional
     public Result<NULL> save(RoleDTO roleDTO) {
-
         if (roleDAO.count(new RoleQuery().setName(roleDTO.getName())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (roleDAO.count(new RoleQuery().setKey(roleDTO.getKey())) > 0) {
             return Result.fail(ResultEnum.EXIST_KEY);
-        } else if (StringUtils.isBlank(roleDTO.getKey())) {
-            roleDTO.setKey(PinyinUtil.toPinyin(roleDTO.getName()));
         }
 
         RolePO rolePO = new RolePO()

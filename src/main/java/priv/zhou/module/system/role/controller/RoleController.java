@@ -1,6 +1,7 @@
 package priv.zhou.module.system.role.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("system:role:add")
     @RequestMapping("/add")
     public String add(Model model) {
-        super.add(model, new RoleDTO().setState(0));
+        super.add(model, new RoleVO().setState(0).setMenus(Lists.newArrayList()));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
         model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery().setFlag(ADMIN_FLAG)));
         return "system/role/au";

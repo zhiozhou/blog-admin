@@ -3,7 +3,8 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}" th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
+                  th:with="isAdd='/rest/save'==${_action}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
@@ -16,7 +17,7 @@
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input"
                                        th:field="*{name}" lay-verify="required"
-                                       placeholder="请输入名称"  autocomplete="off">
+                                       placeholder="请输入名称" autocomplete="off">
                             </div>
                         </div>
 
@@ -72,22 +73,20 @@
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
             const prefix = `${_gate}system/role`,
-                menuTree = [{
-                    id: 0,
-                    name: '根目录',
-                    childList: [[${menuTree}]]
-                }],
-                menuList = [[${_vo.menuList}]]        // 当前用户持有的菜单列表
-
+                menuTree = [[${menuTree}]],
+                menus = [[${_vo.menus}]]        // 当前用户持有的菜单列表
 
             layui.use(['form', 'tree', 'jquery'], () => {
-                const {form, tree, jquery: $} = layui
+                const {form, tree} = layui
 
                 // 菜单树
                 tree.render({
                     id: 'menuTree',
                     elem: '#menuTree',
-                    data: formatTree(menuTree),
+                    data: formatTree(menuTree, (node)=>{
+                        node.title = node.name
+                        delete node.name
+                    }),
                     showCheckbox: true
                 })
 
@@ -98,9 +97,9 @@
                         index = 0
 
                     delete data.layuiTreeCheck_0
-                    for (param in data) {
+                    for (let param in data) {
                         if (/layuiTreeCheck*/.test(param)) {
-                            data[`menuList[${index++}].id`] = data[param]
+                            data[`menus[${index++}]`] = data[param]
                             delete data[param]
                         }
                     }
@@ -108,39 +107,6 @@
                     return false
                 })
             })
-
-            /**
-             * 整理列表为layuitree数据格式
-             */
-            function formatTree(tree) {
-                for (let item of tree) {
-                    item.title = item.name
-                    if (item.childList) {
-                        item.spread = hasMenu(item.id)
-                        item.children = item.childList
-                        formatTree(item.children)
-                    } else {
-                        // 只选择最底层,避免父节点被选中子节点则全部选中
-                        item.checked = hasMenu(item.id)
-                    }
-                    delete item.name
-                    delete item.childList
-                }
-                return tree
-            }
-
-            function hasMenu(id) {
-                if (0 === id) {
-                    return true
-                } else if (!menuList) {
-                    return false
-                }
-                for (menu of menuList) {
-                    if (id === menu.id) {
-                        return true
-                    }
-                }
-            }
         </script>
     </body>
 

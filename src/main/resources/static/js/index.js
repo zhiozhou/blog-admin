@@ -1,5 +1,5 @@
 layui.use(['layer', 'element', 'jquery'], () => {
-        const {element, jquery: $} = layui
+        const {element, $} = layui
         const root = $('#root')
         const loseSider = 'lose-sider'
         let currentTabId
@@ -133,7 +133,7 @@ layui.use(['layer', 'element', 'jquery'], () => {
  * @param name iframe的name
  */
 function changeTab({id, url, title, name}) {
-    const {jquery: $, element} = layui
+    const {$, element} = layui
     let opened = $(`#layout-tab>.layui-tab-title>li[lay-id=${id}]`)
     if (!opened.length) {
         element.tabAdd('layout-tab', {

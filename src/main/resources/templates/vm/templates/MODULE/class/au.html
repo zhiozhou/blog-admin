@@ -50,7 +50,7 @@
             const prefix = `${_gate}$!{app.modulePath}${table.objectName}`
 
             layui.use(['form', 'jquery'], () => {
-                const {form, jquery: $} = layui
+                const {form, $} = layui
 
                 //监听提交
                 form.on('submit(submit)', iframeSubmit)

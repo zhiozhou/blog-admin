@@ -1016,8 +1016,11 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
-                        <input type="radio" th:each="state:${stateList}"
-                               th:value="${state.code}" th:title="${state.label}" th:field="*{state}">
+                        <input type="radio"
+                               th:each="state:${stateList}"
+                               th:value="${state.code}"
+                               th:title="${state.label}"
+                               th:field="*{state}"/>
                     </div>
 
                 </div>
@@ -1052,7 +1055,7 @@
 
 
             layui.use(['form', 'tree', 'jquery'], function () {
-                const {form, tree, jquery: $} = layui
+                const {form, tree, $} = layui
 
                 // 回显
                 areaHandle([[${_vo.type}]])

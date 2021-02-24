@@ -351,3 +351,36 @@ select[multiple] + .layui-form-select .layui-form-checkbox[lay-skin=primary] i {
     height: 33px;
 }
 
+/* 树形结构菜单 */
+ .depth-0 {
+     padding-left: 19px;
+ }
+
+.depth-1 {
+    padding-left: 19px;
+}
+
+.depth-2 {
+    padding-left: 38px;
+}
+
+td {
+    user-select: none;
+}
+
+td i {
+    font-style: inherit;
+}
+
+td i:before {
+    display: inline-block;
+    width: 14px;
+}
+
+.tree-btn {
+    cursor: pointer;
+}
+
+.tree-btn > span {
+    margin-left: 5px;
+}
