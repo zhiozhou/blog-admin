@@ -1,7 +1,6 @@
 package priv.zhou.module.system.role.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.constant.NULL;
@@ -9,7 +8,6 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
-import priv.zhou.common.tools.PinyinUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.GlobalException;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
@@ -97,6 +95,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         }
 
         RolePO rolePO = new RolePO()
+                .setId(roleDTO.getId())
                 .setKey(roleDTO.getKey())
                 .setName(roleDTO.getName())
                 .setRemark(roleDTO.getRemark())
@@ -104,7 +103,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         if (roleDAO.update(rolePO) < 1) {
             return Result.fail(ResultEnum.FAIL_OPERATION);
         } else if (!roleDB.getKey().equals(rolePO.getKey())) {
-            ShiroUtil.clearRoleAuthorization(roleDB.getName());
+            ShiroUtil.clearRoleAuthorization(roleDB.getKey());
         }
 
         Set<Integer> menuSet = roleDB.getMenus()
@@ -124,7 +123,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
                     .collect(Collectors.toList())) != roleDTO.getMenus().size()) {
                 throw new GlobalException(ResultEnum.LATER_RETRY);
             }
-            ShiroUtil.clearRoleAuthorization(rolePO.getName());
+            ShiroUtil.clearRoleAuthorization(roleDB.getKey());
         }
         return Result.success();
 

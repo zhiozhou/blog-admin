@@ -39,7 +39,7 @@
         <result column="name" property="name"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
-        <collection property="menus" ofType="MenuPO">
+        <collection property="menus" ofType="MenuVO">
             <id column="menu_id" property="id"/>
             <result column="menu_parent_id" property="parentId"/>
             <result column="menu_name" property="name" />

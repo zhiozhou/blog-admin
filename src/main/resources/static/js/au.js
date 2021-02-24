@@ -67,24 +67,6 @@ function uploadRender(upload, options) {
     })
 }
 
-
-/**
- * 整理tree为layuitree数据格式
- */
-function formatTree(tree, parseNode) {
-    for (let node of tree) {
-        parseNode && parseNode(node)
-        if (node.children) {
-            node.spread = menus.some(({id}) => id === node.id)
-            formatTree(node.children, parseNode)
-        } else {
-            // 只选择最底层,避免父节点被选中子节点则全部选中
-            node.checked = menus.some(({id}) => id === node.id)
-        }
-    }
-    return tree
-}
-
 /**
  * 压缩图片，返回dataURL格式
  */

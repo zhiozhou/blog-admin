@@ -26,6 +26,28 @@ function formatDate(date, format = 'yyyy年MM月dd日 HH:mm:ss') {
 
 
 /**
+ * 整理tree为layuitree数据格式
+ */
+function formatTree({tree, parseNode, depth = 0, spreadDepth = 0}) {
+    for (let node of tree) {
+        parseNode && parseNode(node)
+        if (node.children) {
+            node.spread = depth <= spreadDepth && echos.some(({id}) => id === node.id)
+            formatTree({
+                tree: node.children,
+                parseNode,
+                depth: ++depth,
+                spreadDepth
+            })
+        } else {
+            // 只选择最底层,避免父节点被选中子节点则全部选中
+            node.checked = echos.some(({id}) => id === node.id)
+        }
+    }
+    return tree
+}
+
+/**
  * 创建 iframe 窗口，手机端自动全屏
  * @param title 窗口标题
  * @param url 地址

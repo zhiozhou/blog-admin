@@ -54,40 +54,22 @@
 
             layui.use('tree', () => {
                 const {tree} = layui,
-                    menuTree = [{
-                        id: 0,
-                        name: '根目录',
-                        childList: [[${_vo.menuList}]]
-                    }]
+                    menuTree = [[${_vo.menus}]]
 
                 // 菜单树
                 tree.render({
                     id: 'menuTree',
                     elem: '#menuTree',
-                    data: formatTree(menuTree),
+                    data: formatTree({
+                        tree: menuTree,
+                        parseNode: (node) => {
+                            node.title = node.name
+                            delete node.name
+                        }
+                    }),
                     text: {none: '无菜单权限'}
                 })
-
             })
-
-            /**
-             * 整理列表为layuitree数据格式
-             */
-            function formatTree(tree) {
-                for (let item of tree) {
-                    item.title = item.name
-                    if (item.childList) {
-                        item.spread = true
-                        item.children = item.childList
-                        formatTree(item.children)
-                    }
-                    delete item.name
-                    delete item.childList
-                }
-                return tree
-            }
-
-
         </script>
     </body>
 

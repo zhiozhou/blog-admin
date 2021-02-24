@@ -3,14 +3,12 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
-                  th:with="isAdd='/rest/save'==${_action}">
+            <form class="layui-form" th:attr="action=${_isAdd?_action:_action+_vo.id}" th:object="${_vo}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
-                        <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
+                        <li class="layui-this" th:text="(${_isAdd}?'添加':'修改')+${_module.name}"></li>
                     </ul>
-                    <input type="hidden" th:field="*{id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>
@@ -74,7 +72,7 @@
         <script th:inline="javascript">
             const prefix = `${_gate}system/role`,
                 menuTree = [[${menuTree}]],
-                menus = [[${_vo.menus}]]        // 当前用户持有的菜单列表
+                echos = [[${_vo.menus}]]        // 当前用户持有的菜单列表
 
             layui.use(['form', 'tree', 'jquery'], () => {
                 const {form, tree} = layui
@@ -83,9 +81,12 @@
                 tree.render({
                     id: 'menuTree',
                     elem: '#menuTree',
-                    data: formatTree(menuTree, (node)=>{
-                        node.title = node.name
-                        delete node.name
+                    data: formatTree({
+                        tree: menuTree,
+                        parseNode: (node) => {
+                            node.title = node.name
+                            delete node.name
+                        }
                     }),
                     showCheckbox: true
                 })
