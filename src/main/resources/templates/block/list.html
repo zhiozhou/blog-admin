@@ -15,7 +15,7 @@
         <script th:inline="javascript">
             const typeMap = [[${typeMap}]]
         </script>
-        <script>
+        <script th:inline="none">
             const prefix = `${_gate}block`
 
             layui.use(['table', 'jquery'], () => {

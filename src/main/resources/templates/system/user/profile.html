@@ -54,7 +54,7 @@
             </div>
         </body>
         <div th:include="include :: au-footer"></div>
-        <script>
+        <script th:inline="none">
             const prefix = `${_gate}system/user`
 
             layui.use(['jquery'], () => {

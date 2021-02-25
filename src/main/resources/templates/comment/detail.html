@@ -74,7 +74,7 @@
             </form>
         </div>
         <div th:include="include :: footer"></div>
-        <script>
+        <script th:inline="none">
             const prefix = `${_gate}comment`
 
             layui.use(['jquery'], () => {

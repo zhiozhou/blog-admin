@@ -42,7 +42,7 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
-        <script>
+        <script th:inline="none">
             const prefix = `${_gate}system/dict`,
                 stateMap = {
                     0: {
@@ -56,35 +56,22 @@
                 }
 
             layui.use(['table', 'jquery'], () => {
-                const {table, $} = layui,
-                    cols = [[
-                        {field: 'name', title: '名称 ', minWidth: '120'},
-                        {field: 'key', title: '字典标识', minWidth: '150'},
-                        {
-                            field: 'state', title: '状态',
-                            templet: ({state}) => dictRender(state, stateMap)
-                        },
-                        {field: 'remark', title: '备注', minWidth: '150'},
-                        {title: '操作', toolbar: '#rud'}
-                    ]]
-
-                tableRender(table, {cols})
-
-                table.on('tool(table)', (tool) => {
-                    if ('remove' === tool.event) {
-                        return layer.confirm(`确认移除该${_module.name}吗`, {
-                                btn: ['确定', '取消'],
-                                shade: [0.1, '#fff']
-                            }, () => httpPost({
-                                url: `${prefix}/rest/remove`,
-                                data: {
-                                    ids: [tool.data.id]
-                                },
-                                cb: () => msg(reloadTable)
-                            })
-                        )
-                    }
-                    pageAction(tool)
+                const {table} = layui
+                tableRender({
+                    table,
+                    options: {
+                        cols: [[
+                            {field: 'name', title: '名称 ', minWidth: '120'},
+                            {field: 'key', title: '字典标识', minWidth: '150'},
+                            {
+                                field: 'state', title: '状态',
+                                templet: ({state}) => dictRender(state, stateMap)
+                            },
+                            {field: 'remark', title: '备注', minWidth: '150'},
+                            {title: '操作', toolbar: '#rud'}
+                        ]]
+                    },
+                    iframe: false
                 })
             })
         </script>

@@ -74,7 +74,7 @@
             const menuTree = [[${menuTree}]],
                 echos = [[${_vo.menus}]]
         </script>
-        <script>
+        <script th:inline="none">
             const prefix = `${_gate}system/role`        // 当前用户持有的菜单列表
 
             layui.use(['form', 'tree', 'jquery'], () => {

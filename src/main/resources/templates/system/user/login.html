@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <script>
+    <script th:inline="none">
         // 父级页面跳转
         if (window !== top) {
             top.location.href = location.href
@@ -33,7 +33,7 @@
         </div>
         <div th:include="include :: footer"></div>
         <div th:include="include :: md5-js"></div>
-        <script>
+        <script th:inline="none">
             layui.use(['form', 'jquery'], () => {
                 const {form} = layui
                 if (location.href.indexOf('loginLimit') > 0) {

@@ -62,6 +62,7 @@ function newFrame(title, url, area) {
         content: url
     })
     window.innerWidth < 768 && layer.full(index)
+    return false
 }
 
 /**

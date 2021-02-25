@@ -1044,7 +1044,7 @@
                     childList: [[${menuTree}]]
                 }]
         </script>
-        <script>
+        <script th:inline="none">
             const prefix = `${_gate}system/menu`,
                 slideMs = 500,
                 areas = ['icon', 'path', 'key', 'sort'],       // 可变区域

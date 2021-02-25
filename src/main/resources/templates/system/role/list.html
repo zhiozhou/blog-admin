@@ -45,7 +45,7 @@
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]
         </script>
-        <script>
+        <script th:inline="none">
             const prefix = `${_gate}system/role`
 
             layui.use(['table', 'jquery'], () => {

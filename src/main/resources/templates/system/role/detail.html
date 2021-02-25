@@ -50,7 +50,7 @@
             </form>
         </div>
         <div th:include="include :: footer"></div>
-        <script>
+        <script th:inline="none">
 
             layui.use('tree', () => {
                 const {tree} = layui,

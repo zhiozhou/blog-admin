@@ -57,11 +57,22 @@ layui.use(['table', 'form', 'jquery'], () => {
 
 })
 
+/**
+ * 刷新表格
+ */
+function reloadTable() {
+    layui.table.reload('table')
+}
 
 /**
  * 表格渲染通用配置
+ * @param table layui.table组件
+ * @param options 表格渲染参数，会替换默认参数
+ * @param idName 唯一标识name
+ * @param onTool 工具栏监听，返回false阻止继续默认事件管理
+ * @param iframe 工具栏监听是否使用iframe
  */
-function tableRender(table, options) {
+function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
     table.render({
         ...{
             id: 'table',
@@ -81,6 +92,47 @@ function tableRender(table, options) {
         },
         ...options
     })
+
+    table.on('tool(table)', (obj) => (!onTool || onTool(obj)) && iframe ? iframeAction(obj) : pageAction(obj))
+
+    function iframeAction({event, data}) {
+        switch (event) {
+            case 'detail':
+                return newFrame(`${_module.name}详情`, `${prefix}/detail/${data.id}`)
+            case 'update':
+                return newFrame(`修改${_module.name}`, `${prefix}/update/${data.id}`)
+            case 'remove':
+                return removeAction(data)
+        }
+    }
+
+    function pageAction({event, data}) {
+        switch (event) {
+            case 'detail':
+                window.location.href = `${prefix}/detail/${data.id}`
+                return
+            case 'update':
+                window.location.href = `${prefix}/update/${data.id}`
+                return
+            case 'remove':
+                return removeAction(data)
+        }
+    }
+
+    function removeAction(data) {
+        layer.confirm(`确认移除该${_module.name}吗`, {
+            btn: ['确定', '取消'],
+            shade: [0.1, '#fff']
+        }, () => {
+            httpPost({
+                url: `${prefix}/rest/remove`,
+                data: {
+                    ids: [data[idName]]
+                },
+                cb: () => msg(reloadTable)
+            })
+        })
+    }
 }
 
 
@@ -166,59 +218,6 @@ function initTreeTable() {
 function dictRender(code, dictMap) {
     let {label, spare} = dictMap[code]
     return `<a class="layui-btn layui-btn-xs ${spare}">${label}</a>`
-}
-
-
-/**
- * 通用表格的工具栏（删 改 查），全部以iframe窗口方式打开
- */
-function iframeAction({data, event}) {
-    switch (event) {
-        case 'detail':
-            return newFrame(`${_module.name}详情`, `${prefix}/detail/${data.id}`)
-        case 'update':
-            return newFrame(`修改${_module.name}`, `${prefix}/update/${data.id}`)
-        case 'remove':
-            return removeAction(data)
-    }
-}
-
-/**
- * 通用表格的工具栏（删 改 查），全部新页面的方式打开
- */
-function pageAction({data, event}) {
-    switch (event) {
-        case 'detail':
-            window.location.href = `${prefix}/detail/${data.id}`
-            return
-        case 'update':
-            window.location.href = `${prefix}/update/${data.id}`
-            return
-        case 'remove':
-            return removeAction(data)
-    }
-}
-
-/**
- * 通用删除操作
- */
-function removeAction(data) {
-    layer.confirm(`确认移除该${_module.name}吗`, {
-        btn: ['确定', '取消'],
-        shade: [0.1, '#fff']
-    }, (index) => {
-        httpPost({
-            url: `${prefix}/rest/remove/${data.id}`,
-            cb: () => msg(reloadTable)
-        })
-    })
-}
-
-/**
- * 刷新表格
- */
-function reloadTable() {
-    layui.table.reload('table')
 }
 
 
