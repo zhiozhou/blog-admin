@@ -82,6 +82,7 @@ public class ShiroConfigurer {
         filterMap.put("/plugin/**", anon);
         filterMap.put(LOGIN_PATH, anon + "," + syncLoginFilter.getName());
         filterMap.put("/system/user/rest/login", anon);
+        filterMap.put("/test/**", anon);
 
         // 注销地址
         filterMap.put("/system/user/logout", DefaultFilter.logout.name());
