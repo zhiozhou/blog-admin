@@ -45,30 +45,29 @@
             const prefix = `${_gate}system/monitor`
 
             layui.use(['table', 'jquery', 'util'], () => {
-                const {table, $} = layui,
-                    cols = [[
-                        {field: 'username', title: 'Username', minWidth: '100'},
-                        {field: 'roleNames', title: 'Role', minWidth: '120'},
-                        {field: 'host', title: 'IP', minWidth: '120'},
-                        {field: 'os', title: 'OS', minWidth: '150'},
-                        {field: 'browser', title: 'Browser', minWidth: '120'},
-                        {field: 'loginTime', title: 'Login Time', sminWidth: '120'},
-                        {field: 'lastAccessTime', title: 'Last Access', minWidth: '120'},
-                        {title: 'Operation', toolbar: '#monitor-tool'}
-                    ]]
+                const {table} = layui
 
-                tableRender(table, {
-                    cols,
-                    page: false,
-                    parseData: ({code, info: msg, data}) => {
-                        return {code, msg, data}
-                    }
-                })
-
-                table.on('tool(table)', ({data, event: action}) => {
-                    switch (action) {
-                        case 'offline':
-                            return layer.confirm(`确认强退该用户吗`, {
+                tableRender({
+                    table,
+                    options: {
+                        page: false,
+                        cols: [[
+                            {field: 'username', title: 'Username', minWidth: '100'},
+                            {field: 'roleNames', title: 'Role', minWidth: '120'},
+                            {field: 'host', title: 'IP', minWidth: '120'},
+                            {field: 'os', title: 'OS', minWidth: '150'},
+                            {field: 'browser', title: 'Browser', minWidth: '120'},
+                            {field: 'loginTime', title: 'Login Time', sminWidth: '120'},
+                            {field: 'lastAccessTime', title: 'Last Access', minWidth: '120'},
+                            {title: 'Operation', toolbar: '#monitor-tool'}
+                        ]],
+                        parseData: ({code, info: msg, data}) => {
+                            return {code, msg, data}
+                        }
+                    },
+                    onTool: ({data, event}) => {
+                        if (event === 'offline') {
+                            layer.confirm(`确认强退该用户吗`, {
                                     btn: ['确定', '取消'],
                                     shade: [0.1, '#fff']
                                 }, () => httpPost({
@@ -76,11 +75,11 @@
                                     cb: () => msg(reloadTable)
                                 })
                             )
+                            return false
+                        }
                     }
                 })
             })
-
-
         </script>
     </body>
 

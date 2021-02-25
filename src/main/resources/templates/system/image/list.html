@@ -21,6 +21,7 @@
         .image-view {
             cursor: pointer;
         }
+
         .layui-elem-quote {
             border-left-color: var(--layui-blue);
         }
@@ -68,26 +69,27 @@
             const prefix = `${_gate}system/image`
 
             layui.use(['table', 'jquery', 'upload', 'form'], () => {
-                    const {table, $, upload} = layui,
-                        cols = [[
-                            {
-                                field: 'url', title: 'Image', minWidth: '120',
-                                templet: ({url}) => `<img src="${url}" class="image-view"/>`
-                            },
-                            {field: 'remark', title: 'Remark', minWidth: '120'},
-                            {title: 'Operation', toolbar: '#image-tool'}
-                        ]]
-
-                    tableRender(table, {cols})
-                    table.on('tool(table)', ({data, event}) => {
+                    const {table, $, upload} = layui
+                    tableRender({
+                        table,
+                        options: {
+                            cols: [[
+                                {
+                                    field: 'url', title: 'Image', minWidth: '120',
+                                    templet: ({url}) => `<img src="${url}" class="image-view"/>`
+                                },
+                                {field: 'remark', title: 'Remark', minWidth: '120'},
+                                {title: 'Operation', toolbar: '#image-tool'}
+                            ]]
+                        },
+                        onTool: ({data, event}) => {
                             switch (event) {
                                 case 'copy':
-                                    return copy(data.url)
+                                    copy(data.url)
+                                    return false
                             }
-                            iframeAction({data, event})
                         }
-                    )
-
+                    })
 
                     $(document.body).on('click', '.image-view', function () {
                         window.open($(this).attr('src'))

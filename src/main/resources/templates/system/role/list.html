@@ -49,20 +49,24 @@
             const prefix = `${_gate}system/role`
 
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui,
-                    cols = [[
-                        {field: 'name', title: '名称'},
-                        {field: 'key', title: '角色标识'},
-                        {
-                            field: 'state', title: '状态',
-                            templet: ({state}) => dictRender(state, stateMap)
-                        },
-                        {field: 'remark', title: '备注', minWidth: '150'},
-                        {field: 'relateCount', title: '使用人数'},
-                        {title: '操作', toolbar: '#rud'}
-                    ]]
-                tableRender(table, {cols})
-                table.on('tool(table)', pageAction)
+                const {table} = layui
+                tableRender({
+                    table,
+                    options: {
+                        cols: [[
+                            {field: 'name', title: '名称'},
+                            {field: 'key', title: '角色标识'},
+                            {
+                                field: 'state', title: '状态',
+                                templet: ({state}) => dictRender(state, stateMap)
+                            },
+                            {field: 'remark', title: '备注', minWidth: '150'},
+                            {field: 'relateCount', title: '使用人数'},
+                            {title: '操作', toolbar: '#rud'}
+                        ]]
+                    },
+                    iframe: false
+                })
             })
         </script>
     </body>

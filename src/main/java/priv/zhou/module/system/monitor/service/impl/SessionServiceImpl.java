@@ -3,6 +3,7 @@ package priv.zhou.module.system.monitor.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.session.ExpiredSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
@@ -42,10 +43,7 @@ public class SessionServiceImpl implements ISessionService {
                         return false;
                     } else if (StringUtils.isNotBlank(query.getHost()) && !s.getHost().contains(query.getHost())) {
                         return false;
-                    } else if (StringUtils.isNotBlank(query.getUsername()) && !((String) s.getAttribute("username")).contains(query.getUsername())) {
-                        return false;
-                    }
-                    return true;
+                    } else return !StringUtils.isNotBlank(query.getUsername()) || ((String) s.getAttribute("username")).contains(query.getUsername());
                 })
                 .map(s -> new SessionVO()
                         .setId((String) s.getId())
@@ -74,9 +72,10 @@ public class SessionServiceImpl implements ISessionService {
             sessionDAO.delete(session);
             session.stop();
             return Result.success();
+        } catch (ExpiredSessionException e) {
+            return Result.success();
         } catch (UnknownSessionException e) {
             return Result.fail(ResultEnum.FAIL_OPERATION, e.getMessage());
         }
     }
-
 }

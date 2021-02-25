@@ -93,7 +93,7 @@ function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
         ...options
     })
 
-    table.on('tool(table)', (obj) => (!onTool || onTool(obj)) && iframe ? iframeAction(obj) : pageAction(obj))
+    options.cols[0].some(col => col.toolbar) && table.on('tool(table)', (obj) => (!onTool || onTool(obj)) && iframe ? iframeAction(obj) : pageAction(obj))
 
     function iframeAction({event, data}) {
         switch (event) {

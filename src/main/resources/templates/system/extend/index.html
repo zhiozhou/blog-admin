@@ -36,15 +36,19 @@
             const prefix = `${_gate}system/extend`
 
             layui.use(['table', 'jquery'], () => {
-                const {table, $} = layui,
-                    cols = [[
-                        {type: 'checkbox'},
-                        {field: 'name', title: '名称'},
-                        {field: 'comment', title: '描述'},
-                        {field: 'gmtCreate', title: '创建时间'},
-                    ]]
-
-                tableRender(table, {cols, url: `${prefix}/rest/table/list`})
+                const {table, $} = layui
+                tableRender({
+                    table,
+                    options:{
+                        url: `${prefix}/rest/table/list`,
+                        cols : [[
+                            {type: 'checkbox'},
+                            {field: 'name', title: '名称'},
+                            {field: 'comment', title: '描述'},
+                            {field: 'gmtCreate', title: '创建时间'},
+                        ]]
+                    }
+                })
 
                 $('.coffee-btn').click(() => {
                     let {data} = table.checkStatus('table')
@@ -73,7 +77,6 @@
                 })
 
             })
-
         </script>
     </body>
 

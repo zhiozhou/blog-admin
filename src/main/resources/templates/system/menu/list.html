@@ -24,47 +24,33 @@
             let openId
 
             layui.use(['table', 'jquery'], () => {
-                const {table, $} = layui
+                const {table} = layui
                 const treeOptions = initTreeTable()
-
-                table.render({
-                    id: 'table',
-                    elem: '#table',
-                    page: false,
-                    method: 'post',
-                    url: `${prefix}/rest/list`,
-                    cellMinWidth: '80',
-                    parseData: treeOptions.parseData,
-                    cols: [[
-                        {
-                            field: 'name', title: '名称', minWidth: '150', align: 'left',
-                            templet: treeOptions.template
-                        },
-                        {field: 'path', title: '跳转地址', minWidth: '150',},
-                        {field: 'key', title: '权限标识', minWidth: '150',},
-                        {
-                            field: 'type', title: '类型',
-                            templet: ({type}) => dictRender(type, typeMap)
-                        },
-                        {
-                            field: 'state', title: '状态',
-                            templet: ({state}) => dictRender(state, stateMap)
-                        },
-                        {field: 'sort', title: '排序'},
-                        {title: '操作', toolbar: '#ud'}
-                    ]],
-                    done: treeOptions.done
-                })
-
-                // 交给通用操作
-                table.on('tool(table)', iframeAction)
-
-                // 权限刷新
-                $('.refresh-btn').click(() => {
-                    httpPost({
-                        url: `${prefix}/rest/refresh`,
-                        cb: () => msg()
-                    })
+                tableRender({
+                    table,
+                    options:{
+                        page: false,
+                        parseData: treeOptions.parseData,
+                        cols: [[
+                            {
+                                field: 'name', title: '名称', minWidth: '150', align: 'left',
+                                templet: treeOptions.template
+                            },
+                            {field: 'path', title: '跳转地址', minWidth: '150',},
+                            {field: 'key', title: '权限标识', minWidth: '150',},
+                            {
+                                field: 'type', title: '类型',
+                                templet: ({type}) => dictRender(type, typeMap)
+                            },
+                            {
+                                field: 'state', title: '状态',
+                                templet: ({state}) => dictRender(state, stateMap)
+                            },
+                            {field: 'sort', title: '排序'},
+                            {title: '操作', toolbar: '#ud'}
+                        ]],
+                        done: treeOptions.done
+                    }
                 })
             })
         </script>

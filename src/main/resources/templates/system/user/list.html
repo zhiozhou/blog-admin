@@ -22,7 +22,7 @@
                         </select>
                     </div>
                     <div class="layui-inline">
-                        <select name="inRoles"  lay-search="" multiple>
+                        <select name="inRoles" lay-search="" multiple>
                             <option value="">按角色查询</option>
                             <option th:each="role : ${roleList}"
                                     th:value="${role.id}"
@@ -78,52 +78,56 @@
             const prefix = `${_gate}system/user`
 
             layui.use(['table', 'jquery'], () => {
-                const {table, $} = layui,
-                    cols = [[
-                        {field: 'username', title: '用户名', minWidth: '100'},
-                        {field: 'name', title: '姓名', minWidth: '100'},
-                        {field: 'phone', title: '手机号', minWidth: '120'},
-                        {
-                            field: 'roles', title: '角色', minWidth: '120',
-                            templet: ({roles}) => roles.split(',').map(rSt => {
-                                let r = rSt.split('-');
-                                return `<a class="layui-btn layui-btn-xs role-btn" data-id="${r[0]}">${r[1]}</a>`
-                            }).join(' ')
-                        },
-                        {
-                            field: 'state', title: '状态',
-                            templet: ({state}) => dictRender(state, stateMap)
-                        },
-                        {title: '操作', toolbar: '#user-tool'}
-                    ]]
+                const {table, $} = layui
 
-
-                tableRender(table, {cols})
-                table.on('tool(table)', ({data, event}) => {
-                    switch (event) {
-                        case 'resetPwd':
-                            return newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/${data.id}`)
-                        case 'freeze':
-                            return httpPost({url: `${prefix}/rest/freeze/${data.id}`, cb: () => msg(reloadTable())})
-                        case 'unfreeze':
-                            return httpPost({url: `${prefix}/rest/unfreeze/${data.id}`, cb: () => msg(reloadTable())})
-                        case 'remove':
-                            return layer.confirm(`确认移除该${_module.name}吗`, {
-                                    btn: ['确定', '取消'],
-                                    shade: [0.1, '#fff']
-                                }, () => httpPost({
-                                    url: `${prefix}/rest/remove`,
-                                    data: {
-                                        ids: [data.id]
-                                    },
-                                    cb: () => msg(reloadTable)
+                tableRender({
+                    table,
+                    options: {
+                        cols: [[
+                            {field: 'username', title: '用户名', minWidth: '100'},
+                            {field: 'name', title: '姓名', minWidth: '100'},
+                            {field: 'phone', title: '手机号', minWidth: '120'},
+                            {
+                                field: 'roles', title: '角色', minWidth: '120',
+                                templet: ({roles}) => roles.split(',').map(rSt => {
+                                    let r = rSt.split('-');
+                                    return `<a class="layui-btn layui-btn-xs role-btn" data-id="${r[0]}">${r[1]}</a>`
+                                }).join(' ')
+                            },
+                            {
+                                field: 'state', title: '状态',
+                                templet: ({state}) => dictRender(state, stateMap)
+                            },
+                            {title: '操作', toolbar: '#user-tool'}
+                        ]]
+                    },
+                    onTool: ({event, data}) => {
+                        switch (event) {
+                            case 'resetPwd':
+                                return newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/${data.id}`)
+                            case 'freeze':
+                                return httpPost({url: `${prefix}/rest/freeze/${data.id}`, cb: () => msg(reloadTable())})
+                            case 'unfreeze':
+                                return httpPost({
+                                    url: `${prefix}/rest/unfreeze/${data.id}`,
+                                    cb: () => msg(reloadTable())
                                 })
-                            )
-
+                            case 'remove':
+                                layer.confirm(`确认移除该${_module.name}吗`, {
+                                        btn: ['确定', '取消'],
+                                        shade: [0.1, '#fff']
+                                    }, () => httpPost({
+                                        url: `${prefix}/rest/remove`,
+                                        data: {
+                                            ids: [data.id]
+                                        },
+                                        cb: () => msg(reloadTable)
+                                    })
+                                )
+                                return false
+                        }
                     }
-                    iframeAction({data, event})
                 })
-
 
                 $('body').on('click', '.role-btn', ({target}) => {
                     newFrame(`角色详情`, `${_gate}/system/role/detail/${$(target).data('id')}`)
