@@ -19,30 +19,31 @@
             const prefix = `${_gate}block`
 
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui,
-                    cols = [[
+                const {table} = layui
+                tableRender({
+                    table,
+                    options: {
+                        cols: [[
 
-                        {field: 'ip', title: 'IP'},
-                        {
-                            field: 'type', title: '类型',
-                            templet: ({type}) => dictRender(type, typeMap)
-                        },
-                        {field: 'reason', title: '原因'},
-                        {
-                            field: 'creator', title: '操作人',
-                            templet: ({creator}) => creator.name
-                        },
-                        {
-                            field: 'gmtCreate', title: '创建时间',
-                            templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
-                        },
-                        {title: '操作', toolbar: '#rud'}
-                    ]]
-
-                tableRender(table, {cols})
-                table.on('tool(table)', ({data, event}) => {
-                    switch (event) {
-                        case 'remove':
+                            {field: 'ip', title: 'IP'},
+                            {
+                                field: 'type', title: '类型',
+                                templet: ({type}) => dictRender(type, typeMap)
+                            },
+                            {field: 'reason', title: '原因'},
+                            {
+                                field: 'creator', title: '操作人',
+                                templet: ({creator}) => creator.name
+                            },
+                            {
+                                field: 'gmtCreate', title: '创建时间',
+                                templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
+                            },
+                            {title: '操作', toolbar: '#rud'}
+                        ]]
+                    },
+                    onTool: ({data, event}) => {
+                        if (event === 'remove') {
                             layer.confirm(`确认移除对此IP的阻塞吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
@@ -52,6 +53,8 @@
                                     cb: () => msg(reloadTable)
                                 })
                             })
+                            return false
+                        }
                     }
                 })
             })

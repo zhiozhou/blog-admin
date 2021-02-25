@@ -58,52 +58,49 @@
         <script th:inline="none">
             const prefix = `${_gate}comment`
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui,
-                    cols = [[
-                        {
-                            field: 'fromVisitor', title: '昵称',
-                            templet: ({fromVisitor}) => fromVisitor.nickname
-                        },
-                        {field: 'content', title: '内容'},
-                        {
-                            field: 'gmtCreate',
-                            title: '评论时间',
-                            templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
+                const {table} = layui
 
-                        },
-                        {
-                            field: 'state', title: '状态',
-                            templet: ({state}) => dictRender(state, stateMap)
-                        },
-                        {title: '操作', toolbar: '#comment-tool'}
-                    ]]
+                tableRender({
+                    table,
+                    options:{
+                        cols:[[
+                            {
+                                field: 'fromVisitor', title: '昵称',
+                                templet: ({fromVisitor}) => fromVisitor.nickname
+                            },
+                            {field: 'content', title: '内容'},
+                            {
+                                field: 'gmtCreate',title: '评论时间',
+                                templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
 
-                tableRender(table, {cols})
-                table.on('tool(table)', ({data, event}) => {
-                    switch (event) {
-                        case 'reply':
-                            newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`)
-                            break
-                        case 'updateReply':
-                            newFrame('修改回复', `${prefix}/reply/update/${data.id}`)
-                            break
-                        case 'pass':
-                            httpPost({
-                                url: `${prefix}/rest/pass/${data.id}`,
-                                cb: () => msg(reloadTable)
-                            })
-                            break
-                        case 'noPass':
-                            httpPost({
-                                url: `${prefix}/rest/pass/no/${data.id}`,
-                                cb: () => msg(reloadTable)
-                            })
-                            break
-                        case 'block':
-                            newFrame('禁言', `${prefix}/block/${data.id}`)
-                            break
+                            },
+                            {
+                                field: 'state', title: '状态',
+                                templet: ({state}) => dictRender(state, stateMap)
+                            },
+                            {title: '操作', toolbar: '#comment-tool'}
+                        ]]
+                    },
+                    onTool:({data, event}) => {
+                        switch (event) {
+                            case 'reply':
+                                return newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`)
+                            case 'updateReply':
+                                return newFrame('修改回复', `${prefix}/reply/update/${data.id}`)
+                            case 'pass':
+                                return httpPost({
+                                    url: `${prefix}/rest/pass/${data.id}`,
+                                    cb: () => msg(reloadTable)
+                                })
+                            case 'noPass':
+                                return httpPost({
+                                    url: `${prefix}/rest/pass/no/${data.id}`,
+                                    cb: () => msg(reloadTable)
+                                })
+                            case 'block':
+                                return newFrame('禁言', `${prefix}/block/${data.id}`)
+                        }
                     }
-                    iframeAction({data, event})
                 })
             })
 

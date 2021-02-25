@@ -18,18 +18,21 @@
             const prefix = `${_gate}${app.modulePath}${table.objectName}`
 
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui,
-                    cols = [[
+                const {table} = layui
+
+                tableRender({
+                    table,
+                    options:{
+                        cols:[[
 #foreach ($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
-                        {field: '${column.attrName}', title: '${column.comment}'},
+                            {field: '${column.attrName}', title: '${column.comment}'},
 #end
 #end
-                        {title: '操作',  toolbar: '#rud'}
-                    ]]
-
-                tableRender(table,{cols})
-                table.on('tool(table)', iframeAction)
+                            {title: '操作',  toolbar: '#rud'}
+                        ]]
+                    }
+                })
             })
         </script>
     </body>
