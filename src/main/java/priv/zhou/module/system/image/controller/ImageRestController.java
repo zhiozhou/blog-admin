@@ -1,5 +1,6 @@
 package priv.zhou.module.system.image.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +22,11 @@ import java.util.List;
  * @since 2020.06.01
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/system/image/rest")
 public class ImageRestController {
 
     private final IImageService imageService;
-
-    public ImageRestController(IImageService imageService) {
-        this.imageService = imageService;
-    }
-
 
     @RequiresPermissions("system:image:save")
     @RequestMapping("/save")

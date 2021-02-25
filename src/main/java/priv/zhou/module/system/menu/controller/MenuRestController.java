@@ -1,5 +1,6 @@
 package priv.zhou.module.system.menu.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,15 +28,11 @@ import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
  * @since 2020.03.20
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/system/menu/rest")
 public class MenuRestController {
 
-
     private final IMenuService menuService;
-
-    public MenuRestController(IMenuService menuService) {
-        this.menuService = menuService;
-    }
 
     @RequiresPermissions("system:menu:add")
     @RequestMapping("/save")

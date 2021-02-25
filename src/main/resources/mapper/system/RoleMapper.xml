@@ -52,6 +52,7 @@
         <result column="name" property="name"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
+        <result column="relate_count" property="relateCount"/>
     </resultMap>
 
     <resultMap id="SelectVOMap" type="RoleSelectVO">
@@ -77,7 +78,7 @@
     <insert id="save" parameterType="RolePO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO system_role(
             `key`,
-            name,
+            `name`,
             state,
             remark,
             create_by,
@@ -106,7 +107,7 @@
         update system_role
         <set>
             <if test="key != null and key != ''">`key` = #{key},</if>
-            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="name != null and name != ''">`name` = #{name},</if>
             <if test="state != null ">state = #{state},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             modified_by = #{modifiedBy},
@@ -171,9 +172,10 @@
         SELECT
             id,
             `key`,
-            name,
+            `name`,
             state,
-            remark
+            remark,
+            (select count(0) from system_user_role where role_id = id) AS relate_count
         FROM system_role
         <where>
             is_deleted = 0
@@ -186,7 +188,7 @@
     <select id="listSelectVO" parameterType="RoleQuery" resultMap="SelectVOMap">
         SELECT
             id,
-            name
+            `name`
         FROM system_role
         <where>
             is_deleted = 0

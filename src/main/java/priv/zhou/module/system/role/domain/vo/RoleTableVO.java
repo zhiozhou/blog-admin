@@ -43,4 +43,9 @@ public class RoleTableVO {
 	 */
 	private String remark;
 
+	/**
+	 * 用户关联数
+	 */
+	private Integer relateCount;
+
 }

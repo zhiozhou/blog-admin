@@ -36,7 +36,6 @@ public class ExtendRestController {
 
     private final IExtendService extendService;
 
-
     @RequiresPermissions("system:extend:index")
     @PostMapping("/table/list")
     public Result<TableVO<TableTableVO>> list(TableQuery query, Page page) {

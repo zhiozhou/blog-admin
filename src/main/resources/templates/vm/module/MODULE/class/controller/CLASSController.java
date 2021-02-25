@@ -1,6 +1,7 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ public class ${table.className}Controller extends BaseController {
         this.${table.objectName}Service = ${table.objectName}Service;
     }
 
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:save")
     @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new ${table.className}DTO());
@@ -40,12 +42,14 @@ public class ${table.className}Controller extends BaseController {
     }
 
 #if(!$table.primaryKeys.isEmpty())
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:update")
     @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
         super.update(model, ${table.objectName}Service.getVO(new ${table.className}Query().setId(id)));
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:detail")
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         super.detail(model, ${table.objectName}Service.getVO(new ${table.className}Query().setId(id)));
@@ -53,6 +57,7 @@ public class ${table.className}Controller extends BaseController {
     }
 
 #end
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:list")
     @GetMapping("/list")
     public String list(Model model) {
         super.list(model);

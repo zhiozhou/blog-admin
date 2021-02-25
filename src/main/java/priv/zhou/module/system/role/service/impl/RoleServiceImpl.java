@@ -39,7 +39,6 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
     private final UserRoleDAO userRoleDAO;
 
-
     @Override
     @Transactional
     public Result<NULL> save(RoleDTO roleDTO) {

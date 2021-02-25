@@ -51,13 +51,14 @@
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
                     cols = [[
-                        {field: 'name', title: '名称', minWidth: '120'},
+                        {field: 'name', title: '名称'},
                         {field: 'key', title: '角色标识'},
                         {
                             field: 'state', title: '状态',
                             templet: ({state}) => dictRender(state, stateMap)
                         },
                         {field: 'remark', title: '备注', minWidth: '150'},
+                        {field: 'relateCount', title: '引用数'},
                         {title: '操作', toolbar: '#rud'}
                     ]]
                 tableRender(table, {cols})

@@ -1,5 +1,6 @@
 package priv.zhou.module.system.role.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
@@ -26,14 +27,11 @@ import javax.validation.Valid;
  * @since 2020.04.15
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/system/role/rest")
 public class RoleRestController {
 
     private final IRoleService roleService;
-
-    public RoleRestController(IRoleService roleService) {
-        this.roleService = roleService;
-    }
 
     @RequiresPermissions("system:role:add")
     @RequestMapping("/save")
@@ -58,7 +56,6 @@ public class RoleRestController {
         }
         return roleService.update(roleDTO);
     }
-
 
     @RequiresPermissions("system:role:list")
     @RequestMapping("/list")
