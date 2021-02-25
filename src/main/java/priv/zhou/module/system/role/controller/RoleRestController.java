@@ -2,10 +2,12 @@ package priv.zhou.module.system.role.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.constant.NULL;
+import priv.zhou.common.constant.Update;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
@@ -49,9 +51,12 @@ public class RoleRestController {
     }
 
     @RequiresPermissions("system:role:update")
-    @RequestMapping("/update/{id}")
-    public Result<NULL> update(@PathVariable Integer id, @Valid RoleDTO roleDTO) {
-        return roleService.update(roleDTO.setId(id));
+    @RequestMapping("/update")
+    public Result<NULL> update(@Validated({Update.class}) RoleDTO roleDTO) {
+        if (StringUtils.isBlank(roleDTO.getKey())) {
+            roleDTO.setKey(PinyinUtil.toPinyin(roleDTO.getName()));
+        }
+        return roleService.update(roleDTO);
     }
 
 

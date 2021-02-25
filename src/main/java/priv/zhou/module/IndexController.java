@@ -7,11 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.user.domain.bo.UserPrincipal;
-import priv.zhou.module.system.user.domain.dto.UserDTO;
 
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
 

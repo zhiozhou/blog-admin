@@ -34,8 +34,7 @@ public class ${table.className}ServiceImpl extends BaseService implements I${tab
     @Override
     public Result<NULL> save(${table.className}DTO ${table.objectName}DTO) {
 
-        ${table.className}PO ${table.objectName}PO = new ${table.className}PO()#if($table.columnList.isEmpty());
-#end
+        ${table.className}PO ${table.objectName}PO = new ${table.className}PO()#if($table.columnList.isEmpty());#end
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
 
@@ -63,12 +62,11 @@ public class ${table.className}ServiceImpl extends BaseService implements I${tab
     @Override
     public Result<NULL> update(${table.className}DTO ${table.objectName}DTO) {
 
-        ${table.className}PO ${table.objectName}PO = new ${table.className}PO()#if($table.columnList.isEmpty());
-#end
+        ${table.className}PO ${table.objectName}PO = new ${table.className}PO()#if($table.columnList.isEmpty());#end
 #foreach($column in $table.columnList)
 #if(!$table.primaryKeys.contains($column))
 
-        .set${column.getSetName}(${table.objectName}DTO.get${column.getSetName}())#if($velocityCount == $table.columnList.size());
+            .set${column.getSetName}(${table.objectName}DTO.get${column.getSetName}())#if($velocityCount == $table.columnList.size());
 #end
 #end
 #end

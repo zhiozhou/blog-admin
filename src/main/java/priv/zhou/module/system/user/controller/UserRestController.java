@@ -1,27 +1,29 @@
 package priv.zhou.module.system.user.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.constant.NULL;
+import priv.zhou.common.constant.Save;
+import priv.zhou.common.constant.Update;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
+import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.dto.UserLoginDTO;
-import priv.zhou.module.system.user.domain.dto.UserSaveDTO;
-import priv.zhou.module.system.user.domain.dto.UserUpdateDTO;
 import priv.zhou.module.system.user.domain.query.UserQuery;
 import priv.zhou.module.system.user.domain.vo.UserTableVO;
 import priv.zhou.module.system.user.service.IUserService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -31,14 +33,11 @@ import javax.validation.constraints.NotEmpty;
  * @since 2020.03.20
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/system/user/rest")
 public class UserRestController {
 
     private final IUserService userService;
-
-    public UserRestController(IUserService userService) {
-        this.userService = userService;
-    }
 
     @RequestMapping("/login")
     public Result<NULL> login(UserLoginDTO loginDTO) {
@@ -59,7 +58,7 @@ public class UserRestController {
 
     @RequiresPermissions("system:user:add")
     @RequestMapping("/save")
-    public Result<NULL> save(@Valid UserSaveDTO saveDTO) {
+    public Result<NULL> save(@Validated({Save.class}) UserDTO saveDTO) {
         return userService.save(saveDTO);
     }
 
@@ -73,9 +72,9 @@ public class UserRestController {
     }
 
     @RequiresPermissions("system:user:update")
-    @RequestMapping("/update/{id}")
-    public Result<NULL> update(@PathVariable Integer id, @Valid UserUpdateDTO updateDTO) {
-        return userService.update(updateDTO.setId(id));
+    @RequestMapping("/update")
+    public Result<NULL> update(@Validated({Update.class}) UserDTO updateDTO) {
+        return userService.update(updateDTO);
     }
 
     @RequiresPermissions("system:user:reset:pwd")

@@ -3,6 +3,7 @@ package priv.zhou.module.system.dict.domain.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import priv.zhou.common.constant.Update;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -21,6 +22,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class DictDTO {
 
+    @NotNull(message = "ID不可为空", groups = Update.class)
     private Integer id;
 
     @NotBlank(message = "名称不可为空")

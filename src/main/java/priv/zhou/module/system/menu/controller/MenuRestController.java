@@ -1,9 +1,11 @@
 package priv.zhou.module.system.menu.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import priv.zhou.common.constant.Update;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.vo.TableVO;
@@ -49,7 +51,7 @@ public class MenuRestController {
 
     @RequiresPermissions("system:menu:update")
     @RequestMapping("/update")
-    public Result<NULL> update(@Valid MenuDTO menuDTO) {
+    public Result<NULL> update(@Validated({Update.class}) MenuDTO menuDTO) {
         return menuService.update(menuDTO.setFlag(ADMIN_FLAG));
     }
 

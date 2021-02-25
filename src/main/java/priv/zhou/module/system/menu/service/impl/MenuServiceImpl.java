@@ -52,9 +52,10 @@ public class MenuServiceImpl implements IMenuService {
                 .setName(menuDTO.getName())
                 .setIcon(menuDTO.getIcon())
                 .setPath(menuDTO.getPath())
+                .setType(menuDTO.getType())
+                .setState(menuDTO.getState())
                 .setSort(menuDTO.getSort())
                 .setFlag(menuDTO.getFlag())
-                .setState(menuDTO.getState())
                 .setCreateBy(ShiroUtil.getUserId());
         if (menuDAO.save(menuPO) < 1) {
             return Result.fail(ResultEnum.FAIL_OPERATION);
@@ -105,14 +106,16 @@ public class MenuServiceImpl implements IMenuService {
         }
 
         MenuPO menuPO = new MenuPO()
+                .setId(menuDTO.getId())
                 .setParentId(menuDTO.getParentId())
                 .setKey(menuDTO.getKey())
                 .setName(menuDTO.getName())
                 .setIcon(menuDTO.getIcon())
                 .setPath(menuDTO.getPath())
+                .setType(menuDTO.getType())
+                .setState(menuDTO.getState())
                 .setSort(menuDTO.getSort())
                 .setFlag(menuDTO.getFlag())
-                .setState(menuDTO.getState())
                 .setModifiedBy(ShiroUtil.getUserId());
         if (menuDAO.update(menuPO) < 1) {
             return Result.fail(ResultEnum.FAIL_OPERATION);

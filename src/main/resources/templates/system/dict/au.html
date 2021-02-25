@@ -3,14 +3,13 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form" th:attr="action=${_isAdd?_action:_action+_vo.id}" th:object="${_vo}">
-
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}">
+                <input type="hidden" th:field="*{id}"/>
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
                         <li><a th:href="@{/system/dict/list}" th:text="${_module.name}+列表"></a></li>
                         <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
                     </ul>
-                    <input type="hidden" th:field="*{id}">
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
                             <label class="layui-form-label">名称：</label>

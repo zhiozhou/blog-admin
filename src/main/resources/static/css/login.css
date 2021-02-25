@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     height: 100vh;
-    background: url("../img/login/bg.jpg") no-repeat center / cover;
+    background: url("../img/login/bg.jpg") no-repeat 20% 100% / cover;
 }
 
 .login {
@@ -53,7 +53,7 @@
     }
 
     #root {
-        background-position-x: -65vw;
+        background-position: 18%;
     }
 
 }

@@ -1,4 +1,5 @@
 接口增加权限校验
+菜单动态校验，使用data-verify,js动态改变lay-verify属性
 使用group分组验证保存修改
 引入excel导入导出功能
 多角色菜单重复问题

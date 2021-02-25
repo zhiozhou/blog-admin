@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.List;
 
+import priv.zhou.common.constant.Update;
 import priv.zhou.common.tools.DateUtil;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
 
@@ -27,6 +28,7 @@ public class RoleDTO {
     /**
      * 
      */
+    @NotNull(message = "ID不可为空", groups = Update.class)
     private Integer id;
 
     /**

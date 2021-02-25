@@ -16,8 +16,7 @@ import priv.zhou.module.system.role.domain.po.RolePO;
 import priv.zhou.module.system.user.domain.bo.UserBO;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.dao.UserRoleDAO;
-import priv.zhou.module.system.user.domain.dto.UserSaveDTO;
-import priv.zhou.module.system.user.domain.dto.UserUpdateDTO;
+import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.po.UserPO;
 import priv.zhou.module.system.user.domain.po.UserRolePO;
 import priv.zhou.module.system.user.domain.query.UserQuery;
@@ -48,31 +47,31 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
 
     @Override
-    public Result<NULL> save(UserSaveDTO saveDTO) {
+    public Result<NULL> save(UserDTO userDTO) {
 
-        if (userDAO.count(new UserQuery().setUsername(saveDTO.getUsername())) > 0) {
+        if (userDAO.count(new UserQuery().setUsername(userDTO.getUsername())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
-        } else if (userDAO.count(new UserQuery().setPhone(saveDTO.getPhone())) > 0) {
+        } else if (userDAO.count(new UserQuery().setPhone(userDTO.getPhone())) > 0) {
             return Result.fail(ResultEnum.EXIST_PHONE);
         }
 
         UserPO userPO = new UserPO()
-                .setUsername(saveDTO.getUsername())
+                .setUsername(userDTO.getUsername())
                 .setSalt(RandomUtil.chars(6))
-                .setName(saveDTO.getName())
-                .setPhone(saveDTO.getPhone())
+                .setName(userDTO.getName())
+                .setPhone(userDTO.getPhone())
                 .setState(0)
                 .setCreateBy(ShiroUtil.getUserId());
-        userPO.setPassword(certMatcher.buildCert(saveDTO.getPassword(), userPO.getSalt()));
+        userPO.setPassword(certMatcher.buildCert(userDTO.getPassword(), userPO.getSalt()));
 
         if (userDAO.save(userPO) < 1) {
             return Result.fail(ResultEnum.LATER_RETRY);
-        } else if (userRoleDAO.saveList(saveDTO.getRoles()
+        } else if (userRoleDAO.saveList(userDTO.getRoles()
                 .stream()
                 .map(roleId -> new UserRolePO()
                         .setRoleId(roleId)
                         .setUserId(userPO.getId()))
-                .collect(Collectors.toList())) != saveDTO.getRoles().size()) {
+                .collect(Collectors.toList())) != userDTO.getRoles().size()) {
             return Result.fail(ResultEnum.LATER_RETRY);
         }
         return Result.success();
@@ -89,18 +88,18 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     @Transactional
-    public Result<NULL> update(UserUpdateDTO updateDTO) {
-        if (userDAO.count(new UserQuery().setPhone(updateDTO.getPhone()).setRidId(updateDTO.getId())) > 0) {
+    public Result<NULL> update(UserDTO userDTO) {
+        if (userDAO.count(new UserQuery().setPhone(userDTO.getPhone()).setRidId(userDTO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_PHONE);
         }
 
-        UserBO userDB = userDAO.getBO(new UserQuery().setId(updateDTO.getId()));
+        UserBO userDB = userDAO.getBO(new UserQuery().setId(userDTO.getId()));
         if (null == userDB) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         } else if (userDAO.update(new UserPO()
-                .setId(updateDTO.getId())
-                .setName(updateDTO.getName())
-                .setPhone(updateDTO.getPhone())
+                .setId(userDTO.getId())
+                .setName(userDTO.getName())
+                .setPhone(userDTO.getPhone())
                 .setModifiedBy(ShiroUtil.getUserId())) < 1) {
             return Result.fail(ResultEnum.LATER_RETRY);
         }
@@ -109,17 +108,17 @@ public class UserServiceImpl extends BaseService implements IUserService {
                 .stream()
                 .map(RolePO::getId)
                 .collect(Collectors.toSet());
-        if (roleSet.size() != updateDTO.getRoles().size() ||
-                updateDTO.getRoles().stream()
+        if (roleSet.size() != userDTO.getRoles().size() ||
+                userDTO.getRoles().stream()
                         .noneMatch(roleSet::contains)) {
-            if (userRoleDAO.remove(updateDTO.getId()) < 1) {
+            if (userRoleDAO.remove(userDTO.getId()) < 1) {
                 return Result.fail(ResultEnum.LATER_RETRY);
-            } else if (userRoleDAO.saveList(updateDTO.getRoles()
+            } else if (userRoleDAO.saveList(userDTO.getRoles()
                     .stream()
                     .map(roleId -> new UserRolePO()
                             .setRoleId(roleId)
-                            .setUserId(updateDTO.getId()))
-                    .collect(Collectors.toList())) != updateDTO.getRoles().size()) {
+                            .setUserId(userDTO.getId()))
+                    .collect(Collectors.toList())) != userDTO.getRoles().size()) {
                 return Result.fail(ResultEnum.LATER_RETRY);
             }
             ShiroUtil.clearUserAuthorization(userDB.getUsername());

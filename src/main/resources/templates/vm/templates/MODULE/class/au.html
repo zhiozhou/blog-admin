@@ -2,9 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:include="include :: header"></head>
     <body>
-#set($action='${_isAdd?_action:_action+_vo.id}')
         <div class="layout-iframe">
-            <form class="layui-form " th:attr="action=$action" th:object="${_vo}">
+            <form class="layui-form " th:attr="action=${_action}" th:object="${_vo}">
 #foreach ($primary in $table.primaryKeys)
                 <input type="hidden" th:field="*{${primary.attrName}}">
 

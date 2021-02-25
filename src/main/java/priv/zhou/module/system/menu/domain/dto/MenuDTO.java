@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import priv.zhou.common.constant.Update;
 import priv.zhou.common.domain.Tree;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
 
@@ -22,6 +23,7 @@ public class MenuDTO extends Tree {
     /**
      * id
      */
+    @NotNull(message = "ID不可为空", groups = Update.class)
     private Integer id;
 
     /**

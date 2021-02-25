@@ -21,21 +21,18 @@ import ${app.packet}.common.tools.DateUtil;
 @Setter
 @Accessors(chain = true)
 public class ${table.className}DTO {
-
 #foreach ($column in $table.columnList)
 
     /**
      * ${column.comment}
      */
-#if(!$table.primaryKeys.contains($column))
 #if($column.javaType=="String")
-    @NotBlank(message = "${column.comment}不可为空")
+    @NotBlank(message = "${column.comment}不可为空"#if($table.primaryKeys.contains($column)), groups = Update.class)#end)
 #else
 #if($column.javaType=="Date")
     @DateTimeFormat(pattern = DateUtil.YMD)
 #end
-    @NotNull(message = "${column.comment}不可为空")
-#end
+    @NotNull(message = "${column.comment}不可为空"#if($table.primaryKeys.contains($column)), groups = Update.class)#end)
 #end
     private ${column.javaType} ${column.attrName};
 #end

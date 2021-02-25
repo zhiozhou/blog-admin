@@ -848,8 +848,7 @@ layui.define('layer', function (exports) {
                 , value = othis.val();
             othis.removeClass(DANGER);
             layui.each(vers, function (_, thisVer) {
-                var isTrue //是否命中校验
-                    , errorText = '' //错误提示文本
+                var errorText = '' //错误提示文本
                     , isFn = typeof verify[thisVer] === 'function';
 
                 //匹配验证规则

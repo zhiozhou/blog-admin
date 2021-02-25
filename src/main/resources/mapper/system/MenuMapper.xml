@@ -141,7 +141,7 @@
             <if test="state != null ">state = #{state},</if>
             <if test="sort != null ">sort = #{sort},</if>
             <if test="key != null and key != ''">`key` = #{key},</if>
-            modified_by = #{modifiedId},
+            modified_by = #{modifiedBy},
             gmt_modified = NOW()
         </set>
         where id = #{id} and flag = #{flag}
