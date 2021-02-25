@@ -14,7 +14,7 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
-        <script th:inline="none">
+        <script>
             const prefix = `${_gate}${app.modulePath}${table.objectName}`
 
             layui.use(['table', 'jquery'], () => {

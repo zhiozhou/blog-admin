@@ -41,7 +41,7 @@
                shiro:hasPermission=${_module.permissionPrefix+':offline'}>Offline</a>
             {{# } }}
         </script>
-        <script th:inline="none">
+        <script>
             const prefix = `${_gate}system/monitor`
 
             layui.use(['table', 'jquery', 'util'], () => {

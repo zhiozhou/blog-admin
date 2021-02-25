@@ -71,9 +71,11 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
-            const prefix = `${_gate}system/role`,
-                menuTree = [[${menuTree}]],
-                echos = [[${_vo.menus}]]        // 当前用户持有的菜单列表
+            const menuTree = [[${menuTree}]],
+                echos = [[${_vo.menus}]]
+        </script>
+        <script>
+            const prefix = `${_gate}system/role`        // 当前用户持有的菜单列表
 
             layui.use(['form', 'tree', 'jquery'], () => {
                 const {form, tree} = layui

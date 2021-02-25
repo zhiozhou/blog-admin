@@ -32,7 +32,7 @@
             </div>
         </div>
         <div th:include="include :: list-footer"></div>
-        <script th:inline="none">
+        <script>
             const prefix = `${_gate}system/extend`
 
             layui.use(['table', 'jquery'], () => {

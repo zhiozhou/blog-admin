@@ -73,7 +73,7 @@
         <script th:inline="javascript">
             const dataListEcho = [[${_vo.dataList}]]
         </script>
-        <script th:inline="none">
+        <script>
             const prefix = `${_gate}system/dict`
             const typeMap = {
                 0: {spare: 'layui-bg-blue', info: '正常'},

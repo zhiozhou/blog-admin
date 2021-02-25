@@ -1037,15 +1037,16 @@
         </div>
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
-            const prefix = `${_gate}system/menu`,
-                menuTree = [{
+            const menuTree = [{
                     id: 0,
                     name: '根目录',
                     spread: true,
                     childList: [[${menuTree}]]
-                }],
-                slidems = 500,
-
+                }]
+        </script>
+        <script>
+            const prefix = `${_gate}system/menu`,
+                slideMs = 500,
                 areas = ['icon', 'path', 'key', 'sort'],       // 可变区域
                 areaMap = {     // 按类型显示区域
                     0: ['icon', 'sort'],
@@ -1125,19 +1126,19 @@
                     }
                     for (let area of areas) {
                         let formItem = $(`#${area}`).parents('.layui-form-item')
-                        viewArea.includes(area) ? formItem.slideDown(slidems) : formItem.slideUp(slidems)
+                        viewArea.includes(area) ? formItem.slideDown(slideMs) : formItem.slideUp(slideMs)
                     }
                 }
 
 
                 // 父级树显示
                 $('#parentName').click(() => {
-                    $("#menuTree").slideToggle(slidems)
+                    $("#menuTree").slideToggle(slideMs)
                 })
 
                 // 图标列表显示
                 $('#icon').click(() => {
-                    $("#iconList").slideToggle(slidems)
+                    $("#iconList").slideToggle(slideMs)
                 })
 
                 // 列表隐藏

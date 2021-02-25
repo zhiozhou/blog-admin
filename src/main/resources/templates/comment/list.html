@@ -55,7 +55,7 @@
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]
         </script>
-        <script th:inline="none">
+        <script>
             const prefix = `${_gate}comment`
             layui.use(['table', 'jquery'], () => {
                 const {table} = layui,
