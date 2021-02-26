@@ -1,5 +1,7 @@
 package priv.zhou.framework.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -37,14 +39,16 @@ public class GlobalHandler {
 
     private final AppProperties appProperties;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * 全局异常
      */
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
-    public Result<?> globalHand(HttpServletRequest request, Exception e) {
+    public Result<?> globalHand(HttpServletRequest request, Exception e) throws JsonProcessingException {
         StringBuilder builder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
-        builder.append("请求参数 -->").append(HttpUtil.getParams(request)).append(" | ");
+        builder.append("请求参数 -->").append(objectMapper.writeValueAsString(HttpUtil.getParams(request))).append(" | ");
         builder.append("e -->");
         log.error(builder.toString(), e);
         EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));

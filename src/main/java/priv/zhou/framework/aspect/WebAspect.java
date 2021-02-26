@@ -1,6 +1,7 @@
 package priv.zhou.framework.aspect;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +11,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.HttpUtil;
+import priv.zhou.framework.exception.GlobalException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class WebAspect {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Pointcut("execution(public * priv.zhou.module.*.*.controller.*.*(..))")
     public void webCut() {
     }
@@ -35,9 +40,9 @@ public class WebAspect {
      */
     @Order(0)
     @Before(value = "webCut()")
-    public void beforeLog() throws Exception {
+    public void beforeLog() throws JsonProcessingException {
         HttpServletRequest request = getRequest();
-        log.info("调用 {} 接口,请求参数 -->{}", request.getRequestURI(), HttpUtil.getParams(request));
+        log.info("调用 {} 接口,请求参数 -->{}", request.getRequestURI(), objectMapper.writeValueAsString(HttpUtil.getParams(request)));
     }
 
 
@@ -45,19 +50,19 @@ public class WebAspect {
      * 返回日志
      */
     @AfterReturning(returning = "result", pointcut = "webCut()")
-    public void AfterExec(Object result) throws Exception {
-        log.info("退出 {} 接口,返回报文 -->{}\n", getRequest().getRequestURI(), JSON.toJSONString(result));
+    public void AfterExec(Object result) throws JsonProcessingException {
+        log.info("退出 {} 接口,返回报文 -->{}\n", getRequest().getRequestURI(), objectMapper.writeValueAsString(result));
     }
 
 
     /**
      * 获取请求
      */
-    private HttpServletRequest getRequest() throws Exception {
+    private HttpServletRequest getRequest() {
         // 1.获取请求
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (null == attributes) {
-            throw new Exception("attributes 为空");
+            throw new GlobalException(ResultEnum.ERROR_SYSTEM);
         }
         return attributes.getRequest();
     }
