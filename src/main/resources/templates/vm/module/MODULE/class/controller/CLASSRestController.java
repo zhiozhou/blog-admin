@@ -3,6 +3,7 @@ package ${app.packet}.module.$!{app.moduleRef}${table.className}.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.validation.annotation.Validated;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ${app.packet}.common.domain.Result;
@@ -30,21 +31,25 @@ public class ${table.className}RestController {
 
     private final I${table.className}Service ${table.objectName}Service;
 
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:save")
     @PostMapping("/save")
     public Result<NULL> save(@Valid ${table.className}DTO ${table.objectName}DTO) {
         return ${table.objectName}Service.save(${table.objectName}DTO);
     }
 
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:remove")
     @PostMapping("/remove")
     public Result<NULL> remove(${table.primaryKeys[0].javaType}[] ${table.primaryKeys[0].attrName}s) {
         return ${table.objectName}Service.remove(${table.primaryKeys[0].attrName}s);
     }
 
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:update")
     @PostMapping("/update")
     public Result<NULL> update(@Validated({Update.class}) ${table.className}DTO ${table.objectName}DTO) {
         return ${table.objectName}Service.update(${table.objectName}DTO);
     }
 
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:view")
     @PostMapping("/list")
     public Result<TableVO<${table.className}TableVO>> list(${table.className}Query query, Page page) {
         return Result.table(${table.objectName}Service.listTableVO(query, page));

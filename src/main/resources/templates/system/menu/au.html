@@ -1111,7 +1111,7 @@
 
                     let parentId = parseInt($('#parentId').val())
 
-                    if (0 == parentId) {
+                    if (0 === parentId) {
                         // 父级是根目录的话,可选菜单和目录
                         $('#type0').prop('disabled', false)
                         $('#type1').prop('disabled', false)
@@ -1121,7 +1121,7 @@
 
                     // 控制表单元素
                     let viewArea = areaMap[type]
-                    if (0 == parentId && type == 1) {
+                    if (0 === parentId && type === 1) {
                         viewArea.push('icon')
                     }
                     for (let area of areas) {
