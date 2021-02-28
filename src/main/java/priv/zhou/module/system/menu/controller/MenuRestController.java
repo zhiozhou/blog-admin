@@ -52,7 +52,7 @@ public class MenuRestController {
         return menuService.update(menuDTO.setFlag(ADMIN_FLAG));
     }
 
-    @RequiresPermissions("system:menu:list")
+    @RequiresPermissions("system:menu:view")
     @RequestMapping("/list")
     public Result<List<MenuVO>> trimList(MenuQuery query) {
         return Result.success(menuService.treeVO(query.setFlag(ADMIN_FLAG)));

@@ -57,10 +57,10 @@ public class DictController extends BaseController {
         return "system/dict/detail";
     }
 
-    @RequiresPermissions("system:dict:list")
-    @RequestMapping("/list")
-    public String list(Model model) {
+    @RequiresPermissions("system:dict:view")
+    @RequestMapping
+    public String view(Model model) {
         super.list(model);
-        return "system/dict/list";
+        return "index";
     }
 }

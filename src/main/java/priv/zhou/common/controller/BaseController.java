@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class BaseController {
 
-    protected final Module module;
+    protected Module module;
 
     protected final Integer DICT_NORM_TYPE = 0;
 
@@ -79,9 +79,8 @@ public class BaseController {
     /**
      * 列表页填充：模块对象
      */
-    protected String list(Model model) {
+    protected void list(Model model) {
         model.addAttribute(MODULE_KEY, module);
-        return "";
     }
 
 

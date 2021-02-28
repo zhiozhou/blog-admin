@@ -99,13 +99,13 @@ public class UserController extends BaseController {
         return "system/user/detail";
     }
 
-    @RequiresPermissions("system:user:list")
-    @RequestMapping("/list")
-    public String list(Model model) {
+    @RequiresPermissions("system:user:view")
+    @RequestMapping
+    public String view(Model model) {
         super.list(model);
 
         model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery()));
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_USER_STATE));
-        return "system/user/list";
+        return "index";
     }
 }

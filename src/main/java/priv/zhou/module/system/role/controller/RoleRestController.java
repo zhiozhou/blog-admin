@@ -57,7 +57,7 @@ public class RoleRestController {
         return roleService.update(roleDTO);
     }
 
-    @RequiresPermissions("system:role:list")
+    @RequiresPermissions("system:role:view")
     @RequestMapping("/list")
     public Result<TableVO<RoleTableVO>> list(RoleQuery query, Page page) {
         return Result.table(roleService.listTableVO(query, page));

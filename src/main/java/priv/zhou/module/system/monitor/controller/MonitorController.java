@@ -26,13 +26,13 @@ public class MonitorController extends BaseController {
         this.roleService = roleService;
     }
 
-    @RequiresPermissions("system:monitor:list")
-    @RequestMapping("/list")
-    public String list(Model model) {
+    @RequiresPermissions("system:monitor:view")
+    @RequestMapping
+    public String view(Model model) {
         super.list(model);
 
         model.addAttribute("id", ShiroUtil.getSession().getId());
         model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery()));
-        return "system/monitor/list";
+        return "index";
     }
 }

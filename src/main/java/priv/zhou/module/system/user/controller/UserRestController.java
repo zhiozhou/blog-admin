@@ -101,7 +101,7 @@ public class UserRestController {
     }
 
 
-    @RequiresPermissions("system:user:list")
+    @RequiresPermissions("system:user:view")
     @RequestMapping("/list")
     public Result<TableVO<UserTableVO>> list(UserQuery query, Page page) {
         return Result.table(userService.listTableVO(query, page));

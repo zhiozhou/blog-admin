@@ -22,10 +22,10 @@ public class BlockController extends BaseController {
         super("阻塞", "block");
     }
 
-    @RequestMapping("/list")
-    public String list(Model model) {
+    @RequestMapping
+    public String view(Model model) {
         super.list(model);
-        model.addAttribute("typeMap", dictService.mapDataVO(TYPE_KEY,DICT_NORM_TYPE));
-        return "block/list";
+        model.addAttribute("typeMap", dictService.mapDataVO(TYPE_KEY, DICT_NORM_TYPE));
+        return "index";
     }
 }

@@ -67,11 +67,11 @@ public class RoleController extends BaseController {
         return "system/role/detail";
     }
 
-    @RequiresPermissions("system:role:list")
-    @RequestMapping("/list")
-    public String list(Model model) {
+    @RequiresPermissions("system:role:view")
+    @RequestMapping
+    public String view(Model model) {
         super.list(model);
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
-        return "system/role/list";
+        return "index";
     }
 }

@@ -41,7 +41,7 @@ public class ImageRestController {
     }
 
 
-    @RequiresPermissions("system:image:list")
+    @RequiresPermissions("system:image:view")
     @RequestMapping("/list")
     public Result<TableVO<ImageDTO>> list(ImageDTO imageDTO, Page page) {
         return Result.table(imageService.list(imageDTO, page));

@@ -6,8 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 图片 视图控制层
  *
@@ -22,12 +20,12 @@ public class ImageController extends BaseController {
         super("图片", "system:image");
     }
 
-    @RequiresPermissions("system:image:list")
-    @RequestMapping("/list")
-    public String list(Model model, HttpServletRequest request) {
+    @RequiresPermissions("system:image:view")
+    @RequestMapping
+    public String view(Model model) {
         super.upload(model);
         super.list(model);
 //        RedisUtil.addSet(FILE_SERVICE_IP_SET_KEY, HttpUtil.getIpAddress(request));
-        return "system/image/list";
+        return "index";
     }
 }

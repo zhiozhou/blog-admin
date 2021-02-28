@@ -50,10 +50,10 @@ public class CommentController extends BaseController {
     }
 
     @RequestMapping("/list")
-    public String list(Model model) {
-        super.list(model);
+    public String view(Model model) {
+        super.view(model);
         model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY, DICT_NORM_TYPE));
-        return "comment/list";
+        return "index";
     }
 
     @RequestMapping("/reply/{repliedId}")

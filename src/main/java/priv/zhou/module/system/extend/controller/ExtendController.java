@@ -21,7 +21,7 @@ public class ExtendController extends BaseController {
     }
 
     @RequiresPermissions("system:extend:index")
-    @RequestMapping("/index")
+    @RequestMapping
     public String index(Model model) {
         super.list(model);
 

@@ -53,13 +53,13 @@ public class MenuController extends BaseController {
         return "system/menu/au";
     }
 
-    @RequiresPermissions("system:menu:list")
-    @RequestMapping("/list")
-    public String login(Model model) {
+    @RequiresPermissions("system:menu:view")
+    @RequestMapping
+    public String view(Model model) {
         super.list(model);
 
         model.addAttribute("typeMap", dictService.mapDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));
-        return "system/menu/list";
+        return "index";
     }
 }

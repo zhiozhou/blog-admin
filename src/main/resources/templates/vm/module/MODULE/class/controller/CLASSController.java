@@ -56,10 +56,10 @@ public class ${table.className}Controller extends BaseController {
     }
 
 #end
-    @RequiresPermissions("$!{modulePrefix}${table.objectName}:list")
-    @GetMapping("/list")
-    public String list(Model model) {
+    @RequiresPermissions("$!{modulePrefix}${table.objectName}:view")
+    @GetMapping
+    public String view(Model model) {
         super.list(model);
-        return "$!{app.modulePath}${table.objectName}/list";
+        return "$!{app.modulePath}${table.objectName}/index";
     }
 }

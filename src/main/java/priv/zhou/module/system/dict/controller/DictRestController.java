@@ -50,7 +50,7 @@ public class DictRestController {
         return dictService.update(dictDTO);
     }
 
-    @RequiresPermissions("system:dict:list")
+    @RequiresPermissions("system:dict:view")
     @PostMapping("/list")
     public Result<TableVO<DictTableVO>> listTableVO(DictQuery query, Page page) {
         return Result.table(dictService.listTableVO(query, page));

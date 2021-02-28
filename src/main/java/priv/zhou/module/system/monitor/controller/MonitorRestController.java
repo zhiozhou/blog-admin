@@ -26,7 +26,7 @@ public class MonitorRestController {
 
     private final ISessionService sessionService;
 
-    @RequiresPermissions("system:monitor:list")
+    @RequiresPermissions("system:monitor:view")
     @RequestMapping("/list")
     public Result<List<SessionVO>> login(SessionQuery query) {
         return sessionService.list(query);

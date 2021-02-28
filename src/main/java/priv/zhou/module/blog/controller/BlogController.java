@@ -59,10 +59,10 @@ public class BlogController extends BaseController {
         return "blog/detail";
     }
 
-    @RequestMapping("/list")
-    public String list(Model model) {
+    @RequestMapping
+    public String view(Model model) {
         super.list(model);
         model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY,DICT_NORM_TYPE));
-        return "blog/list";
+        return "index";
     }
 }
