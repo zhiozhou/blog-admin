@@ -51,7 +51,7 @@ public class GlobalHandler {
         builder.append("请求参数 -->").append(objectMapper.writeValueAsString(HttpUtil.getParams(request))).append(" | ");
         builder.append("e -->");
         log.error(builder.toString(), e);
-        EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
+        EmailUtil.send(appProperties.getName() + " 出现未知异常", getStackTrace(e), appProperties.getAdminEmail());
         return Result.fail(ResultEnum.ERROR_SYSTEM);
 
     }

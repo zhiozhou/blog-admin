@@ -8,7 +8,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import priv.zhou.Application;
 import priv.zhou.common.domain.Result;
+import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.OkHttpUtil;
+
+import javax.validation.constraints.Email;
 
 /**
  * Copyright (C) 2014-2016 天津紫藤科技有限公司. Co. Ltd. All Rights Reserved.
@@ -26,8 +29,7 @@ public class TestRunner {
 
     @Test
     public void ttt() {
-        Result<Object> test = OkHttpUtil.httpGet("test", "https://api.apihubs.cn/holiday/get?token=6a262e088773238c2129cdaf03f114f3&field=year,month,date,week,weekend,holiday_recess,holiday_overtime&year=2021&month=202102&cn=1");
-        System.out.println();
+        EmailUtil.send("zhou","test","2080211280@qq.com","zhoujinzi666@gmail.com");
     }
 
 //    //同步刷脸信息

@@ -18,6 +18,17 @@ spring:
   thymeleaf:
     mode: HTML
     cache: false
+  mail:
+    host: smtp.qq.com
+    username: zhoutemp@qq.com
+    password: zharkewamdcubjcj
+    port: 465
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
 logging:
   path: logs/
 mybatis:
