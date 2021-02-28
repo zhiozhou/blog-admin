@@ -2,13 +2,11 @@ package priv.zhou.module.system.dict.controller;
 
 import com.google.common.collect.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
-import priv.zhou.common.domain.Module;
 import priv.zhou.module.system.dict.domain.query.DictQuery;
 import priv.zhou.module.system.dict.domain.vo.DictDataVO;
 import priv.zhou.module.system.dict.domain.vo.DictVO;
@@ -28,7 +26,7 @@ public class DictController extends BaseController {
 
 
     public DictController(IDictService dictService) {
-        super(new Module("字典", "system:dict"));
+        super("字典", "system:dict");
         this.dictService = dictService;
     }
 
@@ -61,7 +59,7 @@ public class DictController extends BaseController {
 
     @RequiresPermissions("system:dict:list")
     @RequestMapping("/list")
-    public String login(Model model) {
+    public String list(Model model) {
         super.list(model);
         return "system/dict/list";
     }

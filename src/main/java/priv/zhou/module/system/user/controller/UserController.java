@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
-import priv.zhou.common.domain.Module;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.query.RoleQuery;
 import priv.zhou.module.system.role.domain.vo.RoleVO;
@@ -35,7 +34,7 @@ public class UserController extends BaseController {
     private final IRoleService roleService;
 
     public UserController(IUserService userService, IRoleService roleService) {
-        super(new Module("用户", "system:user"));
+        super("用户", "system:user");
         this.userService = userService;
         this.roleService = roleService;
     }

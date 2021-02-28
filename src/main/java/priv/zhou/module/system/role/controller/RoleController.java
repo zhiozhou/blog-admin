@@ -7,11 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
-import priv.zhou.common.domain.Module;
 import priv.zhou.common.domain.Tree;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
-import priv.zhou.module.system.role.domain.dto.RoleDTO;
 import priv.zhou.module.system.role.domain.query.RoleQuery;
 import priv.zhou.module.system.role.domain.vo.RoleVO;
 import priv.zhou.module.system.role.service.IRoleService;
@@ -34,7 +32,7 @@ public class RoleController extends BaseController {
     private final IMenuService menuService;
 
     public RoleController(IRoleService roleService, IMenuService menuService) {
-        super(new Module("角色", "system:role"));
+        super("角色", "system:role");
         this.roleService = roleService;
         this.menuService = menuService;
     }
@@ -73,7 +71,6 @@ public class RoleController extends BaseController {
     @RequestMapping("/list")
     public String list(Model model) {
         super.list(model);
-
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
         return "system/role/list";
     }

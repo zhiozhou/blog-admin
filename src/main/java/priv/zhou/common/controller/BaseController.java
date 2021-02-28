@@ -1,6 +1,5 @@
 package priv.zhou.common.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
@@ -12,13 +11,7 @@ import java.util.HashMap;
 
 public class BaseController {
 
-    @Autowired
-    protected AppProperties appProperties;
-
-    @Autowired
-    protected IDictService dictService;
-
-    protected Module module;
+    protected final Module module;
 
     protected final Integer DICT_NORM_TYPE = 0;
 
@@ -30,16 +23,22 @@ public class BaseController {
 
     protected final String ACTION_FLAG_KEY = "_isAdd";
 
-    protected final String ADD_ACTION = "/rest/save";
+    protected final String ADD_PATH = "/rest/save";
 
-    protected final String UPDATE_ACTION = "/rest/update/";
+    protected final String UPDATE_PATH = "/rest/update";
 
     protected final String UPLOAD_PARAM_KEY = "_upload";
 
     protected final String NOT_FOUNT = "404";
 
-    public BaseController(Module module) {
-        this.module = module;
+    @Autowired
+    protected AppProperties appProperties;
+
+    @Autowired
+    protected IDictService dictService;
+
+    public BaseController(String name, String permissionPrefix) {
+        this.module = Module.build(name, permissionPrefix);
     }
 
     /**
@@ -48,7 +47,7 @@ public class BaseController {
     protected void add(Model model, Object vo) {
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
-        model.addAttribute(ACTION_KEY, ADD_ACTION);
+        model.addAttribute(ACTION_KEY, ADD_PATH);
         model.addAttribute(ACTION_FLAG_KEY, Boolean.TRUE);
     }
 
@@ -61,7 +60,7 @@ public class BaseController {
         }
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
-        model.addAttribute(ACTION_KEY, UPDATE_ACTION);
+        model.addAttribute(ACTION_KEY, UPDATE_PATH);
         model.addAttribute(ACTION_FLAG_KEY, Boolean.FALSE);
     }
 

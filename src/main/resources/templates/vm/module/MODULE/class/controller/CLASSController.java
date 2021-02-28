@@ -5,7 +5,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import ${app.packet}.common.domain.Module;
 import ${app.packet}.common.controller.BaseController;
 import ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.dto.${table.className}DTO;
@@ -30,7 +29,7 @@ public class ${table.className}Controller extends BaseController {
     #end
 
     public ${table.className}Controller(I${table.className}Service ${table.objectName}Service) {
-        super(new Module("${table.comment}","$!{modulePrefix}${table.objectName}"));
+        super("${table.comment}","$!{modulePrefix}${table.objectName}");
         this.${table.objectName}Service = ${table.objectName}Service;
     }
 

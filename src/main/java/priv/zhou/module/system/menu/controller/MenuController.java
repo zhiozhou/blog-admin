@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
-import priv.zhou.common.domain.Module;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
@@ -28,7 +27,7 @@ public class MenuController extends BaseController {
     private final IMenuService menuService;
 
     public MenuController(IMenuService menuService) {
-        super(new Module("菜单", "system:menu"));
+        super("菜单", "system:menu");
         this.menuService = menuService;
     }
 

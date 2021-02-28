@@ -1,12 +1,10 @@
 package priv.zhou.module.system.image.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
-import priv.zhou.common.domain.Module;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ImageController extends BaseController {
 
     public ImageController() {
-        super(new Module("图片", "system:image"));
+        super("图片", "system:image");
     }
 
     @RequiresPermissions("system:image:list")
