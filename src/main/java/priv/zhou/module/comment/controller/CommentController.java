@@ -2,6 +2,7 @@ package priv.zhou.module.comment.controller;
 
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
@@ -29,14 +30,14 @@ public class CommentController extends BaseController {
         this.commentService = commentService;
     }
 
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new CommentDTO());
 
         return "comment/au";
     }
 
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
@@ -49,21 +50,21 @@ public class CommentController extends BaseController {
         return "comment/detail";
     }
 
-    @RequestMapping("/list")
+    @GetMapping
     public String view(Model model) {
-        super.view(model);
+        super.list(model);
         model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY, DICT_NORM_TYPE));
         return "index";
     }
 
-    @RequestMapping("/reply/{repliedId}")
+    @GetMapping("/reply/{repliedId}")
     public String reply(Model model, @PathVariable Integer repliedId) {
         super.detail(model, new CommentDTO().setRepliedId(repliedId));
         model.addAttribute(ACTION_KEY, "/rest/reply");
         return "comment/au";
     }
 
-    @RequestMapping("/reply/update/{id}")
+    @GetMapping("/reply/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
         Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
@@ -74,7 +75,7 @@ public class CommentController extends BaseController {
         return "comment/au";
     }
 
-    @RequestMapping("/block/{id}")
+    @GetMapping("/block/{id}")
     public String block(Model model, @PathVariable Integer id) {
 
         model.addAttribute("typeList", dictService.listDataVO(BLOCK_TYPE_KEY, DICT_NORM_TYPE));
