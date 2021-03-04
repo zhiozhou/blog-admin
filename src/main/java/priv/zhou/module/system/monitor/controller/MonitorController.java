@@ -3,6 +3,7 @@ package priv.zhou.module.system.monitor.controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.tools.ShiroUtil;
@@ -27,12 +28,12 @@ public class MonitorController extends BaseController {
     }
 
     @RequiresPermissions("system:monitor:view")
-    @RequestMapping
+    @GetMapping
     public String view(Model model) {
         super.list(model);
 
         model.addAttribute("id", ShiroUtil.getSession().getId());
         model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery()));
-        return "index";
+        return "system/monitor/index";
     }
 }

@@ -4,6 +4,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
@@ -38,7 +39,7 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("system:role:add")
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new RoleVO().setState(0).setMenus(Lists.newArrayList()));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
@@ -47,7 +48,7 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("system:role:update")
-    @RequestMapping("/update/{id}")
+    @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
         super.update(model, roleService.getVO(new RoleQuery().setId(id)));
 
@@ -57,7 +58,7 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("system:role:detail")
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         RoleVO roleVO = roleService.getVO(new RoleQuery().setId(id));
         super.detail(model, roleVO);
@@ -68,10 +69,10 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("system:role:view")
-    @RequestMapping
+    @GetMapping
     public String view(Model model) {
         super.list(model);
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
-        return "index";
+        return "system/role/index";
     }
 }

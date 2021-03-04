@@ -48,7 +48,7 @@
                         <input type="hidden" th:field="*{parentId}">
                         <input type="text" class="layui-input" id="parentName"
                                th:value="${0 == _vo.parentId ? '根目录': _vo.parentName}"
-                               placeholder="请选择选择父级"  autocomplete="off" lay-verify="required" readonly>
+                               placeholder="请选择选择父级" autocomplete="off" lay-verify="required" readonly>
                         <div id="menuTree"></div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称：</label>
                     <div class="layui-input-block">
-                        <input type="text"  class="layui-input"
+                        <input type="text" class="layui-input"
                                th:field="*{name}" lay-verify="required"
                                placeholder="请输入名称" autocomplete="off">
                     </div>
@@ -1042,7 +1042,8 @@
                     name: '根目录',
                     spread: true,
                     childList: [[${menuTree}]]
-                }]
+                }],
+                typeEcho = [[${_vo.type}]]
         </script>
         <script th:inline="none">
             const prefix = `${_gate}system/menu`,
@@ -1055,16 +1056,30 @@
                 }
 
 
-            layui.use(['form', 'tree', 'jquery'], function () {
+            layui.use(['form', 'tree', 'jquery'], () => {
                 const {form, tree, $} = layui
+                const id =  $('#id').val(),
+                    parentId = $('#parentId').val()
 
                 // 回显
-                areaHandle([[${_vo.type}]])
+                areaHandle(typeEcho)
 
                 // 父级树
                 tree.render({
                     elem: '#menuTree',
-                    data: formatTree(menuTree),
+                    data: formatTree({
+                        data:menuTree,
+                        parseNode:(node)=>{
+                            node.title = node.name
+                            node.children = node.childList
+                            delete node.name
+                            delete node.childList
+                        },
+                        handleNode:(node)=>{
+                            node.spread = parentId === node.id
+                            node.disabled = 2 === node.type || id === node.id
+                        }
+                    }),
                     accordion: true,
                     onlyIconControl: true,
                     click: ({data}) => {
@@ -1072,36 +1087,35 @@
                         $('#parentName').val(data.title)
                         $("#menuTree").slideUp()
 
-                        let childType = 0 == data.id ? 0 : data.type + 1
+                        let childType = 0 === data.id ? 0 : data.type + 1
                         $(`#type${childType}`).prop('checked', true)
                         areaHandle(childType)
                     }
                 })
 
-                //监听提交
-                form.on('submit(submit)', ({form, field: data}) => {
-                    data.type = $('input[name=type]:checked ').val()
-                    httpPost({
-                        url: prefix + form.getAttribute('action'),
-                        data,
-                        cb: () => {
-                            outMsg(() => {
-                                parent.openId = data.parentId
-                                parent.layer.close(parent.layer.getFrameIndex(window.name))
-                                parent.layui.table.reload('table', {
-                                    where: null,
-                                    page: {
-                                        curr: 1
-                                    }
-                                })
-                            })
-                        }
-                    })
-                    return false
+
+                // 区域控制
+                form.on('radio(type)', ({value}) => {
+                    areaHandle(parseInt(value))
                 })
 
-                form.on('radio(type)', function ({value}) {
-                    areaHandle(parseInt(value))
+                //监听提交
+                form.on('submit(submit)', ({form, field}) => {
+                    field.type = $('input[name=type]:checked ').val()
+                    return iframeSubmit({
+                        form,
+                        field,
+                        cb: outMsg(() => {
+                            parent.openId = data.parentId
+                            parent.layer.close(parent.layer.getFrameIndex(window.name))
+                            parent.layui.table.reload('table', {
+                                where: null,
+                                page: {
+                                    curr: 1
+                                }
+                            })
+                        })
+                    })
                 })
 
 
@@ -1153,30 +1167,6 @@
                     $('#iconList').slideUp();
                 })
 
-                // 整理列表为layuitree数据格式
-                function formatTree(tree) {
-
-                    let id = parseInt($('#id').val())
-                    parentId = parseInt($('#parentId').val())
-
-                    for (let item of tree) {
-                        item.title = item.name
-                        if (item.childList) {
-                            item.children = item.childList
-                            formatTree(item.children)
-                        }
-
-                        if (2 == item.type || id === item.id) {
-                            item.disabled = true
-                        } else if (parentId === item.id) {
-                            item.spread = true
-
-                        }
-                        delete item.name
-                        delete item.childList
-                    }
-                    return tree
-                }
             })
         </script>
     </body>

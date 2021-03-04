@@ -19,7 +19,7 @@ function tinymceRender(tinymce, options) {
                     formData = new FormData();
                 formData.append('prefix', _upload.prefix)
                 formData.append('file', file, file.name)
-                layui.jquery.ajax({
+                layui.$.ajax({
                     url: _upload.url,
                     type: "POST",
                     data: formData,
@@ -52,7 +52,7 @@ function uploadRender(upload, options) {
             },
             accept: 'file',
             choose: (obj) => {
-                obj.preview((index, file) => layui.jquery(options.elem).siblings('.view').html(file.name))
+                obj.preview((index, file) => layui.$(options.elem).siblings('.view').html(file.name))
             },
             before: () => loading(),
             done: ({code, info, data}) => {
@@ -60,7 +60,7 @@ function uploadRender(upload, options) {
                 if (fail(code)) return warn(info)
                 msg(null, '上传成功')
                 let url = data[0].origin
-                layui.jquery(options.elem).siblings('.view').attr('href', url).next().val(url)
+                layui.$(options.elem).siblings('.view').attr('href', url).next().val(url)
             }
         },
         ...options
@@ -116,25 +116,29 @@ function blobToFile(theBlob, fileName) {
 /**
  * 页面形式的表单提交，成功后跳转前一级标签
  */
-function pageSubmit({form, field: data}) {
+function pageSubmit({form, field: data, cb = pageDone}) {
     return httpPost({
         url: prefix + form.getAttribute('action'),
         data,
-        cb: () => msg(() => {
-            window.location.href = layui.jquery('.layui-form>.layui-tab .layui-this').prev().children('a').attr('href')
-        })
+        cb
     })
 }
 
+/**
+ * 页面消息提示，成功后关闭并刷新父级表格
+ */
+function pageDone() {
+    outMsg(() => goto(layui.$('.layui-form>.layui-tab .layui-this').prev().children('a').attr('href')))
+}
 
 /**
  * 内联页面通用提交，成功后刷新父级表格
  */
-function iframeSubmit({form, field: data}) {
+function iframeSubmit({form, field: data, cb = iframeDone}) {
     return httpPost({
         url: prefix + form.getAttribute('action'),
         data,
-        cb: iframeDone
+        cb
     })
 }
 
@@ -145,7 +149,7 @@ function iframeSubmit({form, field: data}) {
 function iframeDone() {
     outMsg(() => {
         parent.layer.close(parent.layer.getFrameIndex(window.name))
-        let pt = parent.layui.table
-        pt && pt.reload('table')
+        let table = parent.layui.table
+        table && table.reload('table')
     })
 }

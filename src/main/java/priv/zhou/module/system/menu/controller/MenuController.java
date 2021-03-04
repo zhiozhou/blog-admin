@@ -3,6 +3,7 @@ package priv.zhou.module.system.menu.controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
@@ -32,7 +33,7 @@ public class MenuController extends BaseController {
     }
 
     @RequiresPermissions("system:menu:add")
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public String add(Model model) {
 
         super.add(model, new MenuDTO().setParentId(0).setType(0).setState(0));
@@ -43,7 +44,7 @@ public class MenuController extends BaseController {
     }
 
     @RequiresPermissions("system:menu:update")
-    @RequestMapping("/update/{id}")
+    @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
         super.update(model, menuService.getVO(new MenuQuery().setId(id).setFlag(ADMIN_FLAG)));
 
@@ -54,12 +55,12 @@ public class MenuController extends BaseController {
     }
 
     @RequiresPermissions("system:menu:view")
-    @RequestMapping
+    @GetMapping
     public String view(Model model) {
         super.list(model);
 
         model.addAttribute("typeMap", dictService.mapDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));
-        return "index";
+        return "system/menu/index";
     }
 }

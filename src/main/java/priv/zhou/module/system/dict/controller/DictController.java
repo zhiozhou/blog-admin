@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
@@ -24,14 +25,13 @@ public class DictController extends BaseController {
 
     private final IDictService dictService;
 
-
     public DictController(IDictService dictService) {
         super("字典", "system:dict");
         this.dictService = dictService;
     }
 
     @RequiresPermissions("system:dict:add")
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new DictVO()
                 .setState(0)
@@ -44,23 +44,23 @@ public class DictController extends BaseController {
     }
 
     @RequiresPermissions("system:dict:update")
-    @RequestMapping("/update/{id}")
+    @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
         super.update(model, dictService.getVO(new DictQuery().setId(id)));
         return "system/dict/au";
     }
 
     @RequiresPermissions("system:dict:detail")
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         super.detail(model, dictService.getVO(new DictQuery().setId(id)));
         return "system/dict/detail";
     }
 
     @RequiresPermissions("system:dict:view")
-    @RequestMapping
+    @GetMapping
     public String view(Model model) {
         super.list(model);
-        return "index";
+        return "system/dict/index";
     }
 }

@@ -11,9 +11,7 @@ layui.use(['table', 'form', 'jquery'], () => {
     /**
      * 使用新的页面打开添加页
      */
-    $('.add-page-btn').click(() => {
-        window.location.href = `${prefix}/add`
-    })
+    $('.add-page-btn').click(() => goto(`${prefix}/add`))
 
     /**
      * 表格筛选
@@ -109,10 +107,10 @@ function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
     function pageAction({event, data}) {
         switch (event) {
             case 'detail':
-                window.location.href = `${prefix}/detail/${data.id}`
+                goto(`${prefix}/detail/${data.id}`)
                 return
             case 'update':
-                window.location.href = `${prefix}/update/${data.id}`
+                goto(`${prefix}/update/${data.id}`)
                 return
             case 'remove':
                 return removeAction(data)

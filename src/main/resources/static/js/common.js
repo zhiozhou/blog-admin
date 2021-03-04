@@ -6,12 +6,8 @@ layui.config({
 /**
  * 全局初始化方法
  */
-layui.use(['jquery', 'util', 'layer'], function () {
-    const {$} = layui
-
-    // 初始化时间
-    $('.date-field').each((index, field) => $(field).val(formatDate($(field).val(), $(field).data('format'))))
-
+layui.use([], () => {
+    // 预留方法
 })
 
 
@@ -26,65 +22,31 @@ function formatDate(date, format = 'yyyy年MM月dd日 HH:mm:ss') {
 
 
 /**
- * 整理tree为layuitree数据格式
+ * 整理data为layuitree数据格式
+ * @param data 树形结构数据，结构为 {id,parentId,name,children},可以通过parseNode方法解析
+ * @param parseNode 解析节点方法
+ * @param handleSub 处理子树方法
+ * @param handleLeaf 处理叶子节点方法
+ *
  */
-function formatTree({tree, parseNode, depth = 0, spreadDepth = 0}) {
-    for (let node of tree) {
-        parseNode && parseNode(node)
-        if (node.children) {
-            node.spread = depth <= spreadDepth && echos.some(({id}) => id === node.id)
-            formatTree({
-                tree: node.children,
-                parseNode,
-                depth: ++depth,
-                spreadDepth
-            })
-        } else {
-            // 只选择最底层,避免父节点被选中子节点则全部选中
-            node.checked = echos.some(({id}) => id === node.id)
+function formatTree({data, parseNode, handleSub, handleLeaf}) {
+    format(data, 0)
+
+    function format(tree, depth) {
+        for (let node of tree) {
+            parseNode && parseNode(node, depth)
+            if (!node.children) {
+                handleLeaf && handleLeaf(node, depth)
+                continue
+            }
+            handleSub && handleSub(node, depth)
+            format(node.children, ++depth)
         }
     }
-    return tree
+
+    return data
 }
 
-/**
- * 创建 iframe 窗口，手机端自动全屏
- * @param title 窗口标题
- * @param url 地址
- * @param area 窗口尺寸
- */
-function newFrame(title, url, area) {
-    let index = layer.open({
-        type: 2,
-        title: title,
-        area: area ? area : ['700px', '620px'],
-        fixed: false,
-        content: url
-    })
-    window.innerWidth < 768 && layer.full(index)
-    return false
-}
-
-/**
- * 校验操作是否失败
- * @param code 返回码
- */
-function fail(code) {
-    return '0000' !== code
-}
-
-/**
- * 全局http请求
- */
-function httpPost({url, data, cb, load = true}) {
-    load && loading()
-    layui.jquery.post(url, data, ({code, info, data}) => {
-        load && loaded()
-        if (fail(code)) return warn(info)
-        cb(data)
-    })
-    return false
-}
 
 /**
  * 将数组合并到data中
@@ -124,8 +86,56 @@ function copy(text) {
     document.body.removeChild(input)
 }
 
+//---------------------------------------------- ajax操作 ----------------------------------------------
 
-//---------------------------------------------- 通知类 ----------------------------------------------
+/**
+ * 校验操作是否失败
+ * @param code 返回码
+ */
+function fail(code) {
+    return '0000' !== code
+}
+
+/**
+ * 全局http请求
+ */
+function httpPost({url, data, cb, load = true}) {
+    load && loading()
+    layui.$.post(url, data, ({code, info, data}) => {
+        load && loaded()
+        if (fail(code)) return warn(info)
+        cb(data)
+    })
+    return false
+}
+
+//---------------------------------------------- 页面操作 ----------------------------------------------
+
+
+function goto(href) {
+    window.location.href = href
+}
+
+/**
+ * 创建 iframe 窗口，手机端自动全屏
+ * @param title 窗口标题
+ * @param url 地址
+ * @param area 窗口尺寸
+ */
+function newFrame(title, url, area) {
+    let index = layer.open({
+        type: 2,
+        title: title,
+        area: area ? area : ['700px', '620px'],
+        fixed: false,
+        content: url
+    })
+    window.innerWidth < 768 && layer.full(index)
+    return false
+}
+
+
+//---------------------------------------------- 通知操作 ----------------------------------------------
 
 /**
  * 显示加载蒙层

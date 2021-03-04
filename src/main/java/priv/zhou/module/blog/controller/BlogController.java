@@ -3,6 +3,7 @@ package priv.zhou.module.blog.controller;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
@@ -29,14 +30,14 @@ public class BlogController extends BaseController {
         this.blogService = blogService;
     }
 
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new BlogDTO().setTags(Lists.newArrayList()));
 
         return "blog/au";
     }
 
-    @RequestMapping("/update/{id}")
+    @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
 
         Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
@@ -48,7 +49,7 @@ public class BlogController extends BaseController {
         return "blog/au";
     }
 
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
         if (dtoVO.isFail()) {
@@ -59,10 +60,10 @@ public class BlogController extends BaseController {
         return "blog/detail";
     }
 
-    @RequestMapping
+    @GetMapping
     public String view(Model model) {
         super.list(model);
         model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY,DICT_NORM_TYPE));
-        return "index";
+        return "blog/index";
     }
 }

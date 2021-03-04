@@ -85,10 +85,16 @@
                     id: 'menuTree',
                     elem: '#menuTree',
                     data: formatTree({
-                        tree: menuTree,
+                        data: menuTree,
                         parseNode: (node) => {
                             node.title = node.name
                             delete node.name
+                        },
+                        handleSub: (node, depth) => {
+                            node.spread = depth < 1 && echos.some(({id}) => id === node.id)
+                        },
+                        handleLeaf:(node)=>{
+                            node.checked = echos.some(({id}) => id === node.id)
                         }
                     }),
                     showCheckbox: true

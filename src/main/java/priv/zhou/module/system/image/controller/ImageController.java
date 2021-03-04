@@ -26,6 +26,6 @@ public class ImageController extends BaseController {
         super.upload(model);
         super.list(model);
 //        RedisUtil.addSet(FILE_SERVICE_IP_SET_KEY, HttpUtil.getIpAddress(request));
-        return "index";
+        return "system/image/index";
     }
 }

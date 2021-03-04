@@ -4,6 +4,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
@@ -39,13 +40,14 @@ public class UserController extends BaseController {
         this.roleService = roleService;
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login() {
         return "system/user/login";
     }
 
+
     @RequiresPermissions("system:user:add")
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public String add(Model model) {
         super.add(model, new UserVO().setState(0).setRoleIdSet(Sets.newHashSet()));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
@@ -54,7 +56,7 @@ public class UserController extends BaseController {
     }
 
     @RequiresPermissions("system:user:update")
-    @RequestMapping("/update/{id}")
+    @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
         UserVO userVO = userService.getVO(new UserQuery().setId(id));
         userVO.setRoleIdSet(userVO.getRoles()
@@ -67,7 +69,7 @@ public class UserController extends BaseController {
         return "system/user/au";
     }
 
-    @RequestMapping("/reset/pwd/own")
+    @GetMapping("/reset/pwd/own")
     public String resetPwd(Model model) {
         resetPwd(model, ShiroUtil.getUserId());
         model.addAttribute(ACTION_KEY, "/rest/reset/pwd/own");
@@ -76,7 +78,7 @@ public class UserController extends BaseController {
 
 
     @RequiresPermissions("system:user:reset:pwd")
-    @RequestMapping("/reset/pwd/{id}")
+    @GetMapping("/reset/pwd/{id}")
     public String resetPwd(Model model, @PathVariable Integer id) {
         super.update(model, userService.getVO(new UserQuery().setId(id)));
         model.addAttribute(ACTION_KEY, "/rest/reset/pwd/" + id);
@@ -84,14 +86,14 @@ public class UserController extends BaseController {
     }
 
 
-    @RequestMapping("/profile")
+    @GetMapping("/profile")
     public String profile(Model model) {
         detail(model, ShiroUtil.getUserId());
         return "system/user/profile";
     }
 
     @RequiresPermissions("system:user:detail")
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
         UserVO userVO = userService.getVO(new UserQuery().setId(id));
         super.detail(model, userVO);
@@ -100,12 +102,12 @@ public class UserController extends BaseController {
     }
 
     @RequiresPermissions("system:user:view")
-    @RequestMapping
+    @GetMapping
     public String view(Model model) {
         super.list(model);
 
         model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery()));
         model.addAttribute("stateMap", dictService.mapDataVO(SYSTEM_USER_STATE));
-        return "index";
+        return "system/user/index";
     }
 }

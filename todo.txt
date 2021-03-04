@@ -1,4 +1,7 @@
+菜单childList 字段改为children
 菜单区域动态变化封装为插件
+菜单的class type改为type-
+页面地址去除/list
 接口增加权限校验
 使用group分组验证保存修改
 菜单动态校验，使用data-verify,js动态改变lay-verify属性

@@ -76,19 +76,20 @@
         <div th:include="include :: footer"></div>
         <script th:inline="none">
             const prefix = `${_gate}comment`
+            const id = $('#id')
 
             layui.use(['jquery'], () => {
                 const {$} = layui
 
                 $('#pass').click(() => httpPost({
-                        url: `${prefix}/rest/pass/${$('#id').val()}`,
-                        cb: () => iframeDone()
+                        url: `${prefix}/rest/pass/${id.val()}`,
+                        cb: iframeDone
                     })
                 )
 
                 $('#no-pass').click(() => httpPost({
-                        url: `${prefix}/rest/pass/no/${$('#id').val()}`,
-                        cb: () => iframeDone()
+                        url: `${prefix}/rest/pass/no/${id.val()}`,
+                        cb: iframeDone
                     })
                 )
             })

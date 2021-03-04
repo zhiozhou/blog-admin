@@ -2,6 +2,7 @@ package priv.zhou.module.block.controller;
 
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 
@@ -22,10 +23,10 @@ public class BlockController extends BaseController {
         super("阻塞", "block");
     }
 
-    @RequestMapping
+    @GetMapping
     public String view(Model model) {
         super.list(model);
         model.addAttribute("typeMap", dictService.mapDataVO(TYPE_KEY, DICT_NORM_TYPE));
-        return "index";
+        return "block/index";
     }
 }

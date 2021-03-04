@@ -50,13 +50,6 @@ public class CommentController extends BaseController {
         return "comment/detail";
     }
 
-    @GetMapping
-    public String view(Model model) {
-        super.list(model);
-        model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY, DICT_NORM_TYPE));
-        return "index";
-    }
-
     @GetMapping("/reply/{repliedId}")
     public String reply(Model model, @PathVariable Integer repliedId) {
         super.detail(model, new CommentDTO().setRepliedId(repliedId));
@@ -83,5 +76,12 @@ public class CommentController extends BaseController {
         return "comment/block";
     }
 
+
+    @GetMapping
+    public String view(Model model) {
+        super.list(model);
+        model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY, DICT_NORM_TYPE));
+        return "comment/index";
+    }
 }
 
