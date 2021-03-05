@@ -11,4 +11,6 @@ import java.io.Serializable;
 @Setter
 @Accessors(chain = true)
 public class MenuSelectVO extends Tree implements Serializable {
+
+    private Integer type;
 }

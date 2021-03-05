@@ -38,6 +38,7 @@
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId"/>
         <result column="name" property="name"/>
+        <result column="type" property="type"/>
     </resultMap>
 
     <sql id="POSql">
@@ -163,8 +164,8 @@
             menu.flag = #{flag}
             <if test="userId != null">AND system_user_role.user_id = #{userId}</if>
             <if test="state != null">AND menu.state = #{state}</if>
-            <if test="types != null">AND menu.type IN
-                <foreach collection="types" index="index" item="item" open="(" separator="," close=")">
+            <if test="inTypes != null">AND menu.type IN
+                <foreach collection="inTypes" index="index" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
@@ -176,9 +177,17 @@
         SELECT
             id,
             parent_id,
-            `name`
+            `name`,
+            type
         FROM system_menu
-        WHERE flag = #{flag}
+        <where>
+            flag = #{flag}
+            <if test="inTypes != null">AND type IN
+                <foreach collection="inTypes" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
     </select>
 
     <select id="count" parameterType="MenuQuery" resultType="int">

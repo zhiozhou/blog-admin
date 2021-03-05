@@ -1,13 +1,5 @@
 
-
-菜单childList 字段改为children
-菜单的class type改为type-
-去除layui，直接layer
 page的当前url使用菜单查询
-菜单区域动态变化封装为插件
-页面地址去除/list
-接口增加权限校验
-使用group分组验证保存修改
 菜单动态校验，使用data-verify,js动态改变lay-verify属性
 引入excel导入导出功能
 用户登录增加ip限制

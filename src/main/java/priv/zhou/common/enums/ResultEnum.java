@@ -16,19 +16,17 @@ public enum ResultEnum {
 
     FAIL_PARAM("0002", "参数错误"),
 
-    FAIL_OPERATION("0003", "操作失败"),
+    EMPTY_DATA("0003", "数据不存在"),
 
-    EMPTY_DATA("0004", "数据不存在"),
+    FAIL_DATA("0004", "数据异常"),
 
-    FAIL_DATA("0005", "数据异常"),
+    EXIST_RELATION("0005", "存在关联数据"),
 
     EXIST_NAME("0006", "名称已存在"),
 
     EXIST_KEY("0007", "标识值已存在"),
 
     EXIST_PHONE("0008", "手机号已存在"),
-
-    EXIST_RELATION("0009", "存在关联数据"),
 
     REPEAT_KEY("0101", "标识值重复"),
 

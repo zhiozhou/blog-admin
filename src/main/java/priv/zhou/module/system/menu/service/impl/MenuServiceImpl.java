@@ -38,10 +38,10 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public Result<NULL> save(MenuDTO menuDTO) {
 
-        if (menuDAO.count(new MenuQuery().setName(menuDTO.getName()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
+        if (menuDAO.count(new MenuQuery(menuDTO.getFlag()).setName(menuDTO.getName()).setParentId(menuDTO.getParentId())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType() && StringUtils.isNotBlank(menuDTO.getKey()) &&
-                menuDAO.count(new MenuQuery().setKey(menuDTO.getKey()).setFlag(menuDTO.getFlag()).setParentId(menuDTO.getParentId())) > 0) {
+                menuDAO.count(new MenuQuery(menuDTO.getFlag()).setKey(menuDTO.getKey()).setParentId(menuDTO.getParentId())) > 0) {
             return Result.fail(ResultEnum.EXIST_KEY);
         }
 
@@ -57,7 +57,7 @@ public class MenuServiceImpl implements IMenuService {
                 .setFlag(menuDTO.getFlag())
                 .setCreateBy(ShiroUtil.getUserId());
         if (menuDAO.save(menuPO) < 1) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
         } else if (SERVICE_FLAG.equals(menuDTO.getFlag())) {
             // 4.移除服务端缓存
             RedisUtil.delete(BS_MENU_KEY);
@@ -70,11 +70,11 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     @Transactional
     public Result<NULL> remove(Integer id) {
-        MenuPO menuPO = menuDAO.get(new MenuQuery().setId(id));
+        MenuPO menuPO = menuDAO.get(new MenuQuery(ADMIN_FLAG).setId(id));
         if (null == menuPO) {
             return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (menuDAO.removeTree(id) < 1) {
-            throw new GlobalException(ResultEnum.FAIL_OPERATION);
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         roleMenuDAO.term();
         clearCache(menuPO);
@@ -84,22 +84,19 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public Result<NULL> update(MenuDTO menuDTO) {
 
-        MenuPO menuDB = menuDAO.get(new MenuQuery()
-                .setId(menuDTO.getId())
-                .setFlag(menuDTO.getFlag()));
+        MenuPO menuDB = menuDAO.get(new MenuQuery(menuDTO.getFlag()))
+                .setId(menuDTO.getId());
         if (null == menuDB) {
             return Result.fail(ResultEnum.EMPTY_DATA);
-        } else if (menuDAO.count(new MenuQuery()
+        } else if (menuDAO.count(new MenuQuery(menuDTO.getFlag())
                 .setName(menuDTO.getName())
                 .setRidId(menuDTO.getId())
-                .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0) {
             return Result.fail(ResultEnum.EXIST_NAME);
         } else if (0 != menuDTO.getType()
-                && menuDAO.count(new MenuQuery()
+                && menuDAO.count(new MenuQuery(menuDTO.getFlag())
                 .setRidId(menuDTO.getId())
                 .setKey(menuDTO.getKey())
-                .setFlag(menuDTO.getFlag())
                 .setParentId(menuDTO.getParentId())) > 0) {
             return Result.fail(ResultEnum.EXIST_KEY);
         }
@@ -117,7 +114,7 @@ public class MenuServiceImpl implements IMenuService {
                 .setFlag(menuDTO.getFlag())
                 .setModifiedBy(ShiroUtil.getUserId());
         if (menuDAO.update(menuPO) < 1) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
         }
         clearCache(menuPO);
         return Result.success();

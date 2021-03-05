@@ -25,11 +25,11 @@ function formatDate(date, format = 'yyyy年MM月dd日 HH:mm:ss') {
  * 整理data为layuitree数据格式
  * @param data 树形结构数据，结构为 {id,parentId,name,children},可以通过parseNode方法解析
  * @param parseNode 解析节点方法
- * @param handleSub 处理子树方法
+ * @param handleTree 处理子树方法
  * @param handleLeaf 处理叶子节点方法
  *
  */
-function formatTree({data, parseNode, handleSub, handleLeaf}) {
+function formatTree({data, parseNode, handleTree, handleLeaf}) {
     format(data, 0)
 
     function format(tree, depth) {
@@ -39,7 +39,7 @@ function formatTree({data, parseNode, handleSub, handleLeaf}) {
                 handleLeaf && handleLeaf(node, depth)
                 continue
             }
-            handleSub && handleSub(node, depth)
+            handleTree && handleTree(node, depth)
             format(node.children, ++depth)
         }
     }
@@ -111,11 +111,20 @@ function httpPost({url, data, cb, load = true}) {
 
 //---------------------------------------------- 页面操作 ----------------------------------------------
 
-
+/**
+ * 跳转页面
+ */
 function goto(href) {
     window.location.href = href
 }
 
+
+/**
+ * 刷新表格
+ */
+function reloadTable(table = layui.table) {
+    table.reload(tableId)
+}
 /**
  * 创建 iframe 窗口，手机端自动全屏
  * @param title 窗口标题
@@ -142,14 +151,14 @@ function newFrame(title, url, area) {
  */
 
 function loading() {
-    return layui.layer.load(2)
+    return layer.load(2)
 }
 
 /**
  * 关闭加载蒙层
  */
 function loaded(index) {
-    layui.layer.close(index)
+    layer.close(index)
 }
 
 /**
@@ -157,7 +166,7 @@ function loaded(index) {
  * @param msg 警告内容
  */
 function warn(msg) {
-    layui.layer.msg(msg, {icon: 7})
+    layer.msg(msg, {icon: 7})
     return false
 }
 
@@ -169,7 +178,7 @@ function warn(msg) {
  * @param msg 通知的消息
  */
 function msg(cb, msg = '操作成功') {
-    layui.layer.msg(msg, {icon: 1, time: 500}, cb)
+    layer.msg(msg, {icon: 1, time: 500}, cb)
 }
 
 

@@ -34,7 +34,7 @@ public class UserRealm extends AuthorizingRealm {
         // 获取授权
         UserPrincipal userPrincipal = (UserPrincipal) principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo(roleService.keySet(userPrincipal.getId()));
-        authInfo.setStringPermissions(menuService.keySet(new MenuQuery().setUserId(userPrincipal.getId()).setFlag(ADMIN_FLAG)));
+        authInfo.setStringPermissions(menuService.keySet(new MenuQuery(ADMIN_FLAG).setUserId(userPrincipal.getId())));
         return authInfo;
     }
 

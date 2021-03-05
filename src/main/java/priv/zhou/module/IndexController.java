@@ -30,11 +30,10 @@ public class IndexController {
 
         UserPrincipal userPrincipal = ShiroUtil.getUser();
         model.addAttribute("user", userPrincipal);
-        model.addAttribute("menuList", menuService.treeVO(new MenuQuery()
+        model.addAttribute("menuList", menuService.treeVO(new MenuQuery(ADMIN_FLAG)
                 .setUserId(userPrincipal.getId())
-                .setFlag(ADMIN_FLAG)
                 .setState(0)
-                .setTypes(Lists.newArrayList(0, 1))));
+                .setInTypes(Lists.newArrayList(0, 1))));
         return "index";
     }
 

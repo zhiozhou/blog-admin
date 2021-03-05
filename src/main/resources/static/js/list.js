@@ -1,3 +1,4 @@
+const tableId = 'table'
 layui.use(['table', 'form', 'jquery'], () => {
     const {table, form, $} = layui
 
@@ -17,7 +18,7 @@ layui.use(['table', 'form', 'jquery'], () => {
      * 表格筛选
      */
     form.on('submit(search)', ({field: where}) => {
-        table.reload('table', {
+        table.reload(tableId, {
             where,
             page: {
                 curr: 1
@@ -30,7 +31,7 @@ layui.use(['table', 'form', 'jquery'], () => {
      * 表格筛选无分页
      */
     form.on('submit(search-all)', ({field: where}) => {
-        table.reload('table', {where})
+        table.reload(tableId, {where})
         return false
     })
 
@@ -38,7 +39,7 @@ layui.use(['table', 'form', 'jquery'], () => {
      * 表格重置
      */
     $('.search-reset').click(() => {
-        table.reload('table', {
+        table.reload(tableId, {
             where: null,
             page: {curr: 1}
         })
@@ -48,19 +49,12 @@ layui.use(['table', 'form', 'jquery'], () => {
      * 表格重置无分页
      */
     $('.search-reset-all').click(() => {
-        table.reload('table', {
+        table.reload(tableId, {
             where: null
         })
     })
 
 })
-
-/**
- * 刷新表格
- */
-function reloadTable() {
-    layui.table.reload('table')
-}
 
 /**
  * 表格渲染通用配置
@@ -73,7 +67,7 @@ function reloadTable() {
 function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
     table.render({
         ...{
-            id: 'table',
+            id: tableId,
             elem: '#table',
             page: true,
             cellMinWidth: '80',

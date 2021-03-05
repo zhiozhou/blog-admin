@@ -67,6 +67,27 @@ function uploadRender(upload, options) {
     })
 }
 
+
+//---------------------------------------------- 操作类 ----------------------------------------------
+
+const slideMs = 500
+
+/**
+ * 区域渲染
+ * @param areas 所有可变区域
+ * @param areaMap 可变区域映射
+ * @param code 区域值
+ * @param handleArea 区域处理回调
+ */
+function areaRender({areas, areaMap, code, handleArea}) {
+    const viewAreas = areaMap[code]
+    handleArea && handleArea(viewAreas)
+    for (let area of areas) {
+        const formItem = layui.$(`#${area}`).closest('.layui-form-item')
+        viewAreas.includes(area) ? formItem.slideDown(slideMs) : formItem.slideUp(slideMs)
+    }
+}
+
 /**
  * 压缩图片，返回dataURL格式
  */

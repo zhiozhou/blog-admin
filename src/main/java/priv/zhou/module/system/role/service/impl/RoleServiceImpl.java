@@ -100,7 +100,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
                 .setRemark(roleDTO.getRemark())
                 .setModifiedBy(ShiroUtil.getUserId());
         if (roleDAO.update(rolePO) < 1) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
         } else if (!roleDB.getKey().equals(rolePO.getKey())) {
             ShiroUtil.clearRoleAuthorization(roleDB.getKey());
         }

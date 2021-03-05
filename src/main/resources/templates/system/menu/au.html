@@ -7,19 +7,19 @@
             cursor: pointer;
         }
 
-        #menuTree {
+        #menu-select {
             display: none;
             max-height: 235px;
             overflow-y: auto;
         }
 
-        #iconList {
+        #icon-select {
             display: none;
             max-height: 200px;
             overflow-y: auto;
         }
 
-        #iconList > .fa {
+        #icon-select > .fa {
             margin: 5px;
             padding: 5px;
             cursor: pointer;
@@ -29,7 +29,7 @@
             text-align: center;
         }
 
-        #iconList > .fa:hover {
+        #icon-select > .fa:hover {
             background-color: #1d9d74;
             color: #ffffff;
         }
@@ -49,7 +49,7 @@
                         <input type="text" class="layui-input" id="parentName"
                                th:value="${0 == _vo.parentId ? '根目录': _vo.parentName}"
                                placeholder="请选择选择父级" autocomplete="off" lay-verify="required" readonly>
-                        <div id="menuTree"></div>
+                        <div id="menu-select"></div>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -78,7 +78,7 @@
                     <div class="layui-input-block">
                         <input type="text" th:field="*{icon}" class="layui-input"
                                placeholder="请输入图标" readonly autocomplete="off">
-                        <div id="iconList">
+                        <div id="icon-select">
                             <i class="fa fa-address-book" aria-hidden="true"></i>
 
                             <i class="fa fa-address-book-o" aria-hidden="true"></i>
@@ -1008,7 +1008,7 @@
                     <label class="layui-form-label">显示顺序：</label>
                     <div class="layui-input-block">
                         <input type="number" class="layui-input"
-                               th:filed="*{sort}"
+                               th:field="*{sort}"
                                placeholder="请输入显示顺序" autocomplete="off">
                     </div>
 
@@ -1041,13 +1041,14 @@
                     id: 0,
                     name: '根目录',
                     spread: true,
-                    childList: [[${menuTree}]]
+                    children: [[${menuTree}]]
                 }],
+                idEcho = [[${_vo.id}]],
+                parentIdEcho = [[${_vo.parentId}]],
                 typeEcho = [[${_vo.type}]]
         </script>
         <script th:inline="none">
             const prefix = `${_gate}system/menu`,
-                slideMs = 500,
                 areas = ['icon', 'path', 'key', 'sort'],       // 可变区域
                 areaMap = {     // 按类型显示区域
                     0: ['icon', 'sort'],
@@ -1055,46 +1056,44 @@
                     2: ['key']
                 }
 
-
             layui.use(['form', 'tree', 'jquery'], () => {
                 const {form, tree, $} = layui
-                const inputId = $('#id').val(),
-                    inputParentId = $('#parentId').val()
+                const parentIdInput = $('#parentId'),
+                    parentNameInput = $('#parentName'),
+                    iconInput = $('#icon'),
+                    iconSelect = $('#icon-select'),
+                    menuSelect = $('#menu-select')
+                let parentId = parentIdEcho
 
                 // 回显
-                areaHandle(typeEcho)
+                handleType(typeEcho)
 
                 // 父级树
                 tree.render({
-                    elem: '#menuTree',
+                    elem: '#menu-select',
                     data: formatTree({
                         data: menuTree,
                         parseNode: (node) => {
                             node.title = node.name
                             delete node.name
                         },
-                        handleNode: (node) => {
-                            node.spread = inputParentId === node.id
-                            node.disabled = 2 === node.type || inputId === node.id
+                        handleLeaf: (node) => {
+                            node.spread = parentId === node.id
+                            node.disabled = 2 === node.type || idEcho === node.id
                         }
                     }),
                     accordion: true,
                     onlyIconControl: true,
                     click: ({data}) => {
-                        $('#parentId').val(data.id)
-                        $('#parentName').val(data.title)
-                        $("#menuTree").slideUp()
+                        parentId = data.id
+                        parentIdInput.val(parentId)
+                        parentNameInput.val(data.title)
+                        menuSelect.slideUp()
 
-                        let childType = 0 === data.id ? 0 : data.type + 1
+                        let childType = 0 === parentId ? 0 : data.type + 1
                         $(`#type-${childType}`).prop('checked', true)
-                        areaHandle(childType)
+                        handleType(childType)
                     }
-                })
-
-
-                // 区域控制
-                form.on('radio(type)', ({value}) => {
-                    areaHandle(parseInt(value))
                 })
 
                 //监听提交
@@ -1104,7 +1103,7 @@
                         form,
                         field,
                         cb: parentMsg(() => {
-                            parent.openId = data.parentId
+                            parent.openId = parentId
                             parent.layer.close(parent.layer.getFrameIndex(window.name))
                             parent.layui.table.reload('table', {
                                 where: null,
@@ -1116,13 +1115,12 @@
                     })
                 })
 
+                // 区域控制
+                form.on('radio(type)', ({value}) => handleType(value))
 
                 // 类型控制区域
-                function areaHandle(type) {
+                function handleType(type) {
                     $('.type').prop('disabled', true)
-
-                    let parentId = parseInt($('#parentId').val())
-
                     if (0 === parentId) {
                         // 父级是根目录的话,可选菜单和目录
                         $('#type-0').prop('disabled', false)
@@ -1130,39 +1128,38 @@
                     }
                     $(`#type-${type}`).prop('disabled', false)
                     form.render()
-
-                    // 控制表单元素
-                    let viewArea = areaMap[type]
-                    if (0 === parentId && type === 1) {
-                        viewArea.push('icon')
-                    }
-                    for (let area of areas) {
-                        let formItem = $(`#${area}`).parents('.layui-form-item')
-                        viewArea.includes(area) ? formItem.slideDown(slideMs) : formItem.slideUp(slideMs)
-                    }
+                    areaRender({
+                        areas,
+                        areaMap,
+                        code: type,
+                        handleArea: (viewArea) => {
+                            if (0 === parentId && type === 1) {
+                                viewArea.push('icon')
+                            }
+                        }
+                    })
                 }
 
-
                 // 父级树显示
-                $('#parentName').click(() => {
-                    $("#menuTree").slideToggle(slideMs)
+                parentNameInput.click(() => {
+                    menuSelect.slideToggle(slideMs)
                 })
 
                 // 图标列表显示
-                $('#icon').click(() => {
-                    $("#iconList").slideToggle(slideMs)
-                })
-
-                // 列表隐藏
-                $('.layui-form').on('focus', 'input', function () {
-                    !$(this).is('#icon') && $('#iconList').slideUp()
-                    !$(this).is('#parentName') && $('#menuTree').slideUp()
+                iconInput.click(() => {
+                    iconSelect.slideToggle(slideMs)
                 })
 
                 // 选择图标
-                $('#iconList').on('click', '.fa', function () {
-                    $('#icon').val($(this).attr('class'))
-                    $('#iconList').slideUp();
+                iconSelect.on('click', '.fa', function () {
+                    iconInput.val($(this).attr('class'))
+                    iconSelect.slideUp()
+                })
+
+                // 列表隐藏
+                $('.layui-form-item').on('focus', 'input', function () {
+                    !$(this).is(iconInput) && iconSelect.slideUp()
+                    !$(this).is(parentNameInput) && menuSelect.slideUp()
                 })
 
             })

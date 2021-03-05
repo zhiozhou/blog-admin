@@ -147,7 +147,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         }
         return userDAO.update(new UserPO().setId(id).setState(11).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
                 Result.success() :
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         }
         return userDAO.update(new UserPO().setId(id).setState(0).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
                 Result.success() :
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
     }
 
 
@@ -170,7 +170,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         }
         userPO.setPassword(certMatcher.buildCert(password, userPO.getSalt()));
         if (userDAO.update(userPO) < 1) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
         }
         ShiroUtil.stopSession();
         ShiroUtil.clearAuthentication(userPO.getUsername());

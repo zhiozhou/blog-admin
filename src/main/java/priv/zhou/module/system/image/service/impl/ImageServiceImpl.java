@@ -63,13 +63,13 @@ public class ImageServiceImpl extends BaseService implements IImageService {
         ImagePO imagePO = imageDAO.get(queryDTO);
         if (null != imagePO) {
             if (imageDAO.remove(queryDTO) < 1) {
-                return Result.fail(ResultEnum.FAIL_OPERATION);
+                return Result.fail(ResultEnum.LATER_RETRY);
             }
             Map<String, Object> params = Maps.newHashMap();
             params.put("url", imagePO.getUrl());
             Result<NULL> removeRes = httpPost("移除图片", appProperties.getFileService() + "/remove", params);
             if (removeRes.isFail()) {
-                throw new GlobalException(ResultEnum.FAIL_OPERATION);
+                throw new GlobalException(ResultEnum.LATER_RETRY);
             }
         }
         return Result.success();

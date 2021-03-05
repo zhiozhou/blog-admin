@@ -1,6 +1,7 @@
 package priv.zhou.module.system.menu.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,18 +40,18 @@ public class MenuController extends BaseController {
         super.add(model, new MenuDTO().setParentId(0).setType(0).setState(0));
         model.addAttribute("typeList", dictService.listDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));
-        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery().setFlag(ADMIN_FLAG)));
+        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery(ADMIN_FLAG)));
         return "system/menu/au";
     }
 
     @RequiresPermissions("system:menu:update")
     @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
-        super.update(model, menuService.getVO(new MenuQuery().setId(id).setFlag(ADMIN_FLAG)));
+        super.update(model, menuService.getVO(new MenuQuery(ADMIN_FLAG).setId(id)));
 
         model.addAttribute("typeList", dictService.listDataVO(SYSTEM_MENU_TYPE, DICT_NORM_TYPE));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_MENU_STATE, DICT_NORM_TYPE));
-        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery().setFlag(ADMIN_FLAG)));
+        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery(ADMIN_FLAG).setInTypes(Lists.newArrayList(0,1))));
         return "system/menu/au";
     }
 

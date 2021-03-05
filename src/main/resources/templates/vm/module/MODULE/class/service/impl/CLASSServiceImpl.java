@@ -73,7 +73,7 @@ public class ${table.className}ServiceImpl extends BaseService implements I${tab
 
         return  ${table.objectName}DAO.update(${table.objectName}PO) > 0 ?
                 Result.success():
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
 
     }
 

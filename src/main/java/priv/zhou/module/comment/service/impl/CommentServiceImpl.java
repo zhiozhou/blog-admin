@@ -45,7 +45,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
         }
 
         return commentDAO.remove(commentDTO) < 1 ?
-                Result.fail(ResultEnum.FAIL_OPERATION) :
+                Result.fail(ResultEnum.LATER_RETRY) :
                 Result.success();
     }
 
@@ -58,7 +58,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
         CommentPO commentPO = commentDTO.toPO();
         return commentDAO.update(commentPO) > 0 ?
                 Result.success() :
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
 
     }
 
@@ -90,7 +90,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
                 .setTopicId(targetPO.getTopicId().equals(0) ? targetPO.getId() : targetPO.getTopicId());
         return commentDAO.save(commentPO) > 0 ?
                 Result.success() :
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
     }
 
     @Override
@@ -100,14 +100,14 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
         if (null == commentPO) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         } else if (commentDAO.update(commentPO.setState(10)) < 0) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
         } else if (commentDAO.blockIP(commentPO.getIp()) < 1 ||
                 blockService.save(new BlockDTO()
                         .setType(0)
                         .setIp(commentPO.getIp())
                         .setReason(reason)
                         .setRemark(commentPO.getId().toString())).isFail()) {
-            throw new GlobalException(ResultEnum.FAIL_OPERATION);
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
     }

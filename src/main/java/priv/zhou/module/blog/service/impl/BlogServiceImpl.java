@@ -53,7 +53,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
                 .setPv(0L)
                 .setCreateId(ShiroUtil.getUserId());
         if (blogDAO.save(blogPO) < 0) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
         }
 
         saveTags(blogPO.getId(), blogPO.getTags(), false);
@@ -69,7 +69,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         }
 
         return blogDAO.update(blogDTO.toPO().setState(11)) > 0 ? Result.success() :
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
 
         BlogPO blogPO = blogDTO.toPO();
         if (blogDAO.update(blogPO) < 0) {
-            return Result.fail(ResultEnum.FAIL_OPERATION);
+            return Result.fail(ResultEnum.LATER_RETRY);
         }
 
         saveTags(blogPO.getId(), blogPO.getTags(), true);

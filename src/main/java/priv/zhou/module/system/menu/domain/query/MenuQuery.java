@@ -27,5 +27,9 @@ public class MenuQuery {
 
     private Integer flag;
 
-    private List<Integer> types;
+    private List<Integer> inTypes;
+
+    public MenuQuery(Integer flag) {
+        this.flag = flag;
+    }
 }

@@ -139,7 +139,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
                                 .setLabel(data.getLabel())
                                 .setSpare(data.getSpare()))
                         .collect(Collectors.toList())) != dictDTO.getDataList().size()) {
-            throw new GlobalException(ResultEnum.FAIL_OPERATION);
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         RedisUtil.delete(Lists.newArrayList(BS_DICT_DATA_KEY + dictPO.getKey(), BS_DICT_DATA_MODIFIED_KEY + dictDTO.getKey()));
         return Result.success();

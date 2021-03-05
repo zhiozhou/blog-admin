@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
     public String add(Model model) {
         super.add(model, new RoleVO().setState(0).setMenus(Lists.newArrayList()));
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
-        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery().setFlag(ADMIN_FLAG)));
+        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery(ADMIN_FLAG)));
         return "system/role/au";
     }
 
@@ -53,7 +53,7 @@ public class RoleController extends BaseController {
         super.update(model, roleService.getVO(new RoleQuery().setId(id)));
 
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
-        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery().setFlag(ADMIN_FLAG)));
+        model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery(ADMIN_FLAG)));
         return "system/role/au";
     }
 

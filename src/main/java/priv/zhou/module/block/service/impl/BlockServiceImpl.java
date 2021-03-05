@@ -42,7 +42,7 @@ public class BlockServiceImpl extends BaseService implements IBlockService {
         return blockDAO.save(blockDTO.toPO()
                 .setCreator(new UserPO().setId(ShiroUtil.getUserId()))) > 0 ?
                 Result.success() :
-                Result.fail(ResultEnum.FAIL_OPERATION);
+                Result.fail(ResultEnum.LATER_RETRY);
 
     }
 
@@ -52,7 +52,7 @@ public class BlockServiceImpl extends BaseService implements IBlockService {
         if (null == blockPO) {
             return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (blockDAO.update(blockPO.setGmtFreed(new Date())) < 1) {
-            throw new GlobalException(ResultEnum.FAIL_OPERATION);
+            throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
     }

@@ -75,7 +75,7 @@ public class SessionServiceImpl implements ISessionService {
         } catch (ExpiredSessionException e) {
             return Result.success();
         } catch (UnknownSessionException e) {
-            return Result.fail(ResultEnum.FAIL_OPERATION, e.getMessage());
+            return Result.fail(ResultEnum.LATER_RETRY, e.getMessage());
         }
     }
 }
