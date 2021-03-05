@@ -100,9 +100,9 @@ function fail(code) {
  * 全局http请求
  */
 function httpPost({url, data, cb, load = true}) {
-    load && loading()
+    let index = load && loading()
     layui.$.post(url, data, ({code, info, data}) => {
-        load && loaded()
+        load && loaded(index)
         if (fail(code)) return warn(info)
         cb(data)
     })
@@ -140,17 +140,16 @@ function newFrame(title, url, area) {
 /**
  * 显示加载蒙层
  */
-let loaderIndex
 
 function loading() {
-    loaderIndex = layui.layer.load(2)
+    return layui.layer.load(2)
 }
 
 /**
  * 关闭加载蒙层
  */
-function loaded() {
-    layui.layer.close(loaderIndex)
+function loaded(index) {
+    layui.layer.close(index)
 }
 
 /**
@@ -180,8 +179,8 @@ function msg(cb, msg = '操作成功') {
  * @param cb 回调函数 默认刷新当前表单
  * @param msg 通知的消息
  */
-function outMsg(cb, msg = '操作成功') {
-    parent.layer.msg('操作成功', {icon: 1, time: 500}, cb);
+function parentMsg(cb, msg = '操作成功') {
+    parent.layer.msg(msg, {icon: 1, time: 500}, cb);
 }
 
 /**
@@ -195,3 +194,4 @@ function tips(id, msg) {
         time: 1500
     })
 }
+

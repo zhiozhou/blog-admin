@@ -1103,7 +1103,7 @@
                     return iframeSubmit({
                         form,
                         field,
-                        cb: outMsg(() => {
+                        cb: parentMsg(() => {
                             parent.openId = data.parentId
                             parent.layer.close(parent.layer.getFrameIndex(window.name))
                             parent.layui.table.reload('table', {

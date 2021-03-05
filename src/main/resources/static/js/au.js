@@ -128,7 +128,7 @@ function pageSubmit({form, field: data, cb = pageDone}) {
  * 页面消息提示，成功后关闭并刷新父级表格
  */
 function pageDone() {
-    outMsg(() => goto(layui.$('.layui-form>.layui-tab .layui-this').prev().children('a').attr('href')))
+    parentMsg(() => goto(layui.$('.layui-form>.layui-tab>.layui-tab-title>.layui-this').prev().children('a').attr('href')))
 }
 
 /**
@@ -147,7 +147,7 @@ function iframeSubmit({form, field: data, cb = iframeDone}) {
  * 内联页面消息提示，成功后关闭并刷新父级表格
  */
 function iframeDone() {
-    outMsg(() => {
+    parentMsg(() => {
         parent.layer.close(parent.layer.getFrameIndex(window.name))
         let table = parent.layui.table
         table && table.reload('table')
