@@ -59,7 +59,7 @@
                                th:each="type,iterStat:${typeList}"
                                th:value="${type.code}"
                                th:title="${type.label}"
-                               th:id="${'type'+ type.code}"
+                               th:id="${'type-'+ type.code}"
                                th:field="*{type}">
                     </div>
                 </div>
@@ -1058,8 +1058,8 @@
 
             layui.use(['form', 'tree', 'jquery'], () => {
                 const {form, tree, $} = layui
-                const id =  $('#id').val(),
-                    parentId = $('#parentId').val()
+                const inputId = $('#id').val(),
+                    inputParentId = $('#parentId').val()
 
                 // 回显
                 areaHandle(typeEcho)
@@ -1068,16 +1068,14 @@
                 tree.render({
                     elem: '#menuTree',
                     data: formatTree({
-                        data:menuTree,
-                        parseNode:(node)=>{
+                        data: menuTree,
+                        parseNode: (node) => {
                             node.title = node.name
-                            node.children = node.childList
                             delete node.name
-                            delete node.childList
                         },
-                        handleNode:(node)=>{
-                            node.spread = parentId === node.id
-                            node.disabled = 2 === node.type || id === node.id
+                        handleNode: (node) => {
+                            node.spread = inputParentId === node.id
+                            node.disabled = 2 === node.type || inputId === node.id
                         }
                     }),
                     accordion: true,
@@ -1088,7 +1086,7 @@
                         $("#menuTree").slideUp()
 
                         let childType = 0 === data.id ? 0 : data.type + 1
-                        $(`#type${childType}`).prop('checked', true)
+                        $(`#type-${childType}`).prop('checked', true)
                         areaHandle(childType)
                     }
                 })
@@ -1127,10 +1125,10 @@
 
                     if (0 === parentId) {
                         // 父级是根目录的话,可选菜单和目录
-                        $('#type0').prop('disabled', false)
-                        $('#type1').prop('disabled', false)
+                        $('#type-0').prop('disabled', false)
+                        $('#type-1').prop('disabled', false)
                     }
-                    $(`#type${type}`).prop('disabled', false)
+                    $(`#type-${type}`).prop('disabled', false)
                     form.render()
 
                     // 控制表单元素
