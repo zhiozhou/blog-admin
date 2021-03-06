@@ -16,7 +16,10 @@ import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.query.UserQuery;
 
+import java.util.Set;
+
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
+import static priv.zhou.module.system.role.service.IRoleService.ROOT_KEY;
 
 public class UserRealm extends AuthorizingRealm {
 
@@ -33,8 +36,13 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         // 获取授权
         UserPrincipal userPrincipal = (UserPrincipal) principals.getPrimaryPrincipal();
-        SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo(roleService.keySet(userPrincipal.getId()));
-        authInfo.setStringPermissions(menuService.keySet(new MenuQuery(ADMIN_FLAG).setUserId(userPrincipal.getId())));
+        Set<String> roleKeySet = roleService.keySet(userPrincipal.getId());
+        SimpleAuthorizationInfo authInfo = new SimpleAuthorizationInfo(roleKeySet);
+        if (roleKeySet.contains(ROOT_KEY)) {
+            authInfo.addStringPermission("*");
+        } else {
+            authInfo.setStringPermissions(menuService.keySet(new MenuQuery(ADMIN_FLAG).setUserId(userPrincipal.getId())));
+        }
         return authInfo;
     }
 

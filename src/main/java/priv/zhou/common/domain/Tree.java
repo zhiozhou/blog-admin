@@ -42,11 +42,14 @@ public class Tree {
      * 树对象组整理为树形结构
      */
     @SuppressWarnings("unchecked")
-    public static <M extends Tree> List<M> term(List<M> dtoList, Integer rootId) {
-        TreeMap<Integer, List<Tree>> groupMap = dtoList.stream().collect(Collectors.groupingBy(Tree::getParentId, TreeMap::new, Collectors.toList()));
+    public static <M extends Tree> List<M> term(List<M> treeList, Integer rootId) {
+        if(null == treeList || treeList.isEmpty()){
+            return treeList;
+        }
+        TreeMap<Integer, List<Tree>> groupMap = treeList.stream().collect(Collectors.groupingBy(Tree::getParentId, TreeMap::new, Collectors.toList()));
         for (Map.Entry<Integer, List<Tree>> entry : groupMap.entrySet()) {
             if (!rootId.equals(entry.getKey())) {
-                dtoList.stream()
+                treeList.stream()
                         .filter(po -> entry.getKey().equals(po.getId()))
                         .findFirst()
                         .orElseThrow(() -> new GlobalException(ResultEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey()))

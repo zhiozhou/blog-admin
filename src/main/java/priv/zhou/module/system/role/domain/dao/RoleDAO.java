@@ -22,7 +22,7 @@ import java.util.Set;
 @Repository
 public interface RoleDAO extends BaseDAO<RolePO, RoleQuery> {
 
-    int removeList(Integer[] ids);
+    int removeList(String[] keys);
 
     RoleBO getBO(RoleQuery query);
 

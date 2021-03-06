@@ -3,6 +3,7 @@ package priv.zhou.module.system.monitor.controller;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
@@ -27,13 +28,13 @@ public class MonitorRestController {
     private final ISessionService sessionService;
 
     @RequiresPermissions("system:monitor:view")
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public Result<List<SessionVO>> login(SessionQuery query) {
         return sessionService.list(query);
     }
 
     @RequiresPermissions("system:monitor:offline")
-    @RequestMapping("/offline/{id}")
+    @PostMapping("/offline/{id}")
     public Result<NULL> offline(@PathVariable String id) {
         return sessionService.offline(id);
     }

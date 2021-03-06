@@ -1,6 +1,7 @@
 package priv.zhou.module.blog.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
@@ -31,29 +32,29 @@ public class BlogRestController {
     }
 
 
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public Result<NULL> save(@Valid BlogDTO blogDTO) {
         return blogService.save(blogDTO);
     }
 
-    @RequestMapping("/remove/{id}")
+    @PostMapping("/remove/{id}")
     public Result<NULL> remove(@PathVariable Integer id) {
         return blogService.remove(new BlogDTO().setId(id));
     }
 
-    @RequestMapping("/update")
+    @PostMapping("/update")
     public Result<NULL> update(@Valid BlogDTO blogDTO) {
         return blogService.update(blogDTO);
     }
 
 
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public Result<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
         return Result.table(blogService.list(blogDTO, page));
     }
 
 
-    @RequestMapping("/tag/list")
+    @PostMapping("/tag/list")
     public Result<List<TagDTO>> list(TagDTO tagDTO) {
         return blogService.tagList(tagDTO);
     }

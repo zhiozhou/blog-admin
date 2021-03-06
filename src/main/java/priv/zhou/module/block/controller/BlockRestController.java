@@ -1,6 +1,7 @@
 package priv.zhou.module.block.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
@@ -26,12 +27,12 @@ public class BlockRestController {
         this.blockService = blockService;
     }
 
-    @RequestMapping("/remove/{id}")
+    @PostMapping("/remove/{id}")
     public Result<NULL> remove(@PathVariable Integer id) {
         return blockService.remove(new BlockDTO().setId(id));
     }
 
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public Result<TableVO<BlockDTO>> list(BlockDTO blockDTO, Page page) {
         return Result.table(blockService.list(blockDTO, page));
     }

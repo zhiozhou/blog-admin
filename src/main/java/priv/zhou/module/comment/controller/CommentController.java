@@ -41,7 +41,7 @@ public class CommentController extends BaseController {
     public String detail(Model model, @PathVariable Integer id) {
         Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
-            return NOT_FOUNT;
+            return PAGE_500;
         }
         CommentDTO commentDTO = dtoVO.getData();
         commentDTO.setStateStr(dictService.getLabel(STATE_KEY, commentDTO.getState()));
@@ -61,7 +61,7 @@ public class CommentController extends BaseController {
     public String update(Model model, @PathVariable Integer id) {
         Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
-            return NOT_FOUNT;
+            return PAGE_500;
         }
         super.detail(model, dtoVO.getData());
         model.addAttribute(ACTION_KEY, "/rest/reply/update");

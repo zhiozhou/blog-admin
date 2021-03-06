@@ -18,7 +18,7 @@ public class AppProperties {
 
 	private String name;
 
-	private boolean email;
+	private boolean enableEmail;
 
 	private String adminEmail;
 

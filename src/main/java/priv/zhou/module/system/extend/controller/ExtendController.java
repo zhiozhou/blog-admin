@@ -21,9 +21,9 @@ public class ExtendController extends BaseController {
         super("模块", "system:extend");
     }
 
-    @RequiresPermissions("system:extend:index")
+    @RequiresPermissions("system:extend:view")
     @GetMapping
-    public String index(Model model) {
+    public String view(Model model) {
         super.list(model);
         return "system/extend/index";
     }

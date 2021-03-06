@@ -39,7 +39,7 @@
         <result column="name" property="name"/>
         <result column="state" property="state"/>
         <result column="remark" property="remark"/>
-        <collection property="menus" ofType="MenuVO">
+        <collection property="menus" ofType="MenuSelectVO">
             <id column="menu_id" property="id"/>
             <result column="menu_parent_id" property="parentId"/>
             <result column="menu_name" property="name" />
@@ -95,18 +95,17 @@
         )
     </insert>
 
-    <delete id="removeList" parameterType="Integer">
+    <delete id="removeList" parameterType="String">
         update system_role set is_deleted = 1
-        where is_deleted = 0 and id in
-        <foreach item="id" collection="ids" open="(" separator="," close=")">
-            #{id}
+        where is_deleted = 0 and `key` in
+        <foreach item="key" collection="keys" open="(" separator="," close=")">
+            #{key}
         </foreach>
     </delete>
 
     <update id="update" parameterType="RolePO">
         update system_role
         <set>
-            <if test="key != null and key != ''">`key` = #{key},</if>
             <if test="name != null and name != ''">`name` = #{name},</if>
             <if test="state != null ">state = #{state},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
@@ -118,7 +117,11 @@
 
     <select id="get" parameterType="RoleQuery" resultMap="POMap">
         <include refid="POSql"/>
-        WHERE is_deleted = 0 and id = #{id}
+        <where>
+            is_deleted = 0
+            <if test="id != null"> AND id = #{id}</if>
+            <if test="key != null and key != ''"> AND `key` = #{key}</if>
+        </where>
     </select>
 
     <select id="getBO" parameterType="RoleQuery" resultMap="BOMap">
@@ -135,9 +138,13 @@
             menu.id AS menu_id,
             menu.`name` AS menu_name
         FROM system_role AS role
-        LEFT JOIN system_role_menu AS role_menu ON role.id = role_menu.role_id
+        LEFT JOIN system_role_menu AS role_menu ON role.id = role_menu.role_id  and role.key != 'root'
         LEFT JOIN system_menu AS menu ON role_menu.menu_id = menu.id
-        WHERE is_deleted = 0 AND role.id = #{id}
+        <where>
+            role.is_deleted = 0
+            <if test="id != null"> AND role.id = #{id}</if>
+            <if test="key != null and key != ''"> AND role.`key` = #{key}</if>
+        </where>
     </select>
 
     <select id="getVO" parameterType="RoleQuery" resultMap="VOMap">
@@ -151,16 +158,19 @@
             menu.parent_id AS menu_parent_id,
             menu.`name` AS menu_name
         FROM system_role AS role
-        LEFT JOIN system_role_menu AS role_menu ON role.id = role_menu.role_id
+        LEFT JOIN system_role_menu AS role_menu ON role.id = role_menu.role_id and role.key != 'root'
         LEFT JOIN system_menu AS menu ON role_menu.menu_id = menu.id
-        WHERE role.id = #{id}
+        <where>
+            role.is_deleted = 0
+            <if test="id != null"> AND role.id = #{id}</if>
+            <if test="key != null and key != ''"> AND role.`key` = #{key}</if>
+        </where>
     </select>
 
     <select id="list" parameterType="RoleQuery" resultMap="POMap">
         <include refid="POSql"/>
         <where>
             is_deleted = 0
-            <if test="key != null and key != ''"> AND `key` = #{key}</if>
             <if test="name != null and name != ''"> AND `name` = #{name}</if>
             <if test="state != null"> AND state = #{state}</if>
             <if test="remark != null and remark != ''"> AND remark = #{remark}</if>
@@ -180,10 +190,10 @@
         <where>
             is_deleted = 0
             <if test="state != null">and state = #{state} </if>
+            <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
             <if test="nameLike != null and nameLike != ''">and `name` LIKE CONCAT('%',#{nameLike},'%')</if>
         </where>
     </select>
-
 
     <select id="listSelectVO" parameterType="RoleQuery" resultMap="SelectVOMap">
         SELECT

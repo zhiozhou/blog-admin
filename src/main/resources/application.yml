@@ -36,13 +36,13 @@ mybatis:
   type-aliases-package: priv.zhou.module.*.*.domain,priv.zhou.module.*.domain
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 shiro:
   attempt-login-limit: 5 # 尝试登录最大限制
   sync-login-limit: 1 # 单一账号同时登录登录限制
 app:
   name: ${spring.application.name}
-  email: true
+  enable-email: true
   admin-email: flyingnoob@qq.com
   access-limit: 200
   file-service: https://zhousb.cn/file-service/

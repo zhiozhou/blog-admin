@@ -73,6 +73,7 @@ public class ShiroConfigurer {
         // 访问过滤
         Map<String, String> filterMap = Maps.newLinkedHashMap();
         String anon = DefaultFilter.anon.name();
+
         // 无需授权
         filterMap.put("/static/**", anon);
         filterMap.put("/js/**", anon);
@@ -88,7 +89,6 @@ public class ShiroConfigurer {
         filterMap.put("/system/user/logout", DefaultFilter.logout.name());
         // 记住我 或 认证通过
         filterMap.put("/**", DefaultFilter.user.name() + "," + syncLoginFilter.getName());
-
 
         ShiroFilterFactoryBean filerFactory = new ShiroFilterFactoryBean();
         filerFactory.setSecurityManager(securityManager);

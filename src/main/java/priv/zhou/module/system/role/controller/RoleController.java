@@ -17,6 +17,7 @@ import priv.zhou.module.system.role.service.IRoleService;
 
 import static priv.zhou.common.constant.DictConst.SYSTEM_ROLE_STATE;
 import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
+import static priv.zhou.module.system.role.service.IRoleService.ROOT_KEY;
 
 /**
  * 角色 视图控制层
@@ -48,9 +49,12 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("system:role:update")
-    @GetMapping("/update/{id}")
-    public String update(Model model, @PathVariable Integer id) {
-        super.update(model, roleService.getVO(new RoleQuery().setId(id)));
+    @GetMapping("/update/{key}")
+    public String update(Model model, @PathVariable String key) {
+        if (ROOT_KEY.equals(key)) {
+            return PAGE_DENIED;
+        }
+        super.update(model, roleService.getVO(new RoleQuery().setKey(key)));
 
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_ROLE_STATE, DICT_NORM_TYPE));
         model.addAttribute("menuTree", menuService.treeSelectVO(new MenuQuery(ADMIN_FLAG)));
@@ -58,9 +62,9 @@ public class RoleController extends BaseController {
     }
 
     @RequiresPermissions("system:role:detail")
-    @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable Integer id) {
-        RoleVO roleVO = roleService.getVO(new RoleQuery().setId(id));
+    @GetMapping("/detail/{key}")
+    public String detail(Model model, @PathVariable String key) {
+        RoleVO roleVO = roleService.getVO(new RoleQuery().setKey(key));
         super.detail(model, roleVO);
 
         roleVO.setStateStr(dictService.getLabel(SYSTEM_ROLE_STATE, roleVO.getState()))

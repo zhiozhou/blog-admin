@@ -8,6 +8,7 @@ import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.domain.vo.MenuSelectVO;
 import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
 import priv.zhou.module.system.menu.domain.vo.MenuVO;
+import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 
 import java.util.List;
 import java.util.Set;

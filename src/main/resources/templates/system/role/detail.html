@@ -20,14 +20,15 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">角色标识：</label>
                             <div class="layui-input-block">
-                                <input type="text" class="layui-input" th:value="*{key}"  disabled>
+                                <input type="text" class="layui-input" th:value="*{key}" disabled>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">菜单权限：</label>
                             <div class="layui-input-block">
-                                <div id="menuTree"></div>
+                                <div id="menuTree" th:if="${_vo.key != @roleService.ROOT_KEY}"></div>
+                                <input type="text" class="layui-input" value="所有权限" th:if="${_vo.key == @roleService.ROOT_KEY}" disabled>
                             </div>
                         </div>
 
@@ -42,7 +43,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
-                                <textarea class="layui-textarea" th:value="*{remark}"  disabled></textarea>
+                                <textarea class="layui-textarea" th:value="*{remark}" disabled></textarea>
                             </div>
                         </div>
                     </div>
@@ -50,32 +51,30 @@
             </form>
         </div>
         <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+            const menuEcho = [[${_vo.menus}]],
+                renderTree = [[${_vo.key != @roleService.ROOT_KEY}]]
+        </script>
         <script th:inline="none">
+            if (renderTree) {
+                layui.use('tree', () => {
+                    const {tree} = layui
 
-            layui.use('tree', () => {
-                const {tree} = layui,
-                    menuTree = [[${_vo.menus}]]
-
-                // 菜单树
-                tree.render({
-                    id: 'menuTree',
-                    elem: '#menuTree',
-                    data: formatTree({
-                        data: menuTree,
-                        parseNode: (node) => {
-                            node.title = node.name
-                            delete node.name
-                        },
-                        handleTree: (node, depth) => {
-                            node.spread = depth < 1 && echos.some(({id}) => id === node.id)
-                        },
-                        handleLeaf:(node)=>{
-                            node.checked = echos.some(({id}) => id === node.id)
-                        }
-                    }),
-                    text: {none: '无菜单权限'}
+                    // 菜单树
+                    tree.render({
+                        id: 'menuTree',
+                        elem: '#menuTree',
+                        data: formatTree({
+                            data: menuEcho,
+                            parseNode: (node) => {
+                                node.title = node.name
+                                delete node.name
+                            }
+                        }),
+                        text: {none: '无菜单权限'}
+                    })
                 })
-            })
+            }
         </script>
     </body>
 

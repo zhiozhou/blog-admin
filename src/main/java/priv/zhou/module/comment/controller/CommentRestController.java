@@ -2,6 +2,7 @@ package priv.zhou.module.comment.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
@@ -33,28 +34,28 @@ public class CommentRestController {
         this.commentService = commentService;
     }
 
-    @RequestMapping("/remove/{id}")
+    @PostMapping("/remove/{id}")
     public Result<NULL> remove(@PathVariable Integer id) {
         return commentService.remove(new CommentDTO().setId(id));
     }
 
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public Result<TableVO<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
         return Result.table(commentService.list(commentDTO, page, order));
     }
 
 
-    @RequestMapping("/pass/{id}")
+    @PostMapping("/pass/{id}")
     public Result<NULL> pass(@PathVariable Integer id) {
         return commentService.update(new CommentDTO().setId(id).setState(1));
     }
 
-    @RequestMapping("/pass/no/{id}")
+    @PostMapping("/pass/no/{id}")
     public Result<NULL> noPass(@PathVariable Integer id) {
         return commentService.update(new CommentDTO().setId(id).setState(9));
     }
 
-    @RequestMapping("/reply/update")
+    @PostMapping("/reply/update")
     public Result<NULL> updateReply(CommentDTO commentDTO) {
         if (StringUtils.isBlank(commentDTO.getContent())) {
             return Result.fail(ResultEnum.EMPTY_PARAM);
@@ -63,14 +64,14 @@ public class CommentRestController {
     }
 
 
-    @RequestMapping("/reply")
+    @PostMapping("/reply")
     public Result<NULL> reply(HttpServletRequest request, @Valid CommentDTO commentDTO) {
         return commentService.reply(commentDTO
                 .setIp(HttpUtil.getIpAddress(request))
                 .setUa(HttpUtil.getUserAgent(request)));
     }
 
-    @RequestMapping("/block/{id}")
+    @PostMapping("/block/{id}")
     public Result<NULL> block(@PathVariable Integer id, String reason) {
         return commentService.block(id, reason);
     }

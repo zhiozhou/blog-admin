@@ -22,9 +22,9 @@ public class RoleQuery {
 
     private Integer ridId;
 
-    private Integer[] ids;
-
     private String key;
+
+    private String keyLike;
 
     private String name;
 

@@ -12,7 +12,7 @@ public interface IExtendService {
 
     String CONFIG_KEY = "system_extend_config";
 
-    String DEMO_PATH = "src/main/resources/templates/vm";
+    String DEMO_PATH = "src/main/resources/vm";
 
     Map<String, String> TYPE_MAP = new HashMap<String, String>() {{
         put("tinyint", "Boolean");

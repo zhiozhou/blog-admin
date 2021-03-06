@@ -1,8 +1,10 @@
 package priv.zhou.module.system.role.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.util.Arrays;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.ArrayUtils;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
@@ -29,7 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@Service("roleService")
 @RequiredArgsConstructor
 public class RoleServiceImpl extends BaseService implements IRoleService {
 
@@ -69,10 +71,14 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
 
     @Override
     @Transactional
-    public Result<NULL> remove(Integer[] ids) {
-        if (userRoleDAO.count(new UserRoleQuery().setRoleIds(ids)) > 0) {
+    public Result<NULL> remove(String[] keys) {
+        if (Arrays.isNullOrEmpty(keys)) {
+            return Result.fail(ResultEnum.EMPTY_PARAM);
+        } else if (ArrayUtils.contains(keys, ROOT_KEY)) {
+            return Result.fail(ResultEnum.FAIL_PARAM);
+        } else if (userRoleDAO.count(new UserRoleQuery().setRoleKeys(keys)) > 0) {
             return Result.fail(ResultEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
-        } else if (roleDAO.removeList(ids) != ids.length) {
+        } else if (roleDAO.removeList(keys) != keys.length) {
             throw new GlobalException(ResultEnum.LATER_RETRY);
         }
         return Result.success();

@@ -42,7 +42,7 @@ public class BlogController extends BaseController {
 
         Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
         if (dtoVO.isFail()) {
-            return NOT_FOUNT;
+            return PAGE_500;
         }
         super.update(model, dtoVO.getData());
 
@@ -53,7 +53,7 @@ public class BlogController extends BaseController {
     public String detail(Model model, @PathVariable Integer id) {
         Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
         if (dtoVO.isFail()) {
-            return NOT_FOUNT;
+            return PAGE_500;
         }
         super.detail(model, dtoVO.getData());
 

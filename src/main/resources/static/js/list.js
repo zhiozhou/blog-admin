@@ -60,11 +60,11 @@ layui.use(['table', 'form', 'jquery'], () => {
  * 表格渲染通用配置
  * @param table layui.table组件
  * @param options 表格渲染参数，会替换默认参数
- * @param idName 唯一标识name
+ * @param idField 唯一标识name
  * @param onTool 工具栏监听，返回false阻止继续默认事件管理
  * @param iframe 工具栏监听是否使用iframe
  */
-function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
+function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
     table.render({
         ...{
             id: tableId,
@@ -90,9 +90,9 @@ function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
     function iframeAction({event, data}) {
         switch (event) {
             case 'detail':
-                return newFrame(`${_module.name}详情`, `${prefix}/detail/${data.id}`)
+                return newFrame(`${_module.name}详情`, `${prefix}/detail/${data[idField]}`)
             case 'update':
-                return newFrame(`修改${_module.name}`, `${prefix}/update/${data.id}`)
+                return newFrame(`修改${_module.name}`, `${prefix}/update/${data[idField]}`)
             case 'remove':
                 return removeAction(data)
         }
@@ -101,10 +101,10 @@ function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
     function pageAction({event, data}) {
         switch (event) {
             case 'detail':
-                goto(`${prefix}/detail/${data.id}`)
+                goto(`${prefix}/detail/${data[idField]}`)
                 return
             case 'update':
-                goto(`${prefix}/update/${data.id}`)
+                goto(`${prefix}/update/${data[idField]}`)
                 return
             case 'remove':
                 return removeAction(data)
@@ -116,11 +116,11 @@ function tableRender({table, options, idName = 'id', onTool, iframe = true}) {
             btn: ['确定', '取消'],
             shade: [0.1, '#fff']
         }, () => {
+            const param = {}
+            param[`${idField}s[0]`] = data[idField]
             httpPost({
                 url: `${prefix}/rest/remove`,
-                data: {
-                    ids: [data[idName]]
-                },
+                data: param,
                 cb: () => msg(reloadTable)
             })
         })

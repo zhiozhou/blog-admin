@@ -20,6 +20,6 @@ public class UserRoleQuery {
 
     private Integer roleId;
 
-    private Integer[] roleIds;
+    private String[] roleKeys;
 
 }

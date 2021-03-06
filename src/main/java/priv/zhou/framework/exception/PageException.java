@@ -11,6 +11,10 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class NotFoundException extends RuntimeException {
+public class PageException extends RuntimeException {
+    private String page;
 
+    public PageException( String page) {
+        this.page = page;
+    }
 }

@@ -28,7 +28,7 @@ public class EmailUtil {
      * @param content 发送内容
      */
     public static void send(String topic, String content, String... address) {
-        if (APP_PROPERTIES.isEmail()) {
+        if (APP_PROPERTIES.isEnableEmail()) {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(PROPERTIES.getUsername());
             message.setTo(address);

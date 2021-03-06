@@ -7,6 +7,7 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+import priv.zhou.module.system.menu.domain.vo.MenuSelectVO;
 import priv.zhou.module.system.menu.domain.vo.MenuVO;
 
 /**
@@ -51,5 +52,5 @@ public class RoleVO {
 	/**
 	 * 绑定菜单
 	 */
-	private List<MenuVO> menus;
+	private List<MenuSelectVO> menus;
 }

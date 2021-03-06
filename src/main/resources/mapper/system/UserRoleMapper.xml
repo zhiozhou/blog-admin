@@ -18,14 +18,14 @@
     <select id="count" parameterType="RoleQuery" resultType="int">
         SELECT
             COUNT(0)
-        FROM system_user_role
+        FROM system_user_role AS user_role
+        LEFT JOIN system_role AS role ON user_role.role_id = role.id
         <where>
-            is_deleted = 0
-            <if test="userId != null ">and user_id != #{userId}</if>
-            <if test="roleId != null ">and role_id != #{roleId}</if>
-            <if test="roleIds != null">and role_id IN
-                <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
-                    #{roleId}
+            <if test="userId != null ">and user_role.user_id != #{userId}</if>
+            <if test="roleId != null ">and user_role.role_id != #{roleId}</if>
+            <if test="roleKeys != null">and role.key IN
+                <foreach collection="roleKeys" item="roleKey" open="(" separator="," close=")">
+                    #{roleKey}
                 </foreach>
             </if>
         </where>

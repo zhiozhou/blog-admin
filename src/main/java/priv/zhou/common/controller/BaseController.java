@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
 import priv.zhou.common.properties.AppProperties;
-import priv.zhou.framework.exception.NotFoundException;
+import priv.zhou.framework.exception.PageException;
 import priv.zhou.module.system.dict.service.IDictService;
 
 import java.util.HashMap;
@@ -29,7 +29,15 @@ public class BaseController {
 
     protected final String UPLOAD_PARAM_KEY = "_upload";
 
-    protected final String NOT_FOUNT = "404";
+    protected final String PAGE_404 = "error/404";
+    
+    protected final String PAGE_500 = "error/500";
+    
+    protected final String PAGE_DENIED = "error/denied";
+
+    protected final String PAGE_RETRY = "error/retry";
+
+
 
     @Autowired
     protected AppProperties appProperties;
@@ -56,7 +64,7 @@ public class BaseController {
      */
     protected void update(Model model, Object vo) {
         if (null == vo) {
-            throw new NotFoundException();
+            throw new PageException(PAGE_404);
         }
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
@@ -69,7 +77,7 @@ public class BaseController {
      */
     protected void detail(Model model, Object vo) {
         if (null == vo) {
-            throw new NotFoundException();
+            throw new PageException(PAGE_404);
         }
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);

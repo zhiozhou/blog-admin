@@ -72,7 +72,7 @@
         <div th:include="include :: au-footer"></div>
         <script th:inline="javascript">
             const menuTree = [[${menuTree}]],
-                echos = [[${_vo.menus}]]
+                menuEcho = [[${_vo.menus}]]
         </script>
         <script th:inline="none">
             const prefix = `${_gate}system/role`        // 当前用户持有的菜单列表
@@ -91,10 +91,10 @@
                             delete node.name
                         },
                         handleTree: (node, depth) => {
-                            node.spread = depth < 1 && echos.some(({id}) => id === node.id)
+                            node.spread = depth < 1 && menuEcho.some(({id}) => id === node.id)
                         },
                         handleLeaf:(node)=>{
-                            node.checked = echos.some(({id}) => id === node.id)
+                            node.checked = menuEcho.some(({id}) => id === node.id)
                         }
                     }),
                     showCheckbox: true
@@ -113,8 +113,7 @@
                             delete data[param]
                         }
                     }
-                    pageSubmit(obj)
-                    return false
+                    return pageSubmit(obj)
                 })
             })
         </script>

@@ -6,10 +6,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.constant.Save;
 import priv.zhou.common.constant.Update;
@@ -39,7 +36,7 @@ public class UserRestController {
 
     private final IUserService userService;
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public Result<NULL> login(UserLoginDTO loginDTO) {
         try {
             SecurityUtils.getSubject().login(new UsernamePasswordToken(loginDTO.getUsername(), loginDTO.getPassword(), loginDTO.isRememberMe()));
@@ -57,13 +54,13 @@ public class UserRestController {
 
 
     @RequiresPermissions("system:user:add")
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public Result<NULL> save(@Validated({Save.class}) UserDTO saveDTO) {
         return userService.save(saveDTO);
     }
 
     @RequiresPermissions("system:user:remove")
-    @RequestMapping("/remove")
+    @PostMapping("/remove")
     public Result<NULL> remove(@RequestParam(value = "ids[]") Integer[] ids) {
         if (ArrayUtils.isEmpty(ids)) {
             return Result.fail(ResultEnum.EMPTY_PARAM);
@@ -72,37 +69,37 @@ public class UserRestController {
     }
 
     @RequiresPermissions("system:user:update")
-    @RequestMapping("/update")
+    @PostMapping("/update")
     public Result<NULL> update(@Validated({Update.class}) UserDTO updateDTO) {
         return userService.update(updateDTO);
     }
 
     @RequiresPermissions("system:user:reset:pwd")
-    @RequestMapping("/reset/pwd/{id}")
+    @PostMapping("/reset/pwd/{id}")
     public Result<NULL> resetPwd(@PathVariable Integer id, @NotEmpty(message = "密码不可为空") String password) {
         return userService.resetPwd(id, password);
     }
 
-    @RequestMapping("/reset/pwd/own")
+    @PostMapping("/reset/pwd/own")
     public Result<NULL> resetPwd(@NotEmpty(message = "密码不可为空") String password) {
         return userService.resetPwd(ShiroUtil.getUserId(), password);
     }
 
     @RequiresPermissions("system:user:freeze")
-    @RequestMapping("/freeze/{id}")
+    @PostMapping("/freeze/{id}")
     public Result<NULL> freeze(@PathVariable Integer id) {
         return userService.freeze(id);
     }
 
     @RequiresPermissions("system:user:freeze")
-    @RequestMapping("/unfreeze/{id}")
+    @PostMapping("/unfreeze/{id}")
     public Result<NULL> unfreeze(@PathVariable Integer id) {
         return userService.unfreeze(id);
     }
 
 
     @RequiresPermissions("system:user:view")
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public Result<TableVO<UserTableVO>> list(UserQuery query, Page page) {
         return Result.table(userService.listTableVO(query, page));
     }

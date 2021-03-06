@@ -76,10 +76,14 @@
         <script th:inline="none">
             const prefix = `${_gate}system/dict`
             const typeMap = {
-                0: {spare: 'layui-bg-blue', info: '正常'},
-                1: {spare: 'layui-btn-primary', info: '预留'},
-                11: {spare: '', info: '系统'},
-            }
+                    0: {spare: 'layui-bg-blue', info: '正常'},
+                    1: {spare: 'layui-btn-primary', info: '预留'},
+                    11: {spare: '', info: '系统'},
+                },
+                perfMap = {
+                    0: {spare: 'layui-bg-blue', info: '正常'},
+                    1: {spare: 't', info: '默认'},
+                }
             let perfIndex  // 默认数据索引
 
             layui.use(['table', 'form', 'jquery'], () => {
@@ -103,15 +107,8 @@
                         {
                             field: 'perf', title: '默认使用',
                             templet: ({perf}) => {
-                                let css, info
-                                if (perf) {
-                                    css = 't'
-                                    info = '默认'
-                                } else {
-                                    css = 'layui-bg-blue'
-                                    info = '正常'
-                                }
-                                return `<a class="layui-btn layui-btn-xs perf-btn ${css}">${info}</a>`
+                                let {spare, info} = perfMap[perf]
+                                return `<a class="layui-btn layui-btn-xs perf-btn ${spare}">${info}</a>`
                             }
                         },
                         {title: '操作', toolbar: '#dict-tool'}
@@ -137,8 +134,7 @@
                             field[`dataList[${i}].${key}`] = temp[key]
                         }
                     }
-                    pageSubmit({form, field})
-                    return false
+                    return pageSubmit({form, field})
                 })
 
 
@@ -199,7 +195,6 @@
                     }
                 })
             })
-
         </script>
     </body>
 </html>
