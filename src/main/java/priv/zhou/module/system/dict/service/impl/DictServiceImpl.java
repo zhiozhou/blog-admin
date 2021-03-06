@@ -12,7 +12,7 @@ import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.system.dict.domain.dao.DictDAO;
 import priv.zhou.module.system.dict.domain.dao.DictDataDAO;
 import priv.zhou.module.system.dict.domain.dto.DictDTO;
@@ -78,7 +78,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
                         .setSpare(dataDTO.getSpare())
                         .setDictKey(dictDTO.getKey()))
                 .collect(Collectors.toList())) < 1) {
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
 
@@ -96,9 +96,9 @@ public class DictServiceImpl extends BaseService implements IDictService {
             if (null == dictPO) {
                 return Result.fail(ResultEnum.EMPTY_DATA);
             } else if (dictDAO.remove(new DictQuery().setId(id)) < 0) {
-                throw new GlobalException(ResultEnum.LATER_RETRY);
+                throw new RestException(ResultEnum.LATER_RETRY);
             } else if (dictDataDAO.remove(new DictDataQuery().setDictKey(dictPO.getKey())) < 0) {
-                throw new GlobalException(ResultEnum.LATER_RETRY);
+                throw new RestException(ResultEnum.LATER_RETRY);
             }
         }
         return Result.success();
@@ -139,7 +139,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
                                 .setLabel(data.getLabel())
                                 .setSpare(data.getSpare()))
                         .collect(Collectors.toList())) != dictDTO.getDataList().size()) {
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
         RedisUtil.delete(Lists.newArrayList(BS_DICT_DATA_KEY + dictPO.getKey(), BS_DICT_DATA_MODIFIED_KEY + dictDTO.getKey()));
         return Result.success();

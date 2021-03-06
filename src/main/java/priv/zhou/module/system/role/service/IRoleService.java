@@ -18,7 +18,7 @@ public interface IRoleService {
 
     Result<NULL> save(RoleDTO roleDTO);
 
-    Result<NULL> remove(String[] keys);
+    Result<NULL> remove(List<String> keys);
 
     Result<NULL> update(RoleDTO roleDTO);
 

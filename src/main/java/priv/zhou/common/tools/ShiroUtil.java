@@ -84,12 +84,17 @@ public class ShiroUtil {
     /**
      * 清除指定角色权限缓存
      */
-    public static void clearRoleAuthorization(String roleKey) {
+    public static void clearRoleAuthorization(String... roleKeys) {
         Cache<String, SimpleAuthorizationInfo> cache = cacheManager.getCache(shiroProperties.getAuthorizationCacheName());
         for (String key : cache.keys()) {
             SimpleAuthorizationInfo authorization = cache.get(key);
-            if (null != authorization && authorization.getRoles().contains(roleKey)) {
-                cache.remove(key);
+            if (null != authorization) {
+                for (String roleKey : roleKeys) {
+                    if (authorization.getRoles().contains(roleKey)) {
+                        cache.remove(key);
+                        break;
+                    }
+                }
             }
         }
     }

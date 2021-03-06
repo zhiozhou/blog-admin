@@ -9,7 +9,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.system.menu.domain.dao.MenuDAO;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
@@ -74,7 +74,7 @@ public class MenuServiceImpl implements IMenuService {
         if (null == menuPO) {
             return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (menuDAO.removeTree(id) < 1) {
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
         roleMenuDAO.term();
         clearCache(menuPO);

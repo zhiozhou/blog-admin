@@ -10,7 +10,7 @@ import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.block.domain.dto.BlockDTO;
 import priv.zhou.module.block.service.IBlockService;
 import priv.zhou.module.comment.domain.dao.CommentDAO;
@@ -107,7 +107,7 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
                         .setIp(commentPO.getIp())
                         .setReason(reason)
                         .setRemark(commentPO.getId().toString())).isFail()) {
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
     }

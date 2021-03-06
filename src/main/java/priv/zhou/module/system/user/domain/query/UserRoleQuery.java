@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 
 /**
  * 用户角色 数据查询模型
@@ -20,6 +22,6 @@ public class UserRoleQuery {
 
     private Integer roleId;
 
-    private String[] roleKeys;
+    private List<String> roleKeys;
 
 }

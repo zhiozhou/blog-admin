@@ -12,7 +12,7 @@ import priv.zhou.common.constant.NULL;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.system.image.domain.dao.ImageDAO;
 import priv.zhou.module.system.image.domain.dto.ImageDTO;
 import priv.zhou.module.system.image.domain.po.ImagePO;
@@ -69,7 +69,7 @@ public class ImageServiceImpl extends BaseService implements IImageService {
             params.put("url", imagePO.getUrl());
             Result<NULL> removeRes = httpPost("移除图片", appProperties.getFileService() + "/remove", params);
             if (removeRes.isFail()) {
-                throw new GlobalException(ResultEnum.LATER_RETRY);
+                throw new RestException(ResultEnum.LATER_RETRY);
             }
         }
         return Result.success();

@@ -117,7 +117,7 @@ function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
             shade: [0.1, '#fff']
         }, () => {
             const param = {}
-            param[`${idField}s[0]`] = data[idField]
+            param[`${idField}s`] = data[idField]
             httpPost({
                 url: `${prefix}/rest/remove`,
                 data: param,

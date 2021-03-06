@@ -13,7 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.HttpUtil;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -62,7 +62,7 @@ public class WebAspect {
         // 1.获取请求
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (null == attributes) {
-            throw new GlobalException(ResultEnum.ERROR_SYSTEM);
+            throw new RestException(ResultEnum.ERROR_SYSTEM);
         }
         return attributes.getRequest();
     }

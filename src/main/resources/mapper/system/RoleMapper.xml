@@ -98,7 +98,7 @@
     <delete id="removeList" parameterType="String">
         update system_role set is_deleted = 1
         where is_deleted = 0 and `key` in
-        <foreach item="key" collection="keys" open="(" separator="," close=")">
+        <foreach item="key" collection="list" open="(" separator="," close=")">
             #{key}
         </foreach>
     </delete>

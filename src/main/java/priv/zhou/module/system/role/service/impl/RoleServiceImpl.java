@@ -1,17 +1,15 @@
 package priv.zhou.module.system.role.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.util.Arrays;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.ArrayUtils;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.system.menu.domain.po.MenuPO;
 import priv.zhou.module.system.role.domain.bo.RoleBO;
 import priv.zhou.module.system.role.domain.dao.RoleDAO;
@@ -64,23 +62,23 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
                         .setRoleId(rolePO.getId())
                         .setMenuId(menuId))
                 .collect(Collectors.toList())) != roleDTO.getMenus().size()) {
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
     }
 
     @Override
     @Transactional
-    public Result<NULL> remove(String[] keys) {
-        if (Arrays.isNullOrEmpty(keys)) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        } else if (ArrayUtils.contains(keys, ROOT_KEY)) {
+    public Result<NULL> remove(List<String> keys) {
+        if (keys.contains(ROOT_KEY)) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         } else if (userRoleDAO.count(new UserRoleQuery().setRoleKeys(keys)) > 0) {
             return Result.fail(ResultEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
-        } else if (roleDAO.removeList(keys) != keys.length) {
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+        } else if (roleDAO.removeList(keys) != keys.size()) {
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
+        roleMenuDAO.term();
+        ShiroUtil.clearRoleAuthorization(keys.toArray(new String[0]));
         return Result.success();
     }
 
@@ -126,7 +124,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
                             .setMenuId(menuId)
                             .setRoleId(rolePO.getId()))
                     .collect(Collectors.toList())) != roleDTO.getMenus().size()) {
-                throw new GlobalException(ResultEnum.LATER_RETRY);
+                throw new RestException(ResultEnum.LATER_RETRY);
             }
             ShiroUtil.clearRoleAuthorization(roleDB.getKey());
         }

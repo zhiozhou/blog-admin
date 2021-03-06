@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.common.enums.ResultEnum;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +52,7 @@ public class Tree {
                 treeList.stream()
                         .filter(po -> entry.getKey().equals(po.getId()))
                         .findFirst()
-                        .orElseThrow(() -> new GlobalException(ResultEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey()))
+                        .orElseThrow(() -> new RestException(ResultEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey()))
                         .setChildren(entry.getValue());
             }
         }

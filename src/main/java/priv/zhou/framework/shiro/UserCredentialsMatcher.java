@@ -2,14 +2,13 @@ package priv.zhou.framework.shiro;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
 import priv.zhou.module.system.user.domain.po.UserPO;
@@ -53,7 +52,7 @@ public class UserCredentialsMatcher extends SimpleCredentialsMatcher {
                     .setId(userPrincipal.getId())
                     .setState(11)
                     .setModifiedBy(ZHOU_ID)) < 1) {
-                throw new GlobalException(ResultEnum.LATER_RETRY);
+                throw new RestException(ResultEnum.LATER_RETRY);
             }
             ShiroUtil.putAuthentication(userPrincipal.getUsername(), UserRealm.buildAuthenticationInfo(userPrincipal.setState(11)));
             throw new LockedAccountException();

@@ -10,7 +10,7 @@ import priv.zhou.common.constant.NULL;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.block.domain.dao.BlockDAO;
 import priv.zhou.module.block.domain.dto.BlockDTO;
 import priv.zhou.module.block.domain.po.BlockPO;
@@ -52,7 +52,7 @@ public class BlockServiceImpl extends BaseService implements IBlockService {
         if (null == blockPO) {
             return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (blockDAO.update(blockPO.setGmtFreed(new Date())) < 1) {
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
     }

@@ -13,22 +13,22 @@ import priv.zhou.common.enums.ResultEnum;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class GlobalException extends RuntimeException {
+public class RestException extends RuntimeException {
 
     /**
      * 包含错误信息的vo对象
      */
     private Result<?> result;
 
-    public GlobalException(Result<?> result) {
+    public RestException(Result<?> result) {
         this.result = result;
     }
 
-    public GlobalException(ResultEnum resultEnum) {
+    public RestException(ResultEnum resultEnum) {
         this.result = Result.fail(resultEnum);
     }
 
-    public GlobalException(ResultEnum resultEnum, String info) {
+    public RestException(ResultEnum resultEnum, String info) {
         this.result = Result.fail(resultEnum, info);
     }
 

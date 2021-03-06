@@ -2,7 +2,7 @@ package priv.zhou.common.tools;
 
 import lombok.extern.slf4j.Slf4j;
 import priv.zhou.common.enums.ResultEnum;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -45,7 +45,7 @@ public final class AesUtil {
             return Base64.getEncoder().encodeToString(cipher.doFinal(plantText.getBytes()));
         } catch (Exception e) {
             log.error("AES加密失败： plantText -->{} | seed -->{} | e -->", plantText, seed, e);
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
     }
 
@@ -61,7 +61,7 @@ public final class AesUtil {
             return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
         } catch (Exception e) {
             log.error("AES解密失败： cipherText -->{} | seed -->{} | e -->", cipherText, seed, e);
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
     }
 
@@ -83,7 +83,7 @@ public final class AesUtil {
             return cipher;
         } catch (Exception e) {
             log.error("AES获取Cipher失败： seed -->{} | isEncrypt -->{} | e -->", seed, isEncrypt, e);
-            throw new GlobalException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.LATER_RETRY);
         }
     }
 

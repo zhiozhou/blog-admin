@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
-import priv.zhou.framework.exception.GlobalException;
+import priv.zhou.framework.exception.RestException;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,7 +119,7 @@ public class OkHttpUtil {
                         builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(MimeEnum.getValue(file)), file.getBytes()));
                         params.put(key, file.getOriginalFilename());
                     } catch (IOException e) {
-                        throw new GlobalException(Result.fail(ResultEnum.ERROR_SYSTEM));
+                        throw new RestException(Result.fail(ResultEnum.ERROR_SYSTEM));
                     }
                 } else if (value instanceof List) {
                     List<Object> list = (List<Object>) value;

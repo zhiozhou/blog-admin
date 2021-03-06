@@ -44,9 +44,8 @@ public class RoleRestController {
 
     @RequiresPermissions("system:role:remove")
     @PostMapping("/remove")
-    public Result<NULL> remove(ArrayList<String> keys) {
-//        return roleService.remove(keys);
-        return null;
+    public Result<NULL> remove(@RequestParam(value="keys") List<String> keys) {
+        return roleService.remove(keys);
     }
 
     @RequiresPermissions("system:role:update")

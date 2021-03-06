@@ -82,8 +82,8 @@ public class GlobalHandler {
      * 全局错误异常
      */
     @ResponseBody
-    @ExceptionHandler(GlobalException.class)
-    public Result<?> globalFailHand(HttpServletRequest request, GlobalException e) {
+    @ExceptionHandler(RestException.class)
+    public Result<?> globalFailHand(HttpServletRequest request, RestException e) {
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getResult());
         return e.getResult();
     }
