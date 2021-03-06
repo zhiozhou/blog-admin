@@ -1,12 +1,8 @@
 package priv.zhou.module.system.extend.service;
 
 import priv.zhou.common.domain.Result;
-import priv.zhou.module.system.extend.domain.dto.ExtendDTO;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public interface IExtendService {
 
@@ -58,5 +54,5 @@ public interface IExtendService {
 
     String PRIMARY = "PRI";
 
-    Result<byte[]> generate(ExtendDTO extendDTO) throws Exception;
+    Result<byte[]> generate(List<String> names) throws Exception;
 }

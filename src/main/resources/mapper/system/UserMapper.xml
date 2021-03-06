@@ -108,12 +108,8 @@
         )
     </insert>
 
-    <update id="removeList" parameterType="Integer">
-        UPDATE system_user SET is_deleted = 1
-        WHERE is_deleted = 0 and id in
-        <foreach item="id" collection="ids" open="(" separator="," close=")">
-            #{id}
-        </foreach>
+    <update id="remove" parameterType="Integer">
+        UPDATE system_user SET is_deleted = 1 WHERE  is_deleted = 0  and id = #{id}
     </update>
 
     <update id="update" parameterType="UserQuery">
@@ -126,7 +122,7 @@
             modified_by = #{modifiedBy},
             gmt_modified = NOW()
         </set>
-        WHERE id = #{id}
+        where id = #{id}
     </update>
 
     <select id="get" parameterType="UserQuery" resultMap="POMap">
@@ -156,7 +152,11 @@
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id
-        WHERE `user`.is_deleted = 0 and `user`.id = #{id}
+        <where>
+            `user`.is_deleted = 0
+            <if test="id != null"> and `user`.id = #{id}</if>
+            <if test="username != null and username != '' "> and username = #{username}</if>
+        </where>
     </select>
 
     <select id="getVO" parameterType="UserQuery" resultMap="VOMap">
@@ -172,7 +172,7 @@
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id
-        WHERE `user`.is_deleted = 0 and `user`.id = #{id}
+        where `user`.is_deleted = 0 and username = #{username}
     </select>
 
     <select id="getPrincipal" parameterType="UserQuery" resultMap="PrincipalMap">

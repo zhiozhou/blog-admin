@@ -65,8 +65,8 @@
                             return {code, msg, data}
                         }
                     },
-                    onTool: ({data, event}) => {
-                        if (event === 'offline') {
+                    onTool: {
+                        offline: (data) => {
                             layer.confirm(`确认强退该用户吗`, {
                                     btn: ['确定', '取消'],
                                     shade: [0.1, '#fff']
@@ -75,7 +75,6 @@
                                     cb: () => msg(reloadTable)
                                 })
                             )
-                            return false
                         }
                     }
                 })

@@ -20,7 +20,7 @@ public interface IUserService {
 
     Result<NULL> save(UserDTO userDTO);
 
-    Result<NULL> remove(Integer[] ids);
+    Result<NULL> remove(List<String> usernames);
 
     Result<NULL> update(UserDTO userDTO);
 
@@ -28,9 +28,9 @@ public interface IUserService {
 
     List<UserTableVO> listTableVO(UserQuery query, Page page);
 
-    Result<NULL> freeze(Integer id);
+    Result<NULL> freeze(String username);
 
-    Result<NULL> unfreeze(Integer id);
+    Result<NULL> unfreeze(String username);
 
     Result<NULL> resetPwd(Integer id, String password);
 }

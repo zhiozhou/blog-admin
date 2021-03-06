@@ -46,7 +46,7 @@ public class ShiroUtil {
     }
 
     public static String getUserName() {
-        return getUser().getName();
+        return getUser().getUsername();
     }
 
 

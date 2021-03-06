@@ -138,11 +138,12 @@ function blobToFile(theBlob, fileName) {
  * 页面形式的表单提交，成功后跳转前一级标签
  */
 function pageSubmit({form, field: data, cb = pageDone}) {
-    return httpPost({
+    httpPost({
         url: prefix + form.getAttribute('action'),
         data,
         cb
     })
+    return false
 }
 
 /**
@@ -156,11 +157,12 @@ function pageDone() {
  * 内联页面通用提交，成功后刷新父级表格
  */
 function iframeSubmit({form, field: data, cb = iframeDone}) {
-    return httpPost({
+    httpPost({
         url: prefix + form.getAttribute('action'),
         data,
         cb
     })
+    return false
 }
 
 

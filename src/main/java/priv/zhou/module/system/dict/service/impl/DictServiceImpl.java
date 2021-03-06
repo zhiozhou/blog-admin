@@ -2,7 +2,6 @@ package priv.zhou.module.system.dict.service.impl;
 
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.constant.NULL;
@@ -87,22 +86,20 @@ public class DictServiceImpl extends BaseService implements IDictService {
 
     @Override
     @Transactional
-    public Result<NULL> remove(int[] ids) {
-        if (ArrayUtils.isEmpty(ids)) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        }
-        for (int id : ids) {
+    public Result<NULL> remove(List<Integer> ids) {
+        for (Integer id : ids) {
             DictPO dictPO = dictDAO.get(new DictQuery().setId(id));
             if (null == dictPO) {
                 return Result.fail(ResultEnum.EMPTY_DATA);
-            } else if (dictDAO.remove(new DictQuery().setId(id)) < 0) {
+            } else if (dictDAO.remove(id) < 0) {
                 throw new RestException(ResultEnum.LATER_RETRY);
-            } else if (dictDataDAO.remove(new DictDataQuery().setDictKey(dictPO.getKey())) < 0) {
+            } else if (dictDataDAO.remove(dictPO.getKey()) < 0) {
                 throw new RestException(ResultEnum.LATER_RETRY);
             }
         }
         return Result.success();
     }
+
 
     @Override
     @Transactional
@@ -129,7 +126,7 @@ public class DictServiceImpl extends BaseService implements IDictService {
                 .setRemark(dictDTO.getRemark())
                 .setModifiedBy(ShiroUtil.getUserId())) < 1) {
             return Result.fail(ResultEnum.LATER_RETRY);
-        } else if (dictDataDAO.delete(new DictDataQuery().setDictKey(dictDTO.getKey())) < 1 ||
+        } else if (dictDataDAO.delete(dictDTO.getKey()) < 1 ||
                 dictDataDAO.saveList(dictDTO.getDataList().stream()
                         .map(data -> new DictDataPO()
                                 .setDictKey(dictDTO.getKey())

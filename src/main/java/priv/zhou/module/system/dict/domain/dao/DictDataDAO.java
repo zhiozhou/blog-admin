@@ -23,9 +23,11 @@ import java.util.List;
 @Component
 public interface DictDataDAO extends BaseDAO<DictDataPO, DictDataQuery> {
 
+    int remove(String dictKey);
+
     int saveList(List<DictDataPO> poList);
 
-    int delete(DictDataQuery query);
+    int delete(String dictKey);
 
     List<DictDataVO> listVO(DictDataQuery query);
 }

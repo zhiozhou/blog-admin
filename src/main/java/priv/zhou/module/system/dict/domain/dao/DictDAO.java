@@ -24,6 +24,8 @@ import java.util.List;
 @Component
 public interface DictDAO extends BaseDAO<DictPO, DictQuery> {
 
+    int remove(Integer id);
+
     DictVO getVO(DictQuery query);
 
     List<DictTableVO> listTableVO(DictQuery query);

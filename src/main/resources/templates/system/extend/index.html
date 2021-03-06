@@ -39,9 +39,9 @@
                 const {table, $} = layui
                 tableRender({
                     table,
-                    options:{
+                    options: {
                         url: `${prefix}/rest/table/list`,
-                        cols : [[
+                        cols: [[
                             {type: 'checkbox'},
                             {field: 'name', title: '名称'},
                             {field: 'comment', title: '描述'},
@@ -56,17 +56,9 @@
                         return warn('请选中要生成的表')
                     }
 
-                    let hasEmpty = false,
-                        url = `${prefix}/rest/extend?`
-                    for (let i = 0; i < data.length; i++) {
-                        let {name, comment} = data[i]
-                        url += `names[${i}]=${name}&`
-                        if (!comment) hasEmpty = true
-                    }
-                    url = encodeURI(url)
-
-                    hasEmpty ?
-                        layer.confirm(`选中表存在空描述，会导致注释异常，确认生成吗`, {
+                    const url = encodeURI(`${prefix}/rest/extend?names=${data.map(({name})=>name).join()}`)
+                    data.some(({comment})=>!comment) ?
+                        layer.confirm(`选择了无描述的表会导致注释异常，确认生成吗`, {
                             btn: ['确定', '取消'],
                             shade: [0.1, '#fff']
                         }, (index) => {

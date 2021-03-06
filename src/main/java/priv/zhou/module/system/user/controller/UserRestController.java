@@ -1,7 +1,6 @@
 package priv.zhou.module.system.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -14,7 +13,6 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.enums.ResultEnum;
-import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.user.domain.dto.UserDTO;
 import priv.zhou.module.system.user.domain.dto.UserLoginDTO;
 import priv.zhou.module.system.user.domain.query.UserQuery;
@@ -22,6 +20,7 @@ import priv.zhou.module.system.user.domain.vo.UserTableVO;
 import priv.zhou.module.system.user.service.IUserService;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 /**
  * 用户rest 控制层
@@ -52,7 +51,6 @@ public class UserRestController {
         return Result.success();
     }
 
-
     @RequiresPermissions("system:user:add")
     @PostMapping("/save")
     public Result<NULL> save(@Validated({Save.class}) UserDTO saveDTO) {
@@ -61,11 +59,8 @@ public class UserRestController {
 
     @RequiresPermissions("system:user:remove")
     @PostMapping("/remove")
-    public Result<NULL> remove(@RequestParam(value = "ids[]") Integer[] ids) {
-        if (ArrayUtils.isEmpty(ids)) {
-            return Result.fail(ResultEnum.EMPTY_PARAM);
-        }
-        return userService.remove(ids);
+    public Result<NULL> remove(@RequestParam(value = "usernames") List<String> usernames) {
+        return userService.remove(usernames);
     }
 
     @RequiresPermissions("system:user:update")
@@ -80,21 +75,16 @@ public class UserRestController {
         return userService.resetPwd(id, password);
     }
 
-    @PostMapping("/reset/pwd/own")
-    public Result<NULL> resetPwd(@NotEmpty(message = "密码不可为空") String password) {
-        return userService.resetPwd(ShiroUtil.getUserId(), password);
+    @RequiresPermissions("system:user:freeze")
+    @PostMapping("/freeze/{username}")
+    public Result<NULL> freeze(@PathVariable String username) {
+        return userService.freeze(username);
     }
 
     @RequiresPermissions("system:user:freeze")
-    @PostMapping("/freeze/{id}")
-    public Result<NULL> freeze(@PathVariable Integer id) {
-        return userService.freeze(id);
-    }
-
-    @RequiresPermissions("system:user:freeze")
-    @PostMapping("/unfreeze/{id}")
-    public Result<NULL> unfreeze(@PathVariable Integer id) {
-        return userService.unfreeze(id);
+    @PostMapping("/unfreeze/{username}")
+    public Result<NULL> unfreeze(@PathVariable String username) {
+        return userService.unfreeze(username);
     }
 
 

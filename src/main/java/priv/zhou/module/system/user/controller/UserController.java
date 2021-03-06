@@ -56,46 +56,42 @@ public class UserController extends BaseController {
     }
 
     @RequiresPermissions("system:user:update")
-    @GetMapping("/update/{id}")
-    public String update(Model model, @PathVariable Integer id) {
-        UserVO userVO = userService.getVO(new UserQuery().setId(id));
+    @GetMapping("/update/{username}")
+    public String update(Model model, @PathVariable String username) {
+        UserVO userVO = userService.getVO(new UserQuery().setUsername(username));
+        super.update(model, userVO);
         userVO.setRoleIdSet(userVO.getRoles()
                 .stream()
                 .map(RoleVO::getId)
-                .collect(Collectors.toSet()));
-        super.update(model, userVO.setRoles(null));
+                .collect(Collectors.toSet()))
+                .setRoles(null);
         model.addAttribute("stateList", dictService.listDataVO(SYSTEM_USER_STATE, DICT_NORM_TYPE));
         model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery().setState(0)));
         return "system/user/au";
     }
 
-    @GetMapping("/reset/pwd/own")
-    public String resetPwd(Model model) {
-        resetPwd(model, ShiroUtil.getUserId());
-        model.addAttribute(ACTION_KEY, "/rest/reset/pwd/own");
-        return "system/user/resetPwd";
-    }
-
-
     @RequiresPermissions("system:user:reset:pwd")
-    @GetMapping("/reset/pwd/{id}")
-    public String resetPwd(Model model, @PathVariable Integer id) {
-        super.update(model, userService.getVO(new UserQuery().setId(id)));
-        model.addAttribute(ACTION_KEY, "/rest/reset/pwd/" + id);
+    @GetMapping("/reset/pwd/{username}")
+    public String resetPwd(Model model, @PathVariable String username) {
+        UserVO userVO = userService.getVO(new UserQuery().setUsername(username));
+        super.update(model, userVO);
+        model.addAttribute(ACTION_KEY, "/rest/reset/pwd/" + userVO.getId());
         return "system/user/resetPwd";
     }
 
 
     @GetMapping("/profile")
     public String profile(Model model) {
-        detail(model, ShiroUtil.getUserId());
+        UserVO userVO = userService.getVO(new UserQuery().setUsername(ShiroUtil.getUserName()));
+        super.detail(model, userVO);
+        userVO.setStateStr(dictService.getLabel(SYSTEM_USER_STATE, userVO.getState()));
         return "system/user/profile";
     }
 
     @RequiresPermissions("system:user:detail")
-    @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable Integer id) {
-        UserVO userVO = userService.getVO(new UserQuery().setId(id));
+    @GetMapping("/detail/{username}")
+    public String detail(Model model, @PathVariable String username) {
+        UserVO userVO = userService.getVO(new UserQuery().setUsername(username));
         super.detail(model, userVO);
         userVO.setStateStr(dictService.getLabel(SYSTEM_USER_STATE, userVO.getState()));
         return "system/user/detail";

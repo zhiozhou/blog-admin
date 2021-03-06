@@ -6,8 +6,6 @@ public interface BaseDAO<PO, Query> {
 
     int save(PO po);
 
-    int remove(Query query);
-
     int update(PO po);
 
     PO get(Query query);

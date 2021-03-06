@@ -42,8 +42,8 @@
                             {title: '操作', toolbar: '#rud'}
                         ]]
                     },
-                    onTool: ({data, event}) => {
-                        if (event === 'remove') {
+                    onTool: {
+                        remove: () => {
                             layer.confirm(`确认移除对此IP的阻塞吗`, {
                                 btn: ['确定', '取消'],
                                 shade: [0.1, '#fff']
@@ -53,7 +53,6 @@
                                     cb: () => msg(reloadTable)
                                 })
                             })
-                            return false
                         }
                     }
                 })

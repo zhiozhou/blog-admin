@@ -27,7 +27,7 @@ public interface IDictService {
 
     Result<NULL> save(DictDTO dictDTO);
 
-    Result<NULL> remove(int[] ids);
+    Result<NULL> remove(List<Integer> ids);
 
     Result<NULL> update(DictDTO dictDTO);
 

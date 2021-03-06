@@ -21,8 +21,6 @@ import priv.zhou.common.tools.DateUtil;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoleTableVO {
 
-	private Integer id;
-
 	/**
 	 * key
 	 */

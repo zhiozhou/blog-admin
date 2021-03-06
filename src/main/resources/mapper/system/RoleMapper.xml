@@ -47,7 +47,6 @@
     </resultMap>
 
     <resultMap id="TableVOMap" type="RoleTableVO">
-        <id column="id" property="id"/>
         <result column="key" property="key"/>
         <result column="name" property="name"/>
         <result column="state" property="state"/>
@@ -180,12 +179,11 @@
 
     <select id="listTableVO" parameterType="RoleQuery" resultMap="TableVOMap">
         SELECT
-            id,
             `key`,
             `name`,
             state,
             remark,
-            (select count(0) from system_user_role where role_id = id) AS relate_count
+            (select count(0) from system_user_role where is_deleted = 0 and role_id = id) AS relate_count
         FROM system_role
         <where>
             is_deleted = 0

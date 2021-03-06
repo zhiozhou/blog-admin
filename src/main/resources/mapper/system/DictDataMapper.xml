@@ -44,11 +44,11 @@
         </foreach>
     </insert>
 
-    <delete id="remove" parameterType="DictDataQuery">
+    <delete id="remove" parameterType="String">
         update system_dict_data set is_deleted = 1 where is_deleted = 0 and dict_key = #{dictKey}
     </delete>
 
-    <delete id="delete" parameterType="DictDataQuery">
+    <delete id="delete" parameterType="String">
         delete from system_dict_data where dict_key = #{dictKey}
     </delete>
 

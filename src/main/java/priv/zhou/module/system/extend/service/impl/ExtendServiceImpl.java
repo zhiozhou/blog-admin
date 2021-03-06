@@ -15,7 +15,6 @@ import priv.zhou.module.system.extend.domain.bo.Demo;
 import priv.zhou.module.system.extend.domain.bo.TableBO;
 import priv.zhou.module.system.extend.domain.dao.TableDAO;
 import priv.zhou.module.system.extend.domain.dto.AppConfig;
-import priv.zhou.module.system.extend.domain.dto.ExtendDTO;
 import priv.zhou.module.system.extend.domain.query.TableQuery;
 import priv.zhou.module.system.extend.service.IExtendService;
 
@@ -43,7 +42,7 @@ public class ExtendServiceImpl implements IExtendService {
     private final IDictService dictService;
 
     @Override
-    public Result<byte[]> generate(ExtendDTO extendDTO) throws Exception {
+    public Result<byte[]> generate(List<String> names) throws Exception {
 
         Map<String, DictDataVO> configMap = dictService.mapDataVO(CONFIG_KEY);
         AppConfig appConfig = new AppConfig()
@@ -53,7 +52,7 @@ public class ExtendServiceImpl implements IExtendService {
                 .setKeepPrefix(configMap.get("keepPrefix").getLabel().startsWith("t"));
 
         // todo 使用bo子查询列 参考kid-server
-        List<TableBO> tables = tableDAO.listBO(new TableQuery().setInNames(extendDTO.getNames()));
+        List<TableBO> tables = tableDAO.listBO(new TableQuery().setInNames(names));
         return coreGenerate(appConfig, tables);
     }
 

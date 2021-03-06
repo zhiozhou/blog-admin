@@ -82,12 +82,8 @@
                                 {title: 'Operation', toolbar: '#image-tool'}
                             ]]
                         },
-                        onTool: ({data, event}) => {
-                            switch (event) {
-                                case 'copy':
-                                    copy(data.url)
-                                    return false
-                            }
+                        onTool: {
+                            copy: (data) => copy(data.url)
                         }
                     })
 

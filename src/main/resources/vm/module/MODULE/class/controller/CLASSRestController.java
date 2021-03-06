@@ -1,5 +1,6 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.className}.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +40,7 @@ public class ${table.className}RestController {
 
     @RequiresPermissions("$!{modulePrefix}${table.objectName}:remove")
     @PostMapping("/remove")
-    public Result<NULL> remove(${table.primaryKeys[0].javaType}[] ${table.primaryKeys[0].attrName}s) {
+    public Result<NULL> remove(List<${table.primaryKeys[0].javaType}> ${table.primaryKeys[0].attrName}s) {
         return ${table.objectName}Service.remove(${table.primaryKeys[0].attrName}s);
     }
 

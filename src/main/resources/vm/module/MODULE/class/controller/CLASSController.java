@@ -42,16 +42,16 @@ public class ${table.className}Controller extends BaseController {
 
 #if(!$table.primaryKeys.isEmpty())
     @RequiresPermissions("$!{modulePrefix}${table.objectName}:update")
-    @GetMapping("/update/{id}")
-    public String update(Model model, @PathVariable Integer id) {
-        super.update(model, ${table.objectName}Service.getVO(new ${table.className}Query().setId(id)));
+    @GetMapping("/update/{${table.primaryKeys[0].attrName}}")
+    public String update(Model model, @PathVariable ${table.primaryKeys[0].javaType} ${table.primaryKeys[0].attrName}) {
+        super.update(model, ${table.objectName}Service.getVO(new ${table.className}Query().set${table.primaryKeys[0].getSetName}(${table.primaryKeys[0].attrName})));
         return "$!{app.modulePath}${table.objectName}/au";
     }
 
     @RequiresPermissions("$!{modulePrefix}${table.objectName}:detail")
-    @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable Integer id) {
-        super.detail(model, ${table.objectName}Service.getVO(new ${table.className}Query().setId(id)));
+    @GetMapping("/detail/{${table.primaryKeys[0].attrName}}")
+    public String detail(Model model, @PathVariable ${table.primaryKeys[0].javaType} ${table.primaryKeys[0].attrName}) {
+        super.detail(model, ${table.objectName}Service.getVO(new ${table.className}Query().set${table.primaryKeys[0].getSetName}(${table.primaryKeys[0].attrName})));
         return "$!{app.modulePath}${table.objectName}/detail";
     }
 

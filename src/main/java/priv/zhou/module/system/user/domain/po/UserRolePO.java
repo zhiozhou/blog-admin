@@ -26,4 +26,9 @@ public class UserRolePO implements Serializable {
      * 角色id
      */
     private Integer roleId;
+
+    /**
+     * 删除位
+     */
+    private Boolean deleted;
 }

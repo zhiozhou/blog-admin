@@ -82,6 +82,7 @@
 
                 tableRender({
                     table,
+                    idField: 'username',
                     options: {
                         cols: [[
                             {field: 'username', title: '用户名', minWidth: '100'},
@@ -101,30 +102,19 @@
                             {title: '操作', toolbar: '#user-tool'}
                         ]]
                     },
-                    onTool: ({event, data}) => {
-                        switch (event) {
-                            case 'resetPwd':
-                                return newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/${data.id}`)
-                            case 'freeze':
-                                return httpPost({url: `${prefix}/rest/freeze/${data.id}`, cb: () => msg(reloadTable())})
-                            case 'unfreeze':
-                                return httpPost({
-                                    url: `${prefix}/rest/unfreeze/${data.id}`,
-                                    cb: () => msg(reloadTable())
-                                })
-                            case 'remove':
-                                layer.confirm(`确认移除该${_module.name}吗`, {
-                                        btn: ['确定', '取消'],
-                                        shade: [0.1, '#fff']
-                                    }, () => httpPost({
-                                        url: `${prefix}/rest/remove`,
-                                        data: {
-                                            ids: [data.id]
-                                        },
-                                        cb: () => msg(reloadTable)
-                                    })
-                                )
-                                return false
+                    onTool: {
+                        resetPwd: (data) => newFrame(`修改密码`, `${_gate}/system/user/reset/pwd/${data.username}`),
+                        freeze: (data) => {
+                            httpPost({
+                                url: `${prefix}/rest/freeze/${data.username}`,
+                                cb: () => msg(reloadTable())
+                            })
+                        },
+                        unfreeze: (data) => {
+                            httpPost({
+                                url: `${prefix}/rest/unfreeze/${data.username}`,
+                                cb: () => msg(reloadTable())
+                            })
                         }
                     }
                 })

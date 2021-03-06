@@ -41,13 +41,14 @@
                 }
                 form.on('submit(login)', ({field: data}) => {
                     data.password = md5(data.username + data.password)
-                    return httpPost({
+                    httpPost({
                         url: `${_gate}system/user/rest/login`,
                         data,
                         cb: () => {
                             location.href = `${_gate}index`
                         }
                     })
+                    return false
                 })
             })
         </script>

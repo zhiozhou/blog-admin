@@ -22,4 +22,6 @@ public interface UserRoleDAO extends BaseDAO<UserRolePO, UserRoleQuery> {
 
     int remove(Integer userId);
 
+    int delete(Integer userId);
+
 }

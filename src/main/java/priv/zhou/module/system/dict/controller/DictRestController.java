@@ -18,6 +18,7 @@ import priv.zhou.module.system.dict.domain.vo.DictTableVO;
 import priv.zhou.module.system.dict.service.IDictService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 字典 控制层
@@ -40,7 +41,7 @@ public class DictRestController {
 
     @RequiresPermissions("system:dict:remove")
     @PostMapping("/remove")
-    public Result<NULL> remove(@RequestParam(value = "ids[]") int[] ids) {
+    public Result<NULL> remove(@RequestParam(value = "ids") List<Integer> ids) {
         return dictService.remove(ids);
     }
 

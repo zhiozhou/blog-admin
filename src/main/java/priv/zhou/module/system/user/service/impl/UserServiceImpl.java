@@ -79,11 +79,20 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public Result<NULL> remove(Integer[] ids) {
-        if (userDAO.removeList(ids) != ids.length) {
-            throw new RestException(ResultEnum.LATER_RETRY);
+    @Transactional
+    public Result<NULL> remove(List<String> usernames) {
+        for (String username : usernames) {
+            UserPO userPO = userDAO.get(new UserQuery().setUsername(username));
+            if (null == userPO) {
+                return Result.fail(ResultEnum.EMPTY_DATA);
+            } else if (userDAO.remove(userPO.getId()) < 1) {
+                throw new RestException(ResultEnum.LATER_RETRY);
+            } else if (userRoleDAO.remove(userPO.getId()) < 1) {
+                throw new RestException(ResultEnum.LATER_RETRY);
+            }
+            ShiroUtil.clearUserAuthorization(username);
         }
-        return Result.success();
+        return Result.fail(ResultEnum.SUCCESS);
     }
 
     @Override
@@ -111,7 +120,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if (roleSet.size() != userDTO.getRoles().size() ||
                 userDTO.getRoles().stream()
                         .noneMatch(roleSet::contains)) {
-            if (userRoleDAO.remove(userDTO.getId()) < 1) {
+            if (userRoleDAO.delete(userDTO.getId()) < 1) {
                 return Result.fail(ResultEnum.LATER_RETRY);
             } else if (userRoleDAO.saveList(userDTO.getRoles()
                     .stream()
@@ -140,23 +149,23 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public Result<NULL> freeze(Integer id) {
-        UserPO userPO = userDAO.get(new UserQuery().setId(id));
+    public Result<NULL> freeze(String username) {
+        UserPO userPO = userDAO.get(new UserQuery().setUsername(username));
         if (null == userPO) {
-            return Result.fail(ResultEnum.FAIL_PARAM);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         }
-        return userDAO.update(new UserPO().setId(id).setState(11).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
+        return userDAO.update(new UserPO().setId(userPO.getId()).setState(11).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
                 Result.success() :
                 Result.fail(ResultEnum.LATER_RETRY);
     }
 
     @Override
-    public Result<NULL> unfreeze(Integer id) {
-        UserPO userPO = userDAO.get(new UserQuery().setId(id));
+    public Result<NULL> unfreeze(String username) {
+        UserPO userPO = userDAO.get(new UserQuery().setUsername(username));
         if (null == userPO) {
-            return Result.fail(ResultEnum.FAIL_PARAM);
+            return Result.fail(ResultEnum.EMPTY_DATA);
         }
-        return userDAO.update(new UserPO().setId(id).setState(0).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
+        return userDAO.update(new UserPO().setId(userPO.getId()).setState(0).setModifiedBy(ShiroUtil.getUserId())) > 0 ?
                 Result.success() :
                 Result.fail(ResultEnum.LATER_RETRY);
     }

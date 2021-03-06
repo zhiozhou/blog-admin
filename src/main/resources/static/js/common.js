@@ -6,7 +6,7 @@ layui.config({
 /**
  * 全局初始化方法
  */
-layui.use([], () => {
+layui.use(['layer'], () => {
     // 预留方法
 })
 
@@ -104,9 +104,8 @@ function httpPost({url, data, cb, load = true}) {
     layui.$.post(url, data, ({code, info, data}) => {
         load && loaded(index)
         if (fail(code)) return warn(info)
-        cb(data)
+        cb({code, info, data})
     })
-    return false
 }
 
 //---------------------------------------------- 页面操作 ----------------------------------------------
@@ -125,6 +124,7 @@ function goto(href) {
 function reloadTable(table = layui.table) {
     table.reload(tableId)
 }
+
 /**
  * 创建 iframe 窗口，手机端自动全屏
  * @param title 窗口标题
@@ -140,7 +140,6 @@ function newFrame(title, url, area) {
         content: url
     })
     window.innerWidth < 768 && layer.full(index)
-    return false
 }
 
 

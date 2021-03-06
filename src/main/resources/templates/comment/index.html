@@ -62,15 +62,15 @@
 
                 tableRender({
                     table,
-                    options:{
-                        cols:[[
+                    options: {
+                        cols: [[
                             {
                                 field: 'fromVisitor', title: '昵称',
                                 templet: ({fromVisitor}) => fromVisitor.nickname
                             },
                             {field: 'content', title: '内容'},
                             {
-                                field: 'gmtCreate',title: '评论时间',
+                                field: 'gmtCreate', title: '评论时间',
                                 templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
 
                             },
@@ -81,24 +81,21 @@
                             {title: '操作', toolbar: '#comment-tool'}
                         ]]
                     },
-                    onTool:({data, event}) => {
-                        switch (event) {
-                            case 'reply':
-                                return newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`)
-                            case 'updateReply':
-                                return newFrame('修改回复', `${prefix}/reply/update/${data.id}`)
-                            case 'pass':
-                                return httpPost({
-                                    url: `${prefix}/rest/pass/${data.id}`,
-                                    cb: () => msg(reloadTable)
-                                })
-                            case 'noPass':
-                                return httpPost({
-                                    url: `${prefix}/rest/pass/no/${data.id}`,
-                                    cb: () => msg(reloadTable)
-                                })
-                            case 'block':
-                                return newFrame('禁言', `${prefix}/block/${data.id}`)
+                    onTool: {
+                        block: (data) => newFrame('禁言', `${prefix}/block/${data.id}`),
+                        reply: (data) => newFrame(`回复${_module.name}`, `${prefix}/reply/${data.id}`),
+                        updateReply: (data) => newFrame('修改回复', `${prefix}/reply/update/${data.id}`),
+                        pass: (data) => {
+                            httpPost({
+                                url: `${prefix}/rest/pass/${data.id}`,
+                                cb: () => msg(reloadTable)
+                            })
+                        },
+                        noPass: (data) => {
+                            httpPost({
+                                url: `${prefix}/rest/pass/no/${data.id}`,
+                                cb: () => msg(reloadTable)
+                            })
                         }
                     }
                 })

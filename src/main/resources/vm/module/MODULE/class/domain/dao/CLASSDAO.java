@@ -23,7 +23,7 @@ public interface ${table.className}DAO extends BaseDAO<${table.className}PO, ${t
 
 #if(!$table.primaryKeys.isEmpty())
 
-    int removeList(${table.primaryKeys[0].javaType}[] ids);
+    int removeList(List<${table.primaryKeys[0].javaType}> ${table.primaryKeys[0].attrName}s);
 
     ${table.className}VO getVO(${table.className}Query query);
 

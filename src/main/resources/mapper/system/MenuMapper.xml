@@ -114,8 +114,8 @@
     </insert>
 
     <delete id="removeTree" parameterType="Integer">
-        delete from system_menu
-        where id = #{id} or id in (
+        DELETE FROM system_menu
+        WHERE id = #{id} OR id IN (
             SELECT
             id
             FROM

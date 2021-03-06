@@ -22,6 +22,9 @@
 
                 tableRender({
                     table,
+#if(${table.primaryKeys[0].attrName}!='id')
+                    idField:'${table.primaryKeys[0].attrName}',
+#end
                     options:{
                         cols:[[
 #foreach ($column in $table.columnList)

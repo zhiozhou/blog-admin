@@ -75,7 +75,7 @@
         )
     </insert>
 
-    <delete id="remove" parameterType="DictQuery">
+    <delete id="remove" parameterType="Integer">
         UPDATE system_dict SET is_deleted = 1 WHERE is_deleted = 0 and id = #{id}
     </delete>
 

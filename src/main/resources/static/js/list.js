@@ -61,7 +61,7 @@ layui.use(['table', 'form', 'jquery'], () => {
  * @param table layui.table组件
  * @param options 表格渲染参数，会替换默认参数
  * @param idField 唯一标识name
- * @param onTool 工具栏监听，返回false阻止继续默认事件管理
+ * @param onTool 工具栏监听
  * @param iframe 工具栏监听是否使用iframe
  */
 function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
@@ -85,33 +85,28 @@ function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
         ...options
     })
 
-    options.cols[0].some(col => col.toolbar) && table.on('tool(table)', (obj) => (!onTool || onTool(obj)) && iframe ? iframeAction(obj) : pageAction(obj))
-
-    function iframeAction({event, data}) {
-        switch (event) {
-            case 'detail':
-                return newFrame(`${_module.name}详情`, `${prefix}/detail/${data[idField]}`)
-            case 'update':
-                return newFrame(`修改${_module.name}`, `${prefix}/update/${data[idField]}`)
-            case 'remove':
-                return removeAction(data)
-        }
+    const toolMap = {
+        ...iframe ?
+            {
+                detail: (data) => newFrame(`${_module.name}详情`, `${prefix}/detail/${data[idField]}`),
+                update: (data) => newFrame(`修改${_module.name}`, `${prefix}/update/${data[idField]}`),
+                remove
+            } :
+            {
+                detail: (data) => goto(`${prefix}/detail/${data[idField]}`),
+                update: (data) => goto(`${prefix}/update/${data[idField]}`),
+                remove
+            },
+        ...onTool
     }
 
-    function pageAction({event, data}) {
-        switch (event) {
-            case 'detail':
-                goto(`${prefix}/detail/${data[idField]}`)
-                return
-            case 'update':
-                goto(`${prefix}/update/${data[idField]}`)
-                return
-            case 'remove':
-                return removeAction(data)
-        }
-    }
+    options.cols[0].some(col => col.toolbar) && table.on('tool(table)', ({event, data}) => {
+        const action = toolMap[event]
+        action && action(data)
+    })
 
-    function removeAction(data) {
+
+    function remove(data) {
         layer.confirm(`确认移除该${_module.name}吗`, {
             btn: ['确定', '取消'],
             shade: [0.1, '#fff']
@@ -121,7 +116,7 @@ function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
             httpPost({
                 url: `${prefix}/rest/remove`,
                 data: param,
-                cb: () => msg(reloadTable)
+                cb: ({info}) => msg(reloadTable, info)
             })
         })
     }

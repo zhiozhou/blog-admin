@@ -67,6 +67,13 @@
         )
     </insert>
 
+    <delete id="removeList" parameterType="${table.primaryKeys[0].javaType}">
+        DELETE FROM ${table.name} where ${table.primaryKeys[0].columnName} IN
+        <foreach item="${table.primaryKeys[0].attrName}" collection="list" open="(" separator="," close=")">
+            #{${table.primaryKeys[0].attrName}}
+        </foreach>
+    </delete>
+
 #if(!$table.primaryKeys.isEmpty())
     <update id="update" parameterType="${table.className}PO">
         UPDATE ${table.name}
