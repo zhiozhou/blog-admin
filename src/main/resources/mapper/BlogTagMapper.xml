@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.module.blog.domain.dao.BlogTagDAO">
+
+    <insert id="saveList">
+        INSERT INTO blog_blog_tag ( tag_id, blog_id, is_deleted )
+        VALUES
+        <foreach collection="tags" index="index" item="tag" separator=",">
+            ( (SELECT id FROM blog_tag WHERE name = #{tag.name}) , #{blogId} ,0)
+        </foreach>
+    </insert>
+
+    <insert id="remove">
+        UPDATE blog_blog_tag SET is_deleted = 1 WHERE is_deleted = 0 and blog_id = #{blogId}
+    </insert>
+
+    <insert id="delete">
+        DELETE FROM blog_blog_tag WHERE blog_id = #{blogId}
+    </insert>
+</mapper>

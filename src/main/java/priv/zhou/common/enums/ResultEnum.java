@@ -31,8 +31,7 @@ public enum ResultEnum {
     REPEAT_KEY("0101", "标识值重复"),
 
 
-
-
+    // 1000 - 1100  用户
     NONE_USERNAME("1001", "用户名不存在"),
 
     FAIL_LOGIN("1002", "用户名或密码错误"),
@@ -40,6 +39,12 @@ public enum ResultEnum {
     FROZE_USERNAME("1003", "账号已被冻结"),
 
     LOCKED_USERNAME("1004", "账号已被锁定，请稍后再试"),
+
+    // 1101 - 1200  博客
+    EXIST_BLOG_TITLE("1002", "标题已存在"),
+
+
+
 
 
     ILLEGAL_VISIT("9000", "非法访问"),

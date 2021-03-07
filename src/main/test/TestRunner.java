@@ -1,5 +1,6 @@
 
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,12 @@ import priv.zhou.Application;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.OkHttpUtil;
+import priv.zhou.module.blog.domain.dao.TagDAO;
+import priv.zhou.module.blog.domain.po.TagPO;
 
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright (C) 2014-2016 天津紫藤科技有限公司. Co. Ltd. All Rights Reserved.
@@ -26,10 +31,14 @@ import javax.validation.constraints.Email;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class TestRunner {
 
+    @Autowired
+    TagDAO tagDAO;
 
     @Test
-    public void ttt() {
-        EmailUtil.send("zhou","test","2080211280@qq.com","zhoujinzi666@gmail.com");
+    public void ttt(){
+        List<TagPO> list = Lists.newArrayList(new TagPO().setName("ubunt111231qweqwe21u").setCreateBy(1), new TagPO().setName("c+1231231qweqwe2111+").setCreateBy(1));
+        tagDAO.incrSaveList(list);
+        System.out.printf("");
     }
 
 //    //同步刷脸信息

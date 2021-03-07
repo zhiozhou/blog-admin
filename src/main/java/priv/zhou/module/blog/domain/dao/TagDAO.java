@@ -3,11 +3,11 @@ package priv.zhou.module.blog.domain.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
-import priv.zhou.common.domain.dao.BaseDAO1;
-import priv.zhou.module.blog.domain.dto.TagDTO;
 import priv.zhou.module.blog.domain.po.TagPO;
+import priv.zhou.module.blog.domain.query.TagQuery;
+import priv.zhou.module.blog.domain.vo.TagVO;
 
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -18,9 +18,23 @@ import java.util.Set;
  */
 @Mapper
 @Component
-public interface TagDAO extends BaseDAO1<TagDTO, TagPO> {
+public interface TagDAO {
 
-    void saveMap(@Param("tags") Set<TagPO> tags, @Param("blogId") Integer blogId);
+    /**
+     * 自增保存，当标签存在时增加count数，不存在时则保存标签，count为1
+     * @param tags
+     * @return
+     */
+    void incrSaveList(List<TagPO> tags);
 
-    void removeMap(@Param("tags") Set<TagPO> tags, @Param("blogId") Integer blogId);
+    /**
+     * count应用自增
+     * @param tags 标签集合
+     * @param delta 自增数量
+     */
+    int incrList(@Param(value = "tags") List<TagPO> tags, @Param(value = "delta") Integer delta);
+
+
+    List<TagVO> listVO(TagQuery query);
 }
+

@@ -65,14 +65,16 @@ public class CommentServiceImpl extends BaseService implements ICommentService {
 
     @Override
     public Result<CommentDTO> get(CommentDTO commentDTO) {
-        CommentPO commentPO = commentDAO.get(commentDTO);
-        return Result.success(new CommentDTO(commentPO));
+//        CommentPO commentPO = commentDAO.get(commentDTO);
+//        return Result.success(new CommentDTO(commentPO));
+        return null;
     }
 
     @Override
     public Result<List<CommentDTO>> list(CommentDTO commentDTO, Page page, Order order) {
         startPage(page);
-        return Result.success(DTO.ofPO(commentDAO.list(commentDTO, order), CommentDTO::new));
+//        return Result.success(DTO.ofPO(commentDAO.list(commentDTO, order), CommentDTO::new));
+        return null;
     }
 
     @Override

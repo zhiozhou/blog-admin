@@ -4,66 +4,52 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.blog.domain.dao.TagDAO">
 
-    <insert id="saveMap">
-        INSERT INTO blog_tag_map ( tag_id, blog_id )
-        VALUES
-        <foreach collection="tags" index="index" item="item" separator=",">
-            ( #{item.id},#{blogId} )
-        </foreach>
-    </insert>
+    <resultMap id="VOMap" type="TagVO">
+        <result column="name" property="name"/>
+    </resultMap>
 
-    <insert id="removeMap">
-        DELETE FROM blog_tag_map
-        WHERE
-        blog_id = #{blogId} and tag_id IN
-        <foreach collection="tags" index="index" item="item" separator="," open="(" close=")">
-            #{item.id}
-        </foreach>
-    </insert>
-
-    <insert id="save" parameterType="TagPO" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog_tag(
-             name ,
-             count ,
-             create_id ,
-             gmt_create
-        )
-        VALUES(
-            #{name} ,
-            #{count} ,
-            #{createId} ,
-            NOW()
-        )
-    </insert>
-
-    <update id="update" parameterType="TagPO">
-        UPDATE blog_tag
-        <set>
-            <if test="count != null">count = #{count},</if>
-        </set>
-        WHERE id = #{id}
-    </update>
-
-
-    <select id="get" parameterType="TagDTO" resultType="TagPO">
+    <sql id="POSql">
         SELECT
             id ,
             name,
-            count
+            count,
+            create_by,
+            gmt_create
         FROM blog_tag
-        where name = #{name}
-    </select>
+    </sql>
 
-    <select id="list" parameterType="TagDTO" resultType="TagPO">
+    <insert id="incrSaveList" parameterType="TagPO">
+        INSERT INTO blog_tag(
+             name ,
+             count ,
+             create_by ,
+             gmt_create
+        )
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            ( #{item.name} , 1 ,#{item.createBy},NOW())
+        </foreach>
+        ON DUPLICATE KEY UPDATE count = count + 1;
+    </insert>
+
+    <update id="incrList" parameterType="TagPO">
+        UPDATE blog_tag set count = count + #{delta} where name in
+        <foreach item="tag" collection="tags" open="(" separator="," close=")">
+            #{tag.name}
+        </foreach>
+    </update>
+
+    <select id="listVO" parameterType="TagQuery" resultMap="VOMap">
         SELECT
-        id ,
-        name
+            id ,
+            name,
+            count,
+            create_by,
+            gmt_create
         FROM blog_tag
         <where>
-            <if test="nameLike != null and nameLike != ''">and name LIKE CONCAT('%',#{nameLike},'%')</if>
+            <if test="nameLike != null and nameLike != ''">and `name` LIKE CONCAT('%',#{nameLike},'%')</if>
         </where>
-        ORDER BY count DESC
     </select>
-
 
 </mapper>

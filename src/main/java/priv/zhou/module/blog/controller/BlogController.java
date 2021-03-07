@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
+import priv.zhou.module.blog.domain.query.BlogQuery;
+import priv.zhou.module.blog.domain.vo.BlogVO;
 import priv.zhou.module.blog.service.IBlogService;
 
-import static priv.zhou.module.blog.service.IBlogService.STATE_KEY;
+import static priv.zhou.module.blog.service.IBlogService.STATE_DICT_KEY;
 
 /**
  * 博客 视图控制层
@@ -40,22 +42,14 @@ public class BlogController extends BaseController {
     @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable Integer id) {
 
-        Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return PAGE_500;
-        }
-        super.update(model, dtoVO.getData());
+        super.update(model, blogService.getVO(new BlogQuery().setId(id)));
 
         return "blog/au";
     }
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Integer id) {
-        Result<BlogDTO> dtoVO = blogService.get(new BlogDTO().setId(id));
-        if (dtoVO.isFail()) {
-            return PAGE_500;
-        }
-        super.detail(model, dtoVO.getData());
+        super.detail(model, blogService.getVO(new BlogQuery().setId(id)));
 
         return "blog/detail";
     }
@@ -63,7 +57,7 @@ public class BlogController extends BaseController {
     @GetMapping
     public String view(Model model) {
         super.list(model);
-        model.addAttribute("stateMap", dictService.mapDataVO(STATE_KEY,DICT_NORM_TYPE));
+        model.addAttribute("stateMap", dictService.mapDataVO(STATE_DICT_KEY,DICT_NORM_TYPE));
         return "blog/index";
     }
 }

@@ -5,6 +5,11 @@ import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.domain.dto.TagDTO;
+import priv.zhou.module.blog.domain.query.BlogQuery;
+import priv.zhou.module.blog.domain.query.TagQuery;
+import priv.zhou.module.blog.domain.vo.BlogTableVO;
+import priv.zhou.module.blog.domain.vo.BlogVO;
+import priv.zhou.module.blog.domain.vo.TagVO;
 
 import java.util.List;
 
@@ -16,21 +21,17 @@ import java.util.List;
  */
 public interface IBlogService {
 
-    String STATE_KEY = "blog_state";
+    String STATE_DICT_KEY = "blog_state";
 
     Result<NULL> save(BlogDTO blogDTO);
 
-    Result<NULL> remove(BlogDTO blogDTO);
+    Result<NULL> remove(List<Integer> list);
 
     Result<NULL> update(BlogDTO blogDTO);
 
-    Result<BlogDTO> get(BlogDTO blogDTO);
+    BlogVO getVO(BlogQuery query);
 
-    default Result<List<BlogDTO>> list(BlogDTO blogDTO) {
-        return list(blogDTO, null);
-    }
+    List<BlogTableVO> listTableVO(BlogQuery query, Page page);
 
-    Result<List<BlogDTO>> list(BlogDTO blogDTO, Page page);
-
-    Result<List<TagDTO>> tagList(TagDTO tagDTO);
+    List<TagVO> listTag(TagQuery query);
 }

@@ -1,15 +1,18 @@
 package priv.zhou.module.blog.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
-import priv.zhou.common.constant.NULL;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
-import priv.zhou.module.blog.domain.dto.TagDTO;
+import priv.zhou.module.blog.domain.query.BlogQuery;
+import priv.zhou.module.blog.domain.query.TagQuery;
+import priv.zhou.module.blog.domain.vo.BlogTableVO;
+import priv.zhou.module.blog.domain.vo.TagVO;
 import priv.zhou.module.blog.service.IBlogService;
 
 import javax.validation.Valid;
@@ -38,8 +41,8 @@ public class BlogRestController {
     }
 
     @PostMapping("/remove/{id}")
-    public Result<NULL> remove(@PathVariable Integer id) {
-        return blogService.remove(new BlogDTO().setId(id));
+    public Result<NULL> remove(@RequestParam(value = "ids") List<Integer> ids) {
+        return blogService.remove(ids);
     }
 
     @PostMapping("/update")
@@ -49,14 +52,14 @@ public class BlogRestController {
 
 
     @PostMapping("/list")
-    public Result<TableVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
-        return Result.table(blogService.list(blogDTO, page));
+    public Result<TableVO<BlogTableVO>> list(BlogQuery query, Page page) {
+        return Result.table(blogService.listTableVO(query, page));
     }
 
 
     @PostMapping("/tag/list")
-    public Result<List<TagDTO>> list(TagDTO tagDTO) {
-        return blogService.tagList(tagDTO);
+    public Result<List<TagVO>> listTag(TagQuery query) {
+        return Result.success(blogService.listTag(query));
     }
 
 }

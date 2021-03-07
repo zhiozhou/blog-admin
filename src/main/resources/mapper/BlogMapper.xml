@@ -4,7 +4,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.blog.domain.dao.BlogDAO">
 
-    <resultMap id="blogMap" type="BlogPO">
+    <resultMap id="POMap" type="BlogPO">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="preview" property="preview"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="abs" property="abs"/>
+        <result column="pv" property="pv"/>
+        <result column="create_by" property="createBy"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modified_by" property="modifiedBy"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+
+    <resultMap id="VOMap" type="BlogVO">
         <id column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
@@ -15,59 +32,22 @@
         <result column="pv" property="pv"/>
         <result column="gmt_create" property="gmtCreate"/>
         <collection property="tags"  ofType="TagPO">
-            <result column="tag_id" property="id"/>
             <result column="tag_name" property="name"/>
-            <result column="tag_count" property="count"/>
         </collection>
     </resultMap>
 
+    <resultMap id="TableVOMap" type="BlogTableVO">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="pv" property="pv"/>
+        <result column="gmt_create" property="gmtCreate"/>
+    </resultMap>
 
-    <insert id="save" parameterType="BlogPO" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog_blog(
-             title , 
-             content , 
-             preview , 
-             state , 
-             remark , 
-             abs ,
-             pv ,
-             create_id ,
-             gmt_create , 
-             gmt_modified 
-        )
-        VALUES(
-            #{title} , 
-            #{content} , 
-            #{preview} , 
-            #{state} , 
-            #{remark} , 
-            #{abs} ,
-            #{pv} ,
-            #{createId} ,
-            NOW() ,
-            NOW()
-        )
-    </insert>
-
-    <update id="update" parameterType="BlogPO">
-        UPDATE blog_blog
-        <set>
-            <if test="title != null and title != ''">title = #{title},</if>
-            <if test="content != null and content != ''">content = #{content},</if>
-            <if test="preview != null and preview != ''">preview = #{preview},</if>
-            <if test="state != null and state != ''">state = #{state},</if>
-            <if test="remark != null and remark != ''">remark = #{remark},</if>
-            <if test="abs != null and abs != ''">abs = #{abs},</if>
-            <if test="pv != null and pv != ''">pv = #{pv},</if>
-            gmt_modified = NOW()
-        </set>
-        WHERE id = #{id}
-    </update>
-
-
-    <select id="get" parameterType="BlogDTO" resultMap="blogMap">
+    <sql id="POSql">
         SELECT
-            blog_blog.id,
+            id,
             title,
             content,
             preview,
@@ -75,45 +55,111 @@
             remark,
             abs,
             pv,
-            blog_blog.gmt_create,
-            blog_tag.id tag_id,
-            blog_tag.name tag_name,
-            blog_tag.count tag_count
-        FROM
-            blog_blog
-            LEFT JOIN blog_tag_map ON blog_blog.id = blog_tag_map.blog_id
-            LEFT JOIN blog_tag ON blog_tag_map.tag_id = blog_tag.id
-        WHERE
-            blog_blog.id = #{id}
+            create_by,
+            gmt_create,
+            modified_by,
+            gmt_modified,
+            is_deleted
+        FROM blog_blog
+    </sql>
+
+    <insert id="save" parameterType="BlogPO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_blog(
+            title,
+            content,
+            preview,
+            state,
+            remark,
+            abs,
+            pv,
+            create_by,
+            gmt_create,
+            is_deleted
+        )
+        VALUES(
+            #{title},
+            #{content},
+            #{preview},
+            #{state},
+            #{remark},
+            #{abs},
+            #{pv},
+            #{createBy},
+            NOW(),
+            0
+        )
+    </insert>
+
+    <delete id="removeList" parameterType="Integer">
+        UPDATE blog_blog SET is_deleted = 0 WHERE is_deleted = 0 AND id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="BlogPO">
+        UPDATE blog_blog
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="preview != null and preview != ''">preview = #{preview},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="abs != null and abs != ''">abs = #{abs},</if>
+            gmt_modified = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="get" parameterType="BlogQuery" resultMap="POMap">
+        <include refid="POSql"/>
+        WHERE is_deleted = 0 and id = #{id}
     </select>
 
-
-    <select id="list" parameterType="BlogDTO" resultType="BlogPO">
+    <select id="getVO" parameterType="BlogQuery" resultMap="VOMap">
         SELECT
-        id ,
-        title ,
-        state ,
-        remark ,
-        pv,
-        gmt_create
+            blog.id,
+            blog.title,
+            blog.content,
+            blog.preview,
+            blog.state,
+            blog.remark,
+            blog.abs,
+            blog.pv,
+            blog.gmt_create,
+            tag.`name` AS tag_name
+        FROM blog_blog AS blog
+        LEFT JOIN blog_blog_tag AS blog_tag ON blog.id = blog_tag.blog_id and blog.is_deleted = 0
+        LEFT JOIN blog_tag AS tag ON blog_tag.tag_id = tag.id
+        WHERE blog.is_deleted = 0 and blog.id = #{id}
+    </select>
+
+    <select id="listTableVO" parameterType="BlogQuery" resultMap="TableVOMap">
+        SELECT
+            id ,
+            title ,
+            state ,
+            remark ,
+            pv,
+            gmt_create
         FROM blog_blog
         <where>
+            is_deleted = 0
+            <if test="state != null">and state = #{state}</if>
             <if test="titleLike != null and titleLike != ''">and title LIKE CONCAT('%',#{titleLike},'%')</if>
-            <if test="state != null  ">and state = #{state}</if>
             <if test="remarkLike != null  and remarkLike != '' ">and remark LIKE CONCAT('%',#{remarkLike},'%')</if>
         </where>
-        ORDER BY id DESC
     </select>
 
-
-    <select id="count" parameterType="BlogDTO" resultType="Integer">
+    <select id="count" parameterType="BlogDTO" resultType="int">
         SELECT
-        count(0)
-        FROM
-        blog_blog
+            count(0)
+        FROM blog_blog
         <where>
-            <if test="exclId != null  ">and id != #{exclId}</if>
-            <if test="title != null  and title != '' ">and title = #{title}</if>
+            is_deleted = 0
+            <if test="ridId != null">and id != #{ridId}</if>
+            <if test="title != null  and title != '">and title = #{title}</if>
         </where>
     </select>
+
 </mapper>

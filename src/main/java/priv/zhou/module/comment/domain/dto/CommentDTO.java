@@ -103,12 +103,6 @@ public class CommentDTO extends DTO<CommentPO> {
     private Date gmtModified;
 
 
-    public CommentDTO(CommentPO commentPO) {
-        super(commentPO);
-        this.blog = ofPO(commentPO.getBlog(), BlogDTO::new);
-        this.fromVisitor = ofPO(commentPO.getFromVisitor(), VisitorDTO::new);
-    }
-
     @Override
     public CommentPO toPO() {
         return super.toPO()

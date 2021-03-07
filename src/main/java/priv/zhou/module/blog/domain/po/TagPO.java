@@ -38,7 +38,7 @@ public class TagPO implements Serializable {
     /**
      * 创建人
      */
-    private Integer createId;
+    private Integer createBy;
 
     /**
      * 创建时间
