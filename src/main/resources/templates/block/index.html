@@ -44,14 +44,14 @@
                     },
                     onTool: {
                         remove: () => {
-                            layer.confirm(`确认移除对此IP的阻塞吗`, {
-                                btn: ['确定', '取消'],
-                                shade: [0.1, '#fff']
-                            }, () => {
-                                httpPost({
-                                    url: `${prefix}/rest/remove/${data.id}`,
-                                    cb: () => msg(reloadTable)
-                                })
+                            confirm({
+                                msg: `确认移除对此IP的阻塞吗`,
+                                cb: () => {
+                                    httpPost({
+                                        url: `${prefix}/rest/remove/${data.id}`,
+                                        cb: () => msg(reloadTable)
+                                    })
+                                }
                             })
                         }
                     }

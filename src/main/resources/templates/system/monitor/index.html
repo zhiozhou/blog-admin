@@ -67,14 +67,13 @@
                     },
                     onTool: {
                         offline: (data) => {
-                            layer.confirm(`确认强退该用户吗`, {
-                                    btn: ['确定', '取消'],
-                                    shade: [0.1, '#fff']
-                                }, () => httpPost({
+                            confirm({
+                                msg: `确认强退该用户吗`,
+                                cb: () => httpPost({
                                     url: `${prefix}/rest/offline/${data.id}`,
                                     cb: () => msg(reloadTable)
                                 })
-                            )
+                            })
                         }
                     }
                 })

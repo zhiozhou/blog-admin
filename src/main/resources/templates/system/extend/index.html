@@ -56,14 +56,14 @@
                         return warn('请选中要生成的表')
                     }
 
-                    const url = encodeURI(`${prefix}/rest/extend?names=${data.map(({name})=>name).join()}`)
-                    data.some(({comment})=>!comment) ?
-                        layer.confirm(`选择了无描述的表会导致注释异常，确认生成吗`, {
-                            btn: ['确定', '取消'],
-                            shade: [0.1, '#fff']
-                        }, (index) => {
-                            window.open(url)
-                            layer.close(index)
+                    const url = encodeURI(`${prefix}/rest/extend?names=${data.map(({name}) => name).join()}`)
+                    data.some(({comment}) => !comment) ?
+                        confirm({
+                            msg: `选择了无描述的表会导致注释异常，确认生成吗`,
+                            cb: index => {
+                                window.open(url)
+                                layer.close(index)
+                            }
                         }) :
                         window.open(url)
                 })

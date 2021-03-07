@@ -203,3 +203,13 @@ function tips(id, msg) {
     })
 }
 
+/**
+ * 确认框
+ */
+function confirm({msg = '确认执行该操作吗', cb}) {
+    layer.confirm(msg, {
+        btn: ['确定', '取消'],
+        shade: [0.1, '#fff']
+    }, cb)
+}
+

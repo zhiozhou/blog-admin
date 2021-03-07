@@ -107,17 +107,17 @@ function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
 
 
     function remove(data) {
-        layer.confirm(`确认移除该${_module.name}吗`, {
-            btn: ['确定', '取消'],
-            shade: [0.1, '#fff']
-        }, () => {
-            const param = {}
-            param[`${idField}s`] = data[idField]
-            httpPost({
-                url: `${prefix}/rest/remove`,
-                data: param,
-                cb: ({info}) => msg(reloadTable, info)
-            })
+        confirm({
+            msg: `确认移除该${_module.name}吗`,
+            cb: () => {
+                const param = {}
+                param[`${idField}s`] = data[idField]
+                httpPost({
+                    url: `${prefix}/rest/remove`,
+                    data: param,
+                    cb: ({info}) => msg(reloadTable, info)
+                })
+            }
         })
     }
 }
