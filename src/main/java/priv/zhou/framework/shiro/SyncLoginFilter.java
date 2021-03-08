@@ -16,6 +16,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.util.WebUtils;
+import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.session.ShiroSession;
 import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 
@@ -78,22 +79,23 @@ public class SyncLoginFilter extends AccessControlFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 
         // 1.用户没有登陆 不进行拦截
-        Subject subject = getSubject(request, response);
+        Subject subject = ShiroUtil.getSubject();
         if (!subject.isAuthenticated() && !subject.isRemembered()) {
             return true;
         }
 
-
         // 2.获取账号登陆队列
+        boolean syncCache = false;
         ShiroSession session = (ShiroSession) sessionDAO.readSession(subject.getSession().getId());
         UserPrincipal userPrincipal = (UserPrincipal) subject.getPrincipal();
         Deque<Serializable> deque = cache.get(userPrincipal.getUsername());
         if (null == deque) {
-            cache.put(userPrincipal.getUsername(), deque = Lists.newLinkedList());
+            deque = Lists.newLinkedList();
         }
 
         // 3.放入登陆队列
         if (null == session.getAttribute(kickOutKey) && !deque.contains(session.getId())) {
+            syncCache = true;
             UserAgent userAgent = UserAgent.parseUserAgentString(((ShiroHttpServletRequest) request).getHeader("User-Agent"));
             session.setUsername(userPrincipal.getUsername());
             session.setRoleNames(userPrincipal.getRoleNames());
@@ -108,6 +110,7 @@ public class SyncLoginFilter extends AccessControlFilter {
             try {
                 Session kickOutSession = sessionManager.getSession(new DefaultSessionKey(sessionId));
                 if (kickOutSession != null) {
+                    syncCache = true;
                     kickOutSession.setAttribute(kickOutKey, STR_0);
                 }
             } catch (UnknownSessionException e) {
@@ -115,7 +118,12 @@ public class SyncLoginFilter extends AccessControlFilter {
             }
         }
 
-        // 5.当前没被标识
+        // 5.更新缓存
+        if(syncCache){
+            cache.put(userPrincipal.getUsername(), deque);
+        }
+
+        // 5.未被踢出的session
         if (null == session.getAttribute(kickOutKey)) {
             return true;
         }
