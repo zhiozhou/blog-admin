@@ -87,7 +87,7 @@ public class ShiroConfigurer {
         filterMap.put("/test/**", anon);
 
         // 注销地址
-        filterMap.put("/system/user/logout", DefaultFilter.logout.name());
+//        filterMap.put("/system/user/logout", DefaultFilter.logout.name());
         // 记住我 或 认证通过
         filterMap.put("/**", DefaultFilter.user.name() + "," + syncLoginFilter.getName());
 
@@ -159,13 +159,12 @@ public class ShiroConfigurer {
      */
     @Bean
     public SyncLoginFilter syncLoginFilter() {
-        return new SyncLoginFilter() {{
-            setSessionDAO(sessionDAO());
-            setSessionManager(sessionManager());
-            setOutUrl(LOGIN_PATH + "?" + this.getName());
-            setMaxSync(shiroProperties.getSyncLoginLimit());
-            setCacheManager(cacheManager().getCache(shiroProperties.getSyncLoginCacheName()));
-        }};
+        SyncLoginFilter syncLoginFilter = new SyncLoginFilter();
+        syncLoginFilter.setSessionDAO(sessionDAO());
+        syncLoginFilter.setOutUrl(LOGIN_PATH + "?" + syncLoginFilter.getName());
+        syncLoginFilter.setMaxSync(shiroProperties.getSyncLoginLimit());
+        syncLoginFilter.setCache(cacheManager().getCache(shiroProperties.getSyncLoginCacheName()));
+        return syncLoginFilter;
     }
 
 
@@ -250,11 +249,11 @@ public class ShiroConfigurer {
      */
     @Bean
     public SessionDAO sessionDAO() {
-        return new ShiroSessionDAO() {{
-            setCacheManager(cacheManager());
-            setActiveSessionsCacheName(shiroProperties.getSessionCacheName());
-            setSessionIdGenerator(sessionIdGenerator());
-        }};
+        ShiroSessionDAO sessionDAO = new ShiroSessionDAO();
+        sessionDAO.setCacheManager(cacheManager());
+        sessionDAO.setActiveSessionsCacheName(shiroProperties.getSessionCacheName());
+        sessionDAO.setSessionIdGenerator(sessionIdGenerator());
+        return sessionDAO;
     }
 
     /**

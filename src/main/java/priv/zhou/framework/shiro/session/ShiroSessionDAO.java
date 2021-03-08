@@ -40,6 +40,7 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
 
     @Override
     public Serializable create(Session session) {
+        System.out.println("create id -->" + session.getId());
         return super.create(session);
     }
 
@@ -47,6 +48,7 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
     public void delete(Session session) {
         Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
         if (null != sessionMap) {
+            System.out.println("delete id -->" + session.getId());
             sessionMap.remove(session.getId());
         }
         super.delete(session);
@@ -64,13 +66,14 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
             shiroSession.setSeptumUpdate(true);
             shiroSession.setLastUpdatedTime(DateUtil.now());
         }
+        System.out.println("update id -->" + session.getId());
         setSessionToThreadLocal(session.getId(), session);
         super.update(session);
     }
 
 
     @Override
-    protected Session doReadSession(Serializable sessionId) {
+    public Session readSession(Serializable sessionId) {
         if (null == sessionId) {
             return null;
         }
@@ -78,9 +81,14 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
         if (null != session) {
             return session;
         }
-        session = super.doReadSession(sessionId);
-        setSessionToThreadLocal(sessionId, session);
-        return session;
+        try {
+
+            session = super.readSession(sessionId);
+            setSessionToThreadLocal(sessionId, session);
+            return session;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

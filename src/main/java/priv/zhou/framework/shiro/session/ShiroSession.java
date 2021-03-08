@@ -2,7 +2,6 @@ package priv.zhou.framework.shiro.session;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SimpleSession;
 
@@ -29,6 +28,8 @@ public class ShiroSession extends SimpleSession implements Serializable {
 
     private String os;
 
+    private Integer state;
+
     private Date lastUpdatedTime;
 
     private boolean septumUpdate;
@@ -50,6 +51,11 @@ public class ShiroSession extends SimpleSession implements Serializable {
 
     public void setOs(String os) {
         this.os = os;
+        this.setSeptumUpdate(false);
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
         this.setSeptumUpdate(false);
     }
 

@@ -4,13 +4,9 @@ import com.google.common.collect.Lists;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.DefaultSessionKey;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -24,8 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.Serializable;
 import java.util.Deque;
-
-import static priv.zhou.common.constant.GlobalConst.STR_0;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 登陆限制过滤器
@@ -33,16 +28,9 @@ import static priv.zhou.common.constant.GlobalConst.STR_0;
 @Slf4j
 @Getter
 @Setter
-@Accessors(chain = true)
 public class SyncLoginFilter extends AccessControlFilter {
 
     private final String name = "loginLimit";
-
-    /**
-     * session踢出标识
-     */
-    private String kickOutKey = "KICK_OUT";
-
 
     /**
      * 踢出后到的地址
@@ -54,21 +42,23 @@ public class SyncLoginFilter extends AccessControlFilter {
      */
     private int maxSync = 1;
 
+    /**
+     * 被踢出后的等待时间，5分钟
+     */
+    private Long kickedWait = TimeUnit.MINUTES.toMillis(5);
+
     private SessionDAO sessionDAO;
-
-    private SessionManager sessionManager;
-
 
     private Cache<String, Deque<Serializable>> cache;
 
-
-    public SyncLoginFilter setCacheManager(Cache<String, Deque<Serializable>> cache) {
-        this.cache = cache;
-        return this;
-    }
-
-    public void remove(String username) {
-        cache.get(username).remove();
+    public void remove(String username, Serializable sessionId) {
+        if (null == sessionId) {
+            return;
+        }
+        Deque<Serializable> deque = cache.get(username);
+        if (null != deque && deque.removeIf(sessionId::equals)) {
+            cache.put(username, deque);
+        }
     }
 
     /**
@@ -94,13 +84,14 @@ public class SyncLoginFilter extends AccessControlFilter {
         }
 
         // 3.放入登陆队列
-        if (null == session.getAttribute(kickOutKey) && !deque.contains(session.getId())) {
+        if (session.getState().equals(0) && !deque.contains(session.getId())) {
             syncCache = true;
             UserAgent userAgent = UserAgent.parseUserAgentString(((ShiroHttpServletRequest) request).getHeader("User-Agent"));
             session.setUsername(userPrincipal.getUsername());
             session.setRoleNames(userPrincipal.getRoleNames());
             session.setBrowser(userAgent.getBrowser().getName());
             session.setOs(userAgent.getOperatingSystem().getName());
+            sessionDAO.update(session);
             deque.push(session.getId());
         }
 
@@ -108,10 +99,13 @@ public class SyncLoginFilter extends AccessControlFilter {
         while (deque.size() > maxSync) {
             Serializable sessionId = deque.removeLast();
             try {
-                Session kickOutSession = sessionManager.getSession(new DefaultSessionKey(sessionId));
+                ShiroSession kickOutSession = (ShiroSession) sessionDAO.readSession(sessionId);
                 if (kickOutSession != null) {
                     syncCache = true;
-                    kickOutSession.setAttribute(kickOutKey, STR_0);
+                    kickOutSession.setState(11);
+                    kickOutSession.setTimeout(kickedWait);
+                    System.out.println("kickout id -->" + sessionId);
+                    sessionDAO.update(kickOutSession);
                 }
             } catch (UnknownSessionException e) {
                 log.info(e.getMessage());
@@ -119,18 +113,20 @@ public class SyncLoginFilter extends AccessControlFilter {
         }
 
         // 5.更新缓存
-        if(syncCache){
+        if (syncCache) {
             cache.put(userPrincipal.getUsername(), deque);
         }
 
-        // 5.未被踢出的session
-        if (null == session.getAttribute(kickOutKey)) {
+        if (session.getState().equals(0)) {
+            // 正常状态
             return true;
+        } else if (session.getState().equals(11)) {
+
+            // 被踢出状态
+            subject.logout();
+            WebUtils.issueRedirect(request, response, outUrl);
         }
 
-        // 6.踢出session
-        subject.logout();
-        WebUtils.issueRedirect(request, response, outUrl);
         return false;
     }
 

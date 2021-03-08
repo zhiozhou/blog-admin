@@ -18,6 +18,7 @@ public class ShiroSessionFactory implements SessionFactory {
     @Override
     public Session createSession(SessionContext initData) {
         ShiroSession session = new ShiroSession();
+        session.setState(0);
         HttpServletRequest request = (HttpServletRequest) initData.get(DefaultWebSessionContext.class.getName() + ".SERVLET_REQUEST");
         session.setHost(HttpUtil.getIpAddress(request));
         return session;

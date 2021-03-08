@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.ExpiredSessionException;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.DefaultSessionKey;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.stereotype.Service;
@@ -17,7 +14,6 @@ import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.SyncLoginFilter;
 import priv.zhou.framework.shiro.session.ShiroSession;
-import priv.zhou.framework.shiro.session.ShiroSessionDAO;
 import priv.zhou.module.system.monitor.domain.query.SessionQuery;
 import priv.zhou.module.system.monitor.domain.vo.SessionVO;
 import priv.zhou.module.system.monitor.service.ISessionService;
@@ -30,9 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SessionServiceImpl implements ISessionService {
 
-    private final ShiroSessionDAO sessionDAO;
-
-    private final SessionManager sessionManager;
+    private final SessionDAO sessionDAO;
 
     private final SyncLoginFilter syncLoginFilter;
 
@@ -69,13 +63,12 @@ public class SessionServiceImpl implements ISessionService {
             return Result.fail(ResultEnum.FAIL_PARAM);
         }
         try {
-            Session session = sessionManager.getSession(new DefaultSessionKey(id));
+            ShiroSession session = (ShiroSession) sessionDAO.readSession(id);
             if (null == session) {
                 return Result.fail(ResultEnum.FAIL_PARAM);
             }
-            syncLoginFilter.remove((String) session.getAttribute("username"));
+            syncLoginFilter.remove(session.getUsername(), session.getId());
             sessionDAO.delete(session);
-            session.stop();
             return Result.success();
         } catch (ExpiredSessionException e) {
             return Result.success();
