@@ -28,6 +28,7 @@ import priv.zhou.framework.shiro.SyncLoginFilter;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.framework.shiro.UserRealm;
 import priv.zhou.framework.shiro.session.ShiroSessionDAO;
+import priv.zhou.framework.shiro.session.ShiroSessionFactory;
 import priv.zhou.framework.shiro.session.ShiroSessionListener;
 import priv.zhou.framework.shiro.session.ShiroSessionManager;
 import priv.zhou.module.system.user.domain.dao.UserDAO;
@@ -159,6 +160,7 @@ public class ShiroConfigurer {
     @Bean
     public SyncLoginFilter syncLoginFilter() {
         return new SyncLoginFilter() {{
+            setSessionDAO(sessionDAO());
             setSessionManager(sessionManager());
             setOutUrl(LOGIN_PATH + "?" + this.getName());
             setMaxSync(shiroProperties.getSyncLoginLimit());
@@ -216,6 +218,7 @@ public class ShiroConfigurer {
             setSessionDAO(sessionDAO());
             setDeleteInvalidSessions(true);
             setCacheManager(cacheManager());
+            setSessionFactory(sessionFactory());
             setSessionIdCookie(sessionIdCookie());
             setSessionValidationSchedulerEnabled(true);
             setGlobalSessionTimeout(shiroProperties.getSessionExpire());
@@ -232,6 +235,14 @@ public class ShiroConfigurer {
     public ShiroSessionListener sessionListener() {
         return new ShiroSessionListener();
     }
+
+
+
+    @Bean
+    public ShiroSessionFactory sessionFactory(){
+        return new ShiroSessionFactory();
+    }
+
 
     /**
      * session 持久化

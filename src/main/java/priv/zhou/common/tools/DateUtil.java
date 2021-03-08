@@ -41,6 +41,9 @@ public class DateUtil {
      */
     private final static TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
 
+    public static Date now() {
+        return new Date();
+    }
 
     public static String format() {
         return format(new Date());

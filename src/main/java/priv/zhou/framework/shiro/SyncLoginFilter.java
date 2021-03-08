@@ -11,6 +11,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
@@ -52,6 +53,7 @@ public class SyncLoginFilter extends AccessControlFilter {
      */
     private int maxSync = 1;
 
+    private SessionDAO sessionDAO;
 
     private SessionManager sessionManager;
 
@@ -83,7 +85,7 @@ public class SyncLoginFilter extends AccessControlFilter {
 
 
         // 2.获取账号登陆队列
-        ShiroSession session = (ShiroSession)subject.getSession();
+        ShiroSession session = (ShiroSession) sessionDAO.readSession(subject.getSession().getId());
         UserPrincipal userPrincipal = (UserPrincipal) subject.getPrincipal();
         Deque<Serializable> deque = cache.get(userPrincipal.getUsername());
         if (null == deque) {
@@ -93,10 +95,10 @@ public class SyncLoginFilter extends AccessControlFilter {
         // 3.放入登陆队列
         if (null == session.getAttribute(kickOutKey) && !deque.contains(session.getId())) {
             UserAgent userAgent = UserAgent.parseUserAgentString(((ShiroHttpServletRequest) request).getHeader("User-Agent"));
-            session.setUsername(userPrincipal.getUsername())
-                    .setRoleNames(userPrincipal.getRoleNames())
-                    .setBrowser(userAgent.getBrowser().getName())
-                    .setOs(userAgent.getOperatingSystem().getName());
+            session.setUsername(userPrincipal.getUsername());
+            session.setRoleNames(userPrincipal.getRoleNames());
+            session.setBrowser(userAgent.getBrowser().getName());
+            session.setOs(userAgent.getOperatingSystem().getName());
             deque.push(session.getId());
         }
 

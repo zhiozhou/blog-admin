@@ -17,6 +17,7 @@ import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.SyncLoginFilter;
 import priv.zhou.framework.shiro.session.ShiroSession;
+import priv.zhou.framework.shiro.session.ShiroSessionDAO;
 import priv.zhou.module.system.monitor.domain.query.SessionQuery;
 import priv.zhou.module.system.monitor.domain.vo.SessionVO;
 import priv.zhou.module.system.monitor.service.ISessionService;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SessionServiceImpl implements ISessionService {
 
-    private final SessionDAO sessionDAO;
+    private final ShiroSessionDAO sessionDAO;
 
     private final SessionManager sessionManager;
 

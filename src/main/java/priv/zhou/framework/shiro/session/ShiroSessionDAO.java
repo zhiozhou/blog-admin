@@ -5,6 +5,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.crazycake.shiro.SessionInMemory;
+import priv.zhou.common.tools.DateUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -37,6 +38,10 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
      */
     private long accessTimeUpdateSeptum = 2 * 60 * 1000;
 
+    @Override
+    public Serializable create(Session session) {
+        return super.create(session);
+    }
 
     @Override
     public void delete(Session session) {
@@ -51,12 +56,13 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
     public void update(Session session) throws UnknownSessionException {
         if (session instanceof ShiroSession) {
             ShiroSession shiroSession = (ShiroSession) session;
-            Long accessSeptum = shiroSession.getAccessSeptum();
-            if (null != accessSeptum && shiroSession.getAccessSeptum() < accessTimeUpdateSeptum) {
-                // 指定时间内已更新过访问时间
+            if (null != shiroSession.getLastUpdatedTime() && shiroSession.isSeptumUpdate() &&
+                    shiroSession.getLastAccessTime().getTime() - shiroSession.getLastUpdatedTime().getTime() < accessTimeUpdateSeptum) {
+                // 间隔内已更新过
                 return;
             }
-            shiroSession.setAccessSeptum(null);
+            shiroSession.setSeptumUpdate(true);
+            shiroSession.setLastUpdatedTime(DateUtil.now());
         }
         setSessionToThreadLocal(session.getId(), session);
         super.update(session);
@@ -79,6 +85,9 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
 
 
     private void setSessionToThreadLocal(Serializable sessionId, Session session) {
+        if (null == sessionId || null == session) {
+            return;
+        }
         Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
         if (null == sessionMap) {
             sessionMap = new HashMap<>();
