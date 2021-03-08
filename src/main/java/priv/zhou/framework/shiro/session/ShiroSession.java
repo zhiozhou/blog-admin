@@ -2,7 +2,9 @@ package priv.zhou.framework.shiro.session;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.apache.shiro.session.mgt.SimpleSession;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.Date;
 // 忽略父级方法防止反序列化失败
 @Getter
 @Setter
+@Accessors(chain = true)
 public class ShiroSession extends SimpleSession implements Serializable {
 
 
