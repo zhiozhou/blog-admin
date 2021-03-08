@@ -13,8 +13,8 @@ import java.util.Map;
 
 /**
  * @author zhou
- * @since 2021.02.08
  * @description 参考 shiro-redis 开源项目 Git地址 https://github.com/alexxiyang/shiro-redis
+ * @since 2021.02.08
  */
 @Slf4j
 public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
@@ -32,18 +32,36 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
     private long sessionThreadExpire = 1000L;
 
 
+    /**
+     * session访问时间更新间隔
+     */
+    private long accessTimeUpdateSeptum = 2 * 60 * 1000;
+
+
+    @Override
+    public void delete(Session session) {
+        Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
+        if (null != sessionMap) {
+            sessionMap.remove(session.getId());
+        }
+        super.delete(session);
+    }
+
     @Override
     public void update(Session session) throws UnknownSessionException {
         if (session instanceof ShiroSession) {
             ShiroSession shiroSession = (ShiroSession) session;
-            if (!shiroSession.isChanged()) {
+            Long accessSeptum = shiroSession.getAccessSeptum();
+            if (null != accessSeptum && shiroSession.getAccessSeptum() < accessTimeUpdateSeptum) {
+                // 指定时间内已更新过访问时间
                 return;
             }
-            // 常置false，只有当lastAccessTime以为的字段改变时才会变为true
-            shiroSession.setChanged(false);
+            shiroSession.setAccessSeptum(null);
         }
+        setSessionToThreadLocal(session.getId(), session);
         super.update(session);
     }
+
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
@@ -88,6 +106,7 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
         }
         return session;
     }
+
 
     private String getSessionKey(Serializable sessionId) {
         return this.keyPrefix + sessionId;

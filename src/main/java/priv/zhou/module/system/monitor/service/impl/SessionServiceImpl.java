@@ -16,6 +16,7 @@ import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.SyncLoginFilter;
+import priv.zhou.framework.shiro.session.ShiroSession;
 import priv.zhou.module.system.monitor.domain.query.SessionQuery;
 import priv.zhou.module.system.monitor.domain.vo.SessionVO;
 import priv.zhou.module.system.monitor.service.ISessionService;
@@ -37,23 +38,26 @@ public class SessionServiceImpl implements ISessionService {
 
     @Override
     public Result<List<SessionVO>> list(SessionQuery query) {
+
         return Result.success(sessionDAO.getActiveSessions().stream()
+                .map(s -> (ShiroSession) s)
                 .filter(s -> {
                     if (null == s.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                         return false;
                     } else if (StringUtils.isNotBlank(query.getHost()) && !s.getHost().contains(query.getHost())) {
                         return false;
-                    } else return !StringUtils.isNotBlank(query.getUsername()) || ((String) s.getAttribute("username")).contains(query.getUsername());
+                    } else
+                        return !StringUtils.isNotBlank(query.getUsername()) || s.getUsername().contains(query.getUsername());
                 })
                 .map(s -> new SessionVO()
                         .setId((String) s.getId())
                         .setHost(s.getHost())
+                        .setOs(s.getOs())
+                        .setBrowser(s.getBrowser())
+                        .setUsername(s.getUsername())
+                        .setRoleNames(s.getRoleNames())
                         .setLoginTime(s.getStartTimestamp())
-                        .setLastAccessTime(s.getLastAccessTime())
-                        .setOs((String) s.getAttribute("os"))
-                        .setRoleNames((String) s.getAttribute("roleNames"))
-                        .setBrowser((String) s.getAttribute("browser"))
-                        .setUsername((String) s.getAttribute("username")))
+                        .setLastAccessTime(s.getLastAccessTime()))
                 .collect(Collectors.toList())
         );
     }

@@ -30,8 +30,8 @@ public class RsaUtil {
      * @param plainText    明文
      * @param publicKeyB64 公钥的Base64字符串
      */
-    public static String encode(String plainText, String publicKeyB64) {
-        return encode(plainText, getPublicKey(publicKeyB64));
+    public static String encrypt(String plainText, String publicKeyB64) {
+        return encrypt(plainText, getPublicKey(publicKeyB64));
     }
 
 
@@ -41,7 +41,7 @@ public class RsaUtil {
      * @param plainText 明文
      * @param publicKey 公钥
      */
-    public static String encode(String plainText, PublicKey publicKey) {
+    public static String encrypt(String plainText, PublicKey publicKey) {
         try {
             Cipher cipher = Cipher.getInstance(CIPHER);
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
@@ -57,8 +57,8 @@ public class RsaUtil {
      * @param cipherText    RSA密文
      * @param privateKeyB64 私钥的Base64字符串
      */
-    public static String decode(String cipherText, String privateKeyB64) {
-        return decode(cipherText, getPrivateKey(privateKeyB64));
+    public static String decrypt(String cipherText, String privateKeyB64) {
+        return decrypt(cipherText, getPrivateKey(privateKeyB64));
     }
 
 
@@ -68,7 +68,7 @@ public class RsaUtil {
      * @param cipherText RSA密文
      * @param privateKey 私钥
      */
-    public static String decode(String cipherText, PrivateKey privateKey) {
+    public static String decrypt(String cipherText, PrivateKey privateKey) {
         try{
             byte[] bytes = Base64Util.decode(cipherText);
             Cipher cipher = Cipher.getInstance(CIPHER);
