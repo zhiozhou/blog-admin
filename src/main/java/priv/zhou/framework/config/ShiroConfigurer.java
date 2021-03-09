@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import priv.zhou.common.properties.ShiroProperties;
 import priv.zhou.framework.shiro.SyncOnlineFilter;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
@@ -32,7 +31,6 @@ import priv.zhou.framework.shiro.session.ShiroSessionDAO;
 import priv.zhou.framework.shiro.session.ShiroSessionFactory;
 import priv.zhou.framework.shiro.session.ShiroSessionListener;
 import priv.zhou.framework.shiro.session.ShiroSessionManager;
-import priv.zhou.module.system.user.domain.dao.UserDAO;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -43,8 +41,6 @@ import static priv.zhou.common.constant.ShiroConst.*;
 @Configuration
 @RequiredArgsConstructor
 public class ShiroConfigurer {
-
-    private final UserDAO userDAO;
 
     private final ShiroProperties shiroProperties;
 
@@ -150,7 +146,6 @@ public class ShiroConfigurer {
     @Bean
     public UserCredentialsMatcher credentialsMatcher() {
         return new UserCredentialsMatcher(
-                userDAO,
                 shiroProperties.getAttemptLoginLimit(),
                 cacheManager().getCache(shiroProperties.getAttemptLoginCacheName()));
     }

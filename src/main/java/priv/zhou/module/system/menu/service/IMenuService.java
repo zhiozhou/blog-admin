@@ -39,10 +39,4 @@ public interface IMenuService {
         return Tree.trim(listSelectVO(query), ROOT_ID);
     }
 
-    /**
-     * 获取用户的权限字符set
-     */
-    Set<String> keySet(MenuQuery menuQuery);
-
-
 }

@@ -148,9 +148,4 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         startPage(page);
         return roleDAO.listTableVO(query);
     }
-
-    @Override
-    public Set<String> keySet(Integer userId) {
-        return roleDAO.keySet(userId);
-    }
 }

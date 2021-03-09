@@ -136,11 +136,6 @@ public class MenuServiceImpl implements IMenuService {
     }
 
 
-    @Override
-    public Set<String> keySet(MenuQuery query) {
-        return menuDAO.keySet(query);
-    }
-
 
     private void clearCache(MenuPO menuPO) {
         if (ADMIN_FLAG.equals(menuPO.getFlag())) {

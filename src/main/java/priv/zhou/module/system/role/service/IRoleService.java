@@ -27,9 +27,4 @@ public interface IRoleService {
     List<RoleSelectVO> listSelectVO(RoleQuery query);
 
     List<RoleTableVO> listTableVO(RoleQuery query, Page page);
-
-    /**
-     * 获取用户的权限字符set
-     */
-    Set<String> keySet(Integer userId);
 }
