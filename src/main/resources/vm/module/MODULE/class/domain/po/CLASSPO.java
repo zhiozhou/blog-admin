@@ -1,11 +1,11 @@
 package ${app.packet}.module.$!{app.moduleRef}${table.objectName}.domain.po;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+import static ${app.packet}.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 
 /**
  * ${table.comment} 数据持久化模型
@@ -17,6 +17,8 @@ import java.util.Date;
 @Setter
 @Accessors(chain = true)
 public class ${table.className}PO implements Serializable{
+
+	public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
 #foreach ($column in $table.columnList)
 

@@ -9,10 +9,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 @Getter
 @Setter
 @Accessors(chain = true)
 public class MenuPO implements Serializable {
+
+
+	public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
 	/**
 	 * id

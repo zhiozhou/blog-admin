@@ -10,6 +10,7 @@ import org.crazycake.shiro.RedisCacheManager;
 import priv.zhou.common.properties.ShiroProperties;
 import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -31,6 +32,10 @@ public class ShiroUtil {
 
     public static Session getSession() {
         return getSubject().getSession();
+    }
+
+    public static Serializable getSessionId() {
+        return getSubject().getSession().getId();
     }
 
     public static void stopSession() {

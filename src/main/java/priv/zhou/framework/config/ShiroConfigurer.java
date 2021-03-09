@@ -244,7 +244,7 @@ public class ShiroConfigurer {
      */
     @Bean
     public SessionDAO sessionDAO() {
-        ShiroSessionDAO sessionDAO = new ShiroSessionDAO();
+        ShiroSessionDAO sessionDAO = new ShiroSessionDAO(2 * 60 * 1000);
         sessionDAO.setCacheManager(cacheManager());
         sessionDAO.setActiveSessionsCacheName(shiroProperties.getSessionCacheName());
         sessionDAO.setSessionIdGenerator(sessionIdGenerator());

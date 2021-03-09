@@ -9,6 +9,8 @@ import priv.zhou.module.system.role.domain.po.RolePO;
 import java.io.Serializable;
 import java.util.Date;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 /**
  * 用户 数据持久化模型
  *
@@ -19,6 +21,9 @@ import java.util.Date;
 @Setter
 @Accessors(chain = true)
 public class UserPO implements Serializable {
+
+
+    public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
     /**
      * id

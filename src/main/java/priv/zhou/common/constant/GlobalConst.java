@@ -7,6 +7,13 @@ public interface GlobalConst {
 
     String DEFAULT_ENC =StandardCharsets.UTF_8.name();
 
+
+    /**
+     * 全局序列化版本id
+     * 不要修改，避免反序列化失败
+     */
+    long SERIAL_VERSION_UOD = 2020020202;
+
     String STR_0 = "0";
 
     String EMPTY_STR = "0";

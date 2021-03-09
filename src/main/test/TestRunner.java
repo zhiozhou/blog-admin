@@ -38,7 +38,6 @@ public class TestRunner {
     public void ttt(){
         List<TagPO> list = Lists.newArrayList(new TagPO().setName("ubunt111231qweqwe21u").setCreateBy(1), new TagPO().setName("c+1231231qweqwe2111+").setCreateBy(1));
         tagDAO.incrSaveList(list);
-        System.out.printf("");
     }
 
 //    //同步刷脸信息

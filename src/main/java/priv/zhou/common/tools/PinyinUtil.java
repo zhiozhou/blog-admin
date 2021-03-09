@@ -9,14 +9,6 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 public class PinyinUtil {
 
     /**
-     * 测试main方法
-     */
-    public static void main(String[] args) {
-        System.out.println(toPinyin("周金意", true)); //转为首字母大写
-        System.out.println(toPinyin("周金意"));
-    }
-
-    /**
      * 获取拼写字符穿
      */
     public static String toPinyin(String str) {

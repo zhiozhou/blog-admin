@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 /**
  * 用户 数据持久化模型
  *
@@ -21,6 +23,9 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class UserBO implements Serializable {
+
+
+    public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
     /**
      * id

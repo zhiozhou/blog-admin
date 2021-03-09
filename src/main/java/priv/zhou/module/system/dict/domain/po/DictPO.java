@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 /**
  * 字典 数据持久化模型
  *
@@ -20,6 +22,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class DictPO implements Serializable{
 
+	public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
 	/**
 	 * id

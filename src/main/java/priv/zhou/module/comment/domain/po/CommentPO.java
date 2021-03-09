@@ -7,9 +7,10 @@ import lombok.experimental.Accessors;
 import priv.zhou.module.blog.domain.po.BlogPO;
 import priv.zhou.module.visitor.domain.po.VisitorPO;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 
 /**
  * 评论 数据持久化模型
@@ -21,6 +22,8 @@ import java.util.Date;
 @Setter
 @Accessors(chain = true)
 public class CommentPO implements Serializable {
+
+    public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
     /**
      *

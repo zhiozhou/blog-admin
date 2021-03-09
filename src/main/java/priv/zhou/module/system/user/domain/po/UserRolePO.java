@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 /**
  * 用户 数据持久化模型
  *
@@ -16,6 +18,9 @@ import java.io.Serializable;
 @Setter
 @Accessors(chain = true)
 public class UserRolePO implements Serializable {
+
+
+    public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
     /**
      * 用户id

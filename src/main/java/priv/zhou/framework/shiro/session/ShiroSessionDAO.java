@@ -5,7 +5,10 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.crazycake.shiro.SessionInMemory;
+import org.springframework.context.ApplicationListener;
+import org.springframework.web.context.support.ServletRequestHandledEvent;
 import priv.zhou.common.tools.DateUtil;
+import priv.zhou.common.tools.ShiroUtil;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,41 +21,33 @@ import java.util.Map;
  * @since 2021.02.08
  */
 @Slf4j
-public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
-
-    private String keyPrefix;
-
-    /**
-     * doReadSession在登录时会被调用10次左右,将会话保存到ThreadLocal以解决此问题
-     */
-    private final static ThreadLocal<Map<Serializable, SessionInMemory>> sessionsInThread = new ThreadLocal<>();
-
-    /**
-     * session在ThreadLocal中缓存的毫秒数
-     */
-    private long sessionThreadExpire = 1000L;
-
+public class ShiroSessionDAO extends EnterpriseCacheSessionDAO implements ApplicationListener<ServletRequestHandledEvent> {
 
     /**
      * session访问时间更新间隔
      */
-    private long accessTimeUpdateSeptum = 2 * 60 * 1000;
+    private final long accessTimeUpdateSeptum;
 
-    @Override
-    public Serializable create(Session session) {
-        System.out.println("create id -->" + session.getId());
-        return super.create(session);
+    /**
+     * readSession在登录时会被调用10次左右,将会话保存到ThreadLocal以解决此问题
+     */
+    private final static ThreadLocal<Map<Serializable, SessionInMemory>> sessionLocals = new ThreadLocal<>();
+
+    public ShiroSessionDAO(long accessTimeUpdateSeptum) {
+        this.accessTimeUpdateSeptum = accessTimeUpdateSeptum;
     }
+
 
     @Override
     public void delete(Session session) {
-        Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
+        Map<Serializable, SessionInMemory> sessionMap = sessionLocals.get();
         if (null != sessionMap) {
-            System.out.println("delete id -->" + session.getId());
             sessionMap.remove(session.getId());
         }
         super.delete(session);
     }
+
+
 
     @Override
     public void update(Session session) throws UnknownSessionException {
@@ -66,25 +61,23 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
             shiroSession.setSeptumUpdate(true);
             shiroSession.setLastUpdatedTime(DateUtil.now());
         }
-        System.out.println("update id -->" + session.getId());
-        setSessionToThreadLocal(session.getId(), session);
+        setThreadLocal(session.getId(), session);
         super.update(session);
     }
 
-
     @Override
     public Session readSession(Serializable sessionId) {
+        System.out.println(Thread.currentThread().getId()+" readSession "+sessionId);
         if (null == sessionId) {
             return null;
         }
-        Session session = getSessionFromThreadLocal(sessionId);
+        Session session = getLocalSession(sessionId);
         if (null != session) {
             return session;
         }
         try {
-
             session = super.readSession(sessionId);
-            setSessionToThreadLocal(sessionId, session);
+            setThreadLocal(sessionId, session);
             return session;
         } catch (Exception e) {
             return null;
@@ -92,14 +85,23 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
     }
 
 
-    private void setSessionToThreadLocal(Serializable sessionId, Session session) {
+    @Override
+    public void onApplicationEvent(ServletRequestHandledEvent event) {
+        Map<Serializable, SessionInMemory> sessionMap = sessionLocals.get();
+        if (null != sessionMap) {
+            sessionLocals.remove();
+        }
+    }
+
+
+    private void setThreadLocal(Serializable sessionId, Session session) {
         if (null == sessionId || null == session) {
             return;
         }
-        Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
+        Map<Serializable, SessionInMemory> sessionMap = sessionLocals.get();
         if (null == sessionMap) {
             sessionMap = new HashMap<>();
-            sessionsInThread.set(sessionMap);
+            sessionLocals.set(sessionMap);
         }
         SessionInMemory sessionInMemory = new SessionInMemory();
         sessionInMemory.setCreateTime(new Date());
@@ -108,8 +110,8 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
     }
 
 
-    private Session getSessionFromThreadLocal(Serializable sessionId) {
-        Map<Serializable, SessionInMemory> sessionMap = sessionsInThread.get();
+    private Session getLocalSession(Serializable sessionId) {
+        Map<Serializable, SessionInMemory> sessionMap = sessionLocals.get();
         if (null == sessionMap) {
             return null;
         }
@@ -117,24 +119,8 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO {
         if (null == sessionInMemory) {
             return null;
         }
-        Session session = sessionInMemory.getSession();
-        if (System.currentTimeMillis() - sessionInMemory.getCreateTime().getTime() >= sessionThreadExpire) {
-            sessionMap.remove(sessionId);
-        }
-        return session;
+        return sessionInMemory.getSession();
     }
 
-
-    private String getSessionKey(Serializable sessionId) {
-        return this.keyPrefix + sessionId;
-    }
-
-    public void setKeyPrefix(String keyPrefix) {
-        this.keyPrefix = keyPrefix;
-    }
-
-    public void setSessionThreadExpire(long sessionThreadExpire) {
-        this.sessionThreadExpire = sessionThreadExpire;
-    }
 
 }

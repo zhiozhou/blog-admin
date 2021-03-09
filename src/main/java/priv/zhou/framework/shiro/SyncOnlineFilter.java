@@ -104,7 +104,6 @@ public class SyncOnlineFilter extends AccessControlFilter {
                     syncCache = true;
                     kickOutSession.setState(11);
                     kickOutSession.setTimeout(kickedWait);
-                    System.out.println("kickout id -->" + sessionId);
                     sessionDAO.update(kickOutSession);
                 }
             } catch (UnknownSessionException e) {

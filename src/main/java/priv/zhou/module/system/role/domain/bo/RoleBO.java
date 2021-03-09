@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 /**
  * 角色 逻辑模型
  *
@@ -19,6 +21,9 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class RoleBO implements Serializable{
+
+
+	public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
 	private Integer id;
 

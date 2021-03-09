@@ -9,6 +9,8 @@ import priv.zhou.module.system.user.domain.po.UserPO;
 import java.io.Serializable;
 import java.util.Date;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 /**
  * 阻塞 数据持久化模型
  *
@@ -20,6 +22,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class BlockPO implements Serializable {
 
+    public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
     /**
      *

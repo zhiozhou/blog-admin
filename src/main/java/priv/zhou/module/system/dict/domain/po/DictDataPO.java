@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.Date;
 
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+
 /**
  * 字典数据 数据持久化模型
  *
@@ -18,6 +20,8 @@ import java.util.Date;
 @Setter
 @Accessors(chain = true)
 public class DictDataPO implements Serializable{
+
+	public static final long serialVersionUID = SERIAL_VERSION_UOD;
 
 	/**
 	 * id
