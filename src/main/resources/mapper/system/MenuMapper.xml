@@ -115,7 +115,7 @@
 
     <delete id="removeClan" parameterType="Integer">
         DELETE FROM system_menu
-        WHERE id = #{id} OR id IN (
+        WHERE id IN (
             SELECT
             id
             FROM
@@ -127,7 +127,7 @@
                 ( SELECT id, parent_id FROM system_menu t ORDER BY parent_id, id ) t1,
                 ( SELECT @pids := #{id} ) t2
             ) t3
-            WHERE ischild != 0
+            WHERE ischild != 0 OR id = #{id}
         )
     </delete>
 
