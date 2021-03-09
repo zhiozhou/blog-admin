@@ -23,8 +23,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import priv.zhou.common.properties.ShiroProperties;
-import priv.zhou.framework.shiro.SyncLoginFilter;
+import priv.zhou.framework.shiro.SyncOnlineFilter;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.framework.shiro.UserRealm;
 import priv.zhou.framework.shiro.session.ShiroSessionDAO;
@@ -68,8 +69,8 @@ public class ShiroConfigurer {
         // 自定过滤器
         LinkedHashMap<String, Filter> filters = Maps.newLinkedHashMap();
 
-        SyncLoginFilter syncLoginFilter = syncLoginFilter();
-        filters.put(syncLoginFilter.getName(), syncLoginFilter);
+        SyncOnlineFilter syncOnlineFilter = syncOnlineFilter();
+        filters.put(syncOnlineFilter.getName(), syncOnlineFilter);
 
         // 访问过滤
         Map<String, String> filterMap = Maps.newLinkedHashMap();
@@ -82,14 +83,14 @@ public class ShiroConfigurer {
         filterMap.put("/img/**", anon);
         filterMap.put("/fonts/**", anon);
         filterMap.put("/plugin/**", anon);
-        filterMap.put(LOGIN_PATH, anon + "," + syncLoginFilter.getName());
+        filterMap.put(LOGIN_PATH, anon + "," + syncOnlineFilter.getName());
         filterMap.put("/system/user/rest/login", anon);
         filterMap.put("/test/**", anon);
 
         // 注销地址
 //        filterMap.put("/system/user/logout", DefaultFilter.logout.name());
         // 记住我 或 认证通过
-        filterMap.put("/**", DefaultFilter.user.name() + "," + syncLoginFilter.getName());
+        filterMap.put("/**", DefaultFilter.user.name() + "," + syncOnlineFilter.getName());
 
         ShiroFilterFactoryBean filerFactory = new ShiroFilterFactoryBean();
         filerFactory.setSecurityManager(securityManager);
@@ -158,13 +159,13 @@ public class ShiroConfigurer {
      * 账号登录限制
      */
     @Bean
-    public SyncLoginFilter syncLoginFilter() {
-        SyncLoginFilter syncLoginFilter = new SyncLoginFilter();
-        syncLoginFilter.setSessionDAO(sessionDAO());
-        syncLoginFilter.setOutUrl(LOGIN_PATH + "?" + syncLoginFilter.getName());
-        syncLoginFilter.setMaxSync(shiroProperties.getSyncLoginLimit());
-        syncLoginFilter.setCache(cacheManager().getCache(shiroProperties.getSyncLoginCacheName()));
-        return syncLoginFilter;
+    public SyncOnlineFilter syncOnlineFilter() {
+        return new SyncOnlineFilter() {{
+            setSessionDAO(sessionDAO());
+            setOutUrl(LOGIN_PATH + "?" + this.getName());
+            setMaxSync(shiroProperties.getSyncOnlineLimit());
+            setCache(cacheManager().getCache(shiroProperties.getSyncOnlineCacheName()));
+        }};
     }
 
 
@@ -173,10 +174,10 @@ public class ShiroConfigurer {
      */
     @Bean
     public CookieRememberMeManager rememberMeManager() {
-        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey(HexUtils.fromHexString(REMEMBER_ME_CIPHER_KEY));
-        return cookieRememberMeManager;
+        return new CookieRememberMeManager() {{
+            setCookie(rememberMeCookie());
+            setCipherKey(HexUtils.fromHexString(REMEMBER_ME_CIPHER_KEY));
+        }};
     }
 
 
@@ -185,11 +186,11 @@ public class ShiroConfigurer {
      */
     @Bean
     public RedisCacheManager cacheManager() {
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        redisCacheManager.setExpire(shiroProperties.getCacheExpire());
-        redisCacheManager.setPrincipalIdFieldName(CACHE_PRINCIPAL_FIELD);
-        return redisCacheManager;
+        return new RedisCacheManager() {{
+            setRedisManager(redisManager());
+            setExpire(shiroProperties.getCacheExpire());
+            setPrincipalIdFieldName(CACHE_PRINCIPAL_FIELD);
+        }};
     }
 
     /**
@@ -236,9 +237,8 @@ public class ShiroConfigurer {
     }
 
 
-
     @Bean
-    public ShiroSessionFactory sessionFactory(){
+    public ShiroSessionFactory sessionFactory() {
         return new ShiroSessionFactory();
     }
 

@@ -73,7 +73,7 @@ public class MenuServiceImpl implements IMenuService {
         MenuPO menuPO = menuDAO.get(new MenuQuery(ADMIN_FLAG).setId(id));
         if (null == menuPO) {
             return Result.fail(ResultEnum.EMPTY_DATA);
-        } else if (menuDAO.removeTree(id) < 1) {
+        } else if (menuDAO.removeClan(id) < 1) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
         roleMenuDAO.trim();

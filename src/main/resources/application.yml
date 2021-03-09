@@ -39,7 +39,7 @@ mybatis:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 shiro:
   attempt-login-limit: 5 # 尝试登录最大限制
-  sync-login-limit: 1 # 单一账号同时登录登录限制
+  sync-online-limit: 1 # 同时在线限制
 app:
   name: ${spring.application.name}
   admin-email: 2080211280@qq.com

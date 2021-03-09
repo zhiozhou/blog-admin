@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Getter
 @Setter
-public class SyncLoginFilter extends AccessControlFilter {
+public class SyncOnlineFilter extends AccessControlFilter {
 
     private final String name = "loginLimit";
 

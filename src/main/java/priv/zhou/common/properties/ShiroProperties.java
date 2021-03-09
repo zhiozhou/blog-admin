@@ -43,7 +43,7 @@ public class ShiroProperties {
     /**
      * 同时登录限制缓存名
      */
-    private String syncLoginCacheName = "sync-login-cache";
+    private String syncOnlineCacheName = "sync-online-cache";
 
     /**
      * session过期时间
@@ -91,7 +91,7 @@ public class ShiroProperties {
     /**
      * 同时登录最大限制
      */
-    private Integer syncLoginLimit;
+    private Integer syncOnlineLimit;
 
 
 }

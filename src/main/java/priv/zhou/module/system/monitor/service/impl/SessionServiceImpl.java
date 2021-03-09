@@ -12,7 +12,7 @@ import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.shiro.SyncLoginFilter;
+import priv.zhou.framework.shiro.SyncOnlineFilter;
 import priv.zhou.framework.shiro.session.ShiroSession;
 import priv.zhou.module.system.monitor.domain.query.SessionQuery;
 import priv.zhou.module.system.monitor.domain.vo.SessionVO;
@@ -28,7 +28,7 @@ public class SessionServiceImpl implements ISessionService {
 
     private final SessionDAO sessionDAO;
 
-    private final SyncLoginFilter syncLoginFilter;
+    private final SyncOnlineFilter syncOnlineFilter;
 
 
     @Override
@@ -67,7 +67,7 @@ public class SessionServiceImpl implements ISessionService {
             if (null == session) {
                 return Result.fail(ResultEnum.FAIL_PARAM);
             }
-            syncLoginFilter.remove(session.getUsername(), session.getId());
+            syncOnlineFilter.remove(session.getUsername(), session.getId());
             sessionDAO.delete(session);
             return Result.success();
         } catch (ExpiredSessionException e) {

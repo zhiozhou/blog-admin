@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
 import priv.zhou.common.tools.ShiroUtil;
-import priv.zhou.framework.shiro.SyncLoginFilter;
+import priv.zhou.framework.shiro.SyncOnlineFilter;
 import priv.zhou.module.system.role.domain.query.RoleQuery;
 import priv.zhou.module.system.role.domain.vo.RoleVO;
 import priv.zhou.module.system.role.service.IRoleService;
@@ -37,14 +37,14 @@ public class UserController extends BaseController {
 
     private final IRoleService roleService;
 
-    private final SyncLoginFilter syncLoginFilter;
+    private final SyncOnlineFilter syncOnlineFilter;
 
-    public UserController(IUserService userService, IRoleService roleService, SyncLoginFilter syncLoginFilter) {
+    public UserController(IUserService userService, IRoleService roleService, SyncOnlineFilter syncOnlineFilter) {
 
         super("用户", "system:user");
         this.userService = userService;
         this.roleService = roleService;
-        this.syncLoginFilter = syncLoginFilter;
+        this.syncOnlineFilter = syncOnlineFilter;
     }
 
     @GetMapping("/login")
@@ -57,7 +57,7 @@ public class UserController extends BaseController {
     public String logout() {
         Subject subject = ShiroUtil.getSubject();
         UserPrincipal userPrincipal = (UserPrincipal) subject.getPrincipal();
-        syncLoginFilter.remove(userPrincipal.getUsername(), subject.getSession().getId());
+        syncOnlineFilter.remove(userPrincipal.getUsername(), subject.getSession().getId());
         subject.logout();
         return "system/user/login";
     }
