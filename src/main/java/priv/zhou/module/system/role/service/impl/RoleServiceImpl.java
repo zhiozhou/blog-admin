@@ -77,7 +77,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         } else if (roleDAO.removeList(keys) != keys.size()) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
-        roleMenuDAO.term();
+        roleMenuDAO.trim();
         ShiroUtil.clearRoleAuthorization(keys.toArray(new String[0]));
         return Result.success();
     }

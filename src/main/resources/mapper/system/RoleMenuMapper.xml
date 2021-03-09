@@ -16,7 +16,7 @@
         delete from system_role_menu where role_id = #{id}
     </delete>
 
-    <delete id="term">
+    <delete id="trim">
         delete from system_role_menu
         WHERE menu_id NOT IN ( SELECT id FROM system_menu )
     </delete>

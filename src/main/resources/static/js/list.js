@@ -162,7 +162,7 @@ function initTreeTable() {
         parseData: ({code, info: msg, data: src}) => {
             let dest = null
             if (src) {
-                const term = (dest, src, depth) => {
+                const trim = (dest, src, depth) => {
                     for (let item of src) {
                         item.depth = depth
                         let {id, children} = item
@@ -170,13 +170,13 @@ function initTreeTable() {
                             // 将子元素插入父级元素后
                             dest.splice(1 + parseInt(dest.findIndex(({id: itemId}) => id === itemId)), 0, ...children)
                             // 子孙级递归插入
-                            term(dest, children, 1 + depth)
+                            trim(dest, children, 1 + depth)
                             --item.depth
                         }
                     }
                 }
                 dest = [...src]
-                term(dest, src, 0)
+                trim(dest, src, 0)
             }
             return {code, msg, "data": dest}
         },

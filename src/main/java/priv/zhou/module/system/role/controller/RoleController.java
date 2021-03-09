@@ -68,7 +68,7 @@ public class RoleController extends BaseController {
         super.detail(model, roleVO);
 
         roleVO.setStateStr(dictService.getLabel(SYSTEM_ROLE_STATE, roleVO.getState()))
-                .setMenus(Tree.term(roleVO.getMenus(), IMenuService.ROOT_ID));
+                .setMenus(Tree.trim(roleVO.getMenus(), IMenuService.ROOT_ID));
         return "system/role/detail";
     }
 

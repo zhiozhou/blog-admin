@@ -6,9 +6,7 @@ import priv.zhou.common.domain.Tree;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.domain.vo.MenuSelectVO;
-import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
 import priv.zhou.module.system.menu.domain.vo.MenuVO;
-import priv.zhou.module.system.user.domain.bo.UserPrincipal;
 
 import java.util.List;
 import java.util.Set;
@@ -34,11 +32,11 @@ public interface IMenuService {
     List<MenuSelectVO> listSelectVO(MenuQuery query);
 
     default List<MenuVO> treeVO(MenuQuery query) {
-        return Tree.term(listVO(query), ROOT_ID);
+        return Tree.trim(listVO(query), ROOT_ID);
     }
 
     default List<MenuSelectVO> treeSelectVO(MenuQuery query) {
-        return Tree.term(listSelectVO(query), ROOT_ID);
+        return Tree.trim(listSelectVO(query), ROOT_ID);
     }
 
     /**

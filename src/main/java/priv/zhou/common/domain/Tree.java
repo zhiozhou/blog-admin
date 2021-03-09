@@ -42,7 +42,7 @@ public class Tree {
      * 树对象组整理为树形结构
      */
     @SuppressWarnings("unchecked")
-    public static <M extends Tree> List<M> term(List<M> treeList, Integer rootId) {
+    public static <M extends Tree> List<M> trim(List<M> treeList, Integer rootId) {
         if(null == treeList || treeList.isEmpty()){
             return treeList;
         }

@@ -76,7 +76,7 @@ public class MenuServiceImpl implements IMenuService {
         } else if (menuDAO.removeTree(id) < 1) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
-        roleMenuDAO.term();
+        roleMenuDAO.trim();
         clearCache(menuPO);
         return Result.success();
     }

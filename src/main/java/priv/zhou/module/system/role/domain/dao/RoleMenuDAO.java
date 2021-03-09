@@ -17,7 +17,7 @@ public interface RoleMenuDAO {
     /**
      * 整理垃圾关联
      */
-    int term();
+    void trim();
 
 }
 
