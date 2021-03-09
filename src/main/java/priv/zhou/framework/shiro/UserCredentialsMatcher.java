@@ -6,7 +6,6 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.crypto.hash.Md5Hash;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.ShiroUtil;

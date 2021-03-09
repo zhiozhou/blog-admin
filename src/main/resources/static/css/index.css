@@ -49,6 +49,11 @@
     background: rgba(255, 255, 255, .08);
 }
 
+.tab-tool,
+.layout-main > .body > .layui-tab > .layui-tab-title {
+    border-color: var(--border-color);
+}
+
 
 .layout-sider > .layui-nav dd > a {
     padding-left: 42px;
@@ -90,7 +95,7 @@
     display: flex;
     justify-content: space-between;
     height: 60px;
-    border-bottom: 1px solid var(--border-color);
+    /*border-bottom: 1px solid var(--border-color);*/
     background: var(--component-background);
 }
 
@@ -110,7 +115,6 @@
 .layout-main > .header > .aux-group > li:hover {
     color: var(--text-color-hover);
     background: var(--component-background-hover);
-
 }
 
 /* 侧栏控制 */
@@ -207,6 +211,8 @@
     padding: 0 100px 0 50px;
     z-index: 5;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .06);
+    border-top-width: 1px;
+    border-top-style: solid;
 }
 
 .layout-main > .body > .layui-tab > .layui-tab-title > li {
@@ -247,8 +253,8 @@
 .layout-main > .body > .layui-tab .layui-tab-title > li:after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1px;
+    left: -1px;
     width: 0;
     height: 1px;
     border: none;
@@ -261,7 +267,7 @@
 }
 
 .layout-main > .body > .layui-tab .layui-tab-title li:hover:after {
-    width: 100%;
+    width: calc(100% + 2px);
 }
 
 .layout-main > .body > .layui-tab .layui-tab-title li.home {
@@ -280,7 +286,7 @@
 
 .layout-main > .body > .layui-tab.layui-tab-brief > .layui-tab-more li.layui-this:after,
 .layout-main > .body > .layui-tab.layui-tab-brief > .layui-tab-title .layui-this:after {
-    width: 100%;
+    width: calc(100% + 2px);
     border: none;
 }
 
@@ -290,6 +296,8 @@
     position: absolute;
     width: 100%;
     height: 40px;
+    border-top-width: 1px;
+    border-top-style: solid;
 }
 
 
@@ -305,6 +313,7 @@
 
 #layout-tab > .tab-tool > .layui-btn:hover {
     opacity: 1;
+    background: var(--component-background-hover);
 }
 
 #layout-tab > .tab-tool > #prev-page {

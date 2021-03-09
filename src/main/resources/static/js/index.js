@@ -17,31 +17,41 @@ layui.use(['layer', 'element', 'jquery'], () => {
         })
 
 
-        $('.tab-tool #next-page').click(() => {
-            let leftCount = 0,
-                title = $('.layout-main>.body>.layui-tab .layui-tab-title'),
-                nextMaxLeft = parseFloat(title.css('left')) - title.width()
+        const title = $('.layout-main>.body>.layui-tab .layui-tab-title')
 
+        $('.tab-tool>#next-page').click(() => {
+            let count = 0
+            const nextLeft = parseFloat(title.css('left')) - title.width()
+            console.log('left '+title.css('left'))
+            console.log('width '+title.width())
+            console.log(nextLeft)
             for (let li of title.children('li')) {
-                let width = $(li).outerWidth()
-                if (leftCount -= width, leftCount < nextMaxLeft) {
-                    return title.css('left', leftCount + width)
+                const width = $(li).outerWidth()
+                if (count -= width, count < nextLeft) {
+                    console.log('curr '+  (count + width))
+                    return title.css('left', count + width)
                 }
             }
         })
 
-        $('.tab-tool #prev-page').click(() => {
-            let leftCount = 0,
-                title = $('.layout-main>.body>.layui-tab .layui-tab-title'),
-                nextMaxLeft = parseFloat(title.css('left')) + title.width()
+        $('.tab-tool>#prev-page').click(() => {
+            const titleLeft = parseFloat(title.css('left'))
+            if(!titleLeft) return
 
-            // console.log(nextMaxLeft)
-            // for (let li of title.children('li')) {
-            //     let width = $(li).outerWidth()
-            //     if (leftCount += width, leftCount < nextMaxLeft) {
-            //         return title.css('left', leftCount - width)
-            //     }
-            // }
+            let count = titleLeft
+            const prevLeft = titleLeft + title.width()
+            const childs = title.children('li')
+            // todo 多了10
+            console.log('left '+titleLeft)
+            console.log('width '+title.width())
+            console.log(prevLeft)
+            for (let i = childs.length; i > 0; i--) {
+                let width = $(childs[i]).outerWidth()
+                if (count += width, count > prevLeft) {
+                    console.log('curr '+  (count - width))
+                    return title.css('left', count - width)
+                }
+            }
         })
 
         // logo 跳首页
