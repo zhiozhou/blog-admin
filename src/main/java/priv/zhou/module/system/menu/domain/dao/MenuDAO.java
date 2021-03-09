@@ -15,7 +15,7 @@ import java.util.Set;
 @Component
 public interface MenuDAO extends BaseDAO<MenuPO, MenuQuery> {
 
-    int removeTree(Integer id);
+    int removeClan(Integer id);
 
     MenuVO getVO(MenuQuery query);
 

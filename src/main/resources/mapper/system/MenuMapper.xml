@@ -113,7 +113,7 @@
         )
     </insert>
 
-    <delete id="removeTree" parameterType="Integer">
+    <delete id="removeClan" parameterType="Integer">
         DELETE FROM system_menu
         WHERE id = #{id} OR id IN (
             SELECT
