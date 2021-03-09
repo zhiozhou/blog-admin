@@ -124,7 +124,7 @@
                 t1.*,
                 IF( find_in_set( parent_id, @pids ) > 0, @pids := concat( @pids, ',', id ), 0 ) AS ischild
                 FROM
-                ( SELECT id, `name`, parent_id FROM system_menu t ORDER BY parent_id, id ) t1,
+                ( SELECT id, parent_id FROM system_menu t ORDER BY parent_id, id ) t1,
                 ( SELECT @pids := #{id} ) t2
             ) t3
             WHERE ischild != 0
