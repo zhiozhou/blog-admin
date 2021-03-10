@@ -5,8 +5,8 @@ layui.use(['layer', 'element', 'jquery'], () => {
         let currentTabId
         let tabSpreadTimer
 
-        element.on('nav(layout-sider)', navHandle)
-        element.on('nav(user-aux-group)', navHandle)
+        element.on('nav(layout-sider)', tabHandle)
+        element.on('nav(user-aux-group)', tabHandle)
         element.on(`tab(layout-tab)`, ({elem}) => {
             let id = $(elem.context).attr('lay-id')
             if (!id || currentTabId === id) return
@@ -16,70 +16,53 @@ layui.use(['layer', 'element', 'jquery'], () => {
             element.tabChange('nav', id)
         })
 
+        function tabHandle({context}) {
+            console.log('hh')
+            let nav = $(context),
+                url = nav.data('url')
+            if (!url) return
+            changeTab({
+                url,
+                id: currentTabId = nav.data('id'),
+                name: `tab-${nav.data('title')}`,
+                title: nav.data('title'),
+                onAdd: tabNextPage
+            })
+            root.removeClass(loseSider)
+        }
 
-        const title = $('.layout-main>.body>.layui-tab .layui-tab-title')
 
-        $('.tab-tool>#next-page').click(() => {
+        const tabTitle = $('.layout-main>.body>.layui-tab .layui-tab-title')
+        $('.tab-tool>#next-page').click(tabNextPage)
+
+        function tabNextPage() {
             let count = 0
-            const nextLeft = parseFloat(title.css('left')) - title.width()
-            for (let li of title.children('li')) {
-                const width = $(li).outerWidth()
+            const nextLeft = parseFloat(tabTitle.css('left')) - tabTitle.width()
+            for (let {offsetWidth: width} of tabTitle.children('li')) {
+                console.log(width)
                 if (count -= width, count < nextLeft) {
-                    console.log($(li))
-                    console.log(count + width)
-                    return title.css('left', count + width)
+                    return tabTitle.css('left', count + width)
                 }
             }
-        })
+        }
 
         $('.tab-tool>#prev-page').click(() => {
-            const titleLeft = parseFloat(title.css('left'))
-            if (!titleLeft) return
+            const left = parseFloat(tabTitle.css('left'))
+            if (!left) return
 
-            let count = 0, itemCount = 0
-            const titleWidth =  title.width(),
-                prevLeft = titleLeft + titleWidth
-            // if (prevLeft >= 0) {
-            //     return title.css('left', 0)
-            // }
-            // todo 有问题
-            for (let li of title.children('li')) {
-                // debugger
-                const width = $(li).outerWidth()
-                if(itemCount+=width,itemCount>titleWidth){
-                    count-=(itemCount - width)
-                    if(count<=prevLeft){
-                        return title.css('left', titleLeft-count)
+            let count = 0, pageCount = 0
+            const titleWidth = tabTitle.width(), prevLeft = left + titleWidth
+            for (let {offsetWidth: width} of tabTitle.children('li')) {
+                if (pageCount += width, pageCount > titleWidth) {
+                    count -= (pageCount - width)
+                    if (count === left) {
+                        return tabTitle.css('left', 0)
+                    } else if (count < prevLeft) {
+                        return tabTitle.css('left', count)
                     }
-                    itemCount =0
+                    pageCount = width
                 }
-                // if (count -= width, count < prevLeft) {
-                //     return title.css('left', count)
-                // }
             }
-
-            // // // todo 多了10
-            // for (let li of title.children('li')) {
-            //     let width = $(li).outerWidth()
-            //     // if (!finded) {
-            //     count -= width
-            //     console.log(count)
-            //     console.log(prevLeft)
-            //     if (count <= prevLeft) {
-            //         return title.css('left', titleLeft - count)
-            //     }
-            //     // } else {
-            //     //     count -= width
-            //     //     if (count <= titleLeft) {
-            //     //         return title.css('left', titleLeft - count)
-            //     //     }
-            //     // }
-            //     // // console.log($(li).find('.text').text() +' : ' +width)
-            //     // console.log(count)
-            //     // if (count += width, count > prevLeft) {
-            //     //     return title.css('left', count - width)
-            //     // }
-            // }
         })
 
         // logo 跳首页
@@ -124,21 +107,6 @@ layui.use(['layer', 'element', 'jquery'], () => {
             }, 600)
         })
 
-
-        function navHandle({context}) {
-            let nav = $(context),
-                url = nav.data('url')
-            if (!url) return
-            changeTab({
-                url,
-                id: currentTabId = nav.data('id'),
-                name: `tab-${nav.data('title')}`,
-                title: nav.data('title'),
-            })
-            root.removeClass(loseSider)
-        }
-
-
         //示范一个公告层
         //	layer.open({
         //		  type: 1
@@ -169,8 +137,9 @@ layui.use(['layer', 'element', 'jquery'], () => {
  * @param url 跳转连接
  * @param title 显示名称
  * @param name iframe的name
+ * @param onAdd 新建标签时的回调
  */
-function changeTab({id, url, title, name}) {
+function changeTab({id, url, title, name, onAdd}) {
     const {$, element} = layui
     let opened = $(`#layout-tab > .layui-tab-title > li[lay-id=${id}]`)
     if (!opened.length) {
@@ -179,6 +148,7 @@ function changeTab({id, url, title, name}) {
             title: `<div class="text">${title}<div><div class="text-spread">${title}</div>`,
             content: `<iframe src="${url}" name="${name}" class="iframe" data-id="${id}"></iframe>`
         })
+        onAdd && onAdd()
     }
     element.tabChange('layout-tab', id)
 }
