@@ -17,7 +17,6 @@ layui.use(['layer', 'element', 'jquery'], () => {
         })
 
         function tabHandle({context}) {
-            console.log('hh')
             let nav = $(context),
                 url = nav.data('url')
             if (!url) return
@@ -47,6 +46,7 @@ layui.use(['layer', 'element', 'jquery'], () => {
         }
 
         $('.tab-tool>#prev-page').click(() => {
+            // 快速点击有问题
             const left = parseFloat(tabTitle.css('left'))
             if (!left) return
 
