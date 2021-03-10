@@ -22,13 +22,11 @@ layui.use(['layer', 'element', 'jquery'], () => {
         $('.tab-tool>#next-page').click(() => {
             let count = 0
             const nextLeft = parseFloat(title.css('left')) - title.width()
-            console.log('left '+title.css('left'))
-            console.log('width '+title.width())
-            console.log(nextLeft)
             for (let li of title.children('li')) {
                 const width = $(li).outerWidth()
                 if (count -= width, count < nextLeft) {
-                    console.log('curr '+  (count + width))
+                    console.log($(li))
+                    console.log(count + width)
                     return title.css('left', count + width)
                 }
             }
@@ -36,22 +34,52 @@ layui.use(['layer', 'element', 'jquery'], () => {
 
         $('.tab-tool>#prev-page').click(() => {
             const titleLeft = parseFloat(title.css('left'))
-            if(!titleLeft) return
+            if (!titleLeft) return
 
-            let count = titleLeft
-            const prevLeft = titleLeft + title.width()
-            const childs = title.children('li')
-            // todo 多了10
-            console.log('left '+titleLeft)
-            console.log('width '+title.width())
-            console.log(prevLeft)
-            for (let i = childs.length; i > 0; i--) {
-                let width = $(childs[i]).outerWidth()
-                if (count += width, count > prevLeft) {
-                    console.log('curr '+  (count - width))
-                    return title.css('left', count - width)
+            let count = 0, itemCount = 0
+            const titleWidth =  title.width(),
+                prevLeft = titleLeft + titleWidth
+            // if (prevLeft >= 0) {
+            //     return title.css('left', 0)
+            // }
+            // todo 有问题
+            for (let li of title.children('li')) {
+                // debugger
+                const width = $(li).outerWidth()
+                if(itemCount+=width,itemCount>titleWidth){
+                    count-=(itemCount - width)
+                    if(count<=prevLeft){
+                        return title.css('left', titleLeft-count)
+                    }
+                    itemCount =0
                 }
+                // if (count -= width, count < prevLeft) {
+                //     return title.css('left', count)
+                // }
             }
+
+            // // // todo 多了10
+            // for (let li of title.children('li')) {
+            //     let width = $(li).outerWidth()
+            //     // if (!finded) {
+            //     count -= width
+            //     console.log(count)
+            //     console.log(prevLeft)
+            //     if (count <= prevLeft) {
+            //         return title.css('left', titleLeft - count)
+            //     }
+            //     // } else {
+            //     //     count -= width
+            //     //     if (count <= titleLeft) {
+            //     //         return title.css('left', titleLeft - count)
+            //     //     }
+            //     // }
+            //     // // console.log($(li).find('.text').text() +' : ' +width)
+            //     // console.log(count)
+            //     // if (count += width, count > prevLeft) {
+            //     //     return title.css('left', count - width)
+            //     // }
+            // }
         })
 
         // logo 跳首页
@@ -144,7 +172,7 @@ layui.use(['layer', 'element', 'jquery'], () => {
  */
 function changeTab({id, url, title, name}) {
     const {$, element} = layui
-    let opened = $(`#layout-tab>.layui-tab-title>li[lay-id=${id}]`)
+    let opened = $(`#layout-tab > .layui-tab-title > li[lay-id=${id}]`)
     if (!opened.length) {
         element.tabAdd('layout-tab', {
             id,
