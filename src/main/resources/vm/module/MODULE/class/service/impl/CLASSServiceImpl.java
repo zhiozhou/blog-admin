@@ -53,7 +53,7 @@ public class ${table.className}ServiceImpl extends BaseService implements I${tab
     @Override
     @Transactional
     public Result<NULL> remove(List<${table.primaryKeys[0].javaType}> ${table.primaryKeys[0].attrName}s) {
-        if(${table.objectName}DAO.removeList(${table.primaryKeys[0].attrName}s) != ${table.primaryKeys[0].attrName}s.length){
+        if(${table.objectName}DAO.removeList(${table.primaryKeys[0].attrName}s) != ${table.primaryKeys[0].attrName}s.size()){
             throw new RestException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
