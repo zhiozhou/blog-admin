@@ -10,8 +10,6 @@ layui.use(['layer'], () => {
     // 预留方法
 })
 
-const lockLocals = {
-}
 
 /**
  * 返回格式化后的字符串
@@ -86,6 +84,41 @@ function copy(text) {
         warn('复制失败')
     }
     document.body.removeChild(input)
+}
+
+//---------------------------------------------- 锁操作 ----------------------------------------------
+
+const lockLocals = {}
+
+/**
+ * 尝试执行hook方法，当获取到锁时执行,完成后自行释放并返回true，失败时不执行，返回false
+ * @param key
+ * @param hook
+ * @returns {boolean} 成功执行返回true，失败返回true
+ */
+function attempt(key, hook) {
+    if (!lock(key)) return false
+    hook && hook()
+    unlock()
+    return true
+}
+
+/**
+ * 获取锁
+ * @param key 锁标识
+ * @returns {boolean} 当锁被占用时返回false，成功获取返回true
+ */
+function lock(key) {
+    return !lockLocals[key] && (lockLocals[key] = true)
+}
+
+/**
+ * 释放锁
+ * @param key 锁标识
+ * @param delay 延时解锁，单位秒
+ */
+function unlock(key, delay) {
+    delay ? setTimeout(() => lockLocals[key] = false, delay * 1000) : lockLocals[key] = false
 }
 
 //---------------------------------------------- ajax操作 ----------------------------------------------
