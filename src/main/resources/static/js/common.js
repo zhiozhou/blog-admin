@@ -10,6 +10,8 @@ layui.use(['layer'], () => {
     // 预留方法
 })
 
+const lockLocals = {
+}
 
 /**
  * 返回格式化后的字符串

@@ -38,7 +38,6 @@ layui.use(['layer', 'element', 'jquery'], () => {
             let count = 0
             const nextLeft = parseFloat(tabTitle.css('left')) - tabTitle.width()
             for (let {offsetWidth: width} of tabTitle.children('li')) {
-                console.log(width)
                 if (count -= width, count < nextLeft) {
                     return tabTitle.css('left', count + width)
                 }
