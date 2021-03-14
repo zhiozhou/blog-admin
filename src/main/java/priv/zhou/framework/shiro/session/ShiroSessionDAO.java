@@ -40,6 +40,7 @@ public class ShiroSessionDAO extends EnterpriseCacheSessionDAO implements Applic
 
     @Override
     public void delete(Session session) {
+        System.out.println(Thread.currentThread().getId()+" removeSession "+session.getId());
         Map<Serializable, SessionInMemory> sessionMap = sessionLocals.get();
         if (null != sessionMap) {
             sessionMap.remove(session.getId());

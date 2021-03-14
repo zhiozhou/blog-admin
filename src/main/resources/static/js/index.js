@@ -15,6 +15,10 @@ layui.use(['layer', 'element', 'jquery'], () => {
             $(`[data-id=${id}]`).parent().addClass('layui-this')
             element.tabChange('nav', id)
         })
+        element.on('tabDelete(layout-tab)', () => {
+            // tabPrevPage()
+        })
+
 
         function tabHandle({context}) {
             let nav = $(context),
@@ -37,37 +41,73 @@ layui.use(['layer', 'element', 'jquery'], () => {
 
         // 标签下一页
         function tabNextPage() {
-            let count = 0
-            const nextLeft = parseFloat(tabTitle.css('left')) - tabTitle.width()
-            for (let {offsetWidth: width} of tabTitle.children('li')) {
-                if (count -= width, count < nextLeft) {
-                    return acquire('tab-lock', () => {
-                        tabTitle.css('left', count + width)
-                    }, 0.2)
-                }
-            }
+            rollPage('right')
+            // let count = 0
+            // const nextLeft = parseFloat(tabTitle.css('left')) - tabTitle.width()
+            // for (let {offsetWidth: width} of tabTitle.children('li')) {
+            //     if (count -= width, count < nextLeft) {
+            //         return acquire('tab-lock', () => tabTitle.css('left', count + width), 210)
+            //     }
+            // }
         }
 
         // 标签上一页
         function tabPrevPage() {
-            // 快速点击有问题
-            const left = parseFloat(tabTitle.css('left'))
-            if (!left) return
+            rollPage('left')
+            // const left = parseFloat(tabTitle.css('left'))
+            // if (!left) return
+            // let count = 0, pageCount = 0
+            // const titleWidth = tabTitle.width(), prevLeft = left + titleWidth
+            // for (let {offsetWidth: width} of tabTitle.children('li')) {
+            //     if (pageCount += width, pageCount > titleWidth) {
+            //         count -= (pageCount - width)
+            //         if (count === left) {
+            //             return acquire('tab-lock', () => tabTitle.css('left', 0), 210)
+            //         } else if (count < prevLeft) {
+            //             return acquire('tab-lock', () => tabTitle.css('left', count), 210)
+            //         }
+            //         pageCount = width
+            //     }
+            // }
+        }
 
-            let count = 0, pageCount = 0
-            const titleWidth = tabTitle.width(), prevLeft = left + titleWidth
-            console.log(prevLeft)
-            for (let {offsetWidth: width} of tabTitle.children('li')) {
-                if (pageCount += width, pageCount > titleWidth) {
-                    count -= (pageCount - width)
-                    // todo 同步
-                    if (count === left) {
-                        return tabTitle.css('left', 0)
-                    } else if (count < prevLeft) {
-                        return tabTitle.css('left', count)
+        function rollPage(e) {
+            var  tabs = tabTitle.children("li"),
+                tabWidth = (tabTitle.prop("scrollWidth"), tabTitle.outerWidth()),
+                left = parseFloat(tabTitle.css("left"));
+            console.log(tabWidth)
+            if ("left" === e) {
+
+                tabWidth-=150
+                if (!left && left <= 0) return
+                var prevLeft = -left +100 - tabWidth;
+                console.log('start')
+                tabs.each( (e, t)=> {
+                    var li = $(t), liLeft = li.position().left;
+                    console.log('li:'+li.children('.text').html())
+                    console.log('liLeft:'+liLeft)
+                    console.log('r:'+prevLeft)
+                    if (liLeft >= prevLeft) return tabTitle.css("left", -liLeft)
+                })
+            } else if ("auto" === e ){
+
+                var e, r = tabs.eq(t);
+                if (r[0]) {
+                    if (e = r.position().left, e < -left) return tabTitle.css("left", -e);
+                    if (e + r.outerWidth() >= tabWidth - left) {
+                        var o = e + r.outerWidth() - (tabWidth - left);
+                        tabs.each(function (e, t) {
+                            var n = $(t), l = n.position().left;
+                            if (l + left > 0 && l - left > o) return tabTitle.css("left", -l), !1
+                        })
                     }
-                    pageCount = width
                 }
+            }else{
+                tabWidth-=150
+                tabs.each(function (e, t) {
+                    var li = $(t), liLeft = li.position().left;
+                    if (liLeft + li.outerWidth() >= tabWidth - left) return tabTitle.css("left", -liLeft+150), !1
+                })
             }
         }
 

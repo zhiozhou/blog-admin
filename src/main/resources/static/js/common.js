@@ -94,7 +94,7 @@ const lockLocals = {}
  * 尝试执行hook方法，当获取到锁时执行,完成后自行释放并返回true，失败时不执行，返回false
  * @param key
  * @param hook
- * @param delay 延时解锁，单位秒
+ * @param delay 延时解锁，单位毫秒
  * @returns {boolean} 成功执行返回true，失败返回true
  */
 function acquire(key, hook, delay) {
@@ -116,10 +116,10 @@ function lock(key) {
 /**
  * 释放锁
  * @param key 锁标识
- * @param delay 延时解锁，单位秒
+ * @param delay 延时解锁，单位毫秒
  */
 function unlock(key, delay) {
-    delay ? setTimeout(() => lockLocals[key] = false, delay * 1000) : lockLocals[key] = false
+    delay ? setTimeout(() => lockLocals[key] = false, delay) : lockLocals[key] = false
 }
 
 //---------------------------------------------- ajax操作 ----------------------------------------------

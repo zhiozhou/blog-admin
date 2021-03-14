@@ -113,6 +113,8 @@ public class ShiroSession extends SimpleSession implements Serializable {
 
     @Override
     public void stop() {
+
+        System.out.println(Thread.currentThread().getId()+" stopSession "+getId());
         super.stop();
         this.setSeptumUpdate(false);
     }
