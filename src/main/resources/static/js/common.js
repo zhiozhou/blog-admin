@@ -94,12 +94,13 @@ const lockLocals = {}
  * 尝试执行hook方法，当获取到锁时执行,完成后自行释放并返回true，失败时不执行，返回false
  * @param key
  * @param hook
+ * @param delay 延时解锁，单位秒
  * @returns {boolean} 成功执行返回true，失败返回true
  */
-function attempt(key, hook) {
+function acquire(key, hook, delay) {
     if (!lock(key)) return false
     hook && hook()
-    unlock()
+    unlock(key, delay)
     return true
 }
 

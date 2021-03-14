@@ -33,27 +33,34 @@ layui.use(['layer', 'element', 'jquery'], () => {
 
         const tabTitle = $('.layout-main>.body>.layui-tab .layui-tab-title')
         $('.tab-tool>#next-page').click(tabNextPage)
+        $('.tab-tool>#prev-page').click(tabPrevPage)
 
+        // 标签下一页
         function tabNextPage() {
             let count = 0
             const nextLeft = parseFloat(tabTitle.css('left')) - tabTitle.width()
             for (let {offsetWidth: width} of tabTitle.children('li')) {
                 if (count -= width, count < nextLeft) {
-                    return tabTitle.css('left', count + width)
+                    return acquire('tab-lock', () => {
+                        tabTitle.css('left', count + width)
+                    }, 0.2)
                 }
             }
         }
 
-        $('.tab-tool>#prev-page').click(() => {
+        // 标签上一页
+        function tabPrevPage() {
             // 快速点击有问题
             const left = parseFloat(tabTitle.css('left'))
             if (!left) return
 
             let count = 0, pageCount = 0
             const titleWidth = tabTitle.width(), prevLeft = left + titleWidth
+            console.log(prevLeft)
             for (let {offsetWidth: width} of tabTitle.children('li')) {
                 if (pageCount += width, pageCount > titleWidth) {
                     count -= (pageCount - width)
+                    // todo 同步
                     if (count === left) {
                         return tabTitle.css('left', 0)
                     } else if (count < prevLeft) {
@@ -62,11 +69,11 @@ layui.use(['layer', 'element', 'jquery'], () => {
                     pageCount = width
                 }
             }
-        })
+        }
+
 
         // logo 跳首页
         $('.logo').click(() => element.tabChange('layout-tab', 'home'))
-
 
         $('#sider-trigger').click(() => root.hasClass(loseSider) ? root.removeClass(loseSider) : root.addClass(loseSider))
 
