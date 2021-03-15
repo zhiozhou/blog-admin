@@ -1,4 +1,4 @@
-package priv.zhou.framework.shiro;
+package priv.zhou.framework.shiro.filter;
 
 import com.google.common.collect.Lists;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Setter
 public class SyncOnlineFilter extends AccessControlFilter {
 
-    private final String name = "syncOnlineFilter";
+    public static final String name = "syncOnlineFilter";
 
     /**
      * 踢出后到的地址
@@ -51,13 +52,17 @@ public class SyncOnlineFilter extends AccessControlFilter {
 
     private Cache<String, Deque<Serializable>> cache;
 
-    public void remove(String username, Serializable sessionId) {
+    public void logout(String username, Serializable sessionId) {
         if (null == sessionId) {
             return;
         }
         Deque<Serializable> deque = cache.get(username);
         if (null != deque && deque.removeIf(sessionId::equals)) {
             cache.put(username, deque);
+        }
+        Session session = sessionDAO.readSession(sessionId);
+        if (null != session) {
+            sessionDAO.delete(session);
         }
     }
 
@@ -69,8 +74,9 @@ public class SyncOnlineFilter extends AccessControlFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 
         // 1.用户没有登陆 不进行拦截
-        System.out.println("请求"+((ShiroHttpServletRequest) request).getRequestURL());
+        System.out.println("请求" + ((ShiroHttpServletRequest) request).getRequestURL());
         Subject subject = ShiroUtil.getSubject();
+
         if (!subject.isAuthenticated() && !subject.isRemembered()) {
             System.out.println("subject未授权");
             return true;
@@ -125,6 +131,7 @@ public class SyncOnlineFilter extends AccessControlFilter {
 
             // 被踢出状态
             subject.logout();
+            System.out.println("用户被提出");
             WebUtils.issueRedirect(request, response, outUrl);
         }
 

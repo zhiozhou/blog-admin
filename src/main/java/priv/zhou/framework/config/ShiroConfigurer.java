@@ -24,7 +24,8 @@ import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import priv.zhou.common.properties.ShiroProperties;
-import priv.zhou.framework.shiro.SyncOnlineFilter;
+import priv.zhou.framework.shiro.filter.UserLogoutFilter;
+import priv.zhou.framework.shiro.filter.SyncOnlineFilter;
 import priv.zhou.framework.shiro.UserCredentialsMatcher;
 import priv.zhou.framework.shiro.UserRealm;
 import priv.zhou.framework.shiro.session.ShiroSessionDAO;
@@ -66,8 +67,8 @@ public class ShiroConfigurer {
         // 自定过滤器
         LinkedHashMap<String, Filter> filters = Maps.newLinkedHashMap();
 
-        SyncOnlineFilter syncOnlineFilter = syncOnlineFilter();
-        filters.put(syncOnlineFilter.getName(), syncOnlineFilter);
+        filters.put(SyncOnlineFilter.name,  syncOnlineFilter());
+        filters.put(UserLogoutFilter.name, logoutFilter());
 
         // 访问过滤
         Map<String, String> filterMap = Maps.newLinkedHashMap();
@@ -81,11 +82,12 @@ public class ShiroConfigurer {
         filterMap.put("/fonts/**", anon);
         filterMap.put("/plugin/**", anon);
         filterMap.put("/test/**", anon);
-        filterMap.put("/system/user/rest/login", anon);
         filterMap.put(LOGIN_PATH, anon);
+        filterMap.put("/system/user/rest/login", anon);
+        filterMap.put("/logout", UserLogoutFilter.name);
 
         // 记住我 或 认证通过
-        filterMap.put("/**", DefaultFilter.user.name() + "," + syncOnlineFilter.getName());
+        filterMap.put("/**", SyncOnlineFilter.name + "," + DefaultFilter.user.name());
 
         ShiroFilterFactoryBean filerFactory = new ShiroFilterFactoryBean();
         filerFactory.setSecurityManager(securityManager);
@@ -96,6 +98,12 @@ public class ShiroConfigurer {
         return filerFactory;
     }
 
+    /**
+     * 退出过滤器
+     */
+    public UserLogoutFilter logoutFilter() {
+        return new UserLogoutFilter(syncOnlineFilter());
+    }
 
     @Bean
     public MethodInvokingFactoryBean methodInvokingFactoryBean() {
