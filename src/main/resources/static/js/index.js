@@ -72,26 +72,26 @@ layui.use(['layer', 'element', 'jquery'], () => {
         }
 
         function rollPage(e) {
-            var  tabs = tabTitle.children("li"),
-                tabWidth = (tabTitle.prop("scrollWidth"), tabTitle.outerWidth()),
-                left = parseFloat(tabTitle.css("padding")),
+            var tabs = tabTitle.children("li"),
+                tabWidth = tabTitle.width(),
+                left = parseFloat(tabTitle.css("left")),
                 padding = parseFloat(tabTitle.css("padding-left")) + parseFloat(tabTitle.css("padding-right"))
             console.log(padding)
             console.log(tabWidth)
             if ("left" === e) {
 
-                tabWidth-=150
+                tabWidth -= 150
                 if (!left && left <= 0) return
-                var prevLeft = -left +100 - tabWidth;
+                var prevLeft = -left + 100 - tabWidth;
                 console.log('start')
-                tabs.each( (e, t)=> {
+                tabs.each((e, t) => {
                     var li = $(t), liLeft = li.position().left;
-                    console.log('li:'+li.children('.text').html())
-                    console.log('liLeft:'+liLeft)
-                    console.log('r:'+prevLeft)
+                    console.log('li:' + li.children('.text').html())
+                    console.log('liLeft:' + liLeft)
+                    console.log('r:' + prevLeft)
                     if (liLeft >= prevLeft) return tabTitle.css("left", -liLeft)
                 })
-            } else if ("auto" === e ){
+            } else if ("auto" === e) {
 
                 var e, r = tabs.eq(t);
                 if (r[0]) {
@@ -104,11 +104,10 @@ layui.use(['layer', 'element', 'jquery'], () => {
                         })
                     }
                 }
-            }else{
-                tabWidth-=150
+            } else {
                 tabs.each(function (e, t) {
-                    var li = $(t), liLeft = li.position().left;
-                    if (liLeft + li.outerWidth() >= tabWidth - left) return tabTitle.css("left", -liLeft+150), !1
+                    var li = $(t), liLeft = li.position().left -100;
+                    if (liLeft + li.width()  >= tabWidth) return tabTitle.css("left", -liLeft )
                 })
             }
         }
