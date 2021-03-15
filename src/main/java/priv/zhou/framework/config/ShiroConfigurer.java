@@ -80,9 +80,9 @@ public class ShiroConfigurer {
         filterMap.put("/img/**", anon);
         filterMap.put("/fonts/**", anon);
         filterMap.put("/plugin/**", anon);
-        filterMap.put(LOGIN_PATH, anon + "," + syncOnlineFilter.getName());
-        filterMap.put("/system/user/rest/login", anon);
         filterMap.put("/test/**", anon);
+        filterMap.put("/system/user/rest/login", anon);
+        filterMap.put(LOGIN_PATH, anon);
 
         // 记住我 或 认证通过
         filterMap.put("/**", DefaultFilter.user.name() + "," + syncOnlineFilter.getName());
