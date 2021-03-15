@@ -22,13 +22,18 @@ public enum ResultEnum {
 
     EXIST_RELATION("0005", "存在关联数据"),
 
-    EXIST_NAME("0006", "名称已存在"),
+    FAIL_DECRYPT("0006", "参数错误"),
 
-    EXIST_KEY("0007", "标识值已存在"),
 
-    EXIST_PHONE("0008", "手机号已存在"),
+
 
     REPEAT_KEY("0101", "标识值重复"),
+
+    EXIST_NAME("0102", "名称已存在"),
+
+    EXIST_KEY("0103", "标识值已存在"),
+
+    EXIST_PHONE("0103", "手机号已存在"),
 
 
     // 1000 - 1100  用户

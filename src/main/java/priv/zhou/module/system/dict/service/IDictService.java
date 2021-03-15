@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static priv.zhou.common.constant.GlobalConst.EMPTY_STR;
+import static priv.zhou.common.constant.GlobalConst.STR_0;
 
 /**
  * 字典 服务层定义
@@ -43,7 +43,7 @@ public interface IDictService {
 
     default String getLabel(String key, String code) {
         DictDataPO dataPO = getData(new DictDataQuery().setDictKey(key).setCode(code));
-        return null == dataPO ? EMPTY_STR : dataPO.getLabel();
+        return null == dataPO ? STR_0 : dataPO.getLabel();
     }
 
     List<DictDataPO> listData(DictDataQuery query);

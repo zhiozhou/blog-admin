@@ -16,12 +16,12 @@ public interface GlobalConst {
 
     String STR_0 = "0";
 
-    String EMPTY_STR = "0";
+    Integer INT_0 = 0;
 
     /**
      * 站长id
      */
-    Integer ZHOU_ID = 0;
+    Integer ZHOU_ID = INT_0;
 
     long SERIAL_VERSION_UID = 1L;
 

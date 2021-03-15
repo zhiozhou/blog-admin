@@ -44,6 +44,7 @@ app:
   name: ${spring.application.name}
   admin-email: 2080211280@qq.com
   access-limit: 200
+  aes-seed: zhoudev2021
   file-service: https://zhousb.cn/file-service/
   file-upload-prefix: zhousb-admin
 --- # --------------------------------------------- 开发环境 -------------------------------------------------------
@@ -78,3 +79,4 @@ spring:
     port: 6379
 app:
   enable-email: true
+  aes-seed: zhoudev2021

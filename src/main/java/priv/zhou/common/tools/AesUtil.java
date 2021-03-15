@@ -42,10 +42,10 @@ public final class AesUtil {
     public static String encrypt(String plantText, String seed) {
         try {
             Cipher cipher = getCipher(seed, true);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(plantText.getBytes()));
+            return Base64.getUrlEncoder().encodeToString(cipher.doFinal(plantText.getBytes()));
         } catch (Exception e) {
             log.error("AES加密失败： plantText -->{} | seed -->{} | e -->", plantText, seed, e);
-            throw new RestException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.FAIL_DECRYPT);
         }
     }
 
@@ -58,10 +58,10 @@ public final class AesUtil {
     public static String decrypt(String cipherText, String seed) {
         try {
             Cipher cipher = getCipher(seed, false);
-            return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
+            return new String(cipher.doFinal(Base64.getUrlDecoder().decode(cipherText)));
         } catch (Exception e) {
             log.error("AES解密失败： cipherText -->{} | seed -->{} | e -->", cipherText, seed, e);
-            throw new RestException(ResultEnum.LATER_RETRY);
+            throw new RestException(ResultEnum.FAIL_DECRYPT);
         }
     }
 

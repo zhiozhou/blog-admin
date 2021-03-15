@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.properties.AppProperties;
+import priv.zhou.common.tools.AesUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.module.system.role.domain.query.RoleQuery;
 import priv.zhou.module.system.role.service.IRoleService;
@@ -22,9 +24,12 @@ public class MonitorController extends BaseController {
 
     private final IRoleService roleService;
 
-    public MonitorController(IRoleService roleService) {
+    private final AppProperties appProperties;
+
+    public MonitorController(IRoleService roleService, AppProperties appProperties) {
         super("监控", "system:monitor");
         this.roleService = roleService;
+        this.appProperties = appProperties;
     }
 
     @RequiresPermissions("system:monitor:view")
@@ -32,7 +37,7 @@ public class MonitorController extends BaseController {
     public String view(Model model) {
         super.list(model);
 
-        model.addAttribute("id", ShiroUtil.getSession().getId());
+        model.addAttribute("id", AesUtil.encrypt((String) ShiroUtil.getSessionId(), appProperties.getAesSeed()));
         model.addAttribute("roleList", roleService.listSelectVO(new RoleQuery()));
         return "system/monitor/index";
     }

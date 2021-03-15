@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import priv.zhou.common.tools.DateUtil;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -17,7 +18,7 @@ import java.util.Date;
 public class SessionVO {
 
     @NotEmpty(message = "id不可为空")
-    private String id;
+    private Serializable id;
 
     /**
      * 用户名

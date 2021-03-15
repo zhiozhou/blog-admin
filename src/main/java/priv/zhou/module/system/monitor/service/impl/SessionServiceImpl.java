@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
+import priv.zhou.common.properties.AppProperties;
+import priv.zhou.common.tools.AesUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.filter.SyncOnlineFilter;
 import priv.zhou.framework.shiro.session.ShiroSession;
@@ -18,8 +20,11 @@ import priv.zhou.module.system.monitor.domain.query.SessionQuery;
 import priv.zhou.module.system.monitor.domain.vo.SessionVO;
 import priv.zhou.module.system.monitor.service.ISessionService;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static priv.zhou.common.constant.GlobalConst.INT_0;
 
 @Slf4j
 @Service
@@ -27,6 +32,8 @@ import java.util.stream.Collectors;
 public class SessionServiceImpl implements ISessionService {
 
     private final SessionDAO sessionDAO;
+
+    private final AppProperties appProperties;
 
     private final SyncOnlineFilter syncOnlineFilter;
 
@@ -37,7 +44,7 @@ public class SessionServiceImpl implements ISessionService {
         return Result.success(sessionDAO.getActiveSessions().stream()
                 .map(s -> (ShiroSession) s)
                 .filter(s -> {
-                    if (null == s.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
+                    if (!INT_0.equals(s.getState()) || null == s.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)) {
                         return false;
                     } else if (StringUtils.isNotBlank(query.getHost()) && !s.getHost().contains(query.getHost())) {
                         return false;
@@ -45,7 +52,7 @@ public class SessionServiceImpl implements ISessionService {
                         return !StringUtils.isNotBlank(query.getUsername()) || s.getUsername().contains(query.getUsername());
                 })
                 .map(s -> new SessionVO()
-                        .setId((String) s.getId())
+                        .setId(AesUtil.encrypt((String) s.getId(), appProperties.getAesSeed()))
                         .setHost(s.getHost())
                         .setOs(s.getOs())
                         .setBrowser(s.getBrowser())
@@ -59,6 +66,7 @@ public class SessionServiceImpl implements ISessionService {
 
     @Override
     public Result<NULL> offline(String id) {
+        id = AesUtil.decrypt(id, appProperties.getAesSeed());
         if (id.equals(ShiroUtil.getSession().getId())) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         }
