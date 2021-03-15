@@ -56,11 +56,12 @@ public class ShiroConfigurer {
     @Value("${spring.redis.password}")
     private String RedisPwd;
 
+
     /**
      * 配置过滤器
      */
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilte(SecurityManager securityManager) {
 
         // 自定过滤器
         LinkedHashMap<String, Filter> filters = Maps.newLinkedHashMap();
@@ -83,8 +84,6 @@ public class ShiroConfigurer {
         filterMap.put("/system/user/rest/login", anon);
         filterMap.put("/test/**", anon);
 
-        // 注销地址
-//        filterMap.put("/system/user/logout", DefaultFilter.logout.name());
         // 记住我 或 认证通过
         filterMap.put("/**", DefaultFilter.user.name() + "," + syncOnlineFilter.getName());
 

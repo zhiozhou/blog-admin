@@ -74,7 +74,9 @@ layui.use(['layer', 'element', 'jquery'], () => {
         function rollPage(e) {
             var  tabs = tabTitle.children("li"),
                 tabWidth = (tabTitle.prop("scrollWidth"), tabTitle.outerWidth()),
-                left = parseFloat(tabTitle.css("left"));
+                left = parseFloat(tabTitle.css("padding")),
+                padding = parseFloat(tabTitle.css("padding-left")) + parseFloat(tabTitle.css("padding-right"))
+            console.log(padding)
             console.log(tabWidth)
             if ("left" === e) {
 

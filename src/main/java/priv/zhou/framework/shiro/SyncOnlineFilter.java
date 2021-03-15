@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Setter
 public class SyncOnlineFilter extends AccessControlFilter {
 
-    private final String name = "loginLimit";
+    private final String name = "syncOnlineFilter";
 
     /**
      * 踢出后到的地址
@@ -69,8 +69,10 @@ public class SyncOnlineFilter extends AccessControlFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 
         // 1.用户没有登陆 不进行拦截
+        System.out.println("请求"+((ShiroHttpServletRequest) request).getRequestURL());
         Subject subject = ShiroUtil.getSubject();
         if (!subject.isAuthenticated() && !subject.isRemembered()) {
+            System.out.println("subject未授权");
             return true;
         }
 
