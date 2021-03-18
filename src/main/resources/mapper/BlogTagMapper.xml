@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.blog.domain.dao.BlogTagDAO">
 
-    <insert id="saveList">
+    <insert id="listSave">
         INSERT INTO blog_blog_tag ( tag_id, blog_id, is_deleted )
         VALUES
         <foreach collection="tags" index="index" item="tag" separator=",">

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import priv.zhou.module.blog.domain.po.TagPO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
 @Component
 public interface BlogTagDAO {
 
-    int saveList(@Param(value = "tags") List<TagPO> tags, Integer blogId);
+    int listSave(@Param(value = "tags") List<TagPO> tags, Integer blogId);
 
     int remove(Integer blogId);
 

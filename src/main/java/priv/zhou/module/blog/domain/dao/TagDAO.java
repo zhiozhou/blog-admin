@@ -20,9 +20,8 @@ import java.util.List;
 @Component
 public interface TagDAO {
 
-    List<Integer> test();
 
-    int saveList(List<TagPO> tags);
+    int incrSaveList(List<TagPO> tags);
 
     /**
      * count应用自增

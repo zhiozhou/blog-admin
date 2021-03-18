@@ -67,12 +67,11 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
                 .map(tagDTO -> tagDTO.getName().trim())
                 .distinct()
                 .map(tagName -> new TagPO()
-                        .setCount(1)
                         .setCreateBy(creatorId)
                         .setName(tagName))
                 .collect(Collectors.toList());
-        if (tagDAO.saveList(tags) != tags.size() ||
-                blogTagDAO.saveList(tags, blogPO.getId()) != tags.size()) {
+        if (tagDAO.incrSaveList(tags) != tags.size() ||
+                blogTagDAO.listSave(tags, blogPO.getId()) != tags.size()) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
         return Result.success();
@@ -83,6 +82,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         if (blogDAO.removeList(ids) != ids.size()) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
+
         // todo:删除对应map，减少对应tag引用
         return Result.success();
     }
@@ -93,19 +93,29 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         if (blogDAO.count(new BlogQuery().setTitle(blogDTO.getTitle()).setRidId(blogDTO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_BLOG_TITLE);
         }
+        Integer updaterId = ShiroUtil.getUserId();
         BlogPO blogPO = new BlogPO()
                 .setTitle(blogDTO.getTitle())
                 .setContent(blogDTO.getContent())
                 .setPreview(blogDTO.getPreview())
                 .setRemark(blogDTO.getRemark())
                 .setAbs(blogDTO.getAbs())
-                .setModifiedBy(ShiroUtil.getUserId());
+                .setModifiedBy(updaterId);
         if (blogDAO.update(blogPO) < 0) {
             return Result.fail(ResultEnum.LATER_RETRY);
         }
-
-//        saveTags(blogPO.getId(), blogPO.getTags(), true);
-
+        List<TagPO> tags = blogDTO.getTags()
+                .stream()
+                .map(tagDTO -> tagDTO.getName().trim())
+                .distinct()
+                .map(tagName -> new TagPO()
+                        .setCreateBy(updaterId)
+                        .setName(tagName))
+                .collect(Collectors.toList());
+        if (tagDAO.incrSaveList(tags) != tags.size() ||
+                blogTagDAO.listSave(tags, blogPO.getId()) != tags.size()) {
+            throw new RestException(ResultEnum.LATER_RETRY);
+        }
         return Result.success();
 
     }
@@ -124,47 +134,6 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
 
     @Override
     public List<TagVO> listTag(TagQuery query) {
-        return null;
+        return tagDAO.listVO(query);
     }
-
-//    @Transactional
-//    synchronized void saveTags(Integer blogId, List<TagPO> formTags, boolean isUpdate) {
-//
-//        Set<TagPO> saveTags, removeTags;
-//        if (isUpdate) {
-//            List<TagPO> dbTags = blogDAO.get(new BlogDTO().setId(blogId)).getTags();
-//            saveTags = formTags.stream().filter(tag -> !dbTags.contains(tag)).collect(toSet());
-//            removeTags = dbTags.stream().filter(tag -> !formTags.contains(tag)).collect(toSet());
-//        } else {
-//            removeTags = null;
-//            saveTags = Sets.newHashSet(formTags);
-//        }
-//
-//        if (!saveTags.isEmpty()) {
-//            Set<TagPO> tagSet = Sets.newHashSet();
-//            for (TagPO tag : saveTags) {
-//                TagPO tagPO = tagDAO.get(new TagDTO().setName(tag.getName()));
-//                if (null == tagPO) {
-//                    tagDAO.save(tagPO = new TagPO()
-//                            .setCount(1)
-//                            .setName(tag.getName())
-//                            .setCreateId(ShiroUtil.getUserId())
-//                    );
-//                } else {
-//                    tagDAO.update(tagPO.setCount(tagPO.getCount() + 1));
-//                }
-//                tagSet.add(tagPO);
-//            }
-//            tagDAO.saveMap(tagSet, blogId);
-//        }
-//
-//        if (isUpdate && !removeTags.isEmpty()) {
-//
-//            for (TagPO tag : removeTags) {
-//                tagDAO.update(tag.setCount(tag.getCount() - 1));
-//            }
-//            tagDAO.removeMap(removeTags, blogId);
-//        }
-//
-//    }
 }
