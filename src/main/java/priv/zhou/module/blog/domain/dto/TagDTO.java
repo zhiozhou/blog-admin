@@ -19,11 +19,9 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @Accessors(chain = true)
 public class TagDTO extends DTO<TagPO> {
-
     /**
      * 名称
      */
     @NotBlank(message = "标签名称不可为空")
     private String name;
-
 }

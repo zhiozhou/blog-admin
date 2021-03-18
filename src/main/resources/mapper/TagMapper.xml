@@ -18,7 +18,9 @@
         FROM blog_tag
     </sql>
 
-    <insert id="incrSaveList" parameterType="TagPO">
+
+
+    <insert id="saveList" parameterType="TagPO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO blog_tag(
              name ,
              count ,
@@ -26,8 +28,8 @@
              gmt_create
         )
         VALUES
-        <foreach collection="list" index="index" item="item" separator=",">
-            ( #{item.name} , 1 ,#{item.createBy},NOW())
+        <foreach collection="list" index="index" item="tag" separator=",">
+            (#{tag.name},#{tag.count},#{tag.createBy},NOW())
         </foreach>
         ON DUPLICATE KEY UPDATE count = count + 1;
     </insert>

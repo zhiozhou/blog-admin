@@ -19,4 +19,5 @@
     <insert id="delete">
         DELETE FROM blog_blog_tag WHERE blog_id = #{blogId}
     </insert>
+
 </mapper>

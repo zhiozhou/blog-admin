@@ -18,9 +18,9 @@ import java.util.List;
 @Component
 public interface BlogTagDAO {
 
-    void saveList(@Param(value = "tags") List<TagPO> tags, Integer blogId);
+    int saveList(@Param(value = "tags") List<TagPO> tags, Integer blogId);
 
-    void remove(Integer blogId);
+    int remove(Integer blogId);
 
-    void deleted(Integer blogId);
+    int deleted(Integer blogId);
 }

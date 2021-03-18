@@ -20,12 +20,9 @@ import java.util.List;
 @Component
 public interface TagDAO {
 
-    /**
-     * 自增保存，当标签存在时增加count数，不存在时则保存标签，count为1
-     * @param tags
-     * @return
-     */
-    void incrSaveList(List<TagPO> tags);
+    List<Integer> test();
+
+    int saveList(List<TagPO> tags);
 
     /**
      * count应用自增

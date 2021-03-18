@@ -1,21 +1,19 @@
 package priv.zhou.module.blog.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.assertj.core.util.Sets;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.RestException;
 import priv.zhou.module.blog.domain.dao.BlogDAO;
+import priv.zhou.module.blog.domain.dao.BlogTagDAO;
 import priv.zhou.module.blog.domain.dao.TagDAO;
 import priv.zhou.module.blog.domain.dto.BlogDTO;
-import priv.zhou.module.blog.domain.dto.TagDTO;
 import priv.zhou.module.blog.domain.po.BlogPO;
 import priv.zhou.module.blog.domain.po.TagPO;
 import priv.zhou.module.blog.domain.query.BlogQuery;
@@ -26,9 +24,7 @@ import priv.zhou.module.blog.domain.vo.TagVO;
 import priv.zhou.module.blog.service.IBlogService;
 
 import java.util.List;
-import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
+import java.util.stream.Collectors;
 
 
 /**
@@ -45,15 +41,15 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
 
     private final BlogDAO blogDAO;
 
+    private final BlogTagDAO blogTagDAO;
 
     @Override
     @Transactional
     public Result<NULL> save(BlogDTO blogDTO) {
-
         if (blogDAO.count(new BlogQuery().setTitle(blogDTO.getTitle())) > 0) {
             return Result.fail(ResultEnum.EXIST_BLOG_TITLE);
         }
-
+        Integer creatorId = ShiroUtil.getUserId();
         BlogPO blogPO = new BlogPO()
                 .setTitle(blogDTO.getTitle())
                 .setContent(blogDTO.getContent())
@@ -62,20 +58,29 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
                 .setAbs(blogDTO.getAbs())
                 .setPv(0L)
                 .setState(0)
-                .setCreateBy(ShiroUtil.getUserId());
+                .setCreateBy(creatorId);
         if (blogDAO.save(blogPO) < 0) {
             return Result.fail(ResultEnum.LATER_RETRY);
         }
-
-//        saveTags(blogPO.getId(), blogPO.getTags(), false);
-
+        List<TagPO> tags = blogDTO.getTags()
+                .stream()
+                .map(tagDTO -> tagDTO.getName().trim())
+                .distinct()
+                .map(tagName -> new TagPO()
+                        .setCount(1)
+                        .setCreateBy(creatorId)
+                        .setName(tagName))
+                .collect(Collectors.toList());
+        if (tagDAO.saveList(tags) != tags.size() ||
+                blogTagDAO.saveList(tags, blogPO.getId()) != tags.size()) {
+            throw new RestException(ResultEnum.LATER_RETRY);
+        }
         return Result.success();
     }
 
-
     @Override
     public Result<NULL> remove(List<Integer> ids) {
-        if(blogDAO.removeList(ids) != ids.size()){
+        if (blogDAO.removeList(ids) != ids.size()) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
         // todo:删除对应map，减少对应tag引用
@@ -83,6 +88,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
     }
 
     @Override
+    @Transactional
     public Result<NULL> update(BlogDTO blogDTO) {
         if (blogDAO.count(new BlogQuery().setTitle(blogDTO.getTitle()).setRidId(blogDTO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_BLOG_TITLE);

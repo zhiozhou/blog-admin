@@ -18,6 +18,8 @@ public interface GlobalConst {
 
     Integer INT_0 = 0;
 
+    Integer INT_1 = 1;
+
     /**
      * 站长id
      */
