@@ -7,6 +7,7 @@ import priv.zhou.common.constant.Update;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.module.blog.domain.po.BlogPO;
 
+import javax.naming.Name;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -65,7 +66,6 @@ public class BlogDTO extends DTO<BlogPO> {
     /**
      * 标签列表
      */
-    @Valid
     @NotNull(message = "标签不可为空")
-    private List<TagDTO> tags;
+    private List<String> tags;
 }

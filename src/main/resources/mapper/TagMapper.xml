@@ -4,19 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.module.blog.domain.dao.TagDAO">
 
+    <resultMap id="POMap" type="TagPO">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="create_by" property="createBy"/>
+        <result column="gmt_create" property="gmtCreate"/>
+    </resultMap>
+
     <resultMap id="VOMap" type="TagVO">
         <result column="name" property="name"/>
     </resultMap>
-
-    <sql id="POSql">
-        SELECT
-            id ,
-            name,
-            count,
-            create_by,
-            gmt_create
-        FROM blog_tag
-    </sql>
 
     <insert id="incrSaveList" parameterType="TagPO">
         INSERT INTO blog_tag(
@@ -32,20 +30,38 @@
         ON DUPLICATE KEY UPDATE count = count + 1;
     </insert>
 
-    <update id="incrList" parameterType="TagPO">
+    <update id="incrList" parameterType="String">
         UPDATE blog_tag set count = count + #{delta} where name in
-        <foreach item="tag" collection="tags" open="(" separator="," close=")">
-            #{tag.name}
+        <foreach item="tagName" collection="tagNames" open="(" separator="," close=")">
+            #{tagName}
         </foreach>
     </update>
 
+    <select id="list" parameterType="TagQuery" resultMap="POMap">
+        SELECT
+            tag.id ,
+            tag.name,
+            tag.count,
+            tag.create_by,
+            tag.gmt_create
+        <choose>
+            <when test="blogId != null and blogId !=''">
+                FROM blog_blog_tag AS blog_tag
+                LEFT JOIN blog_tag AS tag ON blog_tag.tag_id = tag.id and blog_tag.is_deleted = 0
+            </when>
+            <otherwise>
+                FROM blog_tag AS tag
+            </otherwise>
+        </choose>
+        <where>
+            tag.is_deleted = 0
+            <if test="blogId != null and blogId != ''">and blog_tag.blog_id = #{blogId}</if>
+        </where>
+    </select>
+
     <select id="listVO" parameterType="TagQuery" resultMap="VOMap">
         SELECT
-            id ,
-            name,
-            count,
-            create_by,
-            gmt_create
+            name
         FROM blog_tag
         <where>
             <if test="nameLike != null and nameLike != ''">and `name` LIKE CONCAT('%',#{nameLike},'%')</if>

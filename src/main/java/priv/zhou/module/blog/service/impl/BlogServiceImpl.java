@@ -24,6 +24,7 @@ import priv.zhou.module.blog.domain.vo.TagVO;
 import priv.zhou.module.blog.service.IBlogService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -64,7 +65,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         }
         List<TagPO> tags = blogDTO.getTags()
                 .stream()
-                .map(tagDTO -> tagDTO.getName().trim())
+                .map(String::trim)
                 .distinct()
                 .map(tagName -> new TagPO()
                         .setCreateBy(creatorId)
@@ -93,8 +94,14 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         if (blogDAO.count(new BlogQuery().setTitle(blogDTO.getTitle()).setRidId(blogDTO.getId())) > 0) {
             return Result.fail(ResultEnum.EXIST_BLOG_TITLE);
         }
+        List<TagPO> blogTags = tagDAO.list(new TagQuery().setBlogId(blogDTO.getId()));
+        if (blogTags.isEmpty()) {
+            return Result.fail(ResultEnum.EMPTY_DATA);
+        }
+
         Integer updaterId = ShiroUtil.getUserId();
         BlogPO blogPO = new BlogPO()
+                .setId(blogDTO.getId())
                 .setTitle(blogDTO.getTitle())
                 .setContent(blogDTO.getContent())
                 .setPreview(blogDTO.getPreview())
@@ -104,17 +111,28 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         if (blogDAO.update(blogPO) < 0) {
             return Result.fail(ResultEnum.LATER_RETRY);
         }
-        List<TagPO> tags = blogDTO.getTags()
+
+        Set<String> tagDBSet = blogTags.stream()
+                .map(TagPO::getName)
+                .collect(Collectors.toSet());
+        List<String> tagNames = blogDTO.getTags()
                 .stream()
-                .map(tagDTO -> tagDTO.getName().trim())
-                .distinct()
-                .map(tagName -> new TagPO()
-                        .setCreateBy(updaterId)
-                        .setName(tagName))
+                .map(String::trim)
                 .collect(Collectors.toList());
-        if (tagDAO.incrSaveList(tags) != tags.size() ||
-                blogTagDAO.listSave(tags, blogPO.getId()) != tags.size()) {
-            throw new RestException(ResultEnum.LATER_RETRY);
+        if (tagDBSet.size() != tagNames.size() ||
+                !tagDBSet.containsAll(tagNames)) {
+            if (blogTagDAO.delete(blogPO.getId()) != tagDAO.incrList(tagNames, -1)) {
+                throw new RestException(ResultEnum.LATER_RETRY);
+            }
+            List<TagPO> tags = tagNames.stream()
+                    .map(tagName -> new TagPO()
+                            .setName(tagName)
+                            .setCreateBy(updaterId))
+                    .collect(Collectors.toList());
+            if (tagDAO.incrSaveList(tags) != tags.size() ||
+                    blogTagDAO.listSave(tags, blogPO.getId()) != tags.size()) {
+                throw new RestException(ResultEnum.LATER_RETRY);
+            }
         }
         return Result.success();
 

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import priv.zhou.module.blog.domain.po.TagPO;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -23,5 +22,5 @@ public interface BlogTagDAO {
 
     int remove(Integer blogId);
 
-    int deleted(Integer blogId);
+    int delete(Integer blogId);
 }

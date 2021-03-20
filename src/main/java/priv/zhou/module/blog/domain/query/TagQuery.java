@@ -18,6 +18,8 @@ public class TagQuery {
 
     private Integer id;
 
+    private Integer blogId;
+
     private String name;
 
     private String nameLike;

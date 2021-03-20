@@ -118,8 +118,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
                 .map(RolePO::getId)
                 .collect(Collectors.toSet());
         if (roleSet.size() != userDTO.getRoles().size() ||
-                userDTO.getRoles().stream()
-                        .noneMatch(roleSet::contains)) {
+                !roleSet.containsAll(userDTO.getRoles())) {
             if (userRoleDAO.delete(userDTO.getId()) < 1) {
                 return Result.fail(ResultEnum.LATER_RETRY);
             } else if (userRoleDAO.saveList(userDTO.getRoles()

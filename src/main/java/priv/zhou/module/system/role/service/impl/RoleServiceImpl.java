@@ -114,8 +114,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
                 .map(MenuPO::getId)
                 .collect(Collectors.toSet());
         if (roleDB.getMenus().size() != roleDTO.getMenus().size() ||
-                roleDTO.getMenus().stream()
-                        .noneMatch(menuSet::contains)) {
+                !menuSet.containsAll(roleDTO.getMenus())) {
             if (roleMenuDAO.remove(rolePO.getId()) < 1) {
                 return Result.fail(ResultEnum.LATER_RETRY);
             } else if (roleMenuDAO.saveList(roleDTO.getMenus()

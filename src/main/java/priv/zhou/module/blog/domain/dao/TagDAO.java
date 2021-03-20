@@ -25,11 +25,12 @@ public interface TagDAO {
 
     /**
      * count应用自增
-     * @param tags 标签集合
+     * @param tagNames 标签名称集合
      * @param delta 自增数量
      */
-    int incrList(@Param(value = "tags") List<TagPO> tags, @Param(value = "delta") Integer delta);
+    int incrList(@Param(value = "tagNames") List<String> tagNames, @Param(value = "delta") Integer delta);
 
+    List<TagPO> list(TagQuery query);
 
     List<TagVO> listVO(TagQuery query);
 }
