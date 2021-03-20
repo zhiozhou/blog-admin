@@ -24,17 +24,19 @@
                 const {table} = layui
                 tableRender({
                     table,
-                    cols: [[
-                        {field: 'title', title: '标题'},
-                        {field: 'state', title: '状态', templet: ({state}) => dictRender(state, stateMap)},
-                        {field: 'pv', title: '页面访问量'},
-                        {
-                            field: 'gmtCreate',
-                            title: '创建时间',
-                            templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
-                        },
-                        {title: '操作', toolbar: '#rud'}
-                    ]],
+                    options:{
+                        cols: [[
+                            {field: 'title', title: '标题'},
+                            {field: 'state', title: '状态', templet: ({state}) => dictRender(state, stateMap)},
+                            {field: 'pv', title: '页面访问量'},
+                            {
+                                field: 'gmtCreate',
+                                title: '创建时间',
+                                templet: ({gmtCreate}) => formatDate(gmtCreate, 'yyyy-MM-dd')
+                            },
+                            {title: '操作', toolbar: '#rud'}
+                        ]],
+                    },
                     iframe: false
                 })
             })

@@ -39,7 +39,7 @@ public class BlogVO {
 
     private Date gmtCreate;
 
-    private List<TagDTO> tags;
+    private List<TagVO> tags;
 
 
 }

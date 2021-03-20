@@ -24,7 +24,7 @@ public interface IBlogService {
 
     Result<NULL> save(BlogDTO blogDTO);
 
-    Result<NULL> remove(List<Integer> list);
+    Result<NULL> remove(Integer id);
 
     Result<NULL> update(BlogDTO blogDTO);
 

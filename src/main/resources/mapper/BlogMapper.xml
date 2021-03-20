@@ -90,11 +90,8 @@
         )
     </insert>
 
-    <delete id="removeList" parameterType="Integer">
-        UPDATE blog_blog SET is_deleted = 0 WHERE is_deleted = 0 AND id IN
-        <foreach item="id" collection="list" open="(" separator="," close=")">
-            #{id}
-        </foreach>
+    <delete id="remove" parameterType="Integer">
+        UPDATE blog_blog SET is_deleted = 0 WHERE is_deleted = 0 AND id = #{id}
     </delete>
 
     <update id="update" parameterType="BlogPO">
@@ -130,7 +127,7 @@
             tag.`name` AS tag_name
         FROM blog_blog AS blog
         LEFT JOIN blog_blog_tag AS blog_tag ON blog.id = blog_tag.blog_id and blog_tag.is_deleted = 0
-        LEFT JOIN blog_tag AS tag ON blog_tag.tag_id = tag.id and tag.is_deleted = 0
+        LEFT JOIN blog_tag AS tag ON blog_tag.tag_id = tag.id
         WHERE blog.is_deleted = 0 and blog.id = #{id}
     </select>
 

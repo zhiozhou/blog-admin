@@ -41,8 +41,8 @@ public class BlogRestController {
     }
 
     @PostMapping("/remove/{id}")
-    public Result<NULL> remove(@RequestParam(value = "ids") List<Integer> ids) {
-        return blogService.remove(ids);
+    public Result<NULL> remove(@RequestParam(value = "ids") Integer id) {
+        return blogService.remove(id);
     }
 
     @PostMapping("/update")

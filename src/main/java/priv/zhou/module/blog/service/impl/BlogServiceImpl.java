@@ -63,7 +63,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         if (blogDAO.save(blogPO) < 0) {
             return Result.fail(ResultEnum.LATER_RETRY);
         }
-        List<TagPO> tags = blogDTO.getTags()
+        List<TagPO> tags = blogDTO.getTagNames()
                 .stream()
                 .map(String::trim)
                 .distinct()
@@ -79,12 +79,20 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
     }
 
     @Override
-    public Result<NULL> remove(List<Integer> ids) {
-        if (blogDAO.removeList(ids) != ids.size()) {
+    @Transactional
+    public Result<NULL> remove(Integer id) {
+        List<TagPO> tags = tagDAO.list(new TagQuery().setBlogId(id));
+        if (tags.isEmpty()) {
+            return Result.fail(ResultEnum.EMPTY_DATA);
+        }
+        List<String> tagNames = tags.stream()
+                .map(TagPO::getName)
+                .collect(Collectors.toList());
+        if (blogDAO.remove(id) < 1) {
+            return Result.fail(ResultEnum.LATER_RETRY);
+        } else if (blogTagDAO.delete(id) != tagDAO.incrList(tagNames, -1)) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
-
-        // todo:删除对应map，减少对应tag引用
         return Result.success();
     }
 
@@ -115,7 +123,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
         Set<String> tagDBSet = blogTags.stream()
                 .map(TagPO::getName)
                 .collect(Collectors.toSet());
-        List<String> tagNames = blogDTO.getTags()
+        List<String> tagNames = blogDTO.getTagNames()
                 .stream()
                 .map(String::trim)
                 .collect(Collectors.toList());
@@ -135,7 +143,6 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
             }
         }
         return Result.success();
-
     }
 
 

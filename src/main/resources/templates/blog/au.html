@@ -193,16 +193,15 @@
 
             layui.use(['form', 'jquery'], () => {
                 const {form, $} = layui
-                const tagDemo = '<div class="tag"><span>NAME</span><span class="remove"><i class="fa fa-remove"></i></span></div>'
                 let postSeq = 0
 
                 // 监听提交
                 form.on('submit(submit)', ({form, field}) => {
-                        if (0 === tags.length) {
-                            return warn('至少添加一种标签')
-                        }
+                        if (!tags.length) return warn('至少添加一种标签')
+
+                        console.log(tags)
                         for (let i in tags) {
-                            field[`tags[${i}].name`] = tags[i]['name']
+                            field[`tagNames[${i}].name`] = tags[i]['name']
                         }
                         field.abs = getAbs(field.content)
                         return pageSubmit({form, field})
@@ -218,26 +217,32 @@
                 })
 
                 $('#add-tag-input').bind("input propertychange", function () {
-                    let seq = ++postSeq,
-                        value = $(this).val(),
-                        tagList = $('#tag-list'),
-                        tagCheck = $('#add-tag-check')
-                    if (value) {
-                        tagCheck.show()
-                        $.post(`${prefix}/rest/tag/list`, {nameLike: value}, ({code, data}) => {
-                            if (fail(code) || seq !== postSeq) return
 
-                            tagList.empty()
-                            0 === data.length ?
-                                tagList.append('<div>无匹配标签</div>') :
-                                data.foreach(({name}) => tagList.append(`<div class="tag">${name}</div>`))
-
-                            tagList.show()
-                        })
-                    } else {
+                    const value = $(this).val()
+                    if (!value) {
                         tagList.hide()
                         tagCheck.hide()
+                        return
                     }
+
+                    let seq = ++postSeq,
+                        tagList = $('#tag-list'),
+                        tagCheck = $('#add-tag-check')
+                    tagCheck.show()
+                    httpPost({
+                        url: `${prefix}/rest/tag/list`,
+                        data: {
+                            nameLike: value
+                        },
+                        cb: ({data}) => {
+                            if (seq !== postSeq) return
+                            tagList.html(!data.length ?
+                                '<div>无匹配标签</div>' :
+                                data.map(({name}) => `<div class="tag">${name}</div>`).join('')
+                            )
+                            tagList.show()
+                        }
+                    })
                 }).blur(function () {
                     !$(this).val() && resetAddTag()
                     $('#tag-list').hide()
@@ -263,7 +268,7 @@
                 })
 
                 function addTag(name) {
-                    $('.add-tag-wrap').before(tagDemo.replace('NAME', name))
+                    $('.add-tag-wrap').before(`<div class="tag"><span>${name}</span><span class="remove"><i class="fa fa-remove"></i></span></div>`)
                     tags.push({name})
                     tags.length >= maxTagSize && $('#add-tag').addClass('layui-btn-disabled')
 

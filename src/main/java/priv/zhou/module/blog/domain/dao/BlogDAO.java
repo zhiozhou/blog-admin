@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 public interface BlogDAO extends BaseDAO<BlogPO, BlogQuery> {
 
-    int removeList(List<Integer> ids);
+    int remove(Integer id);
 
     BlogVO getVO(BlogQuery query);
 

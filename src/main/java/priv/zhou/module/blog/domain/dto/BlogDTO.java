@@ -67,5 +67,5 @@ public class BlogDTO extends DTO<BlogPO> {
      * 标签列表
      */
     @NotNull(message = "标签不可为空")
-    private List<String> tags;
+    private List<String> tagNames;
 }

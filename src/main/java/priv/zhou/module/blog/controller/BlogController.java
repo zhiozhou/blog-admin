@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import priv.zhou.common.controller.BaseController;
-import priv.zhou.common.domain.Result;
-import priv.zhou.module.blog.domain.dto.BlogDTO;
 import priv.zhou.module.blog.domain.query.BlogQuery;
 import priv.zhou.module.blog.domain.vo.BlogVO;
 import priv.zhou.module.blog.service.IBlogService;
@@ -34,7 +32,7 @@ public class BlogController extends BaseController {
 
     @GetMapping("/add")
     public String add(Model model) {
-        super.add(model, new BlogDTO().setTags(Lists.newArrayList()));
+        super.add(model, new BlogVO().setTags(Lists.newArrayList()));
 
         return "blog/au";
     }
@@ -57,7 +55,7 @@ public class BlogController extends BaseController {
     @GetMapping
     public String view(Model model) {
         super.list(model);
-        model.addAttribute("stateMap", dictService.mapDataVO(STATE_DICT_KEY,DICT_NORM_TYPE));
+        model.addAttribute("stateMap", dictService.mapDataVO(STATE_DICT_KEY, DICT_NORM_TYPE));
         return "blog/index";
     }
 }

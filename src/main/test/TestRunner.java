@@ -37,10 +37,6 @@ public class TestRunner {
     @Test
     public void ttt(){
 
-        ArrayList<TagPO> tagPOS = Lists.newArrayList(new TagPO().setName("zj"), new TagPO().setName("aaa"));
-        System.out.println(tagDAO.saveList(tagPOS));
-
-        System.out.println();
     }
 
 //    //同步刷脸信息

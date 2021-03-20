@@ -65,6 +65,7 @@ layui.use(['table', 'form', 'jquery'], () => {
  * @param iframe 工具栏监听是否使用iframe
  */
 function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
+    console.log(options)
     table.render({
         ...{
             id: tableId,
