@@ -1,29 +1,26 @@
 package priv.zhou.common.tools;
 
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 
-import java.util.*;
+import org.springframework.data.redis.core.RedisTemplate;
+import priv.zhou.common.tools.ParseUtil;
+import priv.zhou.common.tools.SpringUtils;
+
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * redis工具类优化版
- *
  * @author zhou
+ * @since 2019.08.12
  */
+
 public class RedisUtil {
 
-    @SuppressWarnings("unchecked")
-    private final static RedisTemplate<String, Object> redisTemplate = SpringUtils.getBean(RedisTemplate.class);
-
-    static {
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-    }
+    private static RedisTemplate<String, Object> redisTemplate = SpringUtils.getBean(RedisTemplate.class);
 
     private RedisUtil() {
     }
+
 
     /**
      * 表达式获取key集合
@@ -33,47 +30,27 @@ public class RedisUtil {
     }
 
 
-    /**
-     * 删除key集合
-     */
-    public static Long delete(Set<String> keys) {
-        return redisTemplate.delete(keys);
-    }
-
-    /**
-     * 保存数据
-     */
     public static void set(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
-
     /**
-     * 存数据有效时间为秒
+     * 秒级过期
      */
-    public static void set(String key, Object value, long timeout) {
-        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    public static void set(String key, Object value, long time) {
+        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
     }
 
     /**
-     * 存数据有效时间
+     * 自定义过期单位
      */
-    public static void set(String key, Object value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().set(key, value, timeout, unit);
+    public static void set(String key, Object value, long time, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, time, timeUnit);
     }
 
-    /**
-     * 获取数据
-     */
-    public static Object get(String key) {
+
+    public static Object get(Object key) {
         return redisTemplate.opsForValue().get(key);
-    }
-
-    /**
-     * 如果key为空则设置value
-     */
-    public static boolean setIfAbsent(String key, Object value) {
-        return ParseUtil.unBox(redisTemplate.opsForValue().setIfAbsent(key, value));
     }
 
     /**
@@ -84,212 +61,133 @@ public class RedisUtil {
     }
 
     /**
-     * 获取key过期时间
+     * 删除指定key
+     *
+     * @return 成功返回true，失败false
+     */
+    public static boolean delete(String key) {
+        return ParseUtil.unBox(redisTemplate.delete(key));
+    }
+
+    /**
+     * 删除key集合
+     *
+     * @return 受影响行数
+     */
+    public static Long delete(Collection<String> keys) {
+        return redisTemplate.delete(keys);
+    }
+
+    /**
+     * 如果不存在则设置，返回true，存在返回false
+     */
+    public static boolean setIfAbsent(String key, Object value) {
+        return ParseUtil.unBox(redisTemplate.opsForValue().setIfAbsent(key, value));
+    }
+
+    /**
+     * 增加(自增长), 负数则为自减
+     */
+    public static Long incr(String key, long increment) {
+        return redisTemplate.opsForValue().increment(key, increment);
+    }
+
+
+    /**
+     * 获取key过期秒数
      */
     public static Long expire(String key) {
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
     /**
-     * 删除key
+     * Map结构
      */
-    public static void delete(String key) {
-        redisTemplate.delete(key);
-    }
+    public final static class Map {
 
-    /**
-     * 删除key
-     */
-    public static void delete(List<String> keys) {
-        redisTemplate.delete(keys);
-    }
-
-    /**
-     * 以map状态保存数据
-     */
-    public static void putHash(String key, String hashKey, Object value) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
-    }
-
-    /**
-     * 以map状态保存数据(秒级别)
-     */
-    public static void putHash(String key, String hashKey, Object value, long timeout) {
-        putHash(key, hashKey, value, timeout, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 以map状态保存数据
-     */
-    public static void putHash(String key, String hashKey, Object value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
-        redisTemplate.expire(key, timeout, unit);
-    }
-
-    /**
-     * 获取map
-     */
-    public static Map<Object, Object> getHash(String key) {
-        return redisTemplate.opsForHash().entries(key);
-    }
-
-
-    /**
-     * 获取map
-     */
-    public static Object getHash(String key, String hashKey) {
-        return redisTemplate.opsForHash().get(key, hashKey);
-    }
-
-    /**
-     * 判断name的Map总是否存在key
-     */
-    public static boolean hasHashKey(String key, Object hashKey) {
-        return redisTemplate.opsForHash().hasKey(key, hashKey);
-    }
-
-    /**
-     * 删除map中的键值对
-     */
-    public static void deleteHash(String key, Object... hashKeys) {
-        redisTemplate.opsForHash().delete(key, hashKeys);
-    }
-
-    /**
-     * 获取指定位置元素
-     */
-    public static Object getList(String key, Long index) {
-        return redisTemplate.opsForList().index(key, index);
-    }
-
-    /**
-     * 获取集合长度
-     */
-    public static Long sizeList(String key) {
-        return redisTemplate.opsForList().size(key);
-    }
-
-    /**
-     * 获取集合长度
-     */
-    public static List<Object> rangeList(String key, Long start, Long end) {
-        return redisTemplate.opsForList().range(key, start, end);
-    }
-
-    /**
-     * 添加元素
-     */
-    public static void addList(String key, Object... values) {
-        redisTemplate.opsForList().rightPushAll(key, values);
-    }
-
-
-    /**
-     * 在集合的指定位置插入元素,如果指定位置已有元素，则覆盖
-     */
-    public static void setList(String key, String value, Long index) {
-        redisTemplate.opsForList().set(key, index, value);
-    }
-
-    /**
-     * 截取集合元素长度，保留长度内的数据。
-     */
-    public static void trimList(String key, Long start, Long end) {
-        redisTemplate.opsForList().trim(key, start, end);
-    }
-
-    /**
-     * 添加set
-     */
-    public static void addSet(String key, Object... values) {
-        redisTemplate.opsForSet().add(key, values);
-    }
-
-    /**
-     * 是否存在于set
-     */
-    public static Set<Object> getSet(String key) {
-        return redisTemplate.opsForSet().members(key);
-    }
-
-    /**
-     * 是否存在于set
-     */
-    public static Boolean isMemberSet(String key, String value) {
-        return redisTemplate.opsForSet().isMember(key, value);
-    }
-
-    /**
-     * Set中移除values
-     */
-    public static void removeSet(String key, Object... values) {
-        redisTemplate.opsForSet().remove(key, values);
-    }
-
-
-    /**
-     * ZSet中移除values
-     */
-    public static void removeZSet(String key, Object... values) {
-        redisTemplate.opsForZSet().remove(key, values);
-    }
-
-
-    /**
-     * 获取排行榜总数
-     */
-    public static Long sizeZSet(String key) {
-        return redisTemplate.opsForZSet().zCard(key);
-    }
-
-
-    /**
-     * 获取排行名次
-     */
-    public static Set<ZSetOperations.TypedTuple<Object>> rangeZSet(String key, Long start, Long end) {
-        return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
-    }
-
-    /**
-     * 获取排行名次
-     */
-    public static Long rankZSet(String key, String value) {
-        Long level = redisTemplate.opsForZSet().reverseRank(key, value);
-        return null == level ? null : level + 1; // 索引排行
-    }
-
-    /**
-     * 获取分数
-     */
-    public static Double scoreZSet(String key, String value) {
-        return redisTemplate.opsForZSet().score(key, value);
-    }
-
-
-    /**
-     * 保存排行
-     */
-    public static void addZSet(String key, String value, Double score) {
-        redisTemplate.opsForZSet().add(key, value, score);
-    }
-
-    /**
-     * 增加分数
-     */
-    public static Double addScoreZSet(String key, String value, Double delta) {
-        return redisTemplate.opsForZSet().incrementScore(key, value, delta);
-    }
-
-
-    public static String generateId() {
-        Date now = new Date();
-        String prefix = DateUtil.format(now, "yyyyMMddHHmmss");
-        RedisAtomicLong counter = new RedisAtomicLong(prefix, redisTemplate.getConnectionFactory());
-        Long expire = counter.getExpire();
-        if (expire == -1) {
-            counter.expireAt(DateUtil.add(now, Calendar.SECOND, 20));
+        public static void put(String mapKey, String key, Object value) {
+            redisTemplate.opsForHash().put(mapKey, key, value);
         }
-        return String.format("%s%06d", prefix, counter.incrementAndGet());
+
+        public static void put(String mapKey, String key, Object value, long time) {
+            put(mapKey, key, value, time, TimeUnit.SECONDS);
+        }
+
+        public static void put(String mapKey, String key, Object value, long time, TimeUnit timeUnit) {
+            redisTemplate.opsForHash().put(mapKey, key, value);
+            redisTemplate.expire(mapKey, time, timeUnit);
+        }
+
+        public static void delete(String mapKey, Object key) {
+            redisTemplate.opsForHash().delete(mapKey, key);
+        }
+
+        public boolean hasKey(String mapKey, Object key) {
+            return redisTemplate.opsForHash().hasKey(mapKey, key);
+        }
+
+        public static java.util.Map<Object, Object> entries(String mapKey) {
+            return redisTemplate.opsForHash().entries(mapKey);
+        }
     }
+
+
+    /**
+     * 有序Set
+     */
+    public final static class ZSet {
+
+        /**
+         * 获取排行榜总数
+         */
+        public static Long getSize(String setKey) {
+            return redisTemplate.opsForZSet().zCard(setKey);
+        }
+
+        /**
+         * 获取排行名次
+         */
+        public static Long getLevel(String setKey, String key) {
+            Long level = redisTemplate.opsForZSet().reverseRank(setKey, key);
+            return null == level ? null : level + 1; // 索引排行
+        }
+
+        /**
+         * 获取分数
+         */
+        public static Double getScore(String setKey, String key) {
+            return redisTemplate.opsForZSet().score(setKey, key);
+        }
+
+        /**
+         * 保存元素
+         */
+        public static void add(String rankey, String key, Double score) {
+            redisTemplate.opsForZSet().add(rankey, key, score);
+        }
+
+        /**
+         * 自增分数
+         */
+        public static Double incrScore(String rankey, String key, Double delta) {
+            return redisTemplate.opsForZSet().incrementScore(rankey, key, delta);
+        }
+
+        /**
+         * 移除排行
+         */
+        public static Long remove(String setKey, String key) {
+            return redisTemplate.opsForZSet().remove(setKey, key);
+        }
+
+        /**
+         * 移除排行区间
+         */
+        public static Long removeRange(String setKey, long start, long end) {
+            return redisTemplate.opsForZSet().removeRange(setKey, start, end);
+        }
+
+    }
+
 
 }
