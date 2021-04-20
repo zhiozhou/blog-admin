@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 当只修改lastAccessTime时会触发间隔更新,用于解决SessionDao的update方法频繁访问
@@ -22,7 +22,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 @Setter
 public class ShiroSession extends SimpleSession implements Serializable {
 
-    public static final long serialVersionUID = SERIAL_VERSION_UOD;
+    public static final long serialVersionUID = SERIAL_VERSION_UID;
 
     private String username;
 

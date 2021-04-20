@@ -7,14 +7,14 @@ import priv.zhou.common.domain.Tree;
 
 import java.io.Serializable;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 public class MenuVO extends Tree implements Serializable {
 
-    public static final long serialVersionUID = SERIAL_VERSION_UOD;
+    public static final long serialVersionUID = SERIAL_VERSION_UID;
 
     private String parentName;
 

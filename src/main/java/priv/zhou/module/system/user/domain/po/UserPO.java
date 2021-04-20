@@ -4,12 +4,11 @@ import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.module.system.role.domain.po.RolePO;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 用户 数据持久化模型
@@ -23,7 +22,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 public class UserPO implements Serializable {
 
 
-    public static final long serialVersionUID = SERIAL_VERSION_UOD;
+    public static final long serialVersionUID = SERIAL_VERSION_UID;
 
     /**
      * id

@@ -1,14 +1,12 @@
 package priv.zhou.module.system.dict.domain.po;
 
-import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 字典数据 数据持久化模型
@@ -21,7 +19,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 @Accessors(chain = true)
 public class DictDataPO implements Serializable{
 
-	public static final long serialVersionUID = SERIAL_VERSION_UOD;
+	public static final long serialVersionUID = SERIAL_VERSION_UID;
 
 	/**
 	 * id

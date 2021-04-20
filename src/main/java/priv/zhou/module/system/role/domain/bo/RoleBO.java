@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 角色 逻辑模型
@@ -23,7 +23,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 public class RoleBO implements Serializable{
 
 
-	public static final long serialVersionUID = SERIAL_VERSION_UOD;
+	public static final long serialVersionUID = SERIAL_VERSION_UID;
 
 	private Integer id;
 

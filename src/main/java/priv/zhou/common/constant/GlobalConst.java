@@ -12,7 +12,7 @@ public interface GlobalConst {
      * 全局序列化版本id
      * 不要修改，避免反序列化失败
      */
-    long SERIAL_VERSION_UOD = 2020020202;
+    long SERIAL_VERSION_UID = 2020020202;
 
     String STR_0 = "0";
 
@@ -25,7 +25,6 @@ public interface GlobalConst {
      */
     Integer ZHOU_ID = INT_0;
 
-    long SERIAL_VERSION_UID = 1L;
 
     String RSA_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnhWMXpLf1LwEY5mO6JO4vdCgYS+S/VV6x5Uz2LkYOM5SOAdWwRH6SjU9Pofi8xAl0xZ+Ohtpo36WbjdCeZORStoQMkV6Pq7Z1K47s/wxoy2NwglvJNuWtk4fIIeH3X9I6M8mumnEKsOBtI3yXsFHt0qG+2ktTalBgwefzVlqVxD2c1QcggmoCjCCmNAzdLFDQJZqTjH0KRqlTROMxT3kOUCRft2UnWpRzSYvicjvRvXYfkRE5lhmhxsRhS35umrRh7k1oTOtm9oWa19IGw3oyDlttNckVbVun+zW4Up3830dggGo1OnjnoZES+nRFjApckExfIbX9+NU2Gs/B0q96QIDAQAB";
 

@@ -10,7 +10,7 @@ import priv.zhou.module.visitor.domain.po.VisitorPO;
 import java.io.Serializable;
 import java.util.Date;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 评论 数据持久化模型
@@ -23,7 +23,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 @Accessors(chain = true)
 public class CommentPO implements Serializable {
 
-    public static final long serialVersionUID = SERIAL_VERSION_UOD;
+    public static final long serialVersionUID = SERIAL_VERSION_UID;
 
     /**
      *

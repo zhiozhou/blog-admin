@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.Date;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 博客类型 数据持久化模型
@@ -21,7 +21,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 @Accessors(chain = true)
 public class TagPO implements Serializable {
 
-    public static final long serialVersionUID = SERIAL_VERSION_UOD;
+    public static final long serialVersionUID = SERIAL_VERSION_UID;
 
     /**
      *

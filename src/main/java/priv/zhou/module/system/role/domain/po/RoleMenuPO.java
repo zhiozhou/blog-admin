@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 角色关联菜单 数据持久化模型
@@ -19,7 +19,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 @Accessors(chain = true)
 public class RoleMenuPO implements Serializable {
 
-    public static final long serialVersionUID = SERIAL_VERSION_UOD;
+    public static final long serialVersionUID = SERIAL_VERSION_UID;
 
     /**
      * 角色id

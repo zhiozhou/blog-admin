@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-import static ${app.packet}.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static ${app.packet}.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * ${table.comment} 数据持久化模型
@@ -18,7 +18,7 @@ import static ${app.packet}.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 @Accessors(chain = true)
 public class ${table.className}PO implements Serializable{
 
-	public static final long serialVersionUID = SERIAL_VERSION_UOD;
+	public static final long serialVersionUID = SERIAL_VERSION_UID;
 
 #foreach ($column in $table.columnList)
 

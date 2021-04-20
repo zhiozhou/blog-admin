@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
+import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UID;
 
 /**
  * 解决 SimpleByteSource 无法序列化问题
@@ -18,7 +18,7 @@ import static priv.zhou.common.constant.GlobalConst.SERIAL_VERSION_UOD;
 @SuppressWarnings(value = "unused")
 public class CacheByteSource implements ByteSource, Serializable {
 
-    public static final long serialVersionUID = SERIAL_VERSION_UOD;
+    public static final long serialVersionUID = SERIAL_VERSION_UID;
 
     private byte[] bytes;
     private String cachedHex;
