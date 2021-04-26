@@ -52,7 +52,7 @@ public class Tree {
                 treeList.stream()
                         .filter(po -> entry.getKey().equals(po.getId()))
                         .findFirst()
-                        .orElseThrow(() -> new RestException(ResultEnum.FAIL_DATA, "父级菜单不存在: id=" + entry.getKey()))
+                        .orElseThrow(() -> new RestException(ResultEnum.FAIL_DATA))
                         .setChildren(entry.getValue());
             }
         }

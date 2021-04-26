@@ -10,6 +10,8 @@ import priv.zhou.common.domain.Result;
  */
 public enum ResultEnum {
 
+    FAIL("500", null),
+
     SUCCESS("0000", "请求成功"),
 
     EMPTY_PARAM("0001", "参数为空"),
@@ -57,6 +59,8 @@ public enum ResultEnum {
     LATER_RETRY("9001", "请稍后重试"),
 
     OFTEN_OPERATION("9002", "操作频繁"),
+
+    NOT_SUPPORTED_REQUEST("8004","不支持{{requestMethod}}请求"),
 
     TIMEOUT_RESPONSE("9003", "响应超时"),
 

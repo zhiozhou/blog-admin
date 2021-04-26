@@ -9,6 +9,8 @@ import priv.zhou.common.domain.vo.TableVO;
 import priv.zhou.common.enums.ResultEnum;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 全局返回
@@ -22,48 +24,55 @@ public class Result<T> {
      * 系统状态
      */
     private String code;
+
     /**
      * 系统返回信息
      */
     private String info;
+
     /**
      * 返回数据
      */
     private T data;
-
 
     /**
      * 状态玛是否错误
      */
     @JsonIgnore
     public boolean isFail() {
-        return !ResultEnum.SUCCESS.equals(this);
+        return !ResultEnum.SUCCESS.getCode().equals(this.code);
     }
-
 
     public static <E> Result<E> build() {
         return new Result<>();
     }
 
-    public static <E> Result<E> build(ResultEnum resultEnum) {
-        return build(resultEnum, null);
-    }
-
-    public static <E> Result<E> build(ResultEnum resultEnum, E data) {
-        return build(resultEnum.getCode(), resultEnum.getInfo(), data);
-    }
-
-    public static <E> Result<E> build(String code, String info) {
+    private static <E> Result<E> build(String code, String info) {
         return Result.build(code, info, null);
     }
 
-    public static <E> Result<E> build(String code, String info, E data) {
-        Result<E> result = new Result<>();
+    private static <E> Result<E> build(String code, String info, E data, String... holders) {
+        if (null != holders && holders.length != 0) {
+            int i = 0;
+            StringBuffer buffer = new StringBuffer();
+            Matcher matcher = Pattern.compile("\\{\\{\\w*}}").matcher(info);
+            while (i < holders.length && matcher.find()) {
+                matcher.appendReplacement(buffer, holders[i++]);
+            }
+            info = matcher.appendTail(buffer).toString();
+        }
+        Result<E> result = build();
         return result.setCode(code)
                 .setInfo(info)
                 .setData(data);
+    }
 
+    private static <E> Result<E> build(ResultEnum resultEnum, String... holders) {
+        return build(resultEnum, null, holders);
+    }
 
+    private static <E> Result<E> build(ResultEnum resultEnum, E data, String... holders) {
+        return build(resultEnum.getCode(), resultEnum.getInfo(), data, holders);
     }
 
     @Override
@@ -71,39 +80,29 @@ public class Result<T> {
         return JSON.toJSONString(this);
     }
 
-    /**
-     * 返回api错误
-     */
-    public static <E> Result<E> fail(Result<?> res) {
-        return build(res.getCode(), res.getInfo());
+    public static <E> Result<E> fail(String info) {
+        return build(ResultEnum.FAIL.getCode(), info);
     }
 
-    /**
-     * 返回api错误
-     */
+    public static <E> Result<E> fail(Result<?> result) {
+        return build(result.getCode(), result.getInfo());
+    }
+
     public static <E> Result<E> fail(ResultEnum resultEnum) {
-        return build(resultEnum.getCode(), resultEnum.getInfo());
+        return build(resultEnum);
     }
 
     /**
-     * 返回api错误
+     * 填充占位符
      */
-    public static <E> Result<E> fail(ResultEnum resultEnum, String info) {
-        return build(resultEnum.getCode(), info);
+    public static <E> Result<E> fail(ResultEnum resultEnum, String... holders) {
+        return build(resultEnum, holders);
     }
 
-
-    /**
-     * 返回api成功
-     */
     public static <E> Result<E> success() {
         return build(ResultEnum.SUCCESS);
     }
 
-
-    /**
-     * 返回api成功
-     */
     public static <T> Result<T> success(T data) {
         return build(ResultEnum.SUCCESS, data);
     }

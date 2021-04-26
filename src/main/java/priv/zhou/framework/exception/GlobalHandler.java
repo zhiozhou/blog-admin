@@ -56,13 +56,13 @@ public class GlobalHandler {
 
     }
 
-
     /**
-     * 不支持此请求方法异常
+     * 请求方式不支持
      */
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public void NotSupportedHand() {
-        log.info("Request method not supported");
+    @ResponseBody
+    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
+    public Result<NULL> handleException(HttpRequestMethodNotSupportedException e) {
+        return Result.fail(ResultEnum.NOT_SUPPORTED_REQUEST, e.getMethod());
     }
 
 
