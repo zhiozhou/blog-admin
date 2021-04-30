@@ -1,12 +1,9 @@
-layui.config({
-    base: _gate + 'plugin/layui/extend/'
-})
-
-
 /**
  * 全局初始化方法
  */
-layui.use(['layer'], () => {
+layui.config({
+    base: _gate + 'plugin/layui/extend/'
+}).use(['layer'], () => {
     // 预留方法
 })
 
