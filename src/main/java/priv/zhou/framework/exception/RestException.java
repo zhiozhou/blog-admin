@@ -24,9 +24,10 @@ public class RestException extends RuntimeException {
         this.result = result;
     }
 
-    public RestException(ResultEnum resultEnum) {
-        this.result = Result.fail(resultEnum);
+    public RestException(ResultEnum resultEnum, String... holders) {
+        this.result = Result.fail(resultEnum, holders);
     }
+
 
     public RestException(String info) {
         this.result = Result.fail(info);
