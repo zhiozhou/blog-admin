@@ -16,16 +16,23 @@ import priv.zhou.common.constant.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.properties.AppProperties;
+import priv.zhou.common.tools.DateUtil;
 import priv.zhou.common.tools.EmailUtil;
 import priv.zhou.common.tools.HttpUtil;
+import priv.zhou.common.tools.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static priv.zhou.common.constant.GlobalConst.DEFAULT_ENC;
+import static priv.zhou.common.constant.GlobalConst.STR_0;
+import static priv.zhou.common.constant.RedisConst.EXCEPTION_COUNT_KEY;
+import static priv.zhou.common.constant.RedisConst.EXCEPTION_SENT_KEY;
 
 /**
  * @author zhou
@@ -47,11 +54,25 @@ public class GlobalHandler {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public Result<?> globalHand(HttpServletRequest request, Exception e) throws JsonProcessingException {
-        StringBuilder builder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
-        builder.append("请求参数 -->").append(objectMapper.writeValueAsString(HttpUtil.getParams(request))).append(" | ");
-        builder.append("e -->");
-        log.error(builder.toString(), e);
-        EmailUtil.send(appProperties.getName() + " 出现未知异常", getStackTrace(e), appProperties.getAdminEmail());
+        StringBuilder infoBuilder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
+        infoBuilder.append("请求参数 -->").append(objectMapper.writeValueAsString(HttpUtil.getParams(request)));
+        String info = infoBuilder.toString(),
+                name = e.getClass().getName(),
+                key = EXCEPTION_SENT_KEY + name;
+        log.error(info, e);
+        RedisUtil.Map.incr(EXCEPTION_COUNT_KEY, name, 1L, DateUtil.restOfToday());
+        if (RedisUtil.get(key) == null) {
+            StringBuilder countBuilder = new StringBuilder(getStackTrace(e))
+                    .append("\n")
+                    .append("----------------------------------- 今日未知异常统计 -----------------------------------")
+                    .append("\n");
+            Map<Object, Object> entries = RedisUtil.Map.entries(EXCEPTION_COUNT_KEY);
+            for (Map.Entry<Object, Object> entry : entries.entrySet()) {
+                countBuilder.append(entry.getKey()).append(" -> ").append(entry.getValue()).append("\n");
+            }
+            EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " thrown " + name, info + "\n" + countBuilder);
+            RedisUtil.set(key, STR_0, 10, TimeUnit.MINUTES);
+        }
         return Result.fail(ResultEnum.ERROR_SYSTEM);
 
     }
@@ -101,7 +122,7 @@ public class GlobalHandler {
     }
 
 
-    private String getStackTrace(Throwable e) {
+    public static String getStackTrace(Throwable e) {
         try (ByteArrayOutputStream outStream = new ByteArrayOutputStream();
              PrintWriter writer = new PrintWriter(outStream)) {
             e.printStackTrace(writer);
@@ -109,7 +130,7 @@ public class GlobalHandler {
             return outStream.toString(DEFAULT_ENC);
         } catch (IOException ex) {
             ex.printStackTrace();
-            return null;
+            return "";
         }
     }
 

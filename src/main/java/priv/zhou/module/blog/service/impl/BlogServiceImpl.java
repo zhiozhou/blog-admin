@@ -153,6 +153,7 @@ public class BlogServiceImpl extends BaseService implements IBlogService {
 
     @Override
     public List<BlogTableVO> listTableVO(BlogQuery query, Page page) {
+
         startPage(page);
         return blogDAO.listTableVO(query);
     }

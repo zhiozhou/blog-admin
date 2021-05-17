@@ -105,6 +105,11 @@ public class RedisUtil {
      */
     public final static class Map {
 
+
+        public static Object get(String mapKey, String key) {
+            return redisTemplate.opsForHash().get(mapKey, key);
+        }
+
         public static void put(String mapKey, String key, Object value) {
             redisTemplate.opsForHash().put(mapKey, key, value);
         }
@@ -128,6 +133,20 @@ public class RedisUtil {
 
         public static java.util.Map<Object, Object> entries(String mapKey) {
             return redisTemplate.opsForHash().entries(mapKey);
+        }
+
+        public static Long incr(String mapKey, String key, long increment) {
+            return redisTemplate.opsForHash().increment(mapKey, key, increment);
+        }
+
+        public static Long incr(String mapKey, String key, long increment, long time) {
+            return incr(mapKey, key, increment, time, TimeUnit.SECONDS);
+        }
+
+        public static Long incr(String mapKey, String key, long increment, long time, TimeUnit timeUnit) {
+            Long result = redisTemplate.opsForHash().increment(mapKey, key, increment);
+            redisTemplate.expire(mapKey, time, timeUnit);
+            return result;
         }
     }
 
