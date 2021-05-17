@@ -50,6 +50,7 @@ public class GlobalHandler {
 
     /**
      * 全局异常
+     * 10分钟内相同异常只发送一次，尾部附带当日异常统计
      */
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
@@ -74,7 +75,6 @@ public class GlobalHandler {
             RedisUtil.set(key, STR_0, 10, TimeUnit.MINUTES);
         }
         return Result.fail(ResultEnum.ERROR_SYSTEM);
-
     }
 
     /**
