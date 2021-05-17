@@ -23,9 +23,9 @@ public class EmailUtil {
     /**
      * 给某人发送异常邮件
      *
-     * @param address 要发送道德邮箱
      * @param topic   发送主题
      * @param content 发送内容
+     * @param address 要发送到的邮箱
      */
     public static void send(String topic, String content, String... address) {
         if (APP_PROPERTIES.isEnableEmail()) {

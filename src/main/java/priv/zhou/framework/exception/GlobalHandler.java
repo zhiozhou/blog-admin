@@ -71,7 +71,7 @@ public class GlobalHandler {
             for (Map.Entry<Object, Object> entry : entries.entrySet()) {
                 countBuilder.append(entry.getKey()).append(" -> ").append(entry.getValue()).append("\n");
             }
-            EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " thrown " + name, info + "\n" + countBuilder);
+            EmailUtil.send(appProperties.getName() + " thrown " + name, info + "\n" + countBuilder, appProperties.getAdminEmail());
             RedisUtil.set(key, STR_0, 10, TimeUnit.MINUTES);
         }
         return Result.fail(ResultEnum.ERROR_SYSTEM);
