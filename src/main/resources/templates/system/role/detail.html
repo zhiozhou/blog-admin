@@ -16,14 +16,12 @@
                                 <input type="text" class="layui-input" th:value="*{name}" disabled>
                             </div>
                         </div>
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">角色标识：</label>
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input" th:value="*{key}" disabled>
                             </div>
                         </div>
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">菜单权限：</label>
                             <div class="layui-input-block">
@@ -31,15 +29,12 @@
                                 <input type="text" class="layui-input" value="所有权限" th:if="${_vo.key == @roleService.ROOT_KEY}" disabled>
                             </div>
                         </div>
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">状态：</label>
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input" th:value="*{stateStr}" disabled>
                             </div>
-
                         </div>
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">备注：</label>
                             <div class="layui-input-block">
