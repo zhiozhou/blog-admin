@@ -27,9 +27,12 @@ public class DictDataDTO {
     @NotNull(message = "数据类型不可为空")
     private Integer type;
 
-    @NotNull(message = "首选标识不可为空")
-    private Boolean perf;
+    @NotNull(message = "默认标识不可为空")
+    private Boolean defa;
 
-    private String spare;
+    /**
+     * 扩展位
+     */
+    private String extend;
 
 }

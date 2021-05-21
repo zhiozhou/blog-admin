@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
@@ -24,11 +24,11 @@ import static priv.zhou.module.system.menu.service.IMenuService.ADMIN_FLAG;
  */
 @Controller
 @RequestMapping("/system/menu")
-public class MenuController extends BaseController {
+public class MenuViewController extends BaseViewController {
 
     private final IMenuService menuService;
 
-    public MenuController(IMenuService menuService) {
+    public MenuViewController(IMenuService menuService) {
         super("菜单", "system:menu");
         this.menuService = menuService;
     }

@@ -27,8 +27,8 @@
             <result column="code" property="code"/>
             <result column="label" property="label" />
             <result column="type" property="type" />
-            <result column="is_perf" property="perf" />
-            <result column="spare" property="spare" />
+            <result column="is_defa" property="defa" />
+            <result column="extend" property="extend" />
         </collection>
     </resultMap>
 
@@ -114,8 +114,8 @@
             dict_data.`code`,
             dict_data.label,
             dict_data.type,
-            dict_data.is_perf,
-            dict_data.spare
+            dict_data.is_defa,
+            dict_data.extend
         FROM system_dict AS dict
         LEFT JOIN system_dict_data AS dict_data ON dict.`key` = dict_data.dict_key
         WHERE dict.is_deleted = 0 and dict.id = #{id}

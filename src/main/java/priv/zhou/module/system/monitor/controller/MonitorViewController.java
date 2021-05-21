@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 import priv.zhou.common.properties.AppProperties;
 import priv.zhou.common.tools.AesUtil;
 import priv.zhou.common.tools.ShiroUtil;
@@ -20,13 +20,13 @@ import priv.zhou.module.system.role.service.IRoleService;
  */
 @Controller
 @RequestMapping("/system/monitor")
-public class MonitorController extends BaseController {
+public class MonitorViewController extends BaseViewController {
 
     private final IRoleService roleService;
 
     private final AppProperties appProperties;
 
-    public MonitorController(IRoleService roleService, AppProperties appProperties) {
+    public MonitorViewController(IRoleService roleService, AppProperties appProperties) {
         super("监控", "system:monitor");
         this.roleService = roleService;
         this.appProperties = appProperties;

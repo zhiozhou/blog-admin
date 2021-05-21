@@ -11,12 +11,12 @@ import priv.zhou.module.system.dict.service.IDictService;
 import java.util.HashMap;
 
 /**
- * 基础控制层
+ * 基础视图控制层
  *
  * @author zhou
  * @since 0.1.0
  */
-public class BaseController {
+public class BaseViewController {
 
     protected Module module;
 
@@ -28,7 +28,7 @@ public class BaseController {
 
     protected final String ACTION_KEY = "_action";
 
-    protected final String ACTION_FLAG_KEY = "_isAdd";
+    protected final String ACTION_TYPE_KEY = "_isAdd";
 
     protected final String ADD_PATH = "/rest/save";
 
@@ -36,16 +36,13 @@ public class BaseController {
 
     protected final String UPLOAD_PARAM_KEY = "_upload";
 
-
-
-
     @Autowired
     protected AppProperties appProperties;
 
     @Autowired
     protected IDictService dictService;
 
-    public BaseController(String name, String permissionPrefix) {
+    public BaseViewController(String name, String permissionPrefix) {
         this.module = Module.build(name, permissionPrefix);
     }
 
@@ -56,7 +53,7 @@ public class BaseController {
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, ADD_PATH);
-        model.addAttribute(ACTION_FLAG_KEY, Boolean.TRUE);
+        model.addAttribute(ACTION_TYPE_KEY, Boolean.TRUE);
     }
 
     /**
@@ -69,7 +66,7 @@ public class BaseController {
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
         model.addAttribute(ACTION_KEY, UPDATE_PATH);
-        model.addAttribute(ACTION_FLAG_KEY, Boolean.FALSE);
+        model.addAttribute(ACTION_TYPE_KEY, Boolean.FALSE);
     }
 
     /**
@@ -100,6 +97,13 @@ public class BaseController {
             put("url", appProperties.getFileService());
             put("prefix", appProperties.getFileUploadPrefix());
         }});
+    }
+
+    /**
+     * 返回错误页面
+     */
+    protected String error() {
+        return PageEnum.SERVER_ERROR.getPath();
     }
 
 }

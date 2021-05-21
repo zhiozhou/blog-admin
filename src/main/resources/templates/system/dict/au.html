@@ -7,8 +7,9 @@
                 <input type="hidden" th:field="*{id}"/>
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/system/dict/list}" th:text="${_module.name}+列表"></a></li>
-                        <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
+                        <li><a th:href="@{/system/dict}" th:text="|${_module.name}列表|"></a></li>
+                        <li th:if="${_isAdd}" class="layui-this" th:text="|添加${_module.name}|"></li>
+                        <li th:unless="${_isAdd}" class="layui-this" th:text="|修改${_module.name}|"></li>
                     </ul>
                     <div class="layui-tab-content">
                         <div class="layui-form-item">
@@ -76,15 +77,15 @@
         <script th:inline="none">
             const prefix = `${_gate}system/dict`
             const typeMap = {
-                    0: {spare: 'layui-bg-blue', info: '正常'},
-                    1: {spare: 'layui-btn-primary', info: '预留'},
-                    11: {spare: '', info: '系统'},
+                    0: {css: 'layui-bg-blue', info: '正常'},
+                    1: {css: 'layui-btn-primary', info: '预留'},
+                    11: {css: '', info: '系统'},
                 },
-                perfMap = {
-                    0: {spare: 'layui-bg-blue', info: '正常'},
-                    1: {spare: 't', info: '默认'},
+                defaMap = {
+                    0: {css: 'layui-bg-blue', info: '正常'},
+                    1: {css: 't', info: '默认'},
                 }
-            let perfIndex  // 默认数据索引
+            let defaIndex  // 默认数据索引
 
             layui.use(['table', 'form', 'jquery'], () => {
                 const {table, form, $} = layui
@@ -96,24 +97,24 @@
                     cols: [[
                         {field: 'code', title: '编码值', edit: true},
                         {field: 'label', title: '标签', edit: true},
-                        {field: 'spare', title: '备用', edit: true},
+                        {field: 'extend', title: '扩展', edit: true},
                         {
                             field: 'type', title: '状态',
                             templet: ({type}) => {
-                                let {spare, info} = typeMap[type]
-                                return `<a data-type="${type}" class="layui-btn layui-btn-xs type-btn ${spare}">${info}</a>`
+                                let {css, info} = typeMap[type]
+                                return `<a data-type="${type}" class="layui-btn layui-btn-xs type-btn ${css}">${info}</a>`
                             }
                         },
                         {
-                            field: 'perf', title: '默认使用',
-                            templet: ({perf}) => {
-                                let {spare, info} = perfMap[perf]
-                                return `<a class="layui-btn layui-btn-xs perf-btn ${spare}">${info}</a>`
+                            field: 'defa', title: '默认使用',
+                            templet: ({defa}) => {
+                                let {css, info} = defaMap[defa ? 1 : 0]
+                                return `<a class="layui-btn layui-btn-xs defa-btn ${css}">${info}</a>`
                             }
                         },
                         {title: '操作', toolbar: '#dict-tool'}
                     ]],
-                    done: () => perfIndex = $('.t').parents('tr').data('index')
+                    done: () => defaIndex = $('.t').parents('tr').data('index')
                 })
 
 
@@ -145,7 +146,7 @@
                     let index = tr.data('index')
                     switch (action) {
                         case 'insert':
-                            dataListEcho.splice(1 + index, 0, {type: 0, perf: 0})
+                            dataListEcho.splice(1 + index, 0, {type: 0, defa: 0})
                             break
                         case 'remove':
                             if (1 === dataListEcho.length) {
@@ -167,7 +168,7 @@
                     let btn = $(this),
                         type = btn.data('type'),
                         index = btn.parents('tr').data('index')
-                    btn.removeClass(typeMap[type].spare)
+                    btn.removeClass(typeMap[type].css)
                     switch (type) {
                         case 0:
                             type = 1
@@ -179,18 +180,18 @@
                             type = 0
                             break
                     }
-                    let {spare, info} = typeMap[type]
+                    let {css, info} = typeMap[type]
                     btn.data('type', type)
                         .html(info)
-                        .addClass(spare)
+                        .addClass(css)
                     dataListEcho[index].type = type
-                }).on('click', '.perf-btn', function () {
+                }).on('click', '.defa-btn', function () {
                     let index = $(this).parents('tr').data('index')
-                    if (perfIndex !== index) {
-                        if (0 === perfIndex || perfIndex) {
-                            dataListEcho[perfIndex].perf = false
+                    if (defaIndex !== index) {
+                        if (0 === defaIndex || defaIndex) {
+                            dataListEcho[defaIndex].defa = false
                         }
-                        dataListEcho[index].perf = true
+                        dataListEcho[index].defa = true
                         table.reload('data-table', {data: dataListEcho})
                     }
                 })

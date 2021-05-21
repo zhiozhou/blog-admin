@@ -24,8 +24,8 @@ public class DictDataVO {
 
     private Integer type;
 
-    private Boolean perf;
+    private Boolean defa;
 
-    private String spare;
+    private String extend;
 
 }

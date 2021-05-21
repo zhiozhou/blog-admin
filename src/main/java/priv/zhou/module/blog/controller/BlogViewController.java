@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 import priv.zhou.module.blog.domain.query.BlogQuery;
 import priv.zhou.module.blog.domain.vo.BlogVO;
 import priv.zhou.module.blog.service.IBlogService;
@@ -21,11 +21,11 @@ import static priv.zhou.module.blog.service.IBlogService.STATE_DICT_KEY;
  */
 @Component
 @RequestMapping("/blog")
-public class BlogController extends BaseController {
+public class BlogViewController extends BaseViewController {
 
     private final IBlogService blogService;
 
-    public BlogController(IBlogService blogService) {
+    public BlogViewController(IBlogService blogService) {
         super("博客", "blog");
         this.blogService = blogService;
     }

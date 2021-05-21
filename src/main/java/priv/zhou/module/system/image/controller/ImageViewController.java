@@ -4,7 +4,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 
 /**
  * 图片 视图控制层
@@ -14,9 +14,9 @@ import priv.zhou.common.controller.BaseController;
  */
 @Controller
 @RequestMapping("/system/image")
-public class ImageController extends BaseController {
+public class ImageViewController extends BaseViewController {
 
-    public ImageController() {
+    public ImageViewController() {
         super("图片", "system:image");
     }
 

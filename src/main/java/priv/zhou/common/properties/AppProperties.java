@@ -13,13 +13,15 @@ import org.springframework.stereotype.Component;
  */
 @Getter
 @Setter
-@Component
+@Component("app")
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
 
 	private String gate;
 
 	private String name;
+
+	private String version;
 
 	private boolean enableEmail;
 
@@ -32,7 +34,6 @@ public class AppProperties {
 	private String fileService;
 
 	private String fileUploadPrefix;
-
 
 	private Integer cacheSecond = 60 * 60 * 24 * 30 * 12; //缓存一年
 

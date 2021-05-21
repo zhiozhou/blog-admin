@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 import priv.zhou.common.domain.Result;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 import priv.zhou.module.comment.service.ICommentService;
@@ -21,11 +21,11 @@ import static priv.zhou.module.comment.service.ICommentService.STATE_KEY;
  */
 @Component
 @RequestMapping("/comment")
-public class CommentController extends BaseController {
+public class CommentViewController extends BaseViewController {
 
     private final ICommentService commentService;
 
-    public CommentController(ICommentService commentService) {
+    public CommentViewController(ICommentService commentService) {
         super("评论", "comment");
         this.commentService = commentService;
     }
@@ -41,7 +41,7 @@ public class CommentController extends BaseController {
     public String detail(Model model, @PathVariable Integer id) {
         Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
-            return PAGE_500;
+            return error();
         }
         CommentDTO commentDTO = dtoVO.getData();
         commentDTO.setStateStr(dictService.getLabel(STATE_KEY, commentDTO.getState()));
@@ -61,7 +61,7 @@ public class CommentController extends BaseController {
     public String update(Model model, @PathVariable Integer id) {
         Result<CommentDTO> dtoVO = commentService.get(new CommentDTO().setId(id));
         if (dtoVO.isFail()) {
-            return PAGE_500;
+            return error();
         }
         super.detail(model, dtoVO.getData());
         model.addAttribute(ACTION_KEY, "/rest/reply/update");

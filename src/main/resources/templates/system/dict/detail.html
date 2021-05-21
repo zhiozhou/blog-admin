@@ -64,10 +64,14 @@
         </script>
         <script th:inline="none">
             const typeMap = {
-                0: {spare: 'layui-bg-blue', label: '正常'},
-                1: {spare: 'layui-btn-primary', label: '预留'},
-                11: {spare: '', label: '系统'},
-            }
+                    0: {css: 'layui-bg-blue', label: '正常'},
+                    1: {css: 'layui-btn-primary', label: '预留'},
+                    11: {css: '', label: '系统'},
+                },
+                defaMap = {
+                    0: {css: 'layui-bg-blue', info: '正常'},
+                    1: {css: 't', info: '默认'},
+                }
 
             layui.use(['table', 'form', 'jquery'], () => {
                 const {table} = layui
@@ -78,23 +82,16 @@
                     cols: [[
                         {field: 'code', title: '编码值'},
                         {field: 'label', title: '标签'},
-                        {field: 'spare', title: '备用',},
+                        {field: 'extend', title: '扩展'},
                         {
                             field: 'type', title: '类型',
                             templet: ({type}) => dictRender(type, typeMap)
                         },
                         {
-                            field: 'perf', title: '默认使用',
-                            templet: ({perf}) => {
-                                let css, info
-                                if (perf) {
-                                    css = 't'
-                                    info = '默认'
-                                } else {
-                                    css = 'layui-bg-blue'
-                                    info = '正常'
-                                }
-                                return `<a class="layui-btn layui-btn-xs ${css}">${info}</a>`
+                            field: 'defa', title: '默认使用',
+                            templet: ({defa}) => {
+                                let {css, info} = defaMap[defa ? 1 : 0]
+                                return `<a class="layui-btn layui-btn-xs defa-btn ${css}">${info}</a>`
                             }
                         }
 

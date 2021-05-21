@@ -70,11 +70,11 @@ public class DictServiceImpl extends BaseService implements IDictService {
         } else if (dictDataDAO.saveList(dictDTO.getDataList()
                 .stream()
                 .map(dataDTO -> new DictDataPO()
-                        .setPerf(dataDTO.getPerf())
+                        .setDefa(dataDTO.getDefa())
                         .setCode(dataDTO.getCode())
                         .setType(dataDTO.getType())
                         .setLabel(dataDTO.getLabel())
-                        .setSpare(dataDTO.getSpare())
+                        .setExtend(dataDTO.getExtend())
                         .setDictKey(dictDTO.getKey()))
                 .collect(Collectors.toList())) < 1) {
             throw new RestException(ResultEnum.LATER_RETRY);
@@ -130,11 +130,11 @@ public class DictServiceImpl extends BaseService implements IDictService {
                 dictDataDAO.saveList(dictDTO.getDataList().stream()
                         .map(data -> new DictDataPO()
                                 .setDictKey(dictDTO.getKey())
-                                .setPerf(data.getPerf())
+                                .setDefa(data.getDefa())
                                 .setCode(data.getCode())
                                 .setType(data.getType())
                                 .setLabel(data.getLabel())
-                                .setSpare(data.getSpare()))
+                                .setExtend(data.getExtend()))
                         .collect(Collectors.toList())) != dictDTO.getDataList().size()) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }

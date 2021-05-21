@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.shiro.filter.SyncOnlineFilter;
 import priv.zhou.module.system.role.domain.query.RoleQuery;
@@ -29,7 +29,7 @@ import static priv.zhou.common.constant.DictConst.SYSTEM_USER_STATE;
  */
 @Controller
 @RequestMapping("/system/user")
-public class UserController extends BaseController {
+public class UserViewController extends BaseViewController {
 
     private final IUserService userService;
 
@@ -37,7 +37,7 @@ public class UserController extends BaseController {
 
     private final SyncOnlineFilter syncOnlineFilter;
 
-    public UserController(IUserService userService, IRoleService roleService, SyncOnlineFilter syncOnlineFilter) {
+    public UserViewController(IUserService userService, IRoleService roleService, SyncOnlineFilter syncOnlineFilter) {
 
         super("用户", "system:user");
         this.userService = userService;

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 
 import static priv.zhou.module.block.service.IBlockService.TYPE_KEY;
 
@@ -17,9 +17,9 @@ import static priv.zhou.module.block.service.IBlockService.TYPE_KEY;
 
 @Component
 @RequestMapping("/block")
-public class BlockController extends BaseController {
+public class BlockViewController extends BaseViewController {
 
-    public BlockController() {
+    public BlockViewController() {
         super("阻塞", "block");
     }
 

@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 import priv.zhou.common.domain.Tree;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
 import priv.zhou.module.system.menu.service.IMenuService;
@@ -27,13 +27,13 @@ import static priv.zhou.module.system.role.service.IRoleService.ROOT_KEY;
  */
 @Controller
 @RequestMapping("/system/role")
-public class RoleController extends BaseController {
+public class RoleViewController extends BaseViewController {
 
     private final IRoleService roleService;
 
     private final IMenuService menuService;
 
-    public RoleController(IRoleService roleService, IMenuService menuService) {
+    public RoleViewController(IRoleService roleService, IMenuService menuService) {
         super("角色", "system:role");
         this.roleService = roleService;
         this.menuService = menuService;
@@ -52,7 +52,7 @@ public class RoleController extends BaseController {
     @GetMapping("/update/{key}")
     public String update(Model model, @PathVariable String key) {
         if (ROOT_KEY.equals(key)) {
-            return PAGE_DENIED;
+            return error();
         }
         super.update(model, roleService.getVO(new RoleQuery().setKey(key)));
 

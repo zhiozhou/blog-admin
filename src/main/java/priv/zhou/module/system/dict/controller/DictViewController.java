@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import priv.zhou.common.controller.BaseController;
+import priv.zhou.common.controller.BaseViewController;
 import priv.zhou.module.system.dict.domain.query.DictQuery;
 import priv.zhou.module.system.dict.domain.vo.DictDataVO;
 import priv.zhou.module.system.dict.domain.vo.DictVO;
@@ -21,11 +21,11 @@ import priv.zhou.module.system.dict.service.IDictService;
  */
 @Controller
 @RequestMapping("/system/dict")
-public class DictController extends BaseController {
+public class DictViewController extends BaseViewController {
 
     private final IDictService dictService;
 
-    public DictController(IDictService dictService) {
+    public DictViewController(IDictService dictService) {
         super("字典", "system:dict");
         this.dictService = dictService;
     }
@@ -37,9 +37,9 @@ public class DictController extends BaseController {
                 .setState(0)
                 .setDataList(Lists.newArrayList(new DictDataVO()
                         .setType(0)
-                        .setPerf(true)
+                        .setDefa(true)
                         .setCode("0")
-                        .setLabel("正常"))));
+                        .setLabel("LABEL"))));
         return "system/dict/au";
     }
 

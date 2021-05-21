@@ -46,17 +46,15 @@ public class DictDataPO implements Serializable{
 	 */
 	private Integer type;
 
+	/**
+	 * 默认标识
+	 */
+	private Boolean defa;
 
 	/**
-	 * 首选标志位
+	 * 扩展位
 	 */
-	private Boolean perf;
-
-
-	/**
-	 * 备用
-	 */
-	private String spare;
+	private String extend;
 
 	/**
 	 * 删除位
