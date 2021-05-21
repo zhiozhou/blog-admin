@@ -1,61 +1,90 @@
 package priv.zhou.common.tools;
 
 
+import com.google.common.collect.Sets;
 import org.springframework.web.multipart.MultipartFile;
+import priv.zhou.common.enums.ExtEnum;
 
 import java.io.File;
+import java.util.Set;
 
 /**
- * Copyright (C) 2012-2018 天津紫藤科技有限公司. Co. Ltd. All Rights Reserved
+ * 文件处理工具类
  *
  * @author zhou
- * @since 2021-01-06
+ * @since 0.0.1
  */
 public class FileUtil {
 
     private FileUtil() {
     }
 
-    public final static String XLS = "xls";
-
-    public final static String XLSX = "xlsx";
+    /**
+     * 图片类型扩展
+     */
+    public static final Set<String> IMAGE_EXT_SET = Sets.newHashSet(
+            ExtEnum.png.name(),
+            ExtEnum.jpg.name(),
+            ExtEnum.jpeg.name(),
+            ExtEnum.tiff.name(),
+            ExtEnum.svg.name()
+    );
 
     /**
-     * 最大文件2M
+     * excel类型扩展
      */
-    public static final long MAX_FILE_SIZE = 2L * 1024 * 1024 * 1024;
+    public static final Set<String> EXCEL_EXT_SET = Sets.newHashSet(
+            ExtEnum.xls.name(),
+            ExtEnum.xlsx.name()
+    );
+
 
     /**
-     * 获取文件后缀
+     * 从set中匹配获取扩展名，set中不存在返回null
      */
+    public static String getExtInSet(MultipartFile file, Set<String> set) {
+        if (null == file) {
+            return null;
+        }
+        String ext = getExt(file);
+        if (null == ext || !set.contains(ext)) {
+            return null;
+        }
+        return ext;
+    }
+
+
     public static String getExt(File file) {
         return getExt(file.getName());
     }
 
-    /**
-     * 获取文件后缀
-     */
     public static String getExt(MultipartFile file) {
         return getExt(file.getOriginalFilename());
     }
 
     /**
-     * 获取文件后缀
+     * 获取扩展名
      */
     public static String getExt(String fileName) {
-        if (null == fileName) {
-            return null;
-        }
-        int i = fileName.lastIndexOf(".");
-        return i < 0 ? null : fileName.substring(i + 1);
+        int i;
+        return null == fileName ? null : (i = fileName.lastIndexOf(".")) < 0 ? null : fileName.substring(i + 1).toLowerCase();
     }
 
+
+    public static boolean isOverload(MultipartFile file) {
+        return isOverload(file, 2);
+    }
+
+    public static boolean isOverload(MultipartFile file, int maxMb) {
+        return isOverload(file, maxMb * 1024L * 1024L * 1024L);
+    }
 
     /**
-     * 文件大小是否过载
+     * 文件是否过载
      */
-    public static boolean overload(MultipartFile file) {
-        return file.getSize() > MAX_FILE_SIZE;
+    public static boolean isOverload(MultipartFile file, long maxByte) {
+        return null != file && file.getSize() > maxByte;
     }
+
 
 }

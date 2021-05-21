@@ -5,6 +5,7 @@ import lombok.Setter;
 
 /**
  * 废弃等待完全删除
+ * @deprecated
  */
 @Getter
 @Setter

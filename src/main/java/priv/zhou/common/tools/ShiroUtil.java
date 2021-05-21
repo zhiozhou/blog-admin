@@ -17,7 +17,7 @@ import java.util.List;
  * shiro 工具类
  *
  * @author zhou
- * @since 2020.04.09
+ * @since 0.1.0
  */
 public class ShiroUtil {
 

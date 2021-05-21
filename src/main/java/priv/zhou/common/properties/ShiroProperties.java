@@ -6,7 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * Shiro属性
+ *
  * @author zhou
+ * @since 0.1.0
  */
 @Getter
 @Setter

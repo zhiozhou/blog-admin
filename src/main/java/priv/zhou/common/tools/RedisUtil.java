@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Redis工具类
+ *
  * @author zhou
  * @since 2019.08.12
  */

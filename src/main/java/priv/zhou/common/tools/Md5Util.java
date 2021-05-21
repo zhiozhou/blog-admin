@@ -3,15 +3,13 @@ package priv.zhou.common.tools;
 import org.springframework.util.DigestUtils;
 
 /**
+ * MD5工具类
+ *
  * @author zhou
- * @since 2019.03.11
+ * @since 0.0.1
  */
 public class Md5Util {
 
-
-    /**
-     * MD5加密
-     */
     public static String encrypt(String data) {
         return DigestUtils.md5DigestAsHex(data.getBytes());
     }

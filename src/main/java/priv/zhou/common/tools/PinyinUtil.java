@@ -6,6 +6,12 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
+/**
+ * 拼音转换工具类
+ *
+ * @author zhou
+ * @since 0.1.0
+ */
 public class PinyinUtil {
 
     /**

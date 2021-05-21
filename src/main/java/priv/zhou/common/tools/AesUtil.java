@@ -15,8 +15,8 @@ import java.util.Base64;
  * AES工具
  *
  * @author zhou
- * @since 2021.02.22
- * @description 参考 https://github.com/sungjun221/AESUtil/blob/master/src/AESUtil.java
+ * @since 0.0.1
+// * @deprecated 参考 https://github.com/sungjun221/AESUtil/blob/master/src/AESUtil.java
  */
 @Slf4j
 @SuppressWarnings("unused")

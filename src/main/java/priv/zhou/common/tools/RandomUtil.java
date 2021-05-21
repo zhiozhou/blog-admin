@@ -4,7 +4,9 @@ import java.util.Random;
 
 /**
  * 随机工具优化版
+ *
  * @author zhou
+ * @since 0.1.0
  */
 @SuppressWarnings("unused")
 public class RandomUtil {

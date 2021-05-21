@@ -14,6 +14,12 @@ import java.util.Enumeration;
 
 import static priv.zhou.common.constant.GlobalConst.DEFAULT_ENC;
 
+/**
+ * Http操作工具类
+ *
+ * @author zhou
+ * @since 0.0.1
+ */
 @SuppressWarnings("unused")
 public class HttpUtil {
 

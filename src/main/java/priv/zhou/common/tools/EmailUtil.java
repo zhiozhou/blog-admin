@@ -7,8 +7,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import priv.zhou.common.properties.AppProperties;
 
 /**
+ * 邮箱工具类
+ *
  * @author zhou
- * @since 2019.03.11
+ * @since 0.0.1
  */
 @DependsOn(value = {"javaMailSender", "mailProperties", "appProperties"})
 public class EmailUtil {
@@ -18,7 +20,6 @@ public class EmailUtil {
     private static final MailProperties PROPERTIES = SpringUtils.getBean(MailProperties.class);
 
     private static final AppProperties APP_PROPERTIES = SpringUtils.getBean(AppProperties.class);
-
 
     /**
      * 给某人发送异常邮件

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Redis 配置
  *
  * @author zhou
+ * @since 0.1.0
  */
 @Configuration
 public class RedisConfigurer implements WebMvcConfigurer {

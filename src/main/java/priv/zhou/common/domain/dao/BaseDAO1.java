@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * 废弃 等待完成删除
+ * @deprecated
  */
 @Mapper
 @Component

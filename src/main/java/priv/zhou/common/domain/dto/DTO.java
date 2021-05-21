@@ -15,6 +15,7 @@ import static java.util.Objects.nonNull;
 
 /**
  * 废弃等待完全删除
+ * @deprecated
  */
 @NoArgsConstructor
 public abstract class DTO<PO> {

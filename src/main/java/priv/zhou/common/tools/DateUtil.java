@@ -6,8 +6,10 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 时间工具类
+ *
  * @author zhou
- * @since 2019.03.11
+ * @since 0.0.1
  */
 @SuppressWarnings("unused")
 public class DateUtil {

@@ -14,7 +14,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * RSA工具类
  *
  * @author zhou
- * @since 2020.6.12
+ * @since 0.1.0
  */
 @SuppressWarnings("unused")
 public class RsaUtil {
@@ -22,7 +22,6 @@ public class RsaUtil {
     private final static String CIPHER = "RSA";
 
     private final static String SIGN_CIPHER = "SHA256withRSA";
-
 
     /**
      * 公钥加密

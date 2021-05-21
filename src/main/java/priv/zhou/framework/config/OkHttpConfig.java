@@ -15,7 +15,13 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * OkHttp配置
+ *
+ * @author zhou
+ * @since 0.1.0
+ * @see priv.zhou.common.tools.OkHttpUtil
+ */
 @Configuration
 public class OkHttpConfig {
 

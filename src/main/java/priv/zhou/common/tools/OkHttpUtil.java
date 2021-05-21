@@ -21,17 +21,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
-@SuppressWarnings("all")
 /**
  * Okhttp 工具类
+ *
  * @author zhou
- * @since 2020.5.15
+ * @since 0.0.1
  */
+@Slf4j
+@SuppressWarnings("all")
 public class OkHttpUtil {
+
     private final static Class<Result> DEFAULT_CLASS = Result.class;
 
-    //    private final static OkHttpClient httpClient = null;
     private final static OkHttpClient httpClient = SpringUtils.getBean(OkHttpClient.class);
 
     public static <E> Result<E> httpGet(String desc, String url) {
