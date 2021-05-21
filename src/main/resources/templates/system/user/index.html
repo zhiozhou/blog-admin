@@ -45,7 +45,7 @@
             <div>
                 <div class="layout-table-tool">
                     <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn"
-                       shiro:hasPermission=${_module.permissionPrefix+':add'}>
+                       shiro:hasPermission=|${_module.permissionPrefix}:add|>
                         <i class="fa fa-plus"></i>
                         添加
                     </a>
@@ -56,20 +56,20 @@
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="user-tool">
             <a class="layui-btn layui-btn-sm" lay-event="detail"
-               shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:detail|>查看</a>
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="update"
-               shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:update|>修改</a>
             <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="resetPwd"
-               shiro:hasPermission=${_module.permissionPrefix+':resetPwd'}>修改密码</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:resetPwd|>修改密码</a>
             {{#  if(d.state == 11){ }}
             <a class="layui-btn layui-btn-sm" lay-event="unfreeze"
-               shiro:hasPermission=${_module.permissionPrefix+':freeze'}>解冻</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:freeze|>解冻</a>
             {{# }else{ }}
             <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="freeze"
-               shiro:hasPermission=${_module.permissionPrefix+':freeze'}>冻结</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:freeze|>冻结</a>
             {{#  } }}
             <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="remove"
-               shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:remove|>移除</a>
         </script>
         <script th:inline="javascript">
             const stateMap = [[${stateMap}]]

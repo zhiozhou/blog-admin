@@ -65,7 +65,7 @@
 
 
                 <div class="layui-form-item" th:if="${ _vo.state == 0 }"
-                     shiro:hasPermission=${_module.permissionPrefix+':check'}>
+                     shiro:hasPermission=|${_module.permissionPrefix}:check|>
                     <div class="layui-input-block">
                         <a class="layui-btn layui-btn-sm layui-btn-normal" id="pass">Pass</a>
                         <a class="layui-btn layui-btn-sm layui-btn-danger" id="no-pass">No Pass</a>

@@ -48,7 +48,7 @@
                         <input type="hidden" th:field="*{parentId}">
                         <input type="text" class="layui-input" id="parentName"
                                th:value="${0 == _vo.parentId ? '根目录': _vo.parentName}"
-                               placeholder="请选择选择父级" lay-verify="required" readonly>
+                               placeholder="请选择父级" lay-verify="required" readonly>
                         <div id="menu-select"></div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                                th:each="type,iterStat:${typeList}"
                                th:value="${type.code}"
                                th:title="${type.label}"
-                               th:id="${'type-'+ type.code}"
+                               th:id="|type-${type.code}"
                                th:field="*{type}">
                     </div>
                 </div>

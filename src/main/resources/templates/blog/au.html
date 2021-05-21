@@ -108,8 +108,9 @@
                   th:with="isAdd='/rest/save'==${_action}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/blog/list}" th:text="${_module.name}+列表"></a></li>
-                        <li class="layui-this" th:text="(${isAdd}?'添加':'修改')+${_module.name}"></li>
+                        <li><a th:href="@{/blog}" th:text="|${_module.name}列表|"></a></li>
+                        <li th:if="${_isAdd}" class="layui-this" th:text="|添加${_module.name}|"></li>
+                        <li th:unless="${_isAdd}" class="layui-this" th:text="|修改${_module.name}|"></li>
                     </ul>
                     <input type="hidden" th:field="*{id}">
                     <div class="layui-tab-content">

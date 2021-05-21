@@ -10,7 +10,7 @@
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="block-tool" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
-               shiro:hasPermission=${_module.permissionPrefix+':remove'}>解除</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:remove|>解除</a>
         </script>
         <script th:inline="javascript">
             const typeMap = [[${typeMap}]]

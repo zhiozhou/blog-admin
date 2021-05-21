@@ -7,8 +7,9 @@
                 <input type="hidden" th:field="*{id}"/>
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
-                        <li><a th:href="@{/system/role/list}" th:text="${_module.name}+列表"></a></li>
-                        <li class="layui-this" th:text="(${_isAdd}?'添加':'修改')+${_module.name}"></li>
+                        <li><a th:href="@{/system/role}" th:text="|${_module.name}列表|"></a></li>
+                        <li th:if="${_isAdd}" class="layui-this" th:text="|添加${_module.name}|"></li>
+                        <li th:unless="${_isAdd}" class="layui-this" th:text="|修改${_module.name}|"></li>
                     </ul>
                     <div class="layui-tab-content">
                         <div class="layui-form-item">

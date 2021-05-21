@@ -5,8 +5,8 @@
         <div class="layout-page">
             <div>
                 <div class="layout-table-tool">
-#set($permission="_module.permissionPrefix+':add'")
-                    <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn" shiro:hasPermission=${${permission}}>
+#set($permission="_module.permissionPrefix}")
+                    <a class="layui-btn layui-btn-sm layui-btn-normal add-iframe-btn" shiro:hasPermission=|${${permission}:add|>
                         <i class="fa fa-plus"></i> 添加
                     </a>
                 </div>

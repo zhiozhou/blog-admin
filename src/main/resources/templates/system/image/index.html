@@ -61,7 +61,7 @@
         <script type="text/html" id="image-tool">
             <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="copy">Copy URL</a>
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
-               shiro:hasPermission=${_module.permissionPrefix+':remove'}>Remove</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:remove|>Remove</a>
         </script>
 
         <script th:src="@{/js/au.js}"></script>

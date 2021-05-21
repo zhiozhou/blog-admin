@@ -38,7 +38,7 @@
             <a class="layui-btn layui-btn-sm layui-btn-disabled">Current</a>
             {{# } else { }}
             <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="offline"
-               shiro:hasPermission=${_module.permissionPrefix+':offline'}>Offline</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:offline|>Offline</a>
             {{# } }}
         </script>
         <script th:inline="none">

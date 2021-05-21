@@ -37,7 +37,7 @@
             <div>
                 <div class="layout-table-tool">
                     <a class="layui-btn layui-btn-sm layui-btn-normal add-page-btn"
-                       shiro:hasPermission=${_module.permissionPrefix+':add'}>
+                       shiro:hasPermission=|${_module.permissionPrefix}:add|>
                         <i class="fa fa-plus"></i>
                         添加
                     </a>
@@ -48,12 +48,12 @@
         <div th:include="include :: list-footer"></div>
         <script type="text/html" id="role-tool">
             <a class="layui-btn layui-btn-sm" lay-event="detail"
-               shiro:hasPermission=${_module.permissionPrefix+':detail'}>查看</a>
+               shiro:hasPermission=|${module.permissionPrefix}:detail|>查看</a>
             {{#  if(d.key != 'root'){ }}
             <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="update"
-               shiro:hasPermission=${_module.permissionPrefix+':update'}>修改</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:update|>修改</a>
             <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"
-               shiro:hasPermission=${_module.permissionPrefix+':remove'}>移除</a>
+               shiro:hasPermission=|${_module.permissionPrefix}:remove|>移除</a>
             {{#  } }}
         </script>
         <script th:inline="javascript">
