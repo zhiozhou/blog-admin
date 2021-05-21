@@ -3,7 +3,7 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}" autocomplete="off">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
@@ -16,7 +16,7 @@
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input"
                                        th:field="*{name}" lay-verify="required"
-                                       placeholder="请输入名称" autocomplete="off">
+                                       placeholder="请输入名称">
                             </div>
                         </div>
 
@@ -25,7 +25,7 @@
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input"
                                        th:field="*{key}"
-                                       placeholder="默认为名称拼音" autocomplete="off">
+                                       placeholder="默认为名称拼音">
                             </div>
                         </div>
 

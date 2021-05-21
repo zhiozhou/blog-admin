@@ -3,7 +3,7 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form " th:attr="action=${_action}" th:object="${_vo}">
+            <form class="layui-form " th:attr="action=${_action}" th:object="${_vo}" autocomplete="off">
                 <input type="hidden" th:field="*{id}">
                 <input type="hidden" th:field="*{repliedId}">
 
@@ -11,7 +11,7 @@
                     <textarea class="layui-textarea"
                               th:field="${content}"
                               rows="6" maxlength="256"
-                              placeholder="请输入回复内容" autocomplete="off">
+                              placeholder="请输入回复内容">
                     </textarea>
                 </div>
 

@@ -3,12 +3,12 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}" autocomplete="off">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
-                        <input type="text" class="layui-input" autocomplete="off"
+                        <input type="text" class="layui-input"
                                placeholder="请输入用户名"
                                th:field="*{username}"
                                th:disabled="${!_isAdd}"
@@ -20,7 +20,7 @@
                 <div class="layui-form-item" th:if="${_isAdd}">
                     <label class="layui-form-label">密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" class="layui-input" autocomplete="off" lay-verify="required"
+                        <input type="password" class="layui-input" lay-verify="required"
                                name="password" placeholder="请输入密码">
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{name}" lay-verify="required"
-                               placeholder="请输入姓名" autocomplete="off">
+                               placeholder="请输入姓名">
                     </div>
                 </div>
 
@@ -39,7 +39,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{phone}" lay-verify="required"
-                               placeholder="请输入手机号" autocomplete="off">
+                               placeholder="请输入手机号">
                     </div>
                 </div>
 

@@ -132,13 +132,34 @@ function fail(code) {
 /**
  * 全局http请求
  */
-function httpPost({url, data, cb, load = true}) {
+function httpPost({
+                      url,
+                      data,
+                      cb,
+                      load = true,
+                      multipart,
+                      error = () => warn('请求出错咯')
+                  }) {
     let index = load && loading()
-    layui.$.post(url, data, ({code, info, data}) => {
-        load && loaded(index)
-        if (fail(code)) return warn(info)
-        cb({code, info, data})
-    })
+    const options = {
+        url,
+        data,
+        type: 'POST',
+        dataType: 'JSON',
+        success: ({code, info, data}) => {
+            load && loaded(index)
+            if (fail(code)) return warn(info)
+            cb && cb({code, info, data})
+        },
+        error
+    }
+    if (multipart) {
+        options.enctype = 'multipart/form-data'
+        options.processData = false
+        options.contentType = false
+        options.cache = false
+    }
+    layui.$.ajax(options)
 }
 
 //---------------------------------------------- 页面操作 ----------------------------------------------

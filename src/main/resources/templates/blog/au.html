@@ -102,7 +102,9 @@
     </style>
     <body>
         <div class="layout-page">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
+            <form class="layui-form"  autocomplete="off"
+                  th:attr="action=${_action}"
+                  th:object="${_vo}"
                   th:with="isAdd='/rest/save'==${_action}">
                 <div class="layui-tab">
                     <ul class="layui-tab-title">
@@ -115,7 +117,7 @@
                         <div class="layui-form-item">
                             <input type="text" class="layui-input"
                                    th:field="*{title}" lay-verify="required" maxlength="256"
-                                   placeholder="请输入标题" autocomplete="off">
+                                   placeholder="请输入标题" >
                         </div>
 
                         <div class="layui-form-item">
@@ -141,7 +143,7 @@
                                         <i class="fa fa-plus"></i> 添加标签
                                     </a>
                                     <div id="add-tag-input-wrap">
-                                        <input type="text" class="layui-input" autocomplete="off"
+                                        <input type="text" class="layui-input"
                                                id="add-tag-input" placeholder="注册 / 查询标签"/>
                                         <div id="add-tag-check"><i class="fa fa-check"></i></div>
                                         <div id="tag-list"></div>
@@ -155,7 +157,7 @@
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input"
                                        th:value="*{preview}" maxlength="512"
-                                       placeholder="请输入预览图地址" autocomplete="off">
+                                       placeholder="请输入预览图地址">
                             </div>
                         </div>
 
@@ -164,7 +166,7 @@
                             <div class="layui-input-block">
                                 <input type="text" class="layui-input"
                                        th:value="*{remark}" maxlength="64"
-                                       placeholder="请输入备注" autocomplete="off">
+                                       placeholder="请输入备注">
                             </div>
                         </div>
 

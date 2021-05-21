@@ -40,7 +40,7 @@
     </style>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}">
+            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}" autocomplete="off">
                 <input type="hidden" th:field="*{id}">
                 <div class="layui-form-item">
                     <label class="layui-form-label">父级：</label>
@@ -48,7 +48,7 @@
                         <input type="hidden" th:field="*{parentId}">
                         <input type="text" class="layui-input" id="parentName"
                                th:value="${0 == _vo.parentId ? '根目录': _vo.parentName}"
-                               placeholder="请选择选择父级" autocomplete="off" lay-verify="required" readonly>
+                               placeholder="请选择选择父级" lay-verify="required" readonly>
                         <div id="menu-select"></div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{name}" lay-verify="required"
-                               placeholder="请输入名称" autocomplete="off">
+                               placeholder="请输入名称">
                     </div>
 
                 </div>
@@ -77,7 +77,7 @@
                     <label class="layui-form-label">图标：</label>
                     <div class="layui-input-block">
                         <input type="text" th:field="*{icon}" class="layui-input"
-                               placeholder="请输入图标" readonly autocomplete="off">
+                               placeholder="请输入图标" readonly>
                         <div id="icon-select">
                             <i class="fa fa-address-book" aria-hidden="true"></i>
 
@@ -990,7 +990,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{key}"
-                               placeholder="module:operation" autocomplete="off">
+                               placeholder="module:operation">
                     </div>
 
                 </div>
@@ -999,7 +999,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{path}"
-                               placeholder="/module/operation" autocomplete="off">
+                               placeholder="/module/operation">
                     </div>
 
                 </div>
@@ -1009,7 +1009,7 @@
                     <div class="layui-input-block">
                         <input type="number" class="layui-input"
                                th:field="*{sort}"
-                               placeholder="请输入显示顺序" autocomplete="off">
+                               placeholder="请输入显示顺序">
                     </div>
 
                 </div>

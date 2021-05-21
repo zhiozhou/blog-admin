@@ -3,7 +3,9 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form" th:attr="action=${_action}" th:object="${_vo}"
+            <form class="layui-form"  autocomplete="off"
+                  th:attr="action=${_action}"
+                  th:object="${_vo}"
                   th:with="isAdd='/rest/save'==${_action}">
                 <input type="hidden" th:field="${_vo.id}">
 
@@ -12,7 +14,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{id}" lay-verify="required"
-                               placeholder="请输入" autocomplete="off">
+                               placeholder="请输入">
                     </div>
                 </div>
 
@@ -21,7 +23,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                lay-verify="required" th:field="*{.ip }"
-                               placeholder="请输入IP" autocomplete="off">
+                               placeholder="请输入IP">
                     </div>
                 </div>
 
@@ -30,7 +32,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{type}" lay-verify="required"
-                               placeholder="请输入类型" autocomplete="off">
+                               placeholder="请输入类型">
                     </div>
                 </div>
 
@@ -39,7 +41,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{reason}" lay-verify="required"
-                               placeholder="请输入原因" autocomplete="off">
+                               placeholder="请输入原因">
                     </div>
                 </div>
 
