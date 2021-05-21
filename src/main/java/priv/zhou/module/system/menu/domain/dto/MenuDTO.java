@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.constant.Update;
+import priv.zhou.common.interfaces.Update;
 import priv.zhou.common.domain.Tree;
-import priv.zhou.module.system.menu.domain.po.MenuPO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Setter

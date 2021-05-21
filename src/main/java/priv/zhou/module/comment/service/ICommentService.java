@@ -3,7 +3,7 @@ package priv.zhou.module.comment.service;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Order;
 import priv.zhou.common.domain.dto.Page;
-import priv.zhou.common.constant.NULL;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.module.comment.domain.dto.CommentDTO;
 
 import java.util.List;

@@ -8,18 +8,17 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * 列表分页 通用返回模型
+ * 表格渲染模型
  *
  * @author zhou
+ * @since 0.1.0
  */
 @Getter
-@Setter
-@Accessors(chain = true)
 public class TableVO<VO> {
 
-    private List<VO> list;
+    private final List<VO> list;
 
-    private Long count;
+    private final Long count;
 
     private TableVO(List<VO> list) {
         this.list = list;

@@ -12,6 +12,12 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 
+/**
+ * 树形结果包装类
+ *
+ * @author zhou
+ * @since 0.1.0
+ */
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -36,7 +42,6 @@ public class Tree {
      * 子级
      */
     protected List<Tree> children;
-
 
     /**
      * 树对象组整理为树形结构

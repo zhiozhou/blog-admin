@@ -1,6 +1,6 @@
 package priv.zhou.module.test.service;
 
-import priv.zhou.common.constant.NULL;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.module.test.domain.dto.TestDTO;
 

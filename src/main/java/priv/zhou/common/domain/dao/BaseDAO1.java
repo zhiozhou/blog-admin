@@ -9,11 +9,7 @@ import java.util.List;
 
 
 /**
- * 基础 数据访问模型
- * 限定义基础领域入参与返回
- *
- * @author zhou
- * @since 2020.04.30
+ * 废弃 等待完成删除
  */
 @Mapper
 @Component

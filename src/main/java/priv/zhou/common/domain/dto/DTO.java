@@ -14,15 +14,11 @@ import static java.util.Objects.nonNull;
 
 
 /**
- * DTO 基础方法
- *
- * @author zhou
- * @since 2020.5.6
+ * 废弃等待完全删除
  */
 @NoArgsConstructor
 public abstract class DTO<PO> {
 
-//    String id;
 
     /**
      * PO转换构造器

@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import priv.zhou.common.constant.NULL;
-import priv.zhou.common.constant.Update;
+import priv.zhou.common.interfaces.NULL;
+import priv.zhou.common.interfaces.Update;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.domain.dto.Page;
 import priv.zhou.common.domain.vo.TableVO;
@@ -17,7 +17,6 @@ import priv.zhou.module.system.role.domain.vo.RoleTableVO;
 import priv.zhou.module.system.role.service.IRoleService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

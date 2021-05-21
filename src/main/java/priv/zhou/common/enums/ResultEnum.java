@@ -3,7 +3,7 @@ package priv.zhou.common.enums;
 import priv.zhou.common.domain.Result;
 
 /**
- * 全局返回Code枚举类
+ * 全局返回枚举类
  *
  * @author zhou
  * @since 2019.03.11
@@ -76,6 +76,7 @@ public enum ResultEnum {
      * 异常编码
      */
     private final String code;
+
     /**
      * 异常信息
      */

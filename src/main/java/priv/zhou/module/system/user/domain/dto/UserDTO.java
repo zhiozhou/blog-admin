@@ -3,8 +3,8 @@ package priv.zhou.module.system.user.domain.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.constant.Save;
-import priv.zhou.common.constant.Update;
+import priv.zhou.common.interfaces.Save;
+import priv.zhou.common.interfaces.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

@@ -12,7 +12,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import priv.zhou.common.constant.NULL;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.properties.AppProperties;

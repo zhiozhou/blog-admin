@@ -1,10 +1,16 @@
 package priv.zhou.common.constant;
 
+
+/**
+ * Shiro常量
+ *
+ * @author zhou
+ * @since 0.1.0
+ */
 public interface ShiroConst {
 
-
     /**
-     * 不同用户的缓存区分字段
+     * 用户的缓存标识字段
      */
     String CACHE_PRINCIPAL_FIELD = "username";
 

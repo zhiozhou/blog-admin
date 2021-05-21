@@ -1,17 +1,14 @@
 package priv.zhou.module.system.role.domain.dto;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.experimental.Accessors;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Date;
+
 import java.util.List;
 
-import priv.zhou.common.constant.Update;
-import priv.zhou.common.tools.DateUtil;
-import priv.zhou.module.system.menu.domain.po.MenuPO;
+import priv.zhou.common.interfaces.Update;
 
 
 /**

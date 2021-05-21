@@ -3,6 +3,7 @@ package priv.zhou.framework.exception;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import priv.zhou.common.enums.PageEnum;
 
 /**
  * 活动错误异常
@@ -12,9 +13,10 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class PageException extends RuntimeException {
-    private String page;
 
-    public PageException( String page) {
-        this.page = page;
+    private PageEnum pageEnum;
+
+    public PageException(PageEnum pageEnum) {
+        this.pageEnum = pageEnum;
     }
 }

@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import priv.zhou.common.constant.Update;
+import priv.zhou.common.interfaces.Update;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.constant.NULL;
-import priv.zhou.common.domain.vo.TableVO;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.module.system.menu.domain.dto.MenuDTO;
 import priv.zhou.module.system.menu.domain.query.MenuQuery;
-import priv.zhou.module.system.menu.domain.vo.MenuTableVO;
 import priv.zhou.module.system.menu.domain.vo.MenuVO;
 import priv.zhou.module.system.menu.service.IMenuService;
 

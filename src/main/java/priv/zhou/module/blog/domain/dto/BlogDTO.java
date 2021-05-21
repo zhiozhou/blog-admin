@@ -3,12 +3,10 @@ package priv.zhou.module.blog.domain.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import priv.zhou.common.constant.Update;
+import priv.zhou.common.interfaces.Update;
 import priv.zhou.common.domain.dto.DTO;
 import priv.zhou.module.blog.domain.po.BlogPO;
 
-import javax.naming.Name;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;

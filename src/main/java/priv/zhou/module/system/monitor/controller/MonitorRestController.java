@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.constant.NULL;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.module.system.monitor.domain.query.SessionQuery;
 import priv.zhou.module.system.monitor.domain.vo.SessionVO;
 import priv.zhou.module.system.monitor.service.ISessionService;

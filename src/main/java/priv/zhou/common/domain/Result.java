@@ -13,7 +13,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 全局返回
+ * 全局Rest返回结果
+ *
+ * @author zhou
+ * @since 0.1.0
  */
 @Getter
 @Setter

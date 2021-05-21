@@ -8,7 +8,7 @@ import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.stereotype.Service;
-import priv.zhou.common.constant.NULL;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.properties.AppProperties;
@@ -20,7 +20,6 @@ import priv.zhou.module.system.monitor.domain.query.SessionQuery;
 import priv.zhou.module.system.monitor.domain.vo.SessionVO;
 import priv.zhou.module.system.monitor.service.ISessionService;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 

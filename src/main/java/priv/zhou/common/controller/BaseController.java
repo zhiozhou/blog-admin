@@ -3,12 +3,19 @@ package priv.zhou.common.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import priv.zhou.common.domain.Module;
+import priv.zhou.common.enums.PageEnum;
 import priv.zhou.common.properties.AppProperties;
 import priv.zhou.framework.exception.PageException;
 import priv.zhou.module.system.dict.service.IDictService;
 
 import java.util.HashMap;
 
+/**
+ * 基础控制层
+ *
+ * @author zhou
+ * @since 0.1.0
+ */
 public class BaseController {
 
     protected Module module;
@@ -29,13 +36,6 @@ public class BaseController {
 
     protected final String UPLOAD_PARAM_KEY = "_upload";
 
-    protected final String PAGE_404 = "error/404";
-    
-    protected final String PAGE_500 = "error/500";
-    
-    protected final String PAGE_DENIED = "error/denied";
-
-    protected final String PAGE_RETRY = "error/retry";
 
 
 
@@ -64,7 +64,7 @@ public class BaseController {
      */
     protected void update(Model model, Object vo) {
         if (null == vo) {
-            throw new PageException(PAGE_404);
+            throw new PageException(PageEnum.NOT_FOUND);
         }
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);
@@ -77,7 +77,7 @@ public class BaseController {
      */
     protected void detail(Model model, Object vo) {
         if (null == vo) {
-            throw new PageException(PAGE_404);
+            throw new PageException(PageEnum.NOT_FOUND);
         }
         model.addAttribute(VO_KEY, vo);
         model.addAttribute(MODULE_KEY, module);

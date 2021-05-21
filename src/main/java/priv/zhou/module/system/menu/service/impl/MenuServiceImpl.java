@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import priv.zhou.common.constant.NULL;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.RedisUtil;
@@ -20,7 +20,6 @@ import priv.zhou.module.system.menu.service.IMenuService;
 import priv.zhou.module.system.role.domain.dao.RoleMenuDAO;
 
 import java.util.List;
-import java.util.Set;
 
 import static priv.zhou.common.constant.RedisConst.BS_MENU_KEY;
 import static priv.zhou.common.constant.RedisConst.BS_MENU_MODIFIED_KEY;

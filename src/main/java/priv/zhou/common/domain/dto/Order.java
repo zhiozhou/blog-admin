@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 排序通用数据传输
- * @author zhou
+ * 废弃等待完全删除
  */
 @Getter
 @Setter

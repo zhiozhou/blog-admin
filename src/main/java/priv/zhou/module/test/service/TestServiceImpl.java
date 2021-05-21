@@ -2,17 +2,10 @@ package priv.zhou.module.test.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import priv.zhou.common.constant.NULL;
-import priv.zhou.common.constant.Save;
+import priv.zhou.common.interfaces.NULL;
 import priv.zhou.common.domain.Result;
-import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.service.BaseService;
 import priv.zhou.module.test.domain.dto.TestDTO;
-
-import javax.validation.constraints.NotNull;
 
 
 /**
