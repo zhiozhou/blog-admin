@@ -19,7 +19,10 @@
         }
 
         .add-tag-wrap {
+            position: relative;
             margin-left: 8px;
+            width: 100%;
+            max-width: 200px;
         }
 
         .tags-wrap > .tag {
@@ -40,19 +43,14 @@
             text-align: center;
         }
 
-
-        .add-tag-wrap {
-            position: relative;
-            width: 100%;
-            max-width: 200px;
-        }
-
         #add-tag-input-wrap {
             display: none;
             position: relative;
+            width: calc(100% - 30px);
         }
 
         #add-tag-input {
+            padding-right: 30px;
             height: 30px;
             line-height: 30px;
         }
@@ -61,8 +59,8 @@
             display: none;
             cursor: pointer;
             position: absolute;
-            right: 0;
             top: 0;
+            right: 0;
             padding: 7px 0;
             margin: 0 5px;
             width: 20px;

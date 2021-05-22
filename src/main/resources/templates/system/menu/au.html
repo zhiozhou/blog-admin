@@ -1061,12 +1061,19 @@
                 const parentIdInput = $('#parentId'),
                     parentNameInput = $('#parentName'),
                     iconInput = $('#icon'),
+                    keyInput = $('#key'),
+                    pathInput = $('#path'),
                     iconSelect = $('#icon-select'),
                     menuSelect = $('#menu-select')
                 let parentId = parentIdEcho
 
                 // 回显
                 handleType(typeEcho)
+
+                // 同步键入path
+                keyInput.keyup(function () {
+                    pathInput.val('/' + $(this).val().replace(/:/g, '/'))
+                })
 
                 // 父级树
                 tree.render({

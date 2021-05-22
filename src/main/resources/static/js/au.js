@@ -84,6 +84,7 @@ function areaRender({areas, areaMap, code, handleArea}) {
     handleArea && handleArea(viewAreas)
     for (let area of areas) {
         const formItem = layui.$(`#${area}`).closest('.layui-form-item')
+        console.log(area,viewAreas.includes(area))
         viewAreas.includes(area) ? formItem.slideDown(slideMs) : formItem.slideUp(slideMs)
     }
 }
