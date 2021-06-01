@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
 import java.util.Locale;
 
 /**
@@ -17,7 +16,7 @@ import java.util.Locale;
  */
 @Component
 @SuppressWarnings("unused")
-public final class SpringUtils implements ApplicationContextAware {
+public final class SpringUtil implements ApplicationContextAware {
 
     public static Boolean devEnc;
 
@@ -27,7 +26,7 @@ public final class SpringUtils implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
-        SpringUtils.context = context;
+        SpringUtil.context = context;
     }
 
     /**

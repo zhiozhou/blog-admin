@@ -57,12 +57,10 @@ public class GlobalHandler {
     public Result<?> globalHand(HttpServletRequest request, Exception e) throws JsonProcessingException {
         StringBuilder infoBuilder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
         infoBuilder.append("请求参数 -->").append(objectMapper.writeValueAsString(HttpUtil.getParams(request)));
-        String info = infoBuilder.toString(),
-                name = e.getClass().getName(),
-                key = EXCEPTION_SENT_KEY + name;
+        String info = infoBuilder.toString(), name = e.getClass().getName();
         log.error(info, e);
         RedisUtil.Map.incr(EXCEPTION_COUNT_KEY, name, 1L, DateUtil.restOfToday());
-        if (RedisUtil.get(key) == null) {
+        if (RedisUtil.setIfAbsent(EXCEPTION_SENT_KEY + name, STR_0, 10, TimeUnit.MINUTES)) {
             StringBuilder countBuilder = new StringBuilder(getStackTrace(e))
                     .append("\n")
                     .append("----------------------------------- 今日未知异常统计 -----------------------------------")
@@ -72,7 +70,6 @@ public class GlobalHandler {
                 countBuilder.append(entry.getKey()).append(" -> ").append(entry.getValue()).append("\n");
             }
             EmailUtil.send(appProperties.getName() + " thrown " + name, info + "\n" + countBuilder, appProperties.getAdminEmail());
-            RedisUtil.set(key, STR_0, 10, TimeUnit.MINUTES);
         }
         return Result.fail(ResultEnum.ERROR_SYSTEM);
     }

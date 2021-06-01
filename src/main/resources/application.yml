@@ -56,7 +56,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/test_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
+    url: jdbc:mysql://127.0.0.1:3306/ddyh_test_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
   redis:
     database: 0
     host: 127.0.0.1

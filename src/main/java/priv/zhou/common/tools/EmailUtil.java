@@ -15,11 +15,11 @@ import priv.zhou.common.properties.AppProperties;
 @DependsOn(value = {"javaMailSender", "mailProperties", "appProperties"})
 public class EmailUtil {
 
-    private static final JavaMailSender SENDER = SpringUtils.getBean(JavaMailSender.class);
+    private static final JavaMailSender SENDER = SpringUtil.getBean(JavaMailSender.class);
 
-    private static final MailProperties PROPERTIES = SpringUtils.getBean(MailProperties.class);
+    private static final MailProperties PROPERTIES = SpringUtil.getBean(MailProperties.class);
 
-    private static final AppProperties APP_PROPERTIES = SpringUtils.getBean(AppProperties.class);
+    private static final AppProperties APP_PROPERTIES = SpringUtil.getBean(AppProperties.class);
 
     /**
      * 给某人发送异常邮件

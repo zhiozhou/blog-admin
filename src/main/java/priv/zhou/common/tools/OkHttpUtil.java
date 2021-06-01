@@ -33,7 +33,7 @@ public class OkHttpUtil {
 
     private final static Class<Result> DEFAULT_CLASS = Result.class;
 
-    private final static OkHttpClient httpClient = SpringUtils.getBean(OkHttpClient.class);
+    private final static OkHttpClient httpClient = SpringUtil.getBean(OkHttpClient.class);
 
     public static <E> Result<E> httpGet(String desc, String url) {
         return httpGet(desc, url, Maps.newHashMap());

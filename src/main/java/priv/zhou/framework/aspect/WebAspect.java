@@ -1,5 +1,7 @@
 package priv.zhou.framework.aspect;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +15,16 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.common.tools.HttpUtil;
+import priv.zhou.common.tools.Md5Util;
+import priv.zhou.common.tools.RedisUtil;
 import priv.zhou.common.tools.ShiroUtil;
 import priv.zhou.framework.exception.RestException;
 import priv.zhou.framework.shiro.session.ShiroSessionDAO;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static priv.zhou.common.constant.GlobalConst.STR_0;
+import static priv.zhou.common.constant.RedisConst.REDIS_CHECK_REPEAT_KEY;
 
 /**
  * 校验&日志aop
@@ -36,6 +43,18 @@ public class WebAspect {
     public void webCut() {
     }
 
+    /**
+     * 重复提交检查
+     */
+    @Order(0)
+    @Before(value = "@annotation(priv.zhou.framework.annotation.CheckRepeat)")
+    public void checkRepeat() throws Exception {
+        HttpServletRequest request = getRequest();
+        String md5 = Md5Util.encrypt(JSON.toJSONString(request.getParameterMap(), SerializerFeature.MapSortField));
+        if (!RedisUtil.setIfAbsent(REDIS_CHECK_REPEAT_KEY + request.getRequestURI() + md5, STR_0, 5)) {
+            throw new RestException(ResultEnum.OFTEN_OPERATION);
+        }
+    }
 
     /**
      * 请求日志

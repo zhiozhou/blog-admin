@@ -2,8 +2,6 @@ package priv.zhou.common.tools;
 
 
 import org.springframework.data.redis.core.RedisTemplate;
-import priv.zhou.common.tools.ParseUtil;
-import priv.zhou.common.tools.SpringUtils;
 
 import java.util.Collection;
 import java.util.Set;
@@ -15,10 +13,16 @@ import java.util.concurrent.TimeUnit;
  * @author zhou
  * @since 2019.08.12
  */
-
+@SuppressWarnings("unused")
 public class RedisUtil {
 
-    private static RedisTemplate<String, Object> redisTemplate = SpringUtils.getBean(RedisTemplate.class);
+    @SuppressWarnings("unchecked")
+    private static final RedisTemplate<String, Object> redisTemplate = SpringUtil.getBean(RedisTemplate.class);
+
+    /**
+     * 默认时间单位
+     */
+    private static final TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
 
     private RedisUtil() {
     }
@@ -39,15 +43,15 @@ public class RedisUtil {
     /**
      * 秒级过期
      */
-    public static void set(String key, Object value, long time) {
-        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+    public static void set(String key, Object value, long timeout) {
+        redisTemplate.opsForValue().set(key, value, timeout, DEFAULT_UNIT);
     }
 
     /**
      * 自定义过期单位
      */
-    public static void set(String key, Object value, long time, TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set(key, value, time, timeUnit);
+    public static void set(String key, Object value, long timeout, TimeUnit unit) {
+        redisTemplate.opsForValue().set(key, value, timeout, unit);
     }
 
 
@@ -87,6 +91,14 @@ public class RedisUtil {
         return ParseUtil.unBox(redisTemplate.opsForValue().setIfAbsent(key, value));
     }
 
+    public static boolean setIfAbsent(String key, Object value, long timeout) {
+        return ParseUtil.unBox(redisTemplate.opsForValue().setIfAbsent(key, value, timeout, DEFAULT_UNIT));
+    }
+
+    public static boolean setIfAbsent(String key, Object value, long timeout, TimeUnit unit) {
+        return ParseUtil.unBox(redisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit));
+    }
+
     /**
      * 增加(自增长), 负数则为自减
      */
@@ -94,19 +106,17 @@ public class RedisUtil {
         return redisTemplate.opsForValue().increment(key, increment);
     }
 
-
     /**
      * 获取key过期秒数
      */
     public static Long expire(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        return redisTemplate.getExpire(key, DEFAULT_UNIT);
     }
 
     /**
      * Map结构
      */
     public final static class Map {
-
 
         public static Object get(String mapKey, String key) {
             return redisTemplate.opsForHash().get(mapKey, key);
@@ -116,13 +126,13 @@ public class RedisUtil {
             redisTemplate.opsForHash().put(mapKey, key, value);
         }
 
-        public static void put(String mapKey, String key, Object value, long time) {
-            put(mapKey, key, value, time, TimeUnit.SECONDS);
+        public static void put(String mapKey, String key, Object value, long timeout) {
+            put(mapKey, key, value, timeout, DEFAULT_UNIT);
         }
 
-        public static void put(String mapKey, String key, Object value, long time, TimeUnit timeUnit) {
+        public static void put(String mapKey, String key, Object value, long timeout, TimeUnit unit) {
             redisTemplate.opsForHash().put(mapKey, key, value);
-            redisTemplate.expire(mapKey, time, timeUnit);
+            redisTemplate.expire(mapKey, timeout, unit);
         }
 
         public static void delete(String mapKey, Object key) {
@@ -141,13 +151,13 @@ public class RedisUtil {
             return redisTemplate.opsForHash().increment(mapKey, key, increment);
         }
 
-        public static Long incr(String mapKey, String key, long increment, long time) {
-            return incr(mapKey, key, increment, time, TimeUnit.SECONDS);
+        public static Long incr(String mapKey, String key, long increment, long timeout) {
+            return incr(mapKey, key, increment, timeout, DEFAULT_UNIT);
         }
 
-        public static Long incr(String mapKey, String key, long increment, long time, TimeUnit timeUnit) {
+        public static Long incr(String mapKey, String key, long increment, long timeout, TimeUnit unit) {
             Long result = redisTemplate.opsForHash().increment(mapKey, key, increment);
-            redisTemplate.expire(mapKey, time, timeUnit);
+            redisTemplate.expire(mapKey, timeout, unit);
             return result;
         }
     }

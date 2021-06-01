@@ -21,9 +21,9 @@ import java.util.List;
  */
 public class ShiroUtil {
 
-    public static final ShiroProperties shiroProperties = SpringUtils.getBean(ShiroProperties.class);
+    public static final ShiroProperties shiroProperties = SpringUtil.getBean(ShiroProperties.class);
 
-    public static final RedisCacheManager cacheManager = SpringUtils.getBean(RedisCacheManager.class);
+    public static final RedisCacheManager cacheManager = SpringUtil.getBean(RedisCacheManager.class);
 
 
     public static Subject getSubject() {
