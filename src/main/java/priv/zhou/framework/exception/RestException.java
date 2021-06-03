@@ -6,9 +6,14 @@ import lombok.experimental.Accessors;
 import priv.zhou.common.domain.Result;
 import priv.zhou.common.enums.ResultEnum;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
- * 活动错误异常
- * 用于活动实体解析时进行抛出
+ * 全局接口异常
+ *
+ * @author zhou
+ * @since 2019.05.19
+ * @see GlobalHandler#restHandle(HttpServletRequest, RestException)
  */
 @Getter
 @Setter
@@ -27,7 +32,6 @@ public class RestException extends RuntimeException {
     public RestException(ResultEnum resultEnum, String... holders) {
         this.result = Result.fail(resultEnum, holders);
     }
-
 
     public RestException(String info) {
         this.result = Result.fail(info);

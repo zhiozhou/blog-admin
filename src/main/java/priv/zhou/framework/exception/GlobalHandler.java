@@ -35,6 +35,8 @@ import static priv.zhou.common.constant.RedisConst.EXCEPTION_COUNT_KEY;
 import static priv.zhou.common.constant.RedisConst.EXCEPTION_SENT_KEY;
 
 /**
+ * 全局异常捕获
+ *
  * @author zhou
  * @since 2020.03.04
  */
@@ -54,7 +56,7 @@ public class GlobalHandler {
      */
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
-    public Result<?> globalHand(HttpServletRequest request, Exception e) throws JsonProcessingException {
+    public Result<?> unexpectedHandle(HttpServletRequest request, Exception e) throws JsonProcessingException {
         StringBuilder infoBuilder = new StringBuilder("未知异常: request -->").append(request.getRequestURI()).append(" | ");
         infoBuilder.append("请求参数 -->").append(objectMapper.writeValueAsString(HttpUtil.getParams(request)));
         String info = infoBuilder.toString(), name = e.getClass().getName();
@@ -75,21 +77,41 @@ public class GlobalHandler {
     }
 
     /**
+     * 全局错误异常
+     */
+    @ResponseBody
+    @ExceptionHandler(RestException.class)
+    public Result<?> restHandle(HttpServletRequest request, RestException e) {
+        log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getResult());
+        return e.getResult();
+    }
+
+    /**
+     * 强提醒异常捕获
+     * 发送邮件
+     */
+    @ResponseBody
+    @ExceptionHandler(RemindException.class)
+    public Result<?> remindHandle(HttpServletRequest request, RemindException e) {
+        EmailUtil.send(appProperties.getName() + " 强提醒异常!!!", e.getRemind(), appProperties.getAdminEmail());
+        return restHandle(request, e);
+    }
+
+    /**
      * 请求方式不支持
      */
     @ResponseBody
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
-    public Result<NULL> handleException(HttpRequestMethodNotSupportedException e) {
+    public Result<NULL> notSupportedHandle(HttpRequestMethodNotSupportedException e) {
         return Result.fail(ResultEnum.NOT_SUPPORTED_REQUEST, e.getMethod());
     }
-
 
     /**
      * 验证异常
      */
     @ResponseBody
     @ExceptionHandler(BindException.class)
-    public Result<?> bindHand(HttpServletRequest request, BindException e) {
+    public Result<?> bindHandle(HttpServletRequest request, BindException e) {
         List<ObjectError> errs = e.getBindingResult().getAllErrors();
         Result<?> result = Result.fail(ResultEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), result);
@@ -97,22 +119,11 @@ public class GlobalHandler {
     }
 
     /**
-     * 全局错误异常
-     */
-    @ResponseBody
-    @ExceptionHandler(RestException.class)
-    public Result<?> globalFailHand(HttpServletRequest request, RestException e) {
-        log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getResult());
-        return e.getResult();
-    }
-
-
-    /**
      * 无权限异常
      */
     @ResponseBody
     @ExceptionHandler(UnauthorizedException.class)
-    public Result<?> globalFailHand(HttpServletRequest request) {
+    public Result<?> UnauthorizedHandle(HttpServletRequest request) {
         Result<NULL> result = Result.fail(ResultEnum.ILLEGAL_VISIT);
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), result);
         return result;

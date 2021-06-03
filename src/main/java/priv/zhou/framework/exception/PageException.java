@@ -6,8 +6,10 @@ import lombok.experimental.Accessors;
 import priv.zhou.common.enums.PageEnum;
 
 /**
- * 活动错误异常
- * 用于活动实体解析时进行抛出
+ * 页面请求异常
+ *
+ * @author zhou
+ * @since 2020.02.07
  */
 @Getter
 @Setter
