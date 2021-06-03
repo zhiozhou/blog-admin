@@ -39,7 +39,7 @@ public class WebAspect {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Pointcut("execution(public * priv.zhou.module.*.*.controller.*.*(..))")
+    @Pointcut("execution(public * priv.zhou.module.*.controller.*.*(..)) || execution(public * priv.zhou.module.*.*.controller.*.*(..))")
     public void webCut() {
     }
 
