@@ -46,64 +46,70 @@ public class Result<T> {
         return !ResultEnum.SUCCESS.getCode().equals(this.code);
     }
 
-    public static <E> Result<E> build() {
-        return new Result<>();
-    }
-
-    private static <E> Result<E> build(String code, String info) {
-        return Result.build(code, info, null);
-    }
-
-    private static <E> Result<E> build(String code, String info, E data, String... holders) {
-        if (null != holders && holders.length != 0) {
-            int i = 0;
-            StringBuffer buffer = new StringBuffer();
-            Matcher matcher = Pattern.compile("\\{\\{\\w*}}").matcher(info);
-            while (i < holders.length && matcher.find()) {
-                matcher.appendReplacement(buffer, holders[i++]);
-            }
-            info = matcher.appendTail(buffer).toString();
-        }
-        Result<E> result = build();
-        return result.setCode(code)
-                .setInfo(info)
-                .setData(data);
-    }
-
-    private static <E> Result<E> build(ResultEnum resultEnum, String... holders) {
-        return build(resultEnum, null, holders);
-    }
-
-    private static <E> Result<E> build(ResultEnum resultEnum, E data, String... holders) {
-        return build(resultEnum.getCode(), resultEnum.getInfo(), data, holders);
-    }
-
     @Override
     public String toString() {
         return JSON.toJSONString(this);
     }
 
-    public static <E> Result<E> fail(String info) {
-        return build(ResultEnum.FAIL.getCode(), info);
+    public Result<T> render(String... values) {
+        if (null != values && values.length != 0) {
+            int i = 0;
+            StringBuffer buffer = new StringBuffer();
+            Matcher matcher = Pattern.compile("\\{\\{\\w*}}").matcher(info);
+            while (i < values.length && matcher.find()) {
+                matcher.appendReplacement(buffer, values[i++]);
+            }
+            info = matcher.appendTail(buffer).toString();
+        }
+        return this;
     }
 
-    public static <E> Result<E> fail(Result<?> result) {
-        return build(result.getCode(), result.getInfo());
+    public static <E> Result<E> build() {
+        return new Result<>();
+    }
+
+    private static <E> Result<E> build(String code, String info, E data, String... values) {
+        Result<E> result = build();
+        return result.setCode(code)
+                .setInfo(info)
+                .setData(data)
+                .render(values);
+    }
+
+    private static <E> Result<E> build(ResultEnum resultEnum, E data, String... values) {
+        return build(resultEnum.getCode(), resultEnum.getInfo(), data, values);
+    }
+
+
+    public static <E> Result<E> fail(String info) {
+        return build(ResultEnum.FAIL.getCode(), info, null);
     }
 
     public static <E> Result<E> fail(ResultEnum resultEnum) {
-        return build(resultEnum);
+        return build(resultEnum, null);
+    }
+
+    public static <E> Result<E> fail(ResultEnum resultEnum, E data) {
+        return build(resultEnum, data);
+    }
+
+    public static <E> Result<E> fail(Result<?> result) {
+        return build(result.getCode(), result.getInfo(), null);
+    }
+
+    public static <E> Result<E> fail(Result<?> result, E data) {
+        return build(result.getCode(), result.getInfo(), data);
     }
 
     /**
      * 填充占位符
      */
-    public static <E> Result<E> fail(ResultEnum resultEnum, String... holders) {
-        return build(resultEnum, holders);
+    public static <E> Result<E> render(ResultEnum resultEnum, String... values) {
+        return build(resultEnum, null, values);
     }
 
     public static <E> Result<E> success() {
-        return build(ResultEnum.SUCCESS);
+        return success(null);
     }
 
     public static <T> Result<T> success(T data) {
@@ -113,10 +119,9 @@ public class Result<T> {
     /**
      * 渲染转换TableVO
      */
-    public static <T> Result<TableVO<T>> table(Result<List<T>> Result) {
-        return Result.isFail() ?
-                build(Result.getCode(), Result.getInfo()) :
-                success(TableVO.build(Result.getData()));
+    public static <T> Result<TableVO<T>> table(Result<List<T>> result) {
+        return result.isFail() ? fail(result) :
+                success(TableVO.build(result.getData()));
     }
 
     /**

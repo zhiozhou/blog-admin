@@ -23,18 +23,26 @@ public class RestException extends RuntimeException {
     /**
      * 包含错误信息的vo对象
      */
-    private Result<?> result;
+    private final Result<?> result;
 
     public RestException(Result<?> result) {
         this.result = result;
     }
 
-    public RestException(ResultEnum resultEnum, String... holders) {
-        this.result = Result.fail(resultEnum, holders);
+    public RestException(ResultEnum resultEnum) {
+        this.result = Result.fail(resultEnum);
+    }
+
+    public RestException(ResultEnum resultEnum, Object data) {
+        this.result = Result.fail(resultEnum, data);
     }
 
     public RestException(String info) {
         this.result = Result.fail(info);
     }
 
+    public RestException render(String... values){
+        result.render(values);
+        return this;
+    }
 }

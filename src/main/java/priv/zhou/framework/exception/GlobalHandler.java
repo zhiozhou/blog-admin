@@ -103,7 +103,7 @@ public class GlobalHandler {
     @ResponseBody
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     public Result<NULL> notSupportedHandle(HttpRequestMethodNotSupportedException e) {
-        return Result.fail(ResultEnum.NOT_SUPPORTED_REQUEST, e.getMethod());
+        return Result.render(ResultEnum.NOT_SUPPORTED_REQUEST, e.getMethod());
     }
 
     /**

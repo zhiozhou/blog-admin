@@ -73,7 +73,7 @@ public class RoleServiceImpl extends BaseService implements IRoleService {
         if (keys.contains(ROOT_KEY)) {
             return Result.fail(ResultEnum.FAIL_PARAM);
         } else if (userRoleDAO.count(new UserRoleQuery().setRoleKeys(keys)) > 0) {
-            return Result.fail(ResultEnum.EXIST_RELATION, "角色下尚有用户，不可删除");
+            return Result.render(ResultEnum.EXIST_RELATION);
         } else if (roleDAO.removeList(keys) != keys.size()) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
