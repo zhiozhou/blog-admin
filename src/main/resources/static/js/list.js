@@ -204,8 +204,8 @@ function initTreeTable() {
  * @returns {string} html标签
  */
 function dictRender(code, dictMap) {
-    let {label, spare} = dictMap[code]
-    return `<a class="layui-btn layui-btn-xs ${spare}">${label}</a>`
+    let {label, extend} = dictMap[code]
+    return `<a class="layui-btn layui-btn-xs ${extend}">${label}</a>`
 }
 
 
