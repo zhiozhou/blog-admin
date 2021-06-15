@@ -1,3 +1,4 @@
+删除操作区分批量和pathParam
 菜单模块根据sort排序
 菜单修改parseMsg秘名函数
 菜单列表关闭分页
