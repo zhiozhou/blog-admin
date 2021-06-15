@@ -83,8 +83,7 @@ public class MenuServiceImpl implements IMenuService {
     @Override
     public Result<NULL> update(MenuDTO menuDTO) {
 
-        MenuPO menuDB = menuDAO.get(new MenuQuery(menuDTO.getFlag()))
-                .setId(menuDTO.getId());
+        MenuPO menuDB = menuDAO.get(new MenuQuery(menuDTO.getFlag()).setId(menuDTO.getId()));
         if (null == menuDB) {
             return Result.fail(ResultEnum.EMPTY_DATA);
         } else if (menuDAO.count(new MenuQuery(menuDTO.getFlag())
