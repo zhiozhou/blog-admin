@@ -31,7 +31,13 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("all")
 public class OkHttpUtil {
 
+
+    private OkHttpUtil() {
+    }
+
     private final static Class<Result> DEFAULT_CLASS = Result.class;
+
+//    private final static OkHttpClient httpClient = null;
 
     private final static OkHttpClient httpClient = SpringUtil.getBean(OkHttpClient.class);
 
@@ -77,6 +83,7 @@ public class OkHttpUtil {
             for (String key : params.keySet()) {
                 Object value = params.get(key);
                 if (null == value) {
+                    continue;
                 } else if (value instanceof List) {
                     List<Object> list = (List<Object>) value;
                     for (int i = 0; i < list.size(); i++) {
@@ -110,6 +117,7 @@ public class OkHttpUtil {
             for (String key : params.keySet()) {
                 Object value = params.get(key);
                 if (null == value) {
+                    continue;
                 } else if (value instanceof File) {
                     File file = (File) value;
                     builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(MimeEnum.getValue(file)), file));
@@ -120,7 +128,7 @@ public class OkHttpUtil {
                         builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(MimeEnum.getValue(file)), file.getBytes()));
                         params.put(key, file.getOriginalFilename());
                     } catch (IOException e) {
-                        throw new RestException(Result.fail(ResultEnum.ERROR_SYSTEM));
+                        throw new RestException(ResultEnum.ERROR_SYSTEM);
                     }
                 } else if (value instanceof List) {
                     List<Object> list = (List<Object>) value;
@@ -170,17 +178,23 @@ public class OkHttpUtil {
     @SuppressWarnings("unchecked")
     private static <T> T call(String desc, Request request, Class<T> clazz) {
         Stopwatch stopWatch = Stopwatch.createStarted();
+        boolean defaT = clazz.equals(DEFAULT_CLASS);
         try (Response response = httpClient.newCall(request).execute()) {
-            if (response.isSuccessful() && null != response.body()) {
+            long elapsed = stopWatch.elapsed(TimeUnit.MILLISECONDS);
+            if (!response.isSuccessful()) {
+                log.info("收到 {} 接口响应失败, 耗时 {}ms", desc, elapsed);
+                return defaT ? (T) Result.fail(ResultEnum.FAIL_REQUEST) : null;
+            } else if (null == response.body()) {
+                log.info("收到 {} 接口响应, 耗时 {}ms, 响应报文为空", desc, elapsed);
+                return defaT ? (T) Result.build() : null;
+            } else {
                 String result = response.body().string();
-                log.info("收到 {} 接口响应, 响应报文 -->{}, 耗时 {}ms", desc, result, stopWatch.elapsed(TimeUnit.MILLISECONDS));
+                log.info("收到 {} 接口响应, 耗时 {}ms, 响应报文 -->{},", desc, elapsed, result);
                 return clazz.equals(String.class) ? (T) result : ParseUtil.object(result, clazz);
             }
         } catch (SocketTimeoutException e) {
             log.info("断开 {} 接口响应超时, 耗时 {}ms", desc, stopWatch.elapsed(TimeUnit.MILLISECONDS));
-            if (clazz.equals(DEFAULT_CLASS)) {
-                return (T) Result.fail(ResultEnum.TIMEOUT_RESPONSE);
-            }
+            return defaT ? (T) Result.fail(ResultEnum.TIMEOUT_RESPONSE) : null;
         } catch (Exception e) {
             log.info("收到 " + desc + " 接口响应异常 e -->", e);
         }
@@ -240,6 +254,7 @@ public class OkHttpUtil {
         }
 
     }
+
 
 
 //    /**

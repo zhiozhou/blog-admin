@@ -28,7 +28,6 @@ public enum ResultEnum {
 
 
 
-
     REPEAT_KEY("0101", "标识值重复"),
 
     EXIST_NAME("0102", "名称已存在"),
@@ -52,17 +51,18 @@ public enum ResultEnum {
 
 
 
+    ILLEGAL_VISIT("8001", "非法访问"),
 
+    LATER_RETRY("8002", "请稍后重试"),
 
-    ILLEGAL_VISIT("9000", "非法访问"),
-
-    LATER_RETRY("9001", "请稍后重试"),
-
-    OFTEN_OPERATION("9002", "操作频繁"),
+    OFTEN_OPERATION("8003", "操作频繁"),
 
     NOT_SUPPORTED_REQUEST("8004","不支持{{requestMethod}}请求"),
 
-    TIMEOUT_RESPONSE("9003", "响应超时"),
+
+    FAIL_REQUEST("9001", "请求失败"),
+
+    TIMEOUT_RESPONSE("9002", "响应超时"),
 
     ERROR_SYSTEM("9999", "系统异常");
 
