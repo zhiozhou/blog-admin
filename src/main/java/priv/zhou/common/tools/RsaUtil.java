@@ -4,11 +4,11 @@ import priv.zhou.common.enums.ResultEnum;
 import priv.zhou.framework.exception.RestException;
 
 import javax.crypto.Cipher;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * RSA工具类
@@ -44,7 +44,7 @@ public class RsaUtil {
         try {
             Cipher cipher = Cipher.getInstance(CIPHER);
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            return Base64Util.encode(cipher.doFinal(plainText.getBytes(UTF_8)));
+            return Base64Util.encodeToStr(cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
@@ -72,7 +72,7 @@ public class RsaUtil {
             byte[] bytes = Base64Util.decode(cipherText);
             Cipher cipher = Cipher.getInstance(CIPHER);
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            return new String(cipher.doFinal(bytes), UTF_8);
+            return new String(cipher.doFinal(bytes), StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
@@ -88,8 +88,8 @@ public class RsaUtil {
     public static String sign(String plainText, PrivateKey privateKey) throws Exception {
         Signature privateSignature = Signature.getInstance(SIGN_CIPHER);
         privateSignature.initSign(privateKey);
-        privateSignature.update(plainText.getBytes(UTF_8));
-        return Base64Util.encode(privateSignature.sign());
+        privateSignature.update(plainText.getBytes(StandardCharsets.UTF_8));
+        return Base64Util.encodeToStr(privateSignature.sign());
     }
 
 
@@ -103,7 +103,7 @@ public class RsaUtil {
     public static boolean verify(String plainText, String signature, PublicKey publicKey) throws Exception {
         Signature publicSignature = Signature.getInstance(SIGN_CIPHER);
         publicSignature.initVerify(publicKey);
-        publicSignature.update(plainText.getBytes(UTF_8));
+        publicSignature.update(plainText.getBytes(StandardCharsets.UTF_8));
         return publicSignature.verify(Base64Util.decode(signature));
     }
 
@@ -145,8 +145,8 @@ public class RsaUtil {
             generator.initialize(2048, new SecureRandom());
             KeyPair keyPair = generator.generateKeyPair();
 
-            System.out.println("公钥：" + Base64Util.encode(keyPair.getPublic().getEncoded()).replace("\r\n", ""));
-            System.out.println("私钥：" + Base64Util.encode(keyPair.getPrivate().getEncoded()).replace("\r\n", ""));
+            System.out.println("公钥：" + Base64Util.encodeToStr(keyPair.getPublic().getEncoded()).replace("\r\n", ""));
+            System.out.println("私钥：" + Base64Util.encodeToStr(keyPair.getPrivate().getEncoded()).replace("\r\n", ""));
             return generator.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
             throw new RestException(ResultEnum.LATER_RETRY);

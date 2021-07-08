@@ -2,6 +2,8 @@ package priv.zhou.common.tools;
 
 import org.springframework.util.DigestUtils;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * MD5工具类
  *
@@ -11,7 +13,7 @@ import org.springframework.util.DigestUtils;
 public class Md5Util {
 
     public static String encrypt(String data) {
-        return DigestUtils.md5DigestAsHex(data.getBytes());
+        return DigestUtils.md5DigestAsHex(data.getBytes(StandardCharsets.UTF_8));
     }
 
 }

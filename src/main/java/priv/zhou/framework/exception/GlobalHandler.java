@@ -22,6 +22,7 @@ import priv.zhou.common.tools.HttpUtil;
 import priv.zhou.common.tools.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -107,7 +108,7 @@ public class GlobalHandler {
     }
 
     /**
-     * 验证异常
+     * 验证异常 @valid
      */
     @ResponseBody
     @ExceptionHandler(BindException.class)
@@ -119,11 +120,22 @@ public class GlobalHandler {
     }
 
     /**
+     * 验证异常 @validated
+     */
+    @ResponseBody
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Result<NULL> constraintViolationExceptionHandler(HttpServletRequest request,ConstraintViolationException e) {
+        Result<NULL> result = Result.fail(e.getConstraintViolations().iterator().next().getMessage());
+        log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(),result);
+        return result;
+    }
+
+    /**
      * 无权限异常
      */
     @ResponseBody
     @ExceptionHandler(UnauthorizedException.class)
-    public Result<?> UnauthorizedHandle(HttpServletRequest request) {
+    public Result<?> unauthorizedHandle(HttpServletRequest request) {
         Result<NULL> result = Result.fail(ResultEnum.ILLEGAL_VISIT);
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), result);
         return result;
