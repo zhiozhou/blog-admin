@@ -146,6 +146,7 @@
             <if test="titleLike != null and titleLike != ''">and title LIKE CONCAT('%',#{titleLike},'%')</if>
             <if test="remarkLike != null  and remarkLike != '' ">and remark LIKE CONCAT('%',#{remarkLike},'%')</if>
         </where>
+        ORDER BY id
     </select>
 
     <select id="count" parameterType="BlogDTO" resultType="int">

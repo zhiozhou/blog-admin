@@ -191,6 +191,7 @@
             <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
             <if test="nameLike != null and nameLike != ''">and `name` LIKE CONCAT('%',#{nameLike},'%')</if>
         </where>
+        ORDER BY id
     </select>
 
     <select id="listSelectVO" parameterType="RoleQuery" resultMap="SelectVOMap">

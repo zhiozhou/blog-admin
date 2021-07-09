@@ -145,6 +145,7 @@
             <if test="keyLike != null and keyLike != ''">and `key` LIKE CONCAT('%',#{keyLike},'%')</if>
             <if test="state != null"> and state = #{state}</if>
         </where>
+        ORDER BY id
     </select>
 
     <select id="count" parameterType="DictQuery" resultType="int">
