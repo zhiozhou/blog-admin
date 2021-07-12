@@ -3,7 +3,7 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-iframe">
-            <form class="layui-form " th:attr="action=${_action}" th:object="${_vo}">
+            <form class="layui-form " th:attr="action=${_action}" th:object="${_vo}" autocomplete="off">
 #foreach ($primary in $table.primaryKeys)
                 <input type="hidden" th:field="*{${primary.attrName}}">
 
@@ -16,7 +16,7 @@
                     <div class="layui-input-block">
                         <input type="text" class="layui-input"
                                th:field="*{${column.attrName}}" lay-verify="required"
-                               placeholder="请输入${column.comment}" autocomplete="off"/>
+                               placeholder="请输入${column.comment}"/>
                     </div>
                 </div>
 #else
@@ -26,7 +26,7 @@
                         <input type="text" class="layui-input"
                                name="${column.attrName}"
                                th:value="*{#dates.format(${column.attrName})}" lay-verify="required"
-                        placeholder="请输入${column.comment}" autocomplete="off"/>
+                        placeholder="请输入${column.comment}"/>
                     </div>
                 </div>
 #end

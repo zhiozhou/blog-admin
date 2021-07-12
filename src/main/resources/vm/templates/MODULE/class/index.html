@@ -18,12 +18,9 @@
             const prefix = `${_gate}${app.modulePath}${table.objectName}`
 
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui
-
                 tableRender({
-                    table,
 #if(${table.primaryKeys[0].attrName}!='id')
-                    idField:'${table.primaryKeys[0].attrName}',
+                    id:'${table.primaryKeys[0].attrName}',
 #end
                     options:{
                         cols:[[

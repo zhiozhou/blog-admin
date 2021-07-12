@@ -111,7 +111,7 @@
             modified_by = #{modifiedBy},
             gmt_modified = NOW()
         </set>
-        where id = #{id}
+        where `key` = #{key}
     </update>
 
     <select id="get" parameterType="RoleQuery" resultMap="POMap">

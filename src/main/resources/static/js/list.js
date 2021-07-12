@@ -58,15 +58,15 @@ layui.use(['table', 'form', 'jquery'], () => {
 
 /**
  * 表格渲染通用配置
- * @param table layui.table组件
  * @param options 表格渲染参数，会替换默认参数
- * @param idField 唯一标识name
+ * @param id 标识字段
  * @param onTool 工具栏监听
  * @param iframe 工具栏监听是否使用iframe
  */
-function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
-    console.log(options)
-    table.render({
+function tableRender({id = 'id', options, onTool, iframe = true}) {
+    const {table} = layui
+
+    table.render(options = {
         ...{
             id: tableId,
             elem: '#table',
@@ -89,13 +89,13 @@ function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
     const toolMap = {
         ...iframe ?
             {
-                detail: (data) => newFrame(`${_module.name}详情`, `${prefix}/detail/${data[idField]}`),
-                update: (data) => newFrame(`修改${_module.name}`, `${prefix}/update/${data[idField]}`),
+                detail: (data) => newFrame(`${_module.name}详情`, `${prefix}/detail/${data[id]}`),
+                update: (data) => newFrame(`修改${_module.name}`, `${prefix}/update/${data[id]}`),
                 remove
             } :
             {
-                detail: (data) => goto(`${prefix}/detail/${data[idField]}`),
-                update: (data) => goto(`${prefix}/update/${data[idField]}`),
+                detail: (data) => goto(`${prefix}/detail/${data[id]}`),
+                update: (data) => goto(`${prefix}/update/${data[id]}`),
                 remove
             },
         ...onTool
@@ -112,7 +112,7 @@ function tableRender({table, options, idField = 'id', onTool, iframe = true}) {
             msg: `确认移除该${_module.name}吗`,
             cb: () => {
                 const param = {}
-                param[`${idField}s`] = data[idField]
+                param[`${id}s`] = data[id]
                 httpPost({
                     url: `${prefix}/rest/remove`,
                     data: param,

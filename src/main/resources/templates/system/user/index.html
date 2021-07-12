@@ -78,11 +78,10 @@
             const prefix = `${_gate}system/user`
 
             layui.use(['table', 'jquery'], () => {
-                const {table, $} = layui
+                const {$} = layui
 
                 tableRender({
-                    table,
-                    idField: 'username',
+                    id: 'username',
                     options: {
                         cols: [[
                             {field: 'username', title: '用户名', minWidth: '100'},
@@ -107,13 +106,13 @@
                         freeze: (data) => {
                             httpPost({
                                 url: `${prefix}/rest/freeze/${data.username}`,
-                                cb: () => msg(reloadTable())
+                                cb: () => msg(reloadTable)
                             })
                         },
                         unfreeze: (data) => {
                             httpPost({
                                 url: `${prefix}/rest/unfreeze/${data.username}`,
-                                cb: () => msg(reloadTable())
+                                cb: () => msg(reloadTable)
                             })
                         }
                     }

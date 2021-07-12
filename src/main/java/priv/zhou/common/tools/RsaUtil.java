@@ -68,7 +68,7 @@ public class RsaUtil {
      * @param privateKey 私钥
      */
     public static String decrypt(String cipherText, PrivateKey privateKey) {
-        try{
+        try {
             byte[] bytes = Base64Util.decode(cipherText);
             Cipher cipher = Cipher.getInstance(CIPHER);
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
@@ -142,7 +142,7 @@ public class RsaUtil {
     public static KeyPair generateKeyPair() {
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance(CIPHER);
-            generator.initialize(2048, new SecureRandom());
+            generator.initialize(512, new SecureRandom());
             KeyPair keyPair = generator.generateKeyPair();
 
             System.out.println("公钥：" + Base64Util.encodeToStr(keyPair.getPublic().getEncoded()).replace("\r\n", ""));
@@ -151,6 +151,12 @@ public class RsaUtil {
         } catch (NoSuchAlgorithmException e) {
             throw new RestException(ResultEnum.LATER_RETRY);
         }
+    }
+
+    public static void main(String[] args) {
+        String key = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANagXPBpPJHY/6TfB+WllRvO1VJyM0353z8j48hNVai7lbwv7VIBBdb5GbX5BHBkP7Y5/2WIvGmQA9BAp1A6wtkCAwEAAQ==";
+        String zhou = encrypt("zhou", "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANagXPBpPJHY/6TfB+WllRvO1VJyM0353z8j48hNVai7lbwv7VIBBdb5GbX5BHBkP7Y5/2WIvGmQA9BAp1A6wtkCAwEAAQ==");
+        System.out.println(zhou);
     }
 
 

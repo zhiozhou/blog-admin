@@ -155,7 +155,7 @@
         <where>
             `user`.is_deleted = 0
             <if test="id != null"> and `user`.id = #{id}</if>
-            <if test="username != null and username != '' "> and username = #{username}</if>
+            <if test="username != null and username != '' "> and BINARY(username) = #{username}</if>
         </where>
     </select>
 
@@ -172,7 +172,7 @@
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id
-        where `user`.is_deleted = 0 and username = #{username}
+        where `user`.is_deleted = 0 and BINARY(username) = #{username}
     </select>
 
     <select id="getPrincipal" parameterType="UserQuery" resultMap="PrincipalMap">
@@ -188,7 +188,7 @@
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id
-        WHERE `user`.is_deleted = 0 and username = #{username}
+        WHERE `user`.is_deleted = 0 and BINARY(username) = #{username}
         GROUP BY `user`.id
     </select>
 
@@ -208,7 +208,7 @@
             `user`.`name`,
             `user`.phone,
             `user`.state,
-            GROUP_CONCAT(concat(role.id,'-',role.`name`)) as roles
+            GROUP_CONCAT(concat(role.key,'-',role.`name`)) as roles
         FROM system_user AS `user`
         LEFT JOIN system_user_role AS user_role ON `user`.id = user_role.user_id
         LEFT JOIN system_role AS role ON user_role.role_id = role.id
@@ -226,6 +226,7 @@
             </if>
         </where>
         GROUP BY `user`.id
+        ORDER BY `user`.id
     </select>
 
     <select id="count" parameterType="UserQuery" resultType="Integer">
@@ -237,7 +238,7 @@
             <if test="ridId != null  "> and id != #{ridId}</if>
             <if test="state != null  "> and state = #{state}</if>
             <if test="phone != null and phone != '' "> and phone = #{phone}</if>
-            <if test="username != null and username != '' "> and username = #{username}</if>
+            <if test="username != null and username != '' "> and BINARY(username) = #{username}</if>
         </where>
     </select>
 

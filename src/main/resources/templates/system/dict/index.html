@@ -3,13 +3,13 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form">
+            <form class="layui-form" autocomplete="off">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off">
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称">
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="keyLike" class="layui-input" placeholder="请输入字典标识" autocomplete="off">
+                        <input type="text" name="keyLike" class="layui-input" placeholder="请输入字典标识">
                     </div>
                     <div class="layui-inline">
                         <select name="state">
@@ -56,9 +56,7 @@
                 }
 
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui
                 tableRender({
-                    table,
                     options: {
                         cols: [[
                             {field: 'name', title: '名称 ', minWidth: '120'},

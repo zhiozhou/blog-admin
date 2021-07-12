@@ -80,14 +80,12 @@ public class BaseViewController {
         model.addAttribute(MODULE_KEY, module);
     }
 
-
     /**
      * 列表页填充：模块对象
      */
     protected void list(Model model) {
         model.addAttribute(MODULE_KEY, module);
     }
-
 
     /**
      * 上传功能参数：{url，prefix}

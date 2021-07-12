@@ -4,9 +4,9 @@
     <body>
         <div class="layout-page">
             <form class="layui-form">
-                <div class="layui-form-item">
+                <div class="layui-form-item" autocomplete="off">
                     <div class="layui-inline">
-                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称" autocomplete="off">
+                        <input type="text" name="nameLike" class="layui-input" placeholder="请输入名称">
                     </div>
                     <div class="layui-inline">
                         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-filter="search" lay-submit>
@@ -36,9 +36,8 @@
             const prefix = `${_gate}system/extend`
 
             layui.use(['table', 'jquery'], () => {
-                const {table, $} = layui
+                const {$} = layui
                 tableRender({
-                    table,
                     options: {
                         url: `${prefix}/rest/table/list`,
                         cols: [[

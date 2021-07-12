@@ -3,15 +3,13 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form">
+            <form class="layui-form" autocomplete="off">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <input type="text" name="username" class="layui-input" placeholder="Input Username"
-                               autocomplete="off">
+                        <input type="text" name="username" class="layui-input" placeholder="Input Username">
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="host" class="layui-input" placeholder="Input Host"
-                               autocomplete="off">
+                        <input type="text" name="host" class="layui-input" placeholder="Input Host">
                     </div>
                     <div class="layui-inline">
                         <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="search-all">
@@ -45,10 +43,7 @@
             const prefix = `${_gate}system/monitor`
 
             layui.use(['table', 'jquery', 'util'], () => {
-                const {table} = layui
-
                 tableRender({
-                    table,
                     options: {
                         page: false,
                         cols: [[

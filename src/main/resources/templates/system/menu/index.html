@@ -24,10 +24,8 @@
             let openId
 
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui
                 const treeOptions = initTreeTable()
                 tableRender({
-                    table,
                     options:{
                         page: false,
                         parseData: treeOptions.parseData,

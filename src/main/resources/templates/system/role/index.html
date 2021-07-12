@@ -3,14 +3,14 @@
     <head th:include="include :: header"></head>
     <body>
         <div class="layout-page">
-            <form class="layui-form">
+            <form class="layui-form" autocomplete="off">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <input type="text" class="layui-input" autocomplete="off"
+                        <input type="text" class="layui-input"
                                name="nameLike" placeholder="请输入名称">
                     </div>
                     <div class="layui-inline">
-                        <input type="text" class="layui-input" autocomplete="off"
+                        <input type="text" class="layui-input"
                                name="keyLike" placeholder="请输入标识">
                     </div>
                     <div class="layui-inline">
@@ -63,10 +63,8 @@
             const prefix = `${_gate}system/role`
 
             layui.use(['table', 'jquery'], () => {
-                const {table} = layui
                 tableRender({
-                    table,
-                    idField: 'key',
+                    id: 'key',
                     options: {
                         cols: [[
                             {field: 'name', title: '名称'},
