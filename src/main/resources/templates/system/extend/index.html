@@ -36,7 +36,7 @@
             const prefix = `${_gate}system/extend`
 
             layui.use(['table', 'jquery'], () => {
-                const {$} = layui
+                const {$, table} = layui
                 tableRender({
                     options: {
                         url: `${prefix}/rest/table/list`,
